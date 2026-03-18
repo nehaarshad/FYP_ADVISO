@@ -13,13 +13,10 @@ const server = http.createServer(app);
 
 app.use(cors({
   origin: "*", 
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE",],
   allowedHeaders: [
     "Content-Type", 
     "Authorization", 
-    "X-Requested-With", 
-    "Accept",
-    "Origin"
   ],
   credentials: false,
   optionsSuccessStatus: 200 
@@ -36,7 +33,6 @@ sequelize.authenticate()
     console.error("Failed to authenticate database:", err);
   });
 
-// Start server AFTER all middleware and routes are defined
 modelsSyncs.modelsSync()
   .then(() => {
     const port = process.env.PORT || 5500;
