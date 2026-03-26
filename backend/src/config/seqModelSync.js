@@ -1,5 +1,5 @@
 import sequelize from "../config/dbConfig.js";
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 import CategoryModel from "../models/categoryModel.js";
 import CourseModel from "../models/coursesModel.js";
 import CourseOfferingModel from "../models/courseOfferingModel.js";

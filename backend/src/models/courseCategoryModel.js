@@ -7,7 +7,7 @@ const CourseCategoryModel = sequelize.define("CourseCategoryModel", {
         autoIncrement: true,
         primaryKey: true,   
     },
-    courseid: {
+    courseId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
