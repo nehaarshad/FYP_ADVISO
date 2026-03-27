@@ -1,66 +1,72 @@
-import Image from "next/image";
+"use client";
+import React from 'react';
+import { motion } from "framer-motion";
+import { 
+  BookOpen, Users, Calendar, 
+  ShieldCheck, History, Send, 
+  CheckCircle2, Lightbulb, Search 
+} from "lucide-react";
+import { LandingFooter, FeatureCard, SmallFeature } from "@/components/ui/ui";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+    <div className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden">
+      
 
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      {/* --- HERO SECTION --- */}
+      <section className="relative h-screen flex items-center justify-center text-center px-6">
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/Group.png')" }} />
+        <div className="relative z-10 text-white max-w-5xl">
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-5xl text-[#FDB813] md:text-7xl font-black tracking-tight mb-6">
+            Adviso - <br/> <span className="text-[#FDB813]">An Academic Batch Advisor System</span>
+          </motion.h1>
         </div>
-      </main>
+      </section>
+
+      {/* --- WHY CHOOSE US --- */}
+      <section className="py-32 px-6 md:px-12 text-center max-w-7xl mx-auto">
+        <div className="flex justify-center mb-20">
+            <button className="px-10 py-3 border-2 border-slate-200 rounded-full text-[#1e3a5f] font-black text-[11px] uppercase tracking-[0.25em] flex items-center gap-3">
+               <span className="text-blue-600 text-xl">•</span> Why Choose Us
+            </button>
+        </div>
+        <div className="grid md:grid-cols-3 gap-12">
+          <FeatureCard Icon={Users} title="Structured Advisory System" desc="A well-organized platform that streamlines academic advising and student guidance." />
+          <FeatureCard Icon={Lightbulb} title="Efficient Meeting Management" desc="Schedule, manage, and track advisory meetings without manual effort." />
+          <FeatureCard Icon={Search} title="Transparent Decision Tracking" desc="All advisory decisions and academic records are securely stored and easy to access." />
+        </div>
+      </section>
+
+      {/* --- ABOUT US SECTION (Image.png Fix) --- */}
+      <section id="about" className="bg-[#1e3a5f] text-white py-32 px-6 md:px-24">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
+          <div className="text-left">
+            <h2 className="text-2xl font-black mb-12 tracking-[0.2em] text-[#FDB813] uppercase">About Us</h2>
+            <h3 className="text-4xl font-black mb-10 leading-tight">Making academic guidance smarter, <br /> simpler, and more reliable.</h3>
+            <p className="text-white/70 leading-[2] text-lg font-medium">Adviso is a smart academic advising platform that connects students and advisors, streamlining guidance, course recommendations, meetings, and academic decisions.</p>
+          </div>
+          <motion.div className="rounded-[3rem] overflow-hidden shadow-2xl border-[12px] border-white/5">
+            <img src="/Image.png" alt="About" className="w-full h-[450px] object-cover" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* --- FEATURES GRID (image_5bd803.png Match) --- */}
+      <section id="features" className="py-32 px-6 md:px-12 text-center bg-white">
+        <div className="flex justify-center mb-24 text-blue-600 uppercase font-black text-[11px] tracking-widest border-2 border-slate-200 rounded-full w-fit mx-auto px-10 py-3 gap-3">
+            <span>•</span> Features
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-[95rem] mx-auto">
+          <SmallFeature Icon={CheckCircle2} title="Smart Course Recommendations" desc="Automatically suggests eligible courses." />
+          <SmallFeature Icon={Calendar} title="Meeting Scheduling" desc="Schedule and track advisory sessions easily." />
+          <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
+          <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
+          <SmallFeature Icon={BookOpen} title="Transcript" desc="View and manage student academic records for accurate advising." />
+          <SmallFeature Icon={Send} title="Submit Requests" desc="Submit academic requests quickly and digitally." />
+        </div>
+      </section>
+
+      <LandingFooter />
     </div>
   );
 }
