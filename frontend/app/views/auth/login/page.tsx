@@ -16,14 +16,18 @@ export default function LoginPage() {
   const [sapId, setSapId] = useState("");
   const [password, setPassword] = useState("");
 
-  const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" }
-    })
-  };
+ const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number): any => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.2,
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  }),
+};
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +53,8 @@ export default function LoginPage() {
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-400/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <motion.div custom={0} initial="hidden" animate="visible" variants={fadeUp}>
+          
+            
               <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold group transition-all">
                 <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back
               </Link>

@@ -33,28 +33,6 @@ export const PrimaryButton = ({ text, onClick, type = "submit" }: any) => (
   </motion.button>
 );
 
-// --- 3. NAVBAR (Colorful Logo) ---
-export const Navbar = () => (
-  <nav className="flex justify-between items-center p-8 bg-transparent absolute top-0 w-full z-50 px-12">
-    <Link href="/">
-      <img 
-        src="/logo.png" 
-        alt="Adviso Logo" 
-        className="h-12 w-auto object-contain hover:scale-105 transition-transform"
-        onError={(e) => { e.currentTarget.src = 'https://via.placeholder.com/150?text=Logo+Missing'; }} 
-      />
-    </Link>
-    <Link href="/views/auth/login">
-      <motion.button 
-        whileHover={{ scale: 1.05, backgroundColor: "#eeb012" }}
-        whileTap={{ scale: 0.95 }}
-        className="px-10 py-3 bg-[#FDB813] text-[#1e3a5f] font-black text-[12px] uppercase tracking-[0.2em] rounded-full shadow-xl transition-colors"
-      >
-        Login
-      </motion.button>
-    </Link>
-  </nav>
-);
 
 // --- 4. FEATURE CARD ---
 export const FeatureCard = ({ title, desc, Icon }: any) => (
@@ -78,7 +56,7 @@ export const SmallFeature = ({ Icon, title, desc }: any) => (
   </div>
 );
 
-// --- 6. AUTH SIDEBAR (Login Page Fix) ---
+// --- 6. Logo ---
 export const AuthSidebar = ({ title }: { title: string | React.ReactNode }) => (
   <div className="bg-[#1e3a5f]/90 p-12 text-white flex flex-col justify-between relative overflow-hidden h-full">
     <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-400/10 to-transparent pointer-events-none" />
@@ -134,7 +112,7 @@ export const LandingFooter = () => (
         <img 
           src="/logo.png" 
           alt="Adviso Logo" 
-          className="h-14 w-auto object-contain mb-6" 
+          className="h-14 w-auto mb-6" 
           style={{ filter: 'brightness(0) invert(1)' }} 
         />
         <p className="text-sm font-medium opacity-50 max-w-sm">Riphah International University, Gulberg Green Campus Islamabad</p>
