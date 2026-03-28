@@ -7,6 +7,11 @@ const Admin = sequelize.define("Admin", {
         autoIncrement: true,
         primaryKey: true,
     },
+    sapid:{
+        type: DataTypes.INTEGER,
+        allowNull:false
+
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -21,7 +26,7 @@ const Admin = sequelize.define("Admin", {
         allowNull: false,
     },
     contactNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.BIGINT,
         allowNull: false,
     },
     userId: {

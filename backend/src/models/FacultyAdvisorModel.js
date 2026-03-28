@@ -21,7 +21,7 @@ const BatchAdvisor = sequelize.define("BatchAdvisor", {
         allowNull: false,
     },
     contactNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.BIGINT,
         allowNull: false,
     },
     userId: {

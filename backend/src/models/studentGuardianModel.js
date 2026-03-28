@@ -17,7 +17,7 @@ const StudentGuardian = sequelize.define("StudentGuardian", {
         unique: true,
     },
     contactNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.BIGINT,
         allowNull: false,
     },
     studentId: {

@@ -1,11 +1,14 @@
 import bcrypt from "bcryptjs";
 import User from "../models/userModel.js"
 import generateToken from "../utils/generateToken.js";
+import Coordinator from "../models/coordinatorModel.js";
+import Admin from "../models/adminModel.js";
 
+//Sigup functionality for admin and coordinator
 const createNewUser = async (req, res) => {
 
     try{
-        const { sapid, password, role,isActive } = req.body;
+        const { sapid, password, role, name,email,department,contactNumber} = req.body;
 
         if(!sapid||!password  ){
             return res.json({message:"All fields are required to filled!"})
@@ -18,8 +21,22 @@ const createNewUser = async (req, res) => {
         else{
         const hashedPassword = await bcrypt.hash(password, 10);
     
-        const newuser = await User.create({ sapid, password: hashedPassword, role,isActive });
-            //create profile based on role
+        const newuser = await User.create({ sapid, password: hashedPassword, role });
+            
+        //create profile of coordinator & admin
+
+        let newUserInfo;
+        if(role=="coordinator")
+        {
+            newUserInfo = await Coordinator.create({coordinatorName:name,email,contactNumber,userId:newuser.id,department})
+        }
+        else if(role=="admin")
+        {
+            newUserInfo = await Admin.create({name,email,contactNumber,userId:newuser.id,department})
+        }
+
+        console.log("New ",role," is added", newuser, newUserInfo)
+
        return res.json({ 
             id: newuser.id, 
             sapid: newuser.sapid, 

@@ -10,6 +10,7 @@ const CategoryModel = sequelize.define("CategoryModel", {
     categoryName: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique:true
     },
 }, {
     timestamps: true,
