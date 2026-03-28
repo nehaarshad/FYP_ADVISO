@@ -18,6 +18,7 @@ const BatchModel = sequelize.define("BatchModel", {
     batchYear: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique:true
     },
     totalStudent: {
         type: DataTypes.INTEGER,

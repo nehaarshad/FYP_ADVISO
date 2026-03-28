@@ -10,6 +10,7 @@ const ProgramModel = sequelize.define("ProgramModel", {
     programName: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique:true
     },
 
 }, {

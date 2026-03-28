@@ -21,7 +21,7 @@ const Coordinator = sequelize.define("Coordinator", {
         allowNull: false,
     },
     contactNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.BIGINT,
         allowNull: false,
     },
     userId: {

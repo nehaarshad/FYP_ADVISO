@@ -21,7 +21,7 @@ const Student = sequelize.define("Student", {
         allowNull: true,
     },
     contactNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.BIGINT,
         allowNull: true,
     },
     dateOfBirth: {
