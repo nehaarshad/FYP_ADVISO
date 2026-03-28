@@ -1,16 +1,16 @@
-// app/views/auth/login/page.tsx
+
 "use client";
 import React, { useState } from 'react';
-import { motion } from "framer-motion";
+import { motion ,Variants,TargetAndTransition} from "framer-motion";
 import Link from 'next/link';
 import { 
   Mail, 
   Lock, 
   ChevronLeft, 
-  ShieldCheck, 
   AlertCircle 
 } from "lucide-react";
-import { UniversalInput, PrimaryButton } from "@/components/ui/ui";
+import UniversalInput from "@/components/textsComponents/universalInput"
+import BlueFilledButton from '@/components/buttons/FilledButton/blueFilledButton';
 
 export default function LoginPage() {
   const [sapId, setSapId] = useState("");
@@ -18,7 +18,7 @@ export default function LoginPage() {
 
  const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40 },
-  visible: (i: number): any => ({
+  visible: (i: number): string | TargetAndTransition => ({
     opacity: 1,
     y: 0,
     transition: {
@@ -64,7 +64,7 @@ export default function LoginPage() {
               custom={1} initial="hidden" animate="visible" variants={fadeUp} 
               className="bg-white p-3 inline-block mb-8 rounded-2xl shadow-2xl"
             >
-              <img src="/riphahLogo.jpg" alt="Riphah Logo" className="w-16 h-16 object-contain" />
+              <img src="/logo.png" alt="Riphah Logo" className="w-16 h-16 object-contain" />
             </motion.div>
 
             <motion.h1 
@@ -75,19 +75,6 @@ export default function LoginPage() {
               to <span className="text-[#FDB813]">ADVISO.</span>
             </motion.h1>
           </div>
-
-          <motion.div 
-            custom={4} initial="hidden" animate="visible" variants={fadeUp}
-            className="relative z-10 p-5 bg-white/5 rounded-[1.5rem] border border-white/10 backdrop-blur-md flex items-center gap-4 shadow-inner"
-          >
-            <div className="w-10 h-10 bg-[#FDB813] rounded-xl flex items-center justify-center text-[#1e3a5f] shadow-lg">
-              <ShieldCheck size={22} />
-            </div>
-            <div>
-              <p className="text-xs font-black tracking-widest uppercase opacity-60">Security Protocol</p>
-              <p className="text-sm font-bold">Official Riphah Access</p>
-            </div>
-          </motion.div>
         </div>
 
         {/* RIGHT SIDE: FORM */}
@@ -104,12 +91,14 @@ export default function LoginPage() {
             
             <form className="space-y-6" onSubmit={handleLogin}>
               <UniversalInput 
-                label="SAP ID"
-                placeholder="e.g. 49100"
-                value={sapId}
-                onChange={setSapId}
-                Icon={Mail}
-              />
+                    label="SAP ID"
+                    type="text"
+                    placeholder="e.g. 49100"
+                    value={sapId}
+                    onChange={setSapId}
+                    Icon={Mail}
+                  />
+
 
               <UniversalInput 
                 label="Password"
@@ -120,13 +109,7 @@ export default function LoginPage() {
                 Icon={Lock}
               />
 
-              <PrimaryButton text="Sign In" />
-
-              <div className="text-center pt-4">
-                <button type="button" className="text-[11px] font-black uppercase text-[#1e3a5f] hover:text-[#FDB813] transition-colors tracking-widest">
-                  Forgot Password?
-                </button>
-              </div>
+              <BlueFilledButton text="Sign In" />
             </form>
 
             <div className="mt-12 flex items-center gap-4 p-5 bg-blue-50/50 rounded-[1.5rem] border border-blue-100/50">

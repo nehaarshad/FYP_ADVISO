@@ -11,6 +11,7 @@ import {
   User,
   AlertCircle 
 } from "lucide-react";
+import Image from 'next/image';
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -20,7 +21,7 @@ export default function SignupPage() {
 
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({
+    visible: (i:number) => ({
       opacity: 1,
       y: 0,
       transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" }
@@ -49,7 +50,7 @@ export default function SignupPage() {
             </Link>
 
             <div className="bg-white p-3 inline-block mb-8 rounded-2xl">
-              <img src="/riphahLogo.jpg" className="w-16 h-16" />
+              <Image alt='logo' src="/logo.png" className="w-16 h-16" />
             </div>
 
             <h1 className="text-5xl font-black mb-6 leading-[1.1]">
