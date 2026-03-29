@@ -4,16 +4,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Bell, Settings, Users, ShieldCheck, Clock, Mail, Building, IdCard } from "lucide-react";
 
 // Components Imports
-import { Sidebar } from "@/components/coordinator/Sidebar";
-import { SessionManager } from "@/components/coordinator/SessionManager";
-import { RoadmapSection } from "@/components/coordinator/Roadmaps";
-import { StudentRecords } from "@/components/coordinator/StudentRecords";
-import { Guidelines } from "@/components/coordinator/Guidelines";
-import { ExcelUploader } from "@/components/coordinator/ExcelUploader";
-import { AddFaculty } from "@/components/coordinator/AddFaculty";
-import { AddStudent } from "@/components/coordinator/AddStudents";
-import { NotificationPanel } from "@/components/coordinator/NotificationPanel";
-import { SettingsModal } from "@/components/coordinator/SettingsModel";
+
+import { Sidebar } from "@/app/components/Sidebar";
+import { SessionManager } from "@/app/components/SessionManager";
+import { RoadmapSection } from "@/app/components/Roadmaps";
+import { StudentRecords } from "@/app/components/StudentRecords";
+import { Guidelines } from "@/app/components/Guidelines";
+import { ExcelUploader } from "@/app/components/ExcelUploader";
+import { AddFaculty } from "@/app/components/AddFaculty";
+import { AddStudent } from "@/app/components/AddStudents";
+import { NotificationPanel } from "@/app/components/NotificationPanel";
+import { SettingsModal } from "@/app/components/SettingsModel";
+import { EditStudent } from '@/app/components/EditStudent';
+import {EditAdvisor} from '@/app/components/EditAdvisor';
 
 export default function CoordinatorDashboard() {
   const [mounted, setMounted] = useState(false);
@@ -112,6 +115,8 @@ export default function CoordinatorDashboard() {
             {activeTab === "upload-excel" && <ExcelUploader />}
             {activeTab === "add-faculty" && <AddFaculty />}
             {activeTab === "add-student" && <AddStudent />}
+            {activeTab === "edit-student" && <EditStudent />}
+            {activeTab === "edit-advisor" && <EditAdvisor />}
           </AnimatePresence>
         </div>
       </main>
