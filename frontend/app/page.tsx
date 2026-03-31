@@ -70,9 +70,9 @@ export default function LandingPage() {
       <section id="about" className="bg-[#1e3a5f] text-white py-32 px-6 md:px-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div className="text-left">
-            <h2 className="text-3xl font-bold mb-12 tracking-wide text-[#FDB813] uppercase">About Us</h2>
-            <h3 className="text-4xl font-bold mb-10 leading-tight">Making academic guidance smarter, <br /> simpler, and more reliable.</h3>
-            <p className="text-white/70 leading-[2] text-lg font-medium">Adviso is a smart academic advising platform that connects students and advisors, streamlining guidance, course recommendations, meetings, and academic decisions.</p>
+            <h2 className="text-3xl font-bold mb-24 tracking-wide text-[#FDB813] uppercase">About Us</h2>
+            <h3 className="text-4xl font-bold mb-7 leading-tight">Making academic guidance smarter, <br /> simpler, and more reliable.</h3>
+            <p className="text-white/70 leading-[2] text-lg font-normal">Adviso is a smart academic advising platform that connects students and advisors, streamlining guidance, course recommendations, meetings, and academic decisions.</p>
           </div>
           <motion.div className="rounded-[3rem] overflow-hidden shadow-2xl border-[12px] border-white/5">
             <img src="/Image.png" alt="About" className="w-full h-[450px] object-cover" />

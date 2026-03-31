@@ -22,7 +22,7 @@ const BatchModel = sequelize.define("BatchModel", {
     },
     totalStudent: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
 
 }, {

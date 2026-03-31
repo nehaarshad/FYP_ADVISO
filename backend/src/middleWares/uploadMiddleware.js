@@ -10,7 +10,7 @@ const dirname = path.dirname(filename);
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        let dest = path.join(dirname, '..', 'uploads');
+        let dest = path.join(dirname,'..', 'uploads');
         
         if (!fs.existsSync(dest)) {
             fs.mkdirSync(dest, { recursive: true });
@@ -26,18 +26,6 @@ const storage = multer.diskStorage({
         cb(null, filename);
     }
 });
-
-const filefilter = (req, file, cb) => {
-    const allowedTypes = /xlsx|xls/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-    
-    if (mimetype && extname) {
-        return cb(null, true);
-    } else {
-        cb(new Error('Images Only! Allowed formats: XLSX, XLS'));
-    }
-};
 
 const xlsxFilter = (req, file, cb) => {
     const allowedMimeTypes = [
@@ -57,6 +45,6 @@ const uploadXlsx = multer({
 });
 
 // Export the multer instance directly and other utilities as named exports
-export { uploadXlsx ,filefilter};
+export { uploadXlsx };
 
 

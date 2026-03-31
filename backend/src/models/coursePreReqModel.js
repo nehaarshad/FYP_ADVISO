@@ -13,7 +13,7 @@ const CoursePreReqModel = sequelize.define("CoursePreReqModel", {
     },
     preReqCourseId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
 }, {
     timestamps: true,

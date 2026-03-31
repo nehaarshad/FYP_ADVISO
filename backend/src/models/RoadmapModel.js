@@ -14,15 +14,21 @@ const RoadmapModel = sequelize.define("RoadmapModel", {
     versionName: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     },
     isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
+        defaultValue: true,
     },
     totalCreditHours: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    roadmapFilePath:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
 
 }, {
     timestamps: true,
