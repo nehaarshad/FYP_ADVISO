@@ -12,6 +12,10 @@ const CategoryModel = sequelize.define("CategoryModel", {
         allowNull: false,
         unique:true
     },
+    colorScheme: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
 }, {
     timestamps: true,
 });

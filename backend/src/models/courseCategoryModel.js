@@ -11,10 +11,6 @@ const CourseCategoryModel = sequelize.define("CourseCategoryModel", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    semesterId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
     categoryId: {
         type: DataTypes.INTEGER,
         allowNull: true,
