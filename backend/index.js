@@ -8,6 +8,8 @@ import modelsSyncs from "../backend/src/config/seqModelSync.js";
 import  http  from 'http';
 import dotenv from "dotenv";
 import roadmapRoute from "./src/routes/roadmapRoute.js";
+import courseDetailRoute from "./src/routes/courseDetailRouter.js";
+import registerUserRoute from "./src/routes/registerUserRoute.js";
 import path from "path";
 dotenv.config();
 
@@ -44,6 +46,8 @@ app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
 }));
 
 app.use('/auth', roadmapRoute);
+app.use('/auth', courseDetailRoute);
+app.use('/auth', registerUserRoute);
 
 
 sequelize.authenticate()
