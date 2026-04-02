@@ -11,6 +11,10 @@ const BatchModel = sequelize.define("BatchModel", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    roadmapId: {   // which roadmap assigninged to this batch (spring2023 program se)
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
     batchName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -18,7 +22,6 @@ const BatchModel = sequelize.define("BatchModel", {
     batchYear: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique:true
     },
     totalStudent: {
         type: DataTypes.INTEGER,

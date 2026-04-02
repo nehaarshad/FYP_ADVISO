@@ -14,13 +14,7 @@ export default function AdvisorDashboard() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const [selectedStudent, setSelectedStudent] = useState<typeof iramData | null>(null);
 
   // Iram Ghafoor Khan ka real transcript data (from your CSV)
   const iramData = { 
@@ -183,7 +177,7 @@ export default function AdvisorDashboard() {
                           <h3 className="font-black text-[#1e3a5f] text-xs uppercase italic tracking-widest">Audit Roadmap Progress</h3>
                        </div>
                        <div className="grid md:grid-cols-2 gap-4">
-                          {selectedStudent.roadmap.map((item: any, i: number) => (
+                          {selectedStudent.roadmap.map((item: typeof iramData['roadmap'][0], i: number) => (
                             <div key={i} className="flex items-center justify-between p-5 bg-slate-50/50 rounded-2xl border border-slate-100 group hover:border-[#FDB813] transition-all">
                                <div>
                                   <p className="text-[11px] font-black text-slate-600 uppercase italic leading-none mb-1">{item.name}</p>
@@ -203,7 +197,7 @@ export default function AdvisorDashboard() {
                       </div>
                       
                       <div className="p-8 space-y-12">
-                        {selectedStudent.transcript.map((sem: any, idx: number) => (
+                        {selectedStudent.transcript.map((sem: typeof iramData['transcript'][0], idx: number) => (
                           <div key={idx} className="space-y-4">
                             <div className="flex justify-between items-end border-b-2 border-slate-100 pb-2">
                               <span className="font-black text-[#1e3a5f] text-lg italic uppercase">{sem.semester}</span>
@@ -221,7 +215,7 @@ export default function AdvisorDashboard() {
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-slate-50">
-                                {sem.courses.map((course: any, cIdx: number) => (
+                                {sem.courses.map((course: typeof iramData['transcript'][0]['courses'][0], cIdx: number) => (
                                   <tr key={cIdx} className="hover:bg-slate-50/50 transition-colors">
                                     <td className="py-4 text-xs font-bold text-slate-600 uppercase italic">{course.name}</td>
                                     <td className="py-4 text-xs font-black text-slate-400 text-center">{course.cr}</td>

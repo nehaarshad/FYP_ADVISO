@@ -14,7 +14,6 @@ const RoadmapModel = sequelize.define("RoadmapModel", {
     versionName: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     isActive: {
         type: DataTypes.BOOLEAN,

@@ -13,6 +13,7 @@ import detectSemesters from '../utils/roadmapSemesterCreditHour.js';
 import SemesterRoadmapModel from '../models/semesterRoadmapModel.js';
 import CoursesModel from '../models/coursesModel.js';
 import ExcelJS from 'exceljs';
+import CoursePreReqModel from '../models/coursePreReqModel.js';
 
 const uploadNewRoadmap = async (req, res) => {
     try {
@@ -22,7 +23,11 @@ const uploadNewRoadmap = async (req, res) => {
 
         console.log("Uploaded roadmap file:", roadmapFile);
         const [program] = await ProgramModel.findOrCreate({ where: { programName } }); //find if program exist otherwise create new program like CA
-        const [batch] = await BatchModel.findOrCreate({ where: { programId:program.id,batchName,batchYear } }); //find the batch of program otherwise create new batch like Programs SE batch fall 2026
+        let batch ;
+        if(batchName && batchYear){
+            const [findBatch] = await BatchModel.findOrCreate({ where: { batchName,batchYear, programId: program.id } }); //find if batch exist otherwise create new batch like spring2023
+             batch=findBatch.id
+        }
         console.log("Found or created program:", program);
         console.log("Found or created batch:", batch);
 
@@ -56,7 +61,12 @@ const uploadNewRoadmap = async (req, res) => {
                 roadmapFilePath: pathUrl, 
             });
         }
-       
+       if(batch){
+        await BatchModel.update(
+            { roadmapId: roadmap.id }, // Update roadmapId for the batch
+            { where: { id: batch } } // Find the batch by its ID
+        );
+       }
         console.log("Created roadmap in database:");
 
         //2. create categories and roadmap-category associations
@@ -168,8 +178,6 @@ const uploadNewRoadmap = async (req, res) => {
 
         return res.json({ message: 'Roadmap uploaded successfully', roadmap });
 
-
-       // const totalCreditHours =0;
     }
     catch (error) {
         console.log(error); 
@@ -177,7 +185,7 @@ const uploadNewRoadmap = async (req, res) => {
     }
 };
 
-const getRoadmapDetails = async (req, res) => {
+const getProgramRoadmaps = async (req, res) => {
     try {
         const { programName } = req.params;
 
@@ -193,7 +201,7 @@ const getRoadmapDetails = async (req, res) => {
         if (!program) {
             return res.status(404).json({ error: "Program not found" });
         }
-       const roadmap = await RoadmapModel.findOne({
+       const roadmap = await RoadmapModel.findAll({
     where: { programId: program.id },
     include: [
         {
@@ -207,7 +215,17 @@ const getRoadmapDetails = async (req, res) => {
                             include: [
                                 {
                                     model: CoursesModel,
-                                    attributes: ["id", "courseName", "courseCredits"]
+                                    attributes: ["id", "courseName", "courseCredits"],
+                                    include: [
+                                            {
+                                                model: CoursePreReqModel, //course ka preReqCourse
+                                                include: [
+                                                    {
+                                                        model: CoursesModel, //preReqCourseDetails
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                 },
                                 {
                                     model: CategoryModel,
@@ -260,8 +278,110 @@ const getRoadmapDetails = async (req, res) => {
     }
 };
 
+const getBatchRoadmap = async (req, res) => {
+    try {
+        const { batchName,batchYear,programName } = req.params;
+
+        console.log("Received request for roadmap details with batchName:", batchName, batchYear, programName);
+
+        const program = await ProgramModel.findOne({
+                where: {
+                    programName: programName
+                }
+            });
+            if (!program) {
+                return res.status(404).json({ error: "Program not found" });
+            }
+
+        // Find batch by name and year, of specic program
+        const batch = await BatchModel.findOne({
+            where: {
+                batchName: batchName,
+                batchYear: batchYear,
+                programId: program.id
+            }
+        });
+
+        if (!batch) {
+            return res.status(404).json({ error: "Batch not found" });
+        }
+
+        const roadmapId=batch.roadmapId;
+                const roadmap = await RoadmapModel.findOne({
+                    where: { id: roadmapId },
+                    include: [
+                        {
+                            model: RoadmapCourseCategoryModel,
+                            include: [
+                                {
+                                model: CategoryModel,
+                                include: [
+                                    {
+                                        model: CourseCategoryModel,
+                                        include: [
+                                            {
+                                                model: CoursesModel,
+                                                attributes: ["id", "courseName", "courseCredits"],
+                                                include: [
+                                                        {
+                                                            model: CoursePreReqModel, //course ka preReqCourse
+                                                            include: [
+                                                                {
+                                                                    model: CoursesModel, //preReqCourseDetails
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                            },
+                                            {
+                                                model: CategoryModel,
+                                                attributes: ["id", "categoryName", "colorScheme"]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        model: SemesterRoadmapModel,
+                        include: [
+                            {
+                                model: SemesterCourseModel,
+                                include: [
+                                    {
+                                        model: CourseCategoryModel,
+                                        include: [
+                                            {
+                                                model: CoursesModel,
+                                                attributes: ["id", "courseName", "courseCredits"]
+                                            },
+                                            {
+                                                model: CategoryModel,
+                                                attributes: ["id", "categoryName", "colorScheme"]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+        return res.json( roadmap  );
+
+    } catch (error) {
+        console.error("Error in getBatchRoadmap:", error);
+        return res.status(500).json({
+            error: "Internal Server Error",
+            details: error.message
+        });
+    }
+};
+
 
 export default {
     uploadNewRoadmap,
-    getRoadmapDetails,
+    getProgramRoadmaps,
+    getBatchRoadmap
 }

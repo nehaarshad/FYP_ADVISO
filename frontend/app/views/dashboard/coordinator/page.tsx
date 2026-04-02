@@ -110,7 +110,6 @@ export default function CoordinatorDashboard() {
             {activeTab === "session-mgmt" && <SessionManager selectedSession={selectedSession} setSelectedSession={setSelectedSession} />}
             {activeTab === "cs-roadmaps" && <RoadmapSection type="cs" />}
             {activeTab === "se-roadmaps" && <RoadmapSection type="se" />}
-            {activeTab === "guidelines" && <Guidelines />}
             {activeTab === "all-program" && <StudentRecords />}
             {activeTab === "upload-excel" && <ExcelUploader />}
             {activeTab === "add-faculty" && <AddFaculty />}

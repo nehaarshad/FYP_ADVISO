@@ -97,6 +97,9 @@ export default function relations() {
   ProgramModel.hasMany(RoadmapModel, { foreignKey: "programId" });
   RoadmapModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
+  BatchModel.hasOne(RoadmapModel, { foreignKey: "roadmapId" });
+  RoadmapModel.belongsTo(BatchModel, { foreignKey: "roadmapId" });
+
   // ==================== Batch & Assignment ====================
   BatchAssignment.belongsTo(BatchModel, { foreignKey: "batchId" });
   BatchModel.hasMany(BatchAssignment, { foreignKey: "batchId" });
@@ -158,8 +161,8 @@ export default function relations() {
   CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
 
   // Prerequisites (self-referential many-to-many)
-  CourseModel.hasMany(CoursePreReqModel, { foreignKey: "preReqCourseId" });
-  CoursePreReqModel.belongsTo(CourseModel, {  foreignKey: "preReqCourseId" });
+  CoursePreReqModel.hasMany(CourseModel, { foreignKey: "preReqCourseId" });
+  CourseModel.belongsTo(CoursePreReqModel, {  foreignKey: "preReqCourseId" });
 
   CoursePreReqModel.hasMany(CourseModel, { foreignKey: "courseId" });
   CourseModel.belongsTo(CoursePreReqModel, {  foreignKey: "courseId" });
