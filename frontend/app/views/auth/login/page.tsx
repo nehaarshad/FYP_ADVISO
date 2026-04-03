@@ -10,10 +10,12 @@ import {
 } from "lucide-react";
 import UniversalInput from "@/components/textsComponents/universalInput";
 import BlueFilledButton from '@/components/buttons/FilledButton/blueFilledButton';
+import { useRouter } from 'next/navigation'; // Added useRouter
 
 export default function LoginPage() {
   const [sapId, setSapId] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter(); // Initialize router
 
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
@@ -30,14 +32,13 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login Attempt:", { sapId, password });
-    // API logic goes here
+    // For testing/initial phase: Redirecting to Coordinator Dashboard
+    router.push('/views/dashboard/coordinator');
   };
 
   return (
     <div 
       className="min-h-screen bg-cover bg-center bg-no-repeat selection:bg-[#FDB813]/30 flex items-center justify-center p-4 md:p-6 relative overflow-hidden font-sans"
-      // Using the landing page background image
       style={{ backgroundImage: "url('/backgroundLanding.png')" }}
     >
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[3px] pointer-events-none" />
@@ -58,7 +59,6 @@ export default function LoginPage() {
               </Link>
             </motion.div>
             
-            {/* Logo*/}
             <motion.div 
               custom={1} initial="hidden" animate="visible" variants={fadeUp} 
               className="mb-8"
@@ -92,6 +92,7 @@ export default function LoginPage() {
                 <div className="h-1.5 w-12 bg-[#FDB813] rounded-full"></div>
             </div>
             
+            {/* Added onSubmit here */}
             <form className="space-y-6" onSubmit={handleLogin}>
               <UniversalInput 
                     label="SAP ID"
@@ -111,6 +112,7 @@ export default function LoginPage() {
                 Icon={Lock}
               />
 
+              {/* Ensure button type is submit if not already inside the component */}
               <BlueFilledButton text="Sign In" />
             </form>
 
