@@ -34,3 +34,6 @@ export function NotificationPanel({ onClose }: { onClose: () => void }) {
     </motion.div>
   );
 }
+
+
+
