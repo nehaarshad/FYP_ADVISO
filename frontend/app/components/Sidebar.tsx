@@ -167,65 +167,114 @@
 // }
 
 
+
+
+
+
 import React from 'react';
-import { LayoutDashboard, Users, Bookmark, ClipboardList } from 'lucide-react';
+// Maine yahan StickyNote aur MessageSquare add kar diye hain
+import { LayoutDashboard, Users, ClipboardList, StickyNote, MessageSquare, BookOpen } from 'lucide-react';
 
 interface SidebarProps {
   userRole: string;
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  setView: (view: string) => void; // View change karne ke liye
-  setSelectedStudent: (student: any) => void; // Student clear karne ke liye
+  setView: (view: string) => void; 
+  setSelectedStudent: (student: any) => void; 
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ 
-  userRole, 
-  activeTab, 
-  setActiveTab, 
+export const Sidebar: React.FC<SidebarProps> = ({
+  userRole,
+  activeTab,
+  setActiveTab,
   setView,
-  setSelectedStudent 
+  setSelectedStudent, 
 }) => {
   return (
     <aside className="w-64 bg-[#1e3a5f] text-white flex flex-col p-6 shrink-0 shadow-xl h-screen sticky top-0">
+      
+      {/* Logo */}
       <div className="flex items-center gap-2 mb-10 px-2">
         <div className="w-8 h-8 bg-amber-400 rounded flex items-center justify-center text-[#1e3a5f] font-bold text-sm shadow-lg rotate-3">A</div>
         <h1 className="text-2xl font-black italic tracking-tighter uppercase leading-none">ADVISO</h1>
       </div>
 
-      <nav className="flex-1 space-y-1">
-        <button 
-  onClick={() => {
-    setView('Overview');          // Dashboard ko wapas Overview mode mein layega
-    setSelectedStudent(null);     // Kisi bhi khuli hui profile ko band kar dega
-    setActiveTab('Overview');     // Sidebar item ko highlight karega
-  }} 
-  className={`w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-4
-    ${activeTab === 'Overview' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/10 text-white/70'}`}
->
-  <LayoutDashboard size={18} /> Overview
-</button>
+      <nav className="flex-1 space-y-1 overflow-y-auto no-scrollbar">
+        {/* Overview */}
+        <button
+          onClick={() => {
+            setView('Overview');
+            setSelectedStudent(null);
+            setActiveTab('Overview');
+          }}
+          className={`w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-4
+            ${activeTab === 'Overview' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/10 text-white/70'}`}
+        >
+          <LayoutDashboard size={18} /> Overview
+        </button>
 
-        <div className="pt-4 pb-2 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] px-3">Management</div>
-        
+        {/* Batch Advisor Section */}
         {userRole === "Batch Advisor" && (
           <>
-            <button 
-              onClick={() => setActiveTab('my-students')}
+            <div className="pt-4 pb-2 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] px-3">
+              Management
+            </div>
+
+            {/* Advisor Notes */}
+            <button
+              onClick={() => {
+                setView('Notes');
+                setSelectedStudent(null);
+                setActiveTab('Notes');
+              }}
               className={`w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-1
-                ${activeTab === 'my-students' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/5 text-white/70'}`}
+                ${activeTab === 'Notes' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/5 text-white/70'}`}
             >
-              <Users size={18} /> My Students
+              <StickyNote size={18} /> Advisor Notes
             </button>
 
-            <button 
-              onClick={() => setActiveTab('meetings')}
+            {/* Advisor Chat - AB YEH SHOW HOGA */}
+            <button
+              onClick={() => {
+                setView('AdvisorChat');
+                setSelectedStudent(null);
+                setActiveTab('AdvisorChat');
+              }}
               className={`w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-1
-                ${activeTab === 'meetings' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/5 text-white/70'}`}
+                ${activeTab === 'AdvisorChat' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/5 text-white/70'}`}
             >
-              <ClipboardList size={18} /> Meetings
+              <MessageSquare size={18} /> Advisor Chat
             </button>
           </>
         )}
+
+        {/* Other buttons */}
+        <div className="pt-4 pb-2 text-[10px] font-black text-white/30 uppercase tracking-[0.2em] px-3">View</div>
+        
+        <button
+          onClick={() => {
+            setView('Meetings');
+            setSelectedStudent(null);
+            setActiveTab('meetings');
+          }}
+          className={`w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-1
+            ${activeTab === 'meetings' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/5 text-white/70'}`}
+        >
+          <ClipboardList size={18} /> Meetings
+        </button>
+
+        <button
+          onClick={() => {
+            setView('Guidelines');
+            setSelectedStudent(null);
+            setActiveTab('guidelines');
+          }}
+          className={`w-full flex items-center gap-3 p-3 rounded-xl text-sm font-bold transition-all mb-1
+            ${activeTab === 'guidelines' ? 'bg-amber-400 text-[#1e3a5f]' : 'hover:bg-white/5 text-white/70'}`}
+        >
+          <BookOpen size={18} /> Guidelines
+        </button>
+        
       </nav>
     </aside>
   );

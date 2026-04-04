@@ -71,13 +71,13 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
 
   const getTypeBg = (type: string) => {
     switch(type) {
-      case "Computing Core": return "bg-red-200";
-      case "Mathematics and Science Foundation": return "bg-rose-200";
-      case "General Education (Core)": return "bg-slate-200";
-      case "University Elective": return "bg-purple-200";
-      case "SE Core": return "bg-yellow-200";
-      case "SE Elective": return "bg-lime-200";
-      case "SE Supporting": return "bg-blue-200";
+      case "Computing Core": return "bg-red-400";
+      case "Mathematics and Science Foundation": return "bg-rose-300";
+      case "General Education (Core)": return "bg-slate-300";
+      case "University Elective": return "bg-purple-300";
+      case "SE Core": return "bg-yellow-300";
+      case "SE Elective": return "bg-lime-300";
+      case "SE Supporting": return "bg-indigo-700";
       default: return "bg-slate-100";
     }
   };
@@ -95,10 +95,9 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-1">
+      <div className="flex-1 overflow-y-auto p-0">
         <div className="max-w-6xl mx-auto space-y-8 pb-20">
-          {/* Summary Stats - Italic removed from Name and CGPA */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-8 rounded-[2.2rem] border border-slate-100 shadow-sm">
             <div>
               <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Student Name</p>
               <p className="text-xl font-black text-[#1e3a5f] uppercase not-italic">{student?.name || "N/A"}</p>
@@ -117,7 +116,7 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
           {displayTranscript.map((sem: any, idx: number) => (
             <div key={idx} className="bg-white rounded-[1.5rem] overflow-hidden border border-slate-100 shadow-sm">
               <div className="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex justify-between items-center">
-                {/* Heading italic removed */}
+                
                 <h3 className="text-sm font-black text-[#1e3a5f] uppercase tracking-widest not-italic">{sem.semester}</h3>
                 <span className="px-4 py-1.5 bg-white rounded-xl border border-slate-200 text-xs font-black text-amber-600">
                   GPA: {sem.sgpa}
@@ -126,7 +125,7 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
               
               <table className="w-full text-left">
                 <thead>
-                  <tr className="text-[9px] font-black text-slate-300 uppercase tracking-widest border-b border-slate-50">
+                  <tr className="text-[11px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-50">
                     <th className="px-8 py-5">Course Title</th>
                     <th className="px-4 py-5">Course Category</th>
                     <th className="px-4 py-5 text-center">Cr. Hrs</th>
@@ -136,21 +135,21 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                 <tbody className="divide-y divide-slate-50">
                   {sem.courses.map((course: any, cIdx: number) => (
                     <tr key={cIdx} className="hover:bg-slate-50/30 transition-colors">
-                      {/* Course Title italic removed */}
+                      
                       <td className="px-8 py-4 font-bold text-[#1e3a5f] text-xs uppercase not-italic tracking-tight">
                         {course.name}
                       </td>
-                      <td className="px-4 py-4">
-                        <span className={`px-3 py-1 rounded-full text-[8px] font-medium uppercase tracking-tighter text-black ${getTypeBg(course.type)}`}>
+                      <td className="px-5 py-5">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-tighter text-black ${getTypeBg(course.type)}`}>
                           {course.type}
                         </span>
                       </td>
-                      <td className="px-4 py-4 text-center font-black text-slate-500 text-xs">{course.cr}</td>
-                      <td className="px-8 py-4 text-right">
-                        <span className={`text-xs font-black ${course.grade.startsWith('A') ? 'text-green-600' : 'text-blue-600'}`}>
-                          {course.grade}
-                        </span>
-                      </td>
+                      <td className="px-5 py-5 text-center font-black text-slate-500 text-xs">{course.cr}</td>
+                     <td className="px-12 py-5 text-right">
+  <span className={`text-xs font-black ${course.grade.startsWith('A') ? 'text-green-600' : 'text-blue-600'}`}>
+    {course.grade}
+  </span>
+</td>
                     </tr>
                   ))}
                 </tbody>
