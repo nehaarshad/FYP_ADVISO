@@ -91,14 +91,14 @@ export default function relations() {
 
   // ==================== Program ====================
 
-  BatchModel.hasMany(ProgramModel, { foreignKey: "programId" });
-  ProgramModel.belongsTo(BatchModel, { foreignKey: "programId" });
+  BatchModel.belongsTo(ProgramModel, { foreignKey: "programId" });
+  ProgramModel.hasMany(BatchModel, { foreignKey: "programId" });
 
   ProgramModel.hasMany(RoadmapModel, { foreignKey: "programId" });
   RoadmapModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
-  RoadmapModel.hasMany(SemesterRoadmapModel, { foreignKey: "roadmapId" });
-  SemesterRoadmapModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });
+  BatchModel.hasOne(RoadmapModel, { foreignKey: "roadmapId" });
+  RoadmapModel.belongsTo(BatchModel, { foreignKey: "roadmapId" });
 
   // ==================== Batch & Assignment ====================
   BatchAssignment.belongsTo(BatchModel, { foreignKey: "batchId" });
@@ -144,23 +144,25 @@ export default function relations() {
   CourseOfferingModel.hasMany(CourseModel, { foreignKey: "courseId" });
   CourseModel.belongsTo(CourseOfferingModel, { foreignKey: "courseId" });
 
-  CourseModel.belongsToMany(CategoryModel, {
-    through: CourseCategoryModel,
-    foreignKey: "courseId",
-    otherKey: "categoryId",
-  });
-  CategoryModel.belongsToMany(CourseModel, {
-    through: CourseCategoryModel,
-    foreignKey: "categoryId",
-    otherKey: "courseId",
-  });
+  // CourseModel.belongsToMany(CategoryModel, {
+  //   through: CourseCategoryModel,
+  //   foreignKey: "courseId",
+  //   otherKey: "categoryId",
+  //   as: "categories"
+  // });
+  // CategoryModel.belongsToMany(CourseModel, {
+  //   through: CourseCategoryModel,
+  //   foreignKey: "categoryId",
+  //   otherKey: "courseId",
+  //   as: "courses"
+  // });
 
   CourseCategoryModel.belongsTo(CourseModel, { foreignKey: "courseId" });
   CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
 
   // Prerequisites (self-referential many-to-many)
-  CourseModel.hasMany(CoursePreReqModel, { foreignKey: "preReqCourseId" });
-  CoursePreReqModel.belongsTo(CourseModel, {  foreignKey: "preReqCourseId" });
+  CoursePreReqModel.hasMany(CourseModel, { foreignKey: "preReqCourseId" });
+  CourseModel.belongsTo(CoursePreReqModel, {  foreignKey: "preReqCourseId" });
 
   CoursePreReqModel.hasMany(CourseModel, { foreignKey: "courseId" });
   CourseModel.belongsTo(CoursePreReqModel, {  foreignKey: "courseId" });
@@ -175,24 +177,31 @@ export default function relations() {
   EnrolledCoursesModel.belongsTo(SessionModel, { foreignKey: "sessionId" });
   SessionModel.hasMany(EnrolledCoursesModel, { foreignKey: "sessionId" });
 
-  // ==================== Roadmap & Semester ====================
-  RoadmapModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "roadmapId" });
-  RoadmapCourseCategoryModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });
+// ==================== Roadmap & Semester ====================
+RoadmapModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "roadmapId", });
+RoadmapCourseCategoryModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId",  });
 
-  RoadmapModel.hasMany(SemesterRoadmapModel, { foreignKey: "roadmapId" });
-  SemesterRoadmapModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });
+RoadmapModel.hasMany(SemesterRoadmapModel, { foreignKey: "roadmapId",  });
+SemesterRoadmapModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId", });
 
-  RoadmapCourseCategoryModel.belongsTo(CourseModel, { foreignKey: "courseId" });
-  CourseModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "courseId" });
+// RoadmapCourseCategory → Category (NOT the other way around)
+RoadmapCourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId", });
+CategoryModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "categoryId", });
 
-  CategoryModel.belongsTo(RoadmapCourseCategoryModel, { foreignKey: "categoryId" });
-  RoadmapCourseCategoryModel.hasMany(CategoryModel, { foreignKey: "categoryId" });
+// Category → CourseCategoryModel
+CategoryModel.hasMany(CourseCategoryModel, { foreignKey: "categoryId", });
+CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId",  });
 
-  SemesterRoadmapModel.hasMany(SemesterCourseModel, { foreignKey: "semesterRoadmapId" });
-  SemesterCourseModel.belongsTo(SemesterRoadmapModel, { foreignKey: "semesterRoadmapId" });
+// CourseModel → CourseCategoryModel
+CourseModel.hasMany(CourseCategoryModel, { foreignKey: "courseId",  });
+CourseCategoryModel.belongsTo(CourseModel, { foreignKey: "courseId",  });
 
-  SemesterCourseModel.hasMany(CourseCategoryModel, { foreignKey: "courseCategoryId" });
-  CourseCategoryModel.belongsTo(SemesterCourseModel, { foreignKey: "courseCategoryId" });
+// Semester courses
+SemesterRoadmapModel.hasMany(SemesterCourseModel, { foreignKey: "semesterRoadmapId", });
+SemesterCourseModel.belongsTo(SemesterRoadmapModel, { foreignKey: "semesterRoadmapId",  });
+
+SemesterCourseModel.belongsTo(CourseCategoryModel, { foreignKey: "courseCategoryId", });
+CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId",  });
 
   // ==================== Timetable ====================
   TimetableModel.hasMany(CourseOfferingModel, { foreignKey: "courseOfferingId" });
@@ -204,7 +213,6 @@ export default function relations() {
   TimetableModel.hasMany(SessionModel, { foreignKey: "sessionId" });
   SessionModel.belongsTo(TimetableModel, { foreignKey: "sessionId" });
   // ==================== Chat & Messages ====================
-
   ChatsModel.hasMany(Message, { foreignKey: "chatId" });
   Message.belongsTo(ChatsModel, { foreignKey: "chatId" });
 

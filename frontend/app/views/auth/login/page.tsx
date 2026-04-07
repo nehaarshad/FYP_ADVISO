@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, Variants, TargetAndTransition } from "framer-motion";
 import Link from 'next/link';
 import { 
@@ -10,12 +11,11 @@ import {
 } from "lucide-react";
 import UniversalInput from "@/components/textsComponents/universalInput";
 import BlueFilledButton from '@/components/buttons/FilledButton/blueFilledButton';
-import { useRouter } from 'next/navigation'; // Added useRouter
+
 
 export default function LoginPage() {
   const [sapId, setSapId] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); // Initialize router
 
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
@@ -30,10 +30,12 @@ export default function LoginPage() {
     }),
   };
 
+  const router= useRouter();
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // For testing/initial phase: Redirecting to Coordinator Dashboard
-    router.push('/views/dashboard/coordinator');
+    console.log("Login Attempt:", { sapId, password });
+    // API logic goes here
   };
 
   return (
@@ -59,6 +61,7 @@ export default function LoginPage() {
               </Link>
             </motion.div>
             
+            {/* Logo*/}
             <motion.div 
               custom={1} initial="hidden" animate="visible" variants={fadeUp} 
               className="mb-8"
@@ -70,15 +73,15 @@ export default function LoginPage() {
               />
             </motion.div>
 
-            <motion.h1 
-              custom={2} initial="hidden" animate="visible" variants={fadeUp}
-              className="text-5xl font-black tracking-tighter mb-6 leading-[1.1]"
-            >
-              Welcome back <br /> 
-              to <span className="text-[#FDB813]">ADVISO.</span>
-            </motion.h1>
-          </div>
-        </div>
+      <motion.h1 
+        custom={2} initial="hidden" animate="visible" variants={fadeUp}
+        className="text-3xl font-black tracking-tighter mb-4 leading-[1.1]"
+      >
+        Welcome back <br /> 
+        to <span className="text-[#FDB813]">ADVISO.</span>
+      </motion.h1>
+    </div>
+  </div>
 
         {/* RIGHT SIDE: FORM */}
         <div className="p-10 md:p-16 flex flex-col justify-center bg-white relative">
@@ -92,7 +95,6 @@ export default function LoginPage() {
                 <div className="h-1.5 w-12 bg-[#FDB813] rounded-full"></div>
             </div>
             
-            {/* Added onSubmit here */}
             <form className="space-y-6" onSubmit={handleLogin}>
               <UniversalInput 
                     label="SAP ID"
@@ -103,30 +105,29 @@ export default function LoginPage() {
                     Icon={Mail}
                   />
 
-              <UniversalInput 
-                label="Password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={setPassword}
-                Icon={Lock}
-              />
+        <UniversalInput 
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          value={password}
+          onChange={setPassword}
+          Icon={Lock}
+        />
 
-              {/* Ensure button type is submit if not already inside the component */}
               <BlueFilledButton text="Sign In" />
             </form>
 
-            <div className="mt-12 flex items-center gap-4 p-5 bg-blue-50/50 rounded-[1.5rem] border border-blue-100/50">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
-                <AlertCircle size={18} className="text-blue-600" />
-              </div>
-              <p className="text-[12px] text-slate-600 font-bold leading-snug">
-                Issues logging in? Reach out to your <span className="text-[#1e3a5f]"> Coordinator</span> for support.
-              </p>
-            </div>
-          </motion.div>
+      <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50/50 rounded-[1.2rem] border border-blue-100/50">
+        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
+          <AlertCircle size={15} className="text-blue-600" />
         </div>
-      </motion.div>
+        <p className="text-[11px] text-slate-600 font-bold leading-snug">
+          Issues logging in? Reach out to your <span className="text-[#1e3a5f]">Coordinator</span> for support.
+        </p>
+      </div>
+    </motion.div>
+  </div>
+</motion.div>
     </div>
   );
 }

@@ -9,17 +9,13 @@ const CoursesModel = sequelize.define("CoursesModel", {
     },
     courseCode: {
         type: DataTypes.STRING,
-        allowNull: false,
-    },
-    courseName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    courseDescription: {
-        type: DataTypes.STRING,
         allowNull: true,
     },
-    courseCredits: {
+    courseName: {     //course name vary from sheet to sheet, but code same (applied physics)
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    courseCredits: {  // course name and code same but credits may change (CN)
         type: DataTypes.INTEGER,
         allowNull: false,
     },
