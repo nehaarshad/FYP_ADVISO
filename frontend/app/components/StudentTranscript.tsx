@@ -69,19 +69,18 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
 
   const displayTranscript = student?.transcript || defaultTranscript;
 
-  const getTypeBg = (type: string) => {
-    switch(type) {
-      case "Computing Core": return "bg-red-400";
-      case "Mathematics and Science Foundation": return "bg-rose-300";
-      case "General Education (Core)": return "bg-slate-300";
-      case "University Elective": return "bg-purple-300";
-      case "SE Core": return "bg-yellow-300";
-      case "SE Elective": return "bg-lime-300";
-      case "SE Supporting": return "bg-indigo-700";
-      default: return "bg-slate-100";
-    }
-  };
-
+  const getTypeText = (type: string) => {
+  switch(type) {
+    case "Computing Core": return "text-red-600";
+    case "Mathematics and Science Foundation": return "text-rose-500";
+    case "General Education (Core)": return "text-slate-600";
+    case "University Elective": return "text-purple-600";
+    case "SE Core": return "text-yellow-700"; 
+    case "SE Elective": return "text-lime-600";
+    case "SE Supporting": return "text-indigo-700";
+    default: return "text-slate-600";
+  }
+};
   return (
     <div className="animate-in slide-in-from-right duration-500 h-full flex flex-col bg-slate-50/50">
       
@@ -140,7 +139,7 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                         {course.name}
                       </td>
                       <td className="px-5 py-5">
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-tighter text-black ${getTypeBg(course.type)}`}>
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-tighter text-black ${getTypeText(course.type)}`}>
                           {course.type}
                         </span>
                       </td>
