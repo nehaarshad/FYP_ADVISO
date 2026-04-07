@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 // Components Imports
-import { Sidebar } from "@/app/components/Sidebar";
+import { Sidebar } from "@/components/navbars/route";
 import { SessionManager } from "@/app/components/SessionManager";
 import { RoadmapSection } from "@/app/components/Roadmaps";
 import { StudentRecords } from "@/app/components/StudentRecords";
@@ -18,17 +18,19 @@ import { NotificationPanel } from "@/app/components/NotificationPanel";
 import { SettingsModal } from "@/app/components/SettingsModel";
 import { EditStudent } from '@/app/components/EditStudent';
 import { EditAdvisor } from '@/app/components/EditAdvisor';
-import { CourseOffering } from "@/app/components/CourseOffering";
-import { Timetable } from "@/app/components/Timetable";
-import { BatchResults } from "@/app/components/BatchResults";
+import { CourseOffering } from "@/components/coordinatorComponents/courseOfferings/route";
+import { Timetable } from "@/components/coordinatorComponents/titmetable/route";
+import { BatchResults } from "@/components/coordinatorComponents/results/route";
 import { CourseCatalog } from "@/app/components/CourseCatalog";
 import { RoadmapView } from "@/app/components/RoadmapView";
+
+// IMPORTING YOUR SEPARATE PROFILE COMPONENT
 import { ProfileView } from "@/app/components/ProfileView"; 
+
 export default function CoordinatorDashboard() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
-  const [showAddUserOptions, setShowAddUserOptions] = useState(false);
   const [selectedSession, setSelectedSession] = useState("Fall 2025");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -56,10 +58,9 @@ export default function CoordinatorDashboard() {
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">
       <Sidebar 
+      userRole='coordinator'
         activeTab={activeTab} 
         setActiveTab={navigateTo} 
-        showAddUserOptions={showAddUserOptions} 
-        setShowAddUserOptions={setShowAddUserOptions}
       />
       
       <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">

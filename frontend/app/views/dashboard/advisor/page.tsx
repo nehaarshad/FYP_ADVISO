@@ -1,8 +1,4 @@
 
-'../../../components/Sidebar'
-
-
-
 "use client";
 import React, { useState } from "react";
 import { 
@@ -12,7 +8,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion"; 
 
 // Components Imports
-import { Sidebar } from "../../../components/Sidebar";
+import { Sidebar } from "../../../../components/navbars/route";
 import { StatCard } from "../../../components/StatCard";
 import { StudentList } from "../../../components/StudentList";
 import { StudentProfile } from "../../../components/StudentProfile";
@@ -22,13 +18,30 @@ import { MeetingList } from '../../../components/MeetingList';
 import { AdvisorNotes } from '../../../components/AdvisorNotes';
 import { NotificationPanel } from "../../../components/NotificationPanel";
 import { AdvisoryLogs } from '../../../components/AdvisoryLogs';
-
-type ViewState = "Overview" | "BatchDetails" | "StudentProfile" | "Transcript" | "AdvisoryNotes" | "AdvisorChat" | "Meetings" | "Guidelines" | "Notes";
 type StudentStatus = "Total" | "Regular" | "Irregular";
 
+
 export default function Dashboard() {
-  const [view, setView] = useState<ViewState>("Overview");
-  const [activeTab, setActiveTab] = useState<string>("Overview");
+  const goBack = () => {
+  if (navigationStack.length > 1) {
+    const newStack = [...navigationStack];
+    newStack.pop();
+    const last = newStack[newStack.length - 1];
+    setNavigationStack(newStack);
+    setActiveTab(last);
+    setView(last as any);
+  }
+};
+const navigateTo = (tab: string) => {
+  setNavigationStack(prev => [...prev, tab]);
+  setActiveTab(tab);
+  setView(tab as any); // important for switching views
+};
+  
+    const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
+
+  const [view, setView] = useState<string>("overview");
+  const [activeTab, setActiveTab] = useState("overview");
   const [selectedBatch, setSelectedBatch] = useState<string>("Fall 2024");
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
 
@@ -41,13 +54,11 @@ export default function Dashboard() {
   return (
     <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans text-slate-900">
       
-      <Sidebar
-        userRole="Batch Advisor"
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        setView={(v: any) => setView(v as ViewState)}
-        setSelectedStudent={setSelectedStudent}
-      />
+      <Sidebar 
+            userRole='advisor'
+              activeTab={activeTab} 
+              setActiveTab={navigateTo} 
+            />
 
       <main className="flex-1 flex flex-col min-w-0">
         
