@@ -78,7 +78,7 @@ export function Sidebar({
           </>
         )}
 
-        {/* --- ADVISOR ONLY SECTION --- */}
+        {/* --- ADVISOR/STUDENT SECTIONS (Keep same as before) --- */}
         {userRole === "advisor" && (
           <div className="py-2">
               <p className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">Advisory</p>
@@ -87,7 +87,6 @@ export function Sidebar({
           </div>
         )}
 
-        {/* --- STUDENT ONLY SECTION --- */}
         {userRole === "student" && (
           <div className="py-2">
               <p className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">Student Portal</p>
@@ -97,30 +96,42 @@ export function Sidebar({
         )}
       </nav>
 
-      {/* 2. PROFILE SECTION (Updated to be clickable) */}
-      <div className="p-4">
+      {/* 2. PROFILE SECTION */}
+      <div className="p-4 mt-auto">
         <div 
           onClick={() => setActiveTab("profile")}
-          className={`border rounded-[2rem] p-4 shadow-xl cursor-pointer transition-all ${
-            activeTab === "profile" ? 'bg-white/10 border-white/20' : 'bg-[#1e3a5f] border-white/10 hover:bg-white/5'
+          className={`border rounded-[2rem] p-4 shadow-xl cursor-pointer transition-all duration-300 ${
+            activeTab === "profile" 
+              ? 'bg-[#FDB813] border-white/20' 
+              : 'bg-white/5 border-white/10 hover:bg-white/10'
           }`}
         >
             <div className="flex items-center gap-3 mb-3 px-2">
-              <div className="h-10 w-10 bg-[#FDB813] rounded-full flex items-center justify-center text-[#1e3a5f] font-black shadow-lg">
-                C
+              <div className={`h-10 w-10 rounded-full flex items-center justify-center font-black shadow-lg transition-colors ${
+                activeTab === "profile" ? 'bg-[#1e3a5f] text-[#FDB813]' : 'bg-[#FDB813] text-[#1e3a5f]'
+              }`}>
+                A
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-black text-white truncate italic">Aleena Ayub</p>
-                <p className="text-[9px] font-bold text-white/40 uppercase tracking-widest">Coordinator</p>
+                <p className={`text-xs font-black truncate italic ${activeTab === "profile" ? 'text-[#1e3a5f]' : 'text-white'}`}>
+                  Aleena Ayub
+                </p>
+                <p className={`text-[9px] font-bold uppercase tracking-widest ${activeTab === "profile" ? 'text-[#1e3a5f]/60' : 'text-white/40'}`}>
+                  Coordinator
+                </p>
               </div>
             </div>
             
             <button 
               onClick={(e) => {
-                e.stopPropagation(); // Sign out pe click karne se profile active nahi hogi
+                e.stopPropagation(); // Prevents triggering profile tab when clicking sign out
                 handleSignOut();
               }}
-              className="w-full py-2 bg-white/5 hover:bg-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-white border border-white/5"
+              className={`w-full py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                activeTab === "profile" 
+                  ? 'bg-[#1e3a5f] text-white border-transparent' 
+                  : 'bg-white/5 text-white border-white/5 hover:bg-red-500/20 hover:border-red-500/40'
+              }`}
             >
               Sign Out
             </button>
