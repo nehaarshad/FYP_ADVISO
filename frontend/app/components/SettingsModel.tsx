@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { X, Moon, Bell, Shield, Palette } from "lucide-react";
 
 export function SettingsModal({ onClose }: { onClose: () => void }) {
-  // 1. Teeno toggles ki states define ki hain
+ 
   const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [privacyLock, setPrivacyLock] = useState(false);
