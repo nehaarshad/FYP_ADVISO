@@ -101,10 +101,10 @@ export const StudentProfile = ({ student, selectedBatch, onBack, onViewTranscrip
                 <p className="text-[10px] text-amber-400 font-black uppercase tracking-[0.1em] mb-2">
                   Current Academic Standing
                 </p>
-                <div className="flex items-baseline gap-3">
-                  <h2 className="text-4xl font-black not-italic tracking-tighter text-white">
-                    {student.cgpa || '0.00'}
-                  </h2>
+                <div className="flex items-baseline gap-1">
+                  <h2 className="text-4xl font-bold not-italic tracking-tight text-white ml-3 font-black">
+  {student.cgpa || '0.00'}
+</h2>
                   <span className="text-xs font-black not-italic text-slate-300 uppercase tracking-widest">
                     CGPA
                   </span>
@@ -112,16 +112,17 @@ export const StudentProfile = ({ student, selectedBatch, onBack, onViewTranscrip
               </div>
 
               <div className="bg-white/10 backdrop-blur-md px-7 py-6 rounded-[2.1rem] border border-white/10 min-w-[100px]">
-                <p className="text-[9px] font-black text-slate-300 uppercase mb-2 tracking-[0.1em]">
-                  Completed Credits
-                </p>
+<p className="text-[9px] font-black text-amber-400 uppercase mb-2 tracking-[0.1em]">
+  Completed Credits
+</p>
+                 <p className="text-xl font-black text-amber-400"> 
+  85 
+  <span className="text-white"> / 130</span> 
+  <span className="text-[10px] text-slate-400 uppercase ml-1">Hrs</span>
+</p>
                 <div className="flex items-baseline gap-2">
-                  <p className="text-3xl font-black text-white not-italic tracking-tighter leading-none">
-                    85
-                  </p>
-                  <p className="text-[13px] font-black text-amber-400 uppercase not-italic">
-                    Cr.Hr
-                  </p>
+                  
+                  
                 </div>
               </div>
             </div>
@@ -129,7 +130,7 @@ export const StudentProfile = ({ student, selectedBatch, onBack, onViewTranscrip
           </div>
 
           {/* ROADMAP AREA */}
-          <div className="bg-white rounded-[2.1rem] p-7 shadow-sm border border-slate-100 flex flex-col shrink-0">
+          <div className="bg-white rounded-[2.1rem] p-8 shadow-sm border border-slate-100 flex flex-col shrink-0">
             <div className="flex items-center justify-between mb-10 border-b border-slate-50 pb-6 shrink-0">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 shadow-sm">
@@ -143,8 +144,7 @@ export const StudentProfile = ({ student, selectedBatch, onBack, onViewTranscrip
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Requirement</p>
-                <p className="text-xl font-black text-[#1e3a5f]">85 <span className="text-slate-300">/ 130</span> <span className="text-[10px] text-slate-400 uppercase">Hrs</span></p>
+                
               </div>
             </div>
 
