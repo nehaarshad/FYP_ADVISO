@@ -7,6 +7,10 @@ import ProgramModel from "../models/programModel.js";
 import bcrypt from "bcryptjs";
 import BatchModel from "../models/batchModel.js"
 import Student from "../models/studentModel.js";
+import ExcelJS from 'exceljs';
+import utils from '../utils/sheetProcessingHelperFunction.js';
+const { getCellText } = utils;
+
 import { Op } from "sequelize";
 
 const addAdvisor = async(req,res)=>{
@@ -308,7 +312,140 @@ const updateStudentStatus = async(req,res)=>{
 
 
 const addViaExcelSheet = async(req,res)=>{
+    try {
+        const {programName, batchName, batchYear} = req.body;
+        console.log("Check Body:", req.body);
 
-}
+        const studentFile = req.file;
+        if(!studentFile) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+
+        // Find or create program
+        const [program] = await ProgramModel.findOrCreate({
+            where: { programName },
+            defaults: { programName }
+        });
+        console.log("Program:", program.programName);
+
+        // Find or create batch
+        const [batch] = await BatchModel.findOrCreate({
+            where: { 
+                batchName, 
+                batchYear, 
+                programId: program.id 
+            },
+            defaults: {
+                batchName,
+                batchYear,
+                programId: program.id,
+                totalStudent: 0
+            }
+        });
+        console.log("Batch:", batch.batchName, batch.batchYear);
+
+        // Read Excel file
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.readFile(studentFile.path);
+        const worksheet = workbook.worksheets[0];
+        const sheetName = worksheet.name;
+        console.log("Worksheet name:", sheetName);
+
+        // First, find the actual header row by searching for "Sr No."
+        let headerRowIndex = 1;
+        for(let i = 1; i <= 5; i++) { // Check first 5 rows for header
+            const firstCell = getCellText(worksheet.getCell(i, 1));
+            if(firstCell === "Sr No." || firstCell === "Sr No") {
+                headerRowIndex = i;
+                console.log(`Found header at row ${headerRowIndex}`);
+                break;
+            }
+        }
+
+        // Start processing from the row after header
+        for(let i = headerRowIndex + 1; i <= worksheet.rowCount; i++) {
+            const srNo = getCellText(worksheet.getCell(i, 1));
+            let sapid = getCellText(worksheet.getCell(i, 2));
+            const studentName = getCellText(worksheet.getCell(i, 3));
+            
+            console.log(`Processing Row ${i}: SrNo="${srNo}", SAPID="${sapid}", Name="${studentName}"`);
+            
+            // Skip empty rows or header rows
+            if(!sapid || !studentName || sapid === "Student No." || studentName === "Student Name") {
+                console.log(`Row ${i} skipped (missing SAPID or Student Name)`);
+             
+                continue;
+            }
+            
+            // Parse SAPID as integer
+            const parsedSapid = parseInt(sapid);
+            if(isNaN(parsedSapid)) {
+                console.log(`Row ${i} skipped (invalid SAPID: ${sapid})`);
+               
+                continue;
+            }
+            
+            try {
+                // Check if user already exists
+                const existingUser = await User.findOne({ 
+                    where: { sapid: parsedSapid } 
+                });
+                
+                if(existingUser) {
+                    console.log(`User with SAPID ${parsedSapid} already exists, skipping...`);
+                    continue;
+                }
+                
+                // Generate credentials
+                const password = `sap${parsedSapid}`;
+                console.log(`Generated Password: ${password}`);
+                const hashedPassword = await bcrypt.hash(password, 10);
+                const email = `${parsedSapid}@students.riphah.edu.pk`;
+                
+                // Create user
+                const newUser = await User.create({ 
+                    sapid: parsedSapid, 
+                    password: hashedPassword, 
+                    role: "student" 
+                });
+                console.log(`Created User ID: ${newUser.id} for SAPID: ${parsedSapid}`);
+                
+                // Create student with default values for required fields
+                const newStudent = await Student.create({
+                    studentName: studentName.trim(),
+                    registrationNumber: null,
+                    dateOfBirth: null,
+                    cnic: null,
+                    currentSemester: 1, // Set default semester to 1 (or calculate based on batch)
+                    email: email,
+                    contactNumber: null,
+                    userId: newUser.id,
+                    batchId: batch.id
+                });
+                console.log(`Created Student ID: ${newStudent.id} for ${studentName}`);
+                
+                // Update batch total student count
+                batch.totalStudent = (batch.totalStudent || 0) + 1;
+                await batch.save();
+            
+                
+            } catch(error) {
+                console.error(`Error processing row ${i} for student ${studentName}:`, error.message);
+            }
+        }
+        
+    
+        
+        return res.status(200).json( "Student upload completed", );
+        
+    } catch(error) {
+        console.error("Error while uploading students via Excel sheet:", error);
+        return res.status(500).json({ 
+            error: "Internal Server Error",
+            details: error.message 
+        });
+    }
+};
+
 
 export default {addAdvisor,addNewStudent,updateAdvisor,updateStudent,updateStudentStatus,addViaExcelSheet}
