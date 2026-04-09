@@ -97,6 +97,10 @@ export default function relations() {
   ProgramModel.hasMany(RoadmapModel, { foreignKey: "programId" });
   RoadmapModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
+  
+  ProgramModel.hasMany(CourseOfferingModel, { foreignKey: "programId" });
+  CourseOfferingModel.belongsTo(ProgramModel, { foreignKey: "programId" });
+
   BatchModel.hasOne(RoadmapModel, { foreignKey: "roadmapId" });
   RoadmapModel.belongsTo(BatchModel, { foreignKey: "roadmapId" });
 
@@ -109,6 +113,10 @@ export default function relations() {
 
   BatchModel.hasMany(BatchMeeting, { foreignKey: "batchId" });
   BatchMeeting.belongsTo(BatchModel, { foreignKey: "batchId" });
+
+  
+  BatchModel.hasMany(CourseOfferingModel, { foreignKey: "batchId" });
+  CourseOfferingModel.belongsTo(BatchModel, { foreignKey: "batchId" });
 
   BatchMeeting.hasMany(MeetingReminder, { foreignKey: "meetingId" });
   MeetingReminder.belongsTo(BatchMeeting, { foreignKey: "meetingId" });
