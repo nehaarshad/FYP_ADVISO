@@ -12,6 +12,7 @@ import courseDetailRoute from "./src/routes/courseDetailRouter.js";
 import registerUserRoute from "./src/routes/registerUserRoute.js";
 import courseOfferingRoute from "./src/routes/courseOfferingRoute.js";
 import timetableRoute from "./src/routes/timetableRoute.js";
+import manageUserRoute from "./src/routes/manageUserRoute.js";
 import path from "path";
 dotenv.config();
 
@@ -57,6 +58,7 @@ app.use('/auth', courseDetailRoute);
 app.use('/auth', registerUserRoute);
 app.use('/auth', courseOfferingRoute);
 app.use('/auth', timetableRoute);
+app.use('/auth', manageUserRoute);
 
 sequelize.authenticate()
   .then(() => {
