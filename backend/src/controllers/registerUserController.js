@@ -139,7 +139,7 @@ const updateAdvisor = async(req,res)=>{
         
     } catch (error) {
 
-        console.error("Error while adding the new batch advisor",error)
+        console.error("Error while updating the batch advisor",error)
         return res.status(500).json("Internal Server Error")
         
     }
@@ -189,16 +189,8 @@ const addNewStudent = async(req,res)=>{
                    const studentGuardian =  await StudentGuardians.create({fullName,contactNumber:guardiancontactNumber,email:guardianemail,studentId:newUserInfo.id})
                    console.log("New Student guardian",studentGuardian)
                 }
-
-                  await BatchModel.update(
-                            {
-                                totalStudent:batch.totalStudent++ // values to update
-                            },
-                            {
-                                where: { id: batch.id } // condition to find the batch
-                            }
-                            
-                        );
+                    batch.totalStudent += 1;
+                    await batch.save();
 
                 return res.status(201).json("User Created Successfully")
             }
@@ -214,8 +206,109 @@ const addNewStudent = async(req,res)=>{
     }
 }
 
+const updateStudent = async(req,res)=>{
+
+    try {
+
+        const {id} = req.params;//stdId
+        const{studentName,registrationNumber,dateOfBirth,cnic,currentSemester,email,contactNumber,programName,batchName,batchYear,currentStatus,reason,fullName,guardianemail,guardiancontactNumber}= req.body;
+
+            let existingUser;
+                existingUser = await Student.findByPk(id);
+
+        if (!existingUser) {
+            return res.json("Student Not Found");
+        }
+            const program = await ProgramModel.findOne({where:{programName}})
+
+            if(!program){
+                return res.status(404).json("Program Not Found")
+            }
+            const batch = await BatchModel.findOne({where:{batchName,batchYear,programId:program.id}})
+            if(!batch){
+                return res.status(404).json("Batch Not Found")
+            }
+         
+            console.log("Batch of Student",batch);
+
+            if(!batch){
+                return res.status(404).json("Batch Not Found")
+            }
+            else{
+                existingUser=await Student.update({studentName,registrationNumber,dateOfBirth,cnic,currentSemester,email,contactNumber,batchId:batch.id}, {where:{id}})
+
+                console.log("Student updated", existingUser)
+
+                if(currentStatus && reason){
+                  const studentStatus =  await StudentStatus.findOne({where:{studentId:id}})
+                    if(studentStatus){
+                        await studentStatus.update({currentStatus,reason})
+                    }
+                    else{
+                        await StudentStatus.create({currentStatus,reason,studentId:id})    
+                    }
+                }
+
+                if(fullName && guardiancontactNumber && guardianemail){
+
+                    let studentGuardian = await StudentGuardians.findOne({where:{studentId:id}})
+                    if(studentGuardian){
+                        await studentGuardian.update({fullName,contactNumber:guardiancontactNumber,email:guardianemail})
+                    }
+                    else{
+                        studentGuardian =  await StudentGuardians.create({fullName,contactNumber:guardiancontactNumber,email:guardianemail,studentId:id})
+                    }
+                }
+
+                return res.status(201).json("User updates Successfully")
+            }
+
+        
+        
+    } catch (error) {
+
+        console.error("Error while updating the student",error)
+        return res.status(500).json("Internal Server Error")
+        
+    }
+}
+
+const updateStudentStatus = async(req,res)=>{
+
+    try {
+        const{sapid,studentname,currentStatus,reason}= req.body;
+
+        let existingUser;
+
+        existingUser = await User.findOne({where:{sapid,role:"student"},include:[{model:Student}]})
+        if (!existingUser) {
+            return res.json("User Not Found");
+        }
+
+        existingUser = await Student.findOne({where:{studentName:studentname,userId:existingUser.id}});
+        if (!existingUser) {
+            return res.json("Student Not Found");
+        }
+        const studentStatus =  await StudentStatus.findOne({where:{studentId:existingUser.id}})
+            if(studentStatus){
+                await studentStatus.update({currentStatus,reason})
+            }
+            else{
+                await StudentStatus.create({currentStatus,reason,studentId:existingUser.id})    
+            }
+
+        return res.status(201).json("Student Status Updated Successfully")
+    }
+
+        catch (error) {
+            console.error("Error while updating the student status",error)
+            return res.status(500).json("Internal Server Error")
+        }
+}
+
+
 const addViaExcelSheet = async(req,res)=>{
 
 }
 
-export default {addAdvisor,addNewStudent,updateAdvisor}
+export default {addAdvisor,addNewStudent,updateAdvisor,updateStudent,updateStudentStatus,addViaExcelSheet}
