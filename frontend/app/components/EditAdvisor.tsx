@@ -12,7 +12,7 @@ export function EditAdvisor() {
   const handleFetch = () => {
     if (searchId.trim() !== "") {
       console.log("Fetching Advisor with SAP ID:", searchId);
-      // Yahan aapka fetch call aye ga
+      // fetch call
       setIsFound(true);
     }
   };
@@ -29,7 +29,6 @@ export function EditAdvisor() {
             </div>
             <div>
               <h2 className="text-2xl font-black text-white uppercase italic leading-none">Assign & Edit Advisor</h2>
-              <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mt-2">Manage Faculty Roles & Batches</p>
             </div>
           </div>
     
