@@ -89,6 +89,8 @@ export default function relations() {
   Student.hasMany(StudentGuardian, { foreignKey: "studentId" });
   StudentGuardian.belongsTo(Student, { foreignKey: "studentId" });
 
+Student.belongsTo(BatchModel, { foreignKey: "batchId" });
+BatchModel.hasMany(Student, { foreignKey: "batchId" });
   // ==================== Program ====================
 
   BatchModel.belongsTo(ProgramModel, { foreignKey: "programId" });
@@ -151,19 +153,6 @@ export default function relations() {
   // ==================== Course & Offerings ====================
   CourseOfferingModel.hasMany(CourseModel, { foreignKey: "courseId" });
   CourseModel.belongsTo(CourseOfferingModel, { foreignKey: "courseId" });
-
-  // CourseModel.belongsToMany(CategoryModel, {
-  //   through: CourseCategoryModel,
-  //   foreignKey: "courseId",
-  //   otherKey: "categoryId",
-  //   as: "categories"
-  // });
-  // CategoryModel.belongsToMany(CourseModel, {
-  //   through: CourseCategoryModel,
-  //   foreignKey: "categoryId",
-  //   otherKey: "courseId",
-  //   as: "courses"
-  // });
 
   CourseCategoryModel.belongsTo(CourseModel, { foreignKey: "courseId" });
   CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
