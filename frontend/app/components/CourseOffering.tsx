@@ -8,7 +8,7 @@ export const CourseOffering = ({ session }: { session: string }) => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic">Course Offerings</h2>
-          <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest">Active Session: {session}</p>
+          
         </div>
         <button className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FDB813] transition-all">
           Upload New List
@@ -23,7 +23,7 @@ export const CourseOffering = ({ session }: { session: string }) => {
             </div>
             <div>
               <p className="font-black text-[#1e3a5f] text-sm uppercase">CS_Offerings_{session}.pdf</p>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Size: 1.2 MB • Uploaded: 2 days ago</p>
+              
             </div>
           </div>
           <div className="flex gap-3">

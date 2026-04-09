@@ -31,9 +31,7 @@ export function ProfileView() {
             <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
               {profile.role}
             </span>
-            <span className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
-              <ShieldCheck size={14} /> Official Profile
-            </span>
+            
           </div>
         </div>
       </div>
@@ -66,13 +64,6 @@ export function ProfileView() {
             value={profile.location} 
           />
         </div>
-      </div>
-
-      {/* Minimal Footer Footer */}
-      <div className="mt-20 pt-8 border-t border-slate-50 text-center">
-        <p className="text-[10px] text-slate-300 font-medium uppercase tracking-[0.2em]">
-          Adviso Academic Management System • 2026
-        </p>
       </div>
     </div>
   );
