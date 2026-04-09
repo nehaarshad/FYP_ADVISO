@@ -11,6 +11,7 @@ import roadmapRoute from "./src/routes/roadmapRoute.js";
 import courseDetailRoute from "./src/routes/courseDetailRouter.js";
 import registerUserRoute from "./src/routes/registerUserRoute.js";
 import courseOfferingRoute from "./src/routes/courseOfferingRoute.js";
+import timetableRoute from "./src/routes/timetableRoute.js";
 import path from "path";
 dotenv.config();
 
@@ -34,6 +35,11 @@ app.use(cors({
 app.use(bodyparser.json({ limit: '10mb' }));
 app.use(bodyparser.urlencoded({ extended: true, limit: '10mb' }));
 
+app.use((req, res, next) => {
+    console.log("Body Check:", req.body);
+    next();
+});
+
 app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
     maxAge: '1y', // Tells browsers to cache the image for 1 year.
     etag: true, //Enables ETag headers, which help browsers validate cached content.
@@ -50,6 +56,7 @@ app.use('/auth', roadmapRoute);
 app.use('/auth', courseDetailRoute);
 app.use('/auth', registerUserRoute);
 app.use('/auth', courseOfferingRoute);
+app.use('/auth', timetableRoute);
 
 sequelize.authenticate()
   .then(() => {
