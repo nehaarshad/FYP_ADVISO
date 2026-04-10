@@ -16,14 +16,10 @@ export function AddFaculty() {
             </div>
             <div>
               <h2 className="text-xl font-black text-[#1e3a5f] uppercase italic leading-none">Faculty Registration</h2>
-              <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-1">Add New Batch Advisor to System</p>
             </div>
           </div>
           
-          <div className="px-5 py-2 rounded-full bg-blue-50 text-[#1e3a5f] border border-blue-100 font-black text-[10px] uppercase tracking-tighter flex items-center gap-2">
-            <BadgeCheck size={14} className="text-[#FDB813]" />
-            Role: Advisor
-          </div>
+
         </div>
 
         <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>

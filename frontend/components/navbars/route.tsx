@@ -154,7 +154,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, LogOut } from "lucide-react"; 
 import { AnimatePresence, motion } from "framer-motion";
-import { NAV_CONFIG, NavItem, UserRole } from "@/utilits/const/navBarItems";
+import { NAV_CONFIG, NavItem, UserRole } from "@/src/utilits/const/navBarItems";
 
 interface SidebarProps {
   userRole: UserRole;

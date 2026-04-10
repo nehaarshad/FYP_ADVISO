@@ -8,11 +8,11 @@ const DegreeTranscript = sequelize.define("DegreeTranscript", {
         primaryKey: true,
     },
     totalEarnedCreditHours: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     currentCGPA: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     studentId: {

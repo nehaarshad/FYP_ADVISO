@@ -89,6 +89,8 @@ export default function relations() {
   Student.hasMany(StudentGuardian, { foreignKey: "studentId" });
   StudentGuardian.belongsTo(Student, { foreignKey: "studentId" });
 
+Student.belongsTo(BatchModel, { foreignKey: "batchId" });
+BatchModel.hasMany(Student, { foreignKey: "batchId" });
   // ==================== Program ====================
 
   BatchModel.belongsTo(ProgramModel, { foreignKey: "programId" });
@@ -96,6 +98,10 @@ export default function relations() {
 
   ProgramModel.hasMany(RoadmapModel, { foreignKey: "programId" });
   RoadmapModel.belongsTo(ProgramModel, { foreignKey: "programId" });
+
+  
+  ProgramModel.hasMany(CourseOfferingModel, { foreignKey: "programId" });
+  CourseOfferingModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
   BatchModel.hasOne(RoadmapModel, { foreignKey: "roadmapId" });
   RoadmapModel.belongsTo(BatchModel, { foreignKey: "roadmapId" });
@@ -109,6 +115,10 @@ export default function relations() {
 
   BatchModel.hasMany(BatchMeeting, { foreignKey: "batchId" });
   BatchMeeting.belongsTo(BatchModel, { foreignKey: "batchId" });
+
+  
+  BatchModel.hasMany(CourseOfferingModel, { foreignKey: "batchId" });
+  CourseOfferingModel.belongsTo(BatchModel, { foreignKey: "batchId" });
 
   BatchMeeting.hasMany(MeetingReminder, { foreignKey: "meetingId" });
   MeetingReminder.belongsTo(BatchMeeting, { foreignKey: "meetingId" });
@@ -143,19 +153,6 @@ export default function relations() {
   // ==================== Course & Offerings ====================
   CourseOfferingModel.hasMany(CourseModel, { foreignKey: "courseId" });
   CourseModel.belongsTo(CourseOfferingModel, { foreignKey: "courseId" });
-
-  // CourseModel.belongsToMany(CategoryModel, {
-  //   through: CourseCategoryModel,
-  //   foreignKey: "courseId",
-  //   otherKey: "categoryId",
-  //   as: "categories"
-  // });
-  // CategoryModel.belongsToMany(CourseModel, {
-  //   through: CourseCategoryModel,
-  //   foreignKey: "categoryId",
-  //   otherKey: "courseId",
-  //   as: "courses"
-  // });
 
   CourseCategoryModel.belongsTo(CourseModel, { foreignKey: "courseId" });
   CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
