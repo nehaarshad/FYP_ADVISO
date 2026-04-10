@@ -350,10 +350,8 @@ const addViaExcelSheet = async(req,res)=>{
         const worksheet = workbook.worksheets[0];
         const sheetName = worksheet.name;
         console.log("Worksheet name:", sheetName);
-
-        // First, find the actual header row by searching for "Sr No."
         let headerRowIndex = 1;
-        for(let i = 1; i <= 5; i++) { // Check first 5 rows for header
+        for(let i = 1; i <= 5; i++) { 
             const firstCell = getCellText(worksheet.getCell(i, 1));
             if(firstCell === "Sr No." || firstCell === "Sr No") {
                 headerRowIndex = i;
