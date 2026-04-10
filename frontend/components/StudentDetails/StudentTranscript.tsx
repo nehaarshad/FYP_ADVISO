@@ -69,16 +69,16 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
 
   const displayTranscript = student?.transcript || defaultTranscript;
 
-  const getTypeBg = (type: string) => {
+ const getTypeText = (type: string) => {
     switch(type) {
-      case "Computing Core": return "text-red-700";
+      case "Computing Core": return "text-red-800";
       case "Mathematics and Science Foundation": return "text-rose-600";
       case "General Education (Core)": return "text-slate-700";
-      case "University Elective": return "text-purple-700";
-      case "SE Core": return "text-yellow-700";
-      case "SE Elective": return "text-lime-800";
-      case "SE Supporting": return "text-indigo-900";
-      default: return "bg-slate-100";
+      case "University Elective": return "text-purple-800";
+      case "SE Core": return "text-yellow-600";
+      case "SE Elective": return "text-lime-700";
+      case "SE Supporting": return "text-indigo-700";
+      default: return "text-slate-500";
     }
   };
 
@@ -150,8 +150,8 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                       <td className="px-8 py-4 font-bold text-[#1e3a5f] text-xs uppercase not-italic tracking-tight truncate">
                         {course.name}
                       </td>
-                      <td className="px-4 py-5 text-left">
-                        <span className={`px-0 py-1 rounded-full text-[10px] font-medium uppercase tracking-tighter text-black ${getTypeBg(course.type)}`}>
+                      <td className="px-5 py-5">
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-tighter text-black ${getTypeText(course.type)}`}>
                           {course.type}
                         </span>
                       </td>

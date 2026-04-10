@@ -8,18 +8,14 @@ const SessionalTranscript = sequelize.define("SessionalTranscript", {
         primaryKey: true,
     },
     semesterEarnedCreditHours: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     semesterGPA: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     degreeTranscriptId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    enrolledCoursesId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },

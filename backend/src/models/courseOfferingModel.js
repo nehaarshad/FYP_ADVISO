@@ -7,13 +7,21 @@ const CourseOfferingModel = sequelize.define("CourseOfferingModel", {
         autoIncrement: true,
         primaryKey: true,   
     },
-    courseid: {
+    courseName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    credits: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    courseCategory: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
     sessionId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     batchId: {
         type: DataTypes.INTEGER,

@@ -1,37 +1,42 @@
 "use client";
 import React from 'react';
 import { motion } from "framer-motion";
-import { Edit3 } from "lucide-react";
 
 export function StudentRecords() {
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic">Academic Records</h2>
-      <div className="bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden shadow-sm">
-        <table className="w-full text-left">
-          <thead className="bg-slate-50 border-b border-slate-100">
-            <tr>
-              <th className="p-6 text-[10px] font-black uppercase text-slate-400 tracking-widest">Student</th>
-              <th className="p-6 text-[10px] font-black uppercase text-slate-400 tracking-widest">CMS ID</th>
-              <th className="p-6 text-[10px] font-black uppercase text-slate-400 tracking-widest text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50">
-            <StudentRow name="Valeeja Jamil" id="49100" />
-            <StudentRow name="Ayesha Khan" id="48210" />
-          </tbody>
-        </table>
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      className="max-w-2xl mx-auto space-y-6"
+    >
+      {/* Header */}
+      <div className="px-4">
+        <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic tracking-tighter leading-none">
+         Upload Student Records
+        </h2>
+      </div>
+
+      {/* Upload Card */}
+      <div className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm space-y-6">
+        
+        {/* Category Selection */}
+        <div className="space-y-2">
+          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
+            Upload Type
+          </label>
+          <select className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[1.8rem] text-sm font-bold focus:ring-2 focus:ring-[#FDB813] outline-none appearance-none cursor-pointer text-[#1e3a5f]">
+            <option>New Student List (.csv)</option>
+            <option>Batch Enrollment (.xlsx)</option>
+            <option>Course Registration Data</option>
+          </select>
+        </div>
+        {/* Action Button */}
+        <button 
+          className="w-full py-5 bg-[#1e3a5f] text-white rounded-[1.8rem] font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] active:scale-95 transition-all"
+        >
+          Process Records
+        </button>
       </div>
     </motion.div>
-  );
-}
-
-function StudentRow({ name, id }: any) {
-  return (
-    <tr className="hover:bg-slate-50/50 transition-colors group">
-      <td className="p-6"><div className="flex items-center gap-3"><div className="h-8 w-8 rounded-full bg-[#1e3a5f] text-white flex items-center justify-center text-[10px] font-black">{name[0]}</div><span className="text-xs font-black text-[#1e3a5f]">{name}</span></div></td>
-      <td className="p-6 text-xs font-bold text-slate-500 tracking-widest">{id}</td>
-      <td className="p-6 text-right"><button className="p-2 text-slate-300 hover:text-[#FDB813]"><Edit3 size={16}/></button></td>
-    </tr>
   );
 }

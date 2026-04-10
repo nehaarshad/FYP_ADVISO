@@ -18,11 +18,12 @@ import { NotificationPanel } from "@/components/Notifications/NotificationPanel"
 import { SettingsModal } from "@/app/components/SettingsModel";
 import { EditStudent } from '@/app/components/EditStudent';
 import { EditAdvisor } from '@/app/components/EditAdvisor';
-import { CourseOffering } from "@/components/coordinatorComponents/courseOfferings/route";
-import { Timetable } from "@/components/coordinatorComponents/titmetable/route";
-import { BatchResults } from "@/components/coordinatorComponents/results/route";
+import { CourseOffering } from "@/app/components/CourseOffering";
+import { Timetable } from "@/app/components/Timetable";
+import { BatchResults } from "@/app/components/BatchResults";
 import { CourseCatalog } from "@/app/components/CourseCatalog";
 import { RoadmapView } from "@/app/components/RoadmapView";
+import { RequestForms} from "@/app/components/RequestForms";
 
 // IMPORTING YOUR SEPARATE PROFILE COMPONENT
 import { ProfileView } from "@/app/components/ProfileView"; 
@@ -35,8 +36,6 @@ export default function CoordinatorDashboard() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showRoadmapOverlay, setShowRoadmapOverlay] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
 
   const navigateTo = (tab: string) => {
     setNavigationStack(prev => [...prev, tab]);
@@ -118,7 +117,7 @@ export default function CoordinatorDashboard() {
                    </div>
                 )}
 
-                {activeTab === "roadmaps" && <RoadmapSection type="se" />}
+                {activeTab === "roadmaps" && <RoadmapSection />}
                 {activeTab === "course-offering" && <CourseOffering session={selectedSession} />}
                 {activeTab === "timetable" && <Timetable session={selectedSession} />}
                 {activeTab === "results" && <BatchResults />}
@@ -129,7 +128,7 @@ export default function CoordinatorDashboard() {
                 {activeTab === "edit-student" && <EditStudent/>}
                 {activeTab === "edit-advisor" && <EditAdvisor/>}
                 {activeTab === "guidelines" && <Guidelines />}
-                
+                {activeTab === "requests" && <RequestForms />}
                 {/* NOW CALLING THE IMPORTED COMPONENT */}
                 {activeTab === "profile" && <ProfileView />}
               </div>

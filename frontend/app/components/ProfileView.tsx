@@ -38,8 +38,8 @@ export function CoordinatorProfile() {
             <span className="px-4 py-1.5 bg-[#FDB813] text-[#1e3a5f] text-[10px] font-black uppercase tracking-widest rounded-xl shadow-md">
               {coordinator.role}
             </span>
-            <span className="flex items-center gap-1.5 text-slate-400 text-xs font-bold uppercase tracking-tighter">
-              <ShieldCheck size={14} className="text-blue-500" /> Authorized Coordinator
+            <span className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
+              <ShieldCheck size={14} /> Official Profile
             </span>
           </div>
         </div>
@@ -90,13 +90,10 @@ export function CoordinatorProfile() {
         </div>
       </div>
 
-      {/* Footer Quote */}
-      <div className="mt-20 pt-8 border-t border-slate-50 flex flex-col items-center gap-4">
-        <div className="px-6 py-2 bg-slate-50 rounded-2xl border border-slate-100 italic text-slate-400 text-xs font-medium">
-          "Ensuring academic integrity and efficient program management."
-        </div>
-        <p className="text-[9px] text-slate-300 font-black uppercase tracking-[0.2em]">
-          Adviso Admin Portal • 2026
+      {/* Minimal Footer Footer */}
+      <div className="mt-20 pt-8 border-t border-slate-50 text-center">
+        <p className="text-[10px] text-slate-300 font-medium uppercase tracking-[0.2em]">
+          Adviso Academic Management System • 2026
         </p>
       </div>
     </div>

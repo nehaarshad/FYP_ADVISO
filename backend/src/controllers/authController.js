@@ -56,15 +56,15 @@ const createNewUser = async (req, res) => {
 
 const forgetPassword = async (req, res) => {
     try {
-        const { sapid,email ,password } = req.body;
+        const { sapid,password } = req.body;
        console.log(req.body)
-        const user = await User.findOne({ where: { email, sapid } });
+        const user = await User.findOne({ where: { sapid } });
         if (!user) {
-               console.error("Incorrect Email or SAP ID");
-            return res.status(404).json({ message: "Incorrect Email or SAP ID" });
+               console.error("Incorrect SAP ID");
+            return res.status(404).json({ message: "Incorrect SAP ID" });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        await User.update({ password: hashedPassword }, { where: { email, sapid } });
+        await User.update({ password: hashedPassword }, { where: { sapid } });
         res.status(200).json({ message: "Password updated successfully" });
 
     } catch (error) {
