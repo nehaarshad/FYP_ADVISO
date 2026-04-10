@@ -1,9 +1,11 @@
 
+import { AdvisorProfile } from "@/components/AdvisorView/AdvisorProfile";
 import {
   LayoutDashboard, Users, ClipboardList, FileText,
   AlertTriangle, StickyNote, MessageSquare,
   BookOpen, Bell, UserPlus, UserCog, ShieldCheck,
-  Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch
+  Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch,
+  User
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Student ki structure define karein
 interface Student {
   id: number;
   name: string;
@@ -8,6 +9,7 @@ interface Student {
   semester: string;
 }
 
+// Props ki types define karein
 interface ChatStudentListProps {
   students: Student[];
   selectedId: number | null;
@@ -16,36 +18,33 @@ interface ChatStudentListProps {
 
 const ChatStudentList: React.FC<ChatStudentListProps> = ({ students, selectedId, onSelect }) => {
   return (
-    /* Width ko mazeed kam kiya aur padding tight kar di */
-    <div className="w-[28%] bg-white rounded-2xl p-4 overflow-y-auto border border-slate-100 flex flex-col gap-2 shadow-sm">
-      <h3 className="text-[#1e3a5f] font-bold text-[9px] mb-5 uppercase tracking-[0.2em] opacity-40 px-1 leading-none">
+    <div className="h-full bg-white rounded-3xl p-4 flex flex-col border border-slate-100 shadow-sm overflow-hidden">
+      <h3 className="text-[#1e3a5f] font-black text-[9px] mb-4 uppercase tracking-[0.2em] opacity-40 px-1 shrink-0">
         Conversations
       </h3>
 
-      <div className="space-y-2"> 
+      <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar"> 
         {students.map((student) => {
           const isActive = selectedId === student.id;
           return (
             <button
               key={student.id}
               onClick={() => onSelect(student)}
-              /* Background ab white hi rahega, sirf border yellow (amber-400) hoga */
-              className={`w-full text-left px-4 py-3 rounded-2xl transition-all duration-200 border-2
-                ${isActive
-                  ? "bg-white border-amber-400 shadow-sm" 
-                  : "bg-white border-transparent hover:bg-slate-50 text-slate-600"
-                }`}
+              className={`w-full text-left transition-all duration-200 rounded-2xl border-2
+                ${isActive ? "border-amber-400 bg-amber-50/30 shadow-md" : "border-transparent hover:bg-slate-50"}`}
             >
-              <div className="flex flex-col gap-0.5">
-                <p className="font-black text-[12.5px] text-[#1e3a5f] leading-tight">
+              <div className={`p-3 rounded-xl bg-white flex flex-col gap-1 border ${isActive ? "border-amber-100" : "border-slate-50"}`}>
+                <p className="font-black text-[12.5px] text-[#1e3a5f] leading-tight truncate">
                   {student.name}
                 </p>
-                <div className="flex flex-col opacity-70">
-                  <p className="text-[9px] font-bold uppercase tracking-tighter text-slate-500">
+                
+                <div className={`flex mt-0.5 pt-1 border-t border-slate-50 opacity-75 
+                  ${isActive ? "flex-row justify-between items-center gap-2" : "flex-col gap-0.5"}`}>
+                  <p className="text-[9px] font-bold uppercase tracking-tighter text-slate-500 whitespace-nowrap">
                     {student.sapId}
                   </p>
-                  <p className="text-[9px] font-medium uppercase text-slate-400">
-                    {student.batch} • Sem {student.semester}
+                  <p className="text-[8.5px] font-medium uppercase text-slate-400 whitespace-nowrap">
+                    {isActive ? `• ${student.batch}` : `${student.batch} • Sem ${student.semester}`}
                   </p>
                 </div>
               </div>
