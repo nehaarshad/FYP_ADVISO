@@ -182,7 +182,7 @@ const getStudentTranscriptSummary = async (req,res) => {
             ]
         });
 
-        return res.status(200).json({ success: true, data: studentTranscriptSummary });
+        return res.status(200).json(studentTranscriptSummary );
     } catch (error) {
         console.error(`❌ Error fetching transcript summary for student ${id}:`, error);
         return res.status(500).json({ success: false, message: 'Internal server error' });
@@ -191,3 +191,4 @@ const getStudentTranscriptSummary = async (req,res) => {
 
 
 export default { processStudentTranscript, getStudentTranscriptSummary };
+
