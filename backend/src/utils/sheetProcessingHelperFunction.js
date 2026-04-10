@@ -252,4 +252,34 @@ const splitCourseWithSlash = (courseName) => {
     return [normalizeOfferingName(courseName)];
 };
 
-export default { getCellColor,cleanCourseName, parseCourse, parseCredits, maxConsecutiveEmptyCells, getCellText, parseTime, getProgramCode, splitCourseWithSlash, normalizeOfferingName };
+const getColumnIndex = (headers, headerName) => {
+    if (!headers || !headerName) return null;
+    
+    for (let i = 1; i < headers.length; i++) {
+        if (headers[i]) {
+            const headerValue = headers[i].toString().trim().toLowerCase();
+            const searchValue = headerName.toString().trim().toLowerCase();
+            
+            if (headerValue === searchValue) {
+                console.log(`   Found header "${headerName}" at column ${i}`);
+                return i;
+            }
+        }    }
+    console.log(`   Header "${headerName}" not found`);
+    return null;
+};
+
+const getCellByHeader = (headerName,headers,worksheet,i) => {
+                const colIndex = getColumnIndex(headers, headerName);
+                if (colIndex === null) {
+                    return '';
+                }
+                try {
+                    return getCellText(worksheet.getCell(i, colIndex));
+                } catch (error) {
+                    console.log(`Error accessing cell at row ${i}, column ${colIndex}:`, error.message);
+                    return '';
+                }
+            };
+
+export default { getCellColor,getCellByHeader,getColumnIndex,cleanCourseName, parseCourse, parseCredits, maxConsecutiveEmptyCells, getCellText, parseTime, getProgramCode, splitCourseWithSlash, normalizeOfferingName };

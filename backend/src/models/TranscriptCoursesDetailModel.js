@@ -7,8 +7,20 @@ const TranscriptCoursesDetail = sequelize.define("TranscriptCoursesDetail", {
         autoIncrement: true,
         primaryKey: true,
     },
+    courseName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    courseCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    courseCategory:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     points: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     grade: {
@@ -16,15 +28,15 @@ const TranscriptCoursesDetail = sequelize.define("TranscriptCoursesDetail", {
         allowNull: false,
     },
     marks: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     earnedCreditHours: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    status: {
-        type: DataTypes.ENUM("completed", "withdraw", "inProgress","failed"),
+    totalCreditHours: {
+        type: DataTypes.STRING,
         allowNull: false,
     },
     sessionalTranscriptId: {
