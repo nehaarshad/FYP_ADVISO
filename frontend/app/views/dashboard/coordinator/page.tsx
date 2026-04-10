@@ -37,8 +37,6 @@ export default function CoordinatorDashboard() {
   const [showSettings, setShowSettings] = useState(false);
   const [showRoadmapOverlay, setShowRoadmapOverlay] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
-
   const navigateTo = (tab: string) => {
     setNavigationStack(prev => [...prev, tab]);
     setActiveTab(tab);
