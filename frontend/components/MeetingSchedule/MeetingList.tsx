@@ -47,7 +47,7 @@ export const MeetingList = () => {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 h-full overflow-y-auto pb-10">
       <h2 className="text-2xl font-black text-[#1e3a5f] uppercase tracking-tight mb-8">
-        Advisory Meetings
+        Batch Meetings
       </h2>
 
       <div className="w-full bg-white rounded-[2.5rem] shadow-sm border border-slate-100 p-8">

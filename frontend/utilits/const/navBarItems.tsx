@@ -38,6 +38,7 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     { key: "Notes",           label: "Advisor Notes",   icon: <StickyNote size={20}/> },
     { key: "AdvisorChat",     label: "Advisor Chat",    icon: <MessageSquare size={20}/> },
     { key: "AdvisoryLogs",     label: "Advisory Logs",    icon: <MessageSquare size={20}/> },
+    { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
    ],
 
   student: [

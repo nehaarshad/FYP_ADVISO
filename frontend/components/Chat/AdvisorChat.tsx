@@ -13,6 +13,7 @@ export type Student = {
 
 export type Message = {
   id: number;
+  studentId: number;
   sender: "advisor" | "student";
   text: string;
   time: string;
@@ -26,34 +27,44 @@ const AdvisorChat: React.FC = () => {
 
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   
-  // Student ka reply yahan add kiya hai
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, sender: "advisor", text: "Assalam-o-Alaikum, please visit my office tomorrow.", time: "10:30 AM" },
-    { id: 2, sender: "student", text: "Walaikum Assalam Sir, I will be there at 11:00 AM. Is that okay?", time: "10:35 AM" },
+  const [allMessages, setAllMessages] = useState<Message[]>([
+    { id: 1, studentId: 1, sender: "advisor", text: "Ali, please visit my office tomorrow.", time: "10:30 AM" },
+    { id: 2, studentId: 1, sender: "student", text: "Okay sir, I will be there.", time: "10:35 AM" },
+    { id: 3, studentId: 2, sender: "student", text: "Assalam-o-Alaikum Sir, I have a query about credits.", time: "09:00 AM" },
   ]);
 
   const addMessage = (text: string) => {
+    if (!selectedStudent) return;
     const newMessage: Message = {
       id: Date.now(),
+      studentId: selectedStudent.id,
       sender: "advisor",
       text: text,
       time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
-    setMessages((prev) => [...prev, newMessage]);
+    setAllMessages((prev) => [...prev, newMessage]);
   };
 
   return (
-    <div className="flex gap-4 h-[550px] max-w-5xl mx-auto bg-transparent w-full">
-      <ChatStudentList 
-        students={students} 
-        selectedId={selectedStudent?.id || null} 
-        onSelect={setSelectedStudent} 
-      />
-      <ChatArea 
-        selectedStudent={selectedStudent} 
-        messages={messages} 
-        onSendMessage={addMessage} 
-      />
+    /* Height h-[450px] ki hai aur max-width 5xl taake box zyada phila hua na lage */
+    <div className="flex gap-3 h-[450px] max-w-5xl mx-auto bg-transparent w-full overflow-hidden">
+      {/* LEFT: Student List (30% - Thoda aur narrow kiya) */}
+      <div className="w-[30%] h-full shrink-0">
+        <ChatStudentList 
+          students={students} 
+          selectedId={selectedStudent?.id || null} 
+          onSelect={setSelectedStudent} 
+        />
+      </div>
+
+      {/* RIGHT: Chat Area (70% - Space optimize ki hai) */}
+      <div className="w-[70%] h-full shrink-0">
+        <ChatArea 
+          selectedStudent={selectedStudent} 
+          messages={allMessages.filter(m => m.studentId === selectedStudent?.id)} 
+          onSendMessage={addMessage} 
+        />
+      </div>
     </div>
   );
 };
