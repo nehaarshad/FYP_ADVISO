@@ -167,5 +167,27 @@ const processStudentTranscript = async (studentData, sessionId, batchId,res) => 
     }
 };
 
-export default  processStudentTranscript;
+const getStudentTranscriptSummary = async (req,res) => {
+    
+    const { id } = req.params; // student ID from request parameters
 
+    try {
+        const studentTranscriptSummary = await DegreeTranscript.findOne({
+            where: { studentId: id },
+            include: [
+                {
+                    model: SessionalTranscript,
+                    include: [TranscriptCoursesDetail]
+                }
+            ]
+        });
+
+        return res.status(200).json({ success: true, data: studentTranscriptSummary });
+    } catch (error) {
+        console.error(`❌ Error fetching transcript summary for student ${id}:`, error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
+
+export default { processStudentTranscript, getStudentTranscriptSummary };

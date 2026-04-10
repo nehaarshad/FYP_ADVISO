@@ -1,9 +1,7 @@
-
 import {
   LayoutDashboard, Users, ClipboardList, FileText,
-  AlertTriangle, StickyNote, MessageSquare,
-  BookOpen, Bell, UserPlus, UserCog, ShieldCheck,
-  Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch
+  StickyNote, MessageSquare, UserPlus, UserCog, 
+  ShieldCheck, Info, GraduationCap
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";
@@ -28,8 +26,8 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     },
     { key: "edit-student",    label: "Edit Student",   icon: <UserCog size={20}/>,   group: "Management" },
     { key: "edit-advisor",    label: "Batch Advisor",  icon: <ShieldCheck size={20}/> , group: "Management" },
+    { key: "requests",        label: "Requests",       icon: <FileText size={20}/>, }, 
     { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
-    
   ],
 
   advisor: [
@@ -41,8 +39,8 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
 
   student: [
     { key: "overview",        label: "Overview",        icon: <LayoutDashboard size={20}/> },
-    { key: "my-roadmap",      label: "My Roadmap",      icon: <Map size={20}/>,           group: "Student Portal" },
-    { key: "notifications",   label: "Notifications",   icon: <Bell size={20}/> },
+    { key: "my-roadmap",      label: "My Roadmap",      icon: <FileText size={20}/>, group: "Student Portal" },
+    { key: "notifications",   label: "Notifications",   icon: <FileText size={20}/> },
     { key: "submit-request",  label: "Submit Request",  icon: <FileText size={20}/> },
   ],
 };

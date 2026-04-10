@@ -8,9 +8,6 @@ export const BatchResults = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic leading-none">Batch Results</h2>
-          <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest italic opacity-70">
-            Preview and Manage Uploaded Results
-          </p>
         </div>
       </div>
 

@@ -11,7 +11,7 @@ export function EditStudent() {
     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="max-w-4xl mx-auto">
       <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl border border-slate-100 relative overflow-hidden">
         
-        {/* PROMINENT BLUE HEADER */}
+       
         <div className="flex justify-between items-center mb-10 p-8 bg-[#1e3a5f] rounded-[2.5rem] min-h-[120px]">
           <div className="flex items-center gap-5">
             <div className="h-16 w-16 bg-white/10 backdrop-blur-md text-[#FDB813] rounded-2xl flex items-center justify-center shadow-inner">
@@ -19,7 +19,6 @@ export function EditStudent() {
             </div>
             <div>
               <h2 className="text-2xl font-black text-white uppercase italic leading-none">Edit Student Profile</h2>
-              <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mt-2">Update Existing Academic Records</p>
             </div>
           </div>
           
@@ -62,7 +61,6 @@ export function EditStudent() {
               <select className="w-full p-5 bg-slate-50 border-none rounded-[1.5rem] font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/30 cursor-pointer text-[#1e3a5f]">
                 <option>BS Computer Science</option>
                 <option>BS Software Engineering</option>
-                <option>BS Information Technology</option>
               </select>
             </div>
           </div>

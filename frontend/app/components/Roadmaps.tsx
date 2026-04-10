@@ -18,9 +18,7 @@ export function RoadmapSection() {
           <h2 className="text-2xl font-black uppercase italic tracking-tighter text-[#1e3a5f]">
             Upload Roadmap
           </h2>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            Manage Academic Schemes (SRS-7.4)
-          </p>
+  
         </div>
       </div>
 
