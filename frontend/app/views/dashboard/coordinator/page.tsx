@@ -11,7 +11,7 @@ import { Sidebar } from "@/components/navbars/route";
 import { SessionManager } from "@/app/components/SessionManager";
 import { RoadmapSection } from "@/app/components/Roadmaps";
 import { StudentRecords } from "@/app/components/StudentRecords";
-import { Guidelines } from "@/app/components/Guidelines";
+import { Guidelines } from "@/components/Guidelines/Guidelines";
 import { AddFaculty } from "@/app/components/AddFaculty";
 import { AddStudent } from "@/app/components/AddStudents";
 import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
