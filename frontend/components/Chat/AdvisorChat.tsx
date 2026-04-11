@@ -13,11 +13,7 @@ export type Student = {
 
 export type Message = {
   id: number;
-<<<<<<< HEAD
   studentId: number; // Student se link karne ke liye
-=======
-  studentId: number;
->>>>>>> main
   sender: "advisor" | "student";
   text: string;
   time: string;
@@ -31,10 +27,7 @@ const AdvisorChat: React.FC = () => {
 
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   
-<<<<<<< HEAD
   // Dummy data with studentId
-=======
->>>>>>> main
   const [allMessages, setAllMessages] = useState<Message[]>([
     { id: 1, studentId: 1, sender: "advisor", text: "Ali, please visit my office tomorrow.", time: "10:30 AM" },
     { id: 2, studentId: 1, sender: "student", text: "Okay sir, I will be there.", time: "10:35 AM" },
@@ -54,16 +47,9 @@ const AdvisorChat: React.FC = () => {
   };
 
   return (
-<<<<<<< HEAD
     <div className="flex gap-4 h-[520px] max-w-6xl mx-auto bg-transparent w-full overflow-hidden">
       {/* LEFT: Student List (35%) */}
       <div className="w-[35%] h-full">
-=======
-    /* Height h-[450px] ki hai aur max-width 5xl taake box zyada phila hua na lage */
-    <div className="flex gap-3 h-[450px] max-w-5xl mx-auto bg-transparent w-full overflow-hidden">
-      {/* LEFT: Student List (30% - Thoda aur narrow kiya) */}
-      <div className="w-[30%] h-full shrink-0">
->>>>>>> main
         <ChatStudentList 
           students={students} 
           selectedId={selectedStudent?.id || null} 
@@ -71,18 +57,11 @@ const AdvisorChat: React.FC = () => {
         />
       </div>
 
-<<<<<<< HEAD
       {/* RIGHT: Chat Area (65%) */}
       <div className="w-[65%] h-full">
         <ChatArea 
           selectedStudent={selectedStudent} 
           // Sirf selected student ke messages filter karke bhejein
-=======
-      {/* RIGHT: Chat Area (70% - Space optimize ki hai) */}
-      <div className="w-[70%] h-full shrink-0">
-        <ChatArea 
-          selectedStudent={selectedStudent} 
->>>>>>> main
           messages={allMessages.filter(m => m.studentId === selectedStudent?.id)} 
           onSendMessage={addMessage} 
         />

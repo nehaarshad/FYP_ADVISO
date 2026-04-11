@@ -1,18 +1,9 @@
-<<<<<<< HEAD:frontend/utilits/const/navBarItems.tsx
-
-import { AdvisorProfile } from "@/components/AdvisorView/AdvisorProfile";
 import {
   LayoutDashboard, Users, ClipboardList, FileText,
   AlertTriangle, StickyNote, MessageSquare,
   BookOpen, Bell, UserPlus, UserCog, ShieldCheck,
   Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch,
   User
-=======
-import {
-  LayoutDashboard, Users, ClipboardList, FileText,
-  StickyNote, MessageSquare, UserPlus, UserCog, 
-  ShieldCheck, Info, GraduationCap
->>>>>>> main:frontend/src/utilits/const/navBarItems.tsx
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";
