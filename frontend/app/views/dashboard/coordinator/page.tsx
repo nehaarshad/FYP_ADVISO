@@ -14,7 +14,7 @@ import { StudentRecords } from "@/app/components/StudentRecords";
 import { Guidelines } from "@/app/components/Guidelines";
 import { AddFaculty } from "@/app/components/AddFaculty";
 import { AddStudent } from "@/app/components/AddStudents";
-import { NotificationPanel } from "@/app/components/NotificationPanel";
+import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
 import { SettingsModal } from "@/app/components/SettingsModel";
 import { EditStudent } from '@/app/components/EditStudent';
 import { EditAdvisor } from '@/app/components/EditAdvisor';

@@ -146,3 +146,4 @@ function SidebarItem({ icon, label, active, onClick }: any) {
     </div>
   );
 }
+
