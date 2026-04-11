@@ -36,6 +36,9 @@ import TimetableModel from "../models/timetableModel.js";
 import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
 import UploadedContentModel from "../models/uploadedContentModel.js";
 import Chat from "../models/ChatsModel.js";
+import SessionalRecommendation from "../models/sessionalRecommdentationModel.js";
+import SuggestedCourses from "../models/suggestedCoursesModel.js";
+
 
 export default function relations() {
   // ==================== User & Auth Relations ====================
@@ -122,6 +125,20 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
 
   BatchMeeting.hasMany(MeetingReminder, { foreignKey: "meetingId" });
   MeetingReminder.belongsTo(BatchMeeting, { foreignKey: "meetingId" });
+
+  // ==================== Sessional Recommendation Courses ====================
+
+  Student.hasMany(SessionalRecommendation, { foreignKey: "studentId" });
+  SessionalRecommendation.belongsTo(Student, { foreignKey: "studentId" });
+
+  SessionModel.hasMany(SessionalRecommendation, { foreignKey: "sessionId" });
+  SessionalRecommendation.belongsTo(SessionModel, { foreignKey: "sessionId" });
+
+  CourseModel.hasMany(SuggestedCourses, { foreignKey: "courseId" });
+  SuggestedCourses.belongsTo(CourseModel, { foreignKey: "courseId" });
+
+  SuggestedCourses.belongsTo(SessionalRecommendation, { foreignKey: "sessionalRecommendationId" });
+  SessionalRecommendation.hasMany(SuggestedCourses, { foreignKey: "sessionalRecommendationId" });
 
   // ==================== Faculty Advisor ====================
   BatchAdvisor.hasMany(FacultyRecommendation, { foreignKey: "advisorId" });

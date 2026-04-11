@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default class APIs{
 
-    static BASE_URL = process.env.BASE_URL;
+    static BASE_URL = process.env.NEXT_PUBLIC_API_URL
     
 
     //auth Module

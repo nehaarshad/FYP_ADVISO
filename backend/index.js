@@ -13,6 +13,7 @@ import registerUserRoute from "./src/routes/registerUserRoute.js";
 import courseOfferingRoute from "./src/routes/courseOfferingRoute.js";
 import timetableRoute from "./src/routes/timetableRoute.js";
 import manageUserRoute from "./src/routes/manageUserRoute.js";
+import authroute from "./src/routes/userRoute.js";
 import resultRoute from "./src/routes/resultRoute.js";
 import transcriptRoute from "./src/routes/transcriptRoute.js";
 import path from "path";
@@ -55,6 +56,7 @@ app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
     }
 }));
 
+app.use('/auth', authroute);
 app.use('/auth', roadmapRoute);
 app.use('/auth', courseDetailRoute);
 app.use('/auth', registerUserRoute);

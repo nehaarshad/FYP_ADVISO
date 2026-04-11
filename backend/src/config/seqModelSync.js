@@ -8,6 +8,8 @@ import CoursePreReqModel from "../models/coursePreReqModel.js";
 import Admin from "../models/adminModel.js";
 import BatchAssignment from "../models/batchAssignmentModel.js";
 import BatchModel from "../models/batchModel.js";
+import SessionalRecommendation from "../models/sessionalRecommdentationModel.js";
+import SuggestedCourses from "../models/suggestedCoursesModel.js";
 import BatchMeeting from "../models/BatchMeetingModel.js";
 import AdvisorDecision from "../models/AdvisorDecisionModel.js";
 import AdvisorNotes from "../models/AdvisorNotes.js";
@@ -59,6 +61,8 @@ const models={
     DegreeTranscript,
     EnrolledCoursesModel,
     FacultyRecommendation,
+    SessionalRecommendation,
+    SuggestedCourses,
     MeetingReminder,
     Message,
     ProgramModel,

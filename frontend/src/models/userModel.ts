@@ -3,9 +3,9 @@
 export interface User {
   id: number;
   sapid: number;
-  password: string;
+  password: string | null;
   role: UserRole;
-  isActive: boolean;
+  isActive: boolean | null;
   sessionToken: string | null;
   deactivateAt: string | null;
   createdAt?: string;
