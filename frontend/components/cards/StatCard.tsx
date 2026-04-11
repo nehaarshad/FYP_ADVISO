@@ -60,6 +60,7 @@ export const StatCard: React.FC<StatCardProps> = ({ label, value, icon: Icon, is
           {value}
         </p>
       </div>
+      
     </button>
   );
 };
