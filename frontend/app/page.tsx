@@ -1,26 +1,26 @@
-// "use client";
-// import OutlinedTextHeading from "@/components/textsComponents/OutlinedTextHeading";
-// import { motion } from "framer-motion";
-// import YellowFilledButtonProps from "@/components/buttons/FilledButton/yellowFilledButton";
-// import { 
-//   BookOpen, Users, Calendar, 
-//   ShieldCheck, History, Send, 
-//   CheckCircle2, Lightbulb, Search 
-// } from "lucide-react";
-// import LandingFooter from "@/components/footer/route";
-// import SmallFeature from "@/components/cards/featureCards";
-// import { useRouter } from 'next/navigation';
+"use client";
+import OutlinedTextHeading from "@/components/textsComponents/OutlinedTextHeading";
+import { motion } from "framer-motion";
+import YellowFilledButtonProps from "@/components/buttons/FilledButton/yellowFilledButton";
+import { 
+  BookOpen, Users, Calendar, 
+  ShieldCheck, History, Send, 
+  CheckCircle2, Lightbulb, Search 
+} from "lucide-react";
+import LandingFooter from "@/components/footer/route";
+import SmallFeature from "@/components/cards/featureCards";
+import { useRouter } from 'next/navigation';
 
-// export default function LandingPage() {
-//   const router = useRouter();
+export default function LandingPage() {
+  const router = useRouter();
 
-//   // Navigation logic for Login page
-//   const handleClick = () => {
-//     router.push('/views/auth/login'); 
-//   };
+  // Navigation logic for Login page
+  const handleClick = () => {
+    router.push('/views/auth/registeration/signup'); 
+  };
 
-//   return (
-//     <div className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden">
+  return (
+    <div className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden">
       
 //       {/* --- HERO SECTION --- */}
 //       <section className="relative h-screen flex items-center justify-center text-center px-6">

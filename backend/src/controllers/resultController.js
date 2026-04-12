@@ -1,11 +1,12 @@
 import BatchModel from '../models/batchModel.js';
-import processStudentTranscript from './transcriptManagementController.js';
+import StudentTranscript from './transcriptManagementController.js';
 import ExcelJS from 'exceljs';
 import utils from '../utils/sheetProcessingHelperFunction.js';
 const { getCellText } = utils;
 import ProgramModel from '../models/programModel.js';
 import SessionModel from '../models/sessionModel.js';
 import fs from 'fs';
+const {processStudentTranscript} = StudentTranscript
 
 const uploadSessionalResult = async(req,res) =>{
     try {
