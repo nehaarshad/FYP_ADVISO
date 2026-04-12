@@ -1,7 +1,10 @@
 import {
   LayoutDashboard, Users, ClipboardList, FileText,
-  StickyNote, MessageSquare, UserPlus, UserCog, 
-  ShieldCheck, Info, GraduationCap
+  AlertTriangle, StickyNote, MessageSquare,
+  BookOpen, Bell, UserPlus, UserCog, ShieldCheck,
+  Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch,
+  User,
+  Lightbulb
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";
@@ -35,12 +38,17 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     { key: "Meetings",        label: "Meetings",        icon: <ClipboardList size={20}/> },
     { key: "Notes",           label: "Advisor Notes",   icon: <StickyNote size={20}/> },
     { key: "AdvisorChat",     label: "Advisor Chat",    icon: <MessageSquare size={20}/> },
+    { key: "AdvisoryLogs",     label: "Advisory Logs",    icon: <MessageSquare size={20}/> },
+    { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
+    { key: "facultyrecommendation", label: "Faculty Recommendation", icon: <Lightbulb size={20}/> },
    ],
 
   student: [
-    { key: "overview",        label: "Overview",        icon: <LayoutDashboard size={20}/> },
-    { key: "my-roadmap",      label: "My Roadmap",      icon: <FileText size={20}/>, group: "Student Portal" },
-    { key: "notifications",   label: "Notifications",   icon: <FileText size={20}/> },
-    { key: "submit-request",  label: "Submit Request",  icon: <FileText size={20}/> },
+    { key: "Overview",        label: "Overview",        icon: <LayoutDashboard size={20}/> },
+    { key: "StudentChat",     label: "StudentChat",    icon: <MessageSquare size={20}/> },
+    { key: "RequestsFoam",     label: "Submit Request",    icon: <FileText size={20}/> },
+    { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
+    // { key: "my-roadmap",      label: "My Roadmap",      icon: <FileText size={20}/>, group: "Student Portal" },
+    
   ],
 };

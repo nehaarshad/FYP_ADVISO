@@ -12,10 +12,10 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 import { Sidebar } from "@/components/navbars/route";
 import { RoadmapSection } from "@/app/components/Roadmaps";
 import { StudentRecords } from "@/app/components/StudentRecords";
-import { Guidelines } from "@/app/components/Guidelines";
+import { Guidelines } from "@/components/Guidelines/Guidelines";
 import { AddFaculty } from "@/app/components/AddFaculty";
 import { AddStudent } from "@/app/components/AddStudents";
-import { NotificationPanel } from "@/app/components/NotificationPanel";
+import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
 import { SettingsModal } from "@/app/components/SettingsModel";
 import { EditStudent } from '@/app/components/EditStudent';
 import { EditAdvisor } from '@/app/components/EditAdvisor';

@@ -5,13 +5,13 @@ import {
   ShieldCheck, GraduationCap, Briefcase 
 } from "lucide-react";
 
-export function CoordinatorProfile() {
-  const coordinator = {
-    name: "Aleena Ayub",
-    role: "Program Coordinator",
+export function AdvisorProfile() {
+  const advisor = {
+    name: "Fatima Basit",
+    role: "Academic Advisor",
     rank: "Management Executive",
-    id: "COORD-2026-012",
-    email: "aleena.ayub@riphah.edu.pk",
+    id: "ADVISOR-2026-012",
+    email: "fatima.basit@riphah.edu.pk",
     dept: "Academic Operations / Faculty of Computing",
     specialization: "Academic Administration",
     location: "Main Block, Islamabad Campus",
@@ -32,11 +32,11 @@ export function CoordinatorProfile() {
         
         <div className="text-center md:text-left">
           <h2 className="text-4xl font-black text-[#1e3a5f] tracking-tighter mb-2 uppercase">
-            {coordinator.name}
+            {advisor.name}
           </h2>
           <div className="flex flex-wrap justify-center md:justify-start gap-4 items-center">
             <span className="px-4 py-1.5 bg-[#FDB813] text-[#1e3a5f] text-[10px] font-black uppercase tracking-widest rounded-xl shadow-md">
-              {coordinator.role}
+              {advisor.role}
             </span>
             <span className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
               <ShieldCheck size={14} /> Official Profile
@@ -52,7 +52,7 @@ export function CoordinatorProfile() {
             Official Information
           </h3>
           <span className="text-[9px] font-black text-blue-500 bg-blue-50 px-3 py-1 rounded-full uppercase">
-            Member Since {coordinator.joinedDate}
+            Member Since {advisor.joinedDate}
           </span>
         </div>
         
@@ -60,32 +60,32 @@ export function CoordinatorProfile() {
           <InfoRow 
             icon={<IdCard size={20} className="text-[#1e3a5f]" />} 
             label="Staff ID" 
-            value={coordinator.id} 
+            value={advisor.id} 
           />
           <InfoRow 
             icon={<Mail size={20} className="text-[#1e3a5f]" />} 
             label="Office Email" 
-            value={coordinator.email} 
+            value={advisor.email} 
           />
           <InfoRow 
             icon={<Briefcase size={20} className="text-[#1e3a5f]" />} 
             label="Designation" 
-            value={coordinator.rank} 
+            value={advisor.rank} 
           />
           <InfoRow 
             icon={<Building size={20} className="text-[#1e3a5f]" />} 
             label="Department" 
-            value={coordinator.dept} 
+            value={advisor.dept} 
           />
           <InfoRow 
             icon={<GraduationCap size={20} className="text-[#1e3a5f]" />} 
             label="Specialization" 
-            value={coordinator.specialization} 
+            value={advisor.specialization} 
           />
           <InfoRow 
             icon={<Globe size={20} className="text-[#1e3a5f]" />} 
             label="Office Location" 
-            value={coordinator.location} 
+            value={advisor.location} 
           />
         </div>
       </div>
