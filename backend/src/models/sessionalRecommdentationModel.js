@@ -11,6 +11,18 @@ const SessionalRecommendation = sequelize.define('SessionalRecommendation', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
+    recommendedCoursesSummary: {
+        type: DataTypes.JSON,
+        allowNull: true,
+    },
+    priorityWiseCourses: {
+        type: DataTypes.JSON,
+        allowNull: true,
+    },
+    totalCreditsAllowed: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
     sessionId: {
         type: DataTypes.INTEGER,
         allowNull: false,

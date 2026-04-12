@@ -16,6 +16,7 @@ import manageUserRoute from "./src/routes/manageUserRoute.js";
 import authroute from "./src/routes/userRoute.js";
 import resultRoute from "./src/routes/resultRoute.js";
 import transcriptRoute from "./src/routes/transcriptRoute.js";
+import suggestCoursesRoute from "./src/routes/suggestCoursesRoute.js";
 import path from "path";
 dotenv.config();
 
@@ -40,20 +41,13 @@ app.use(bodyparser.json({ limit: '10mb' }));
 app.use(bodyparser.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use((req, res, next) => {
-    console.log("Body Check:", req.body);
     next();
 });
 
 app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
     maxAge: '1y', // Tells browsers to cache the image for 1 year.
-    etag: true, //Enables ETag headers, which help browsers validate cached content.
-    lastModified: true, //Adds a Last-Modified header for cache validation.
+   lastModified: true, //Adds a Last-Modified header for cache validation.
     cacheControl: true, //Enables Cache-Control headers.
-    setHeaders: (res, path) => {
-        if (path.endsWith('.webp') || path.endsWith('.jpg') || path.endsWith('.png')) {
-            res.setHeader('Cache-Control', 'public, max-age=31536000'); // 1 year
-        }
-    }
 }));
 
 app.use('/auth', authroute);
@@ -62,6 +56,7 @@ app.use('/auth', courseDetailRoute);
 app.use('/auth', registerUserRoute);
 app.use('/auth', courseOfferingRoute);
 app.use('/auth', timetableRoute);
+app.use('/auth', suggestCoursesRoute);
 app.use('/auth', manageUserRoute);
 app.use('/auth', resultRoute);
 app.use('/auth', transcriptRoute);

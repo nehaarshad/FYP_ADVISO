@@ -159,6 +159,8 @@ const processStudentTranscript = async (studentData, sessionId, batchId,res) => 
         ]
        }); 
         
+       student.currentSemester=student.currentSemester+1;
+       await student.save()
         return {studentTranscriptSummary };
         
     } catch (error) {

@@ -1,3 +1,4 @@
+
 import { DataTypes } from "sequelize";
 import sequelize from "../config/dbConfig.js";
 
@@ -7,21 +8,48 @@ const SuggestedCourses = sequelize.define("SuggestedCourses", {
         autoIncrement: true,
         primaryKey: true,
     },
-    courseId: {
+    courseName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    courseCode: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    credits: {
         type: DataTypes.INTEGER,
         allowNull: false,
+    },
+    category: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     sessionalRecommendationId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    reason:{
+    priority: {
+        type: DataTypes.ENUM('CRITICAL', 'HIGH', 'MEDIUM', 'LOW'),
+        defaultValue: 'MEDIUM',
+    },
+    reason: {
         type: DataTypes.TEXT,
         allowNull: true,
-    }
+    },
+    isOffered: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+    offeredProgram: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    timeSlot: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
 }, {
     timestamps: true,
-}
-); 
+});
 
 export default SuggestedCourses;

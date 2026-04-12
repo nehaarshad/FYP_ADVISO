@@ -21,7 +21,7 @@ import Message from "../models/messagesModel.js";
 import ProgramModel from "../models/programModel.js";
 import RecommendationCategory from "../models/RecommendationModel.js";
 import RequestFormType from "../models/RequestFormTypeModel.js";
-import RoadmapModel from "../models/RoadmapModel.js";
+import RoadmapModel from "../models/roadmapModel.js";
 import RoadmapCourseCategoryModel from "../models/RoadmapCourseCategoryModel.js";
 import SemesterCourseModel from "../models/semesterCourseModel.js";
 import SemesterRoadmapModel from "../models/semesterRoadmapModel.js";
@@ -175,11 +175,27 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
 
   // Prerequisites (self-referential many-to-many)
-  CoursePreReqModel.hasMany(CourseModel, { foreignKey: "preReqCourseId" });
-  CourseModel.belongsTo(CoursePreReqModel, {  foreignKey: "preReqCourseId" });
-
-  CoursePreReqModel.hasMany(CourseModel, { foreignKey: "courseId" });
-  CourseModel.belongsTo(CoursePreReqModel, {  foreignKey: "courseId" });
+   CourseModel.hasMany(CoursePreReqModel, {foreignKey: "courseid",
+        as: "prerequisites", 
+        sourceKey: "id",
+    });
+    
+    CourseModel.hasMany(CoursePreReqModel, {foreignKey: "preReqCourseId",
+        as: "usedAsPrerequisiteFor",
+        sourceKey: "id",
+    });
+    
+    CoursePreReqModel.belongsTo(CourseModel, {
+        foreignKey: "courseid",
+        as: "mainCourse",
+        targetKey: "id",
+    });
+    
+    CoursePreReqModel.belongsTo(CourseModel, {
+        foreignKey: "preReqCourseId",
+        as: "prerequisiteCourse",
+        targetKey: "id",
+    });
 
   // ==================== Session & Enrollment ====================
   SessionModel.hasMany(CourseOfferingModel, { foreignKey: "sessionId" });
@@ -218,14 +234,11 @@ SemesterCourseModel.belongsTo(CourseCategoryModel, { foreignKey: "courseCategory
 CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId",  });
 
   // ==================== Timetable ====================
-  TimetableModel.hasMany(CourseOfferingModel, { foreignKey: "courseOfferingId" });
-  CourseOfferingModel.belongsTo(TimetableModel, { foreignKey: "courseOfferingId" });
 
-  TimetableModel.hasMany(ProgramModel, { foreignKey: "programId" });
-  ProgramModel.belongsTo(TimetableModel, { foreignKey: "programId" });
+    CourseOfferingModel.hasMany(TimetableModel, { foreignKey: "courseOfferingId"  });
 
-  TimetableModel.hasMany(SessionModel, { foreignKey: "sessionId" });
-  SessionModel.belongsTo(TimetableModel, { foreignKey: "sessionId" });
+    TimetableModel.belongsTo(CourseOfferingModel, { foreignKey: "courseOfferingId",});
+    
   // ==================== Chat & Messages ====================
   ChatsModel.hasMany(Message, { foreignKey: "chatId" });
   Message.belongsTo(ChatsModel, { foreignKey: "chatId" });
