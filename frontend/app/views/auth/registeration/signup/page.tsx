@@ -114,8 +114,9 @@ export default function SignupPage() {
       // Call signup API through repository
       const user = await authRepository.signup(credentials);
       
-      // Redirect based on user role
+      setTimeout(() => {
       redirectBasedOnRole(user.data!.role, router);
+    }, 100);
       
     } catch (err: any) {
       // Handle error
@@ -267,7 +268,7 @@ export default function SignupPage() {
                   >
                     <option value="" disabled>---Select Role---</option>
                     <option value="coordinator">COORDINATOR</option>
-                    <option value="adviser" disabled>ADVISOR</option>
+                    <option value="advisor" >ADVISOR</option>
                   </select>
                 </div>
               </div>
@@ -329,6 +330,8 @@ export default function SignupPage() {
 
 // Helper function to redirect based on user role
 function redirectBasedOnRole(role: string, router: any) {
+  console.log('Redirecting based on role:', role); // Debug log
+  
   switch (role) {
     case 'student':
       router.push('/views/dashboard/students');
@@ -343,6 +346,7 @@ function redirectBasedOnRole(role: string, router: any) {
       router.push('/views/dashboard/admin');
       break;
     default:
+      console.warn('Unknown role:', role, 'redirecting to dashboard');
       router.push('/dashboard');
   }
 }

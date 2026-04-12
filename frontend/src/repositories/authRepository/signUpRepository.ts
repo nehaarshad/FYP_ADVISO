@@ -4,10 +4,10 @@ import AppApis from '../../services/appApis/apiUrl';
 import { SignupCredentials } from '../../credentials/authCred/signUpCreds';
 import { User } from '@/src/models/userModel';
 import { sessionManager } from '../../services/sessionManagement/sessionManager';
+import {localStorageService} from '../../services/localStorage/authLocalStorageService'
 
 export class SignUpRepository extends BaseApiService {
   private static instance: SignUpRepository;
-
   private constructor() {
     super();
   }
@@ -19,30 +19,35 @@ export class SignUpRepository extends BaseApiService {
     return SignUpRepository.instance;
   }
 
-  async signUp(credentials: SignupCredentials): Promise<ApiResponse<User>> {
-    try {
-      const response = await this.postApiWithJson<ApiResponse<User>>(
-        AppApis.SignUpUrl,
-        credentials
-      );
+async signUp(credentials: SignupCredentials): Promise<ApiResponse<User>> {
+  try {
+    const response = await this.postApiWithJson<ApiResponse<User>>(
+      AppApis.SignUpUrl,
+      credentials
+    );
 
-      console.log('Sign up response:', response);
+    console.log('Sign up response:', response);
 
-      if (response.success && response.data) {
-
-        if (response.data.data?.sessionToken && response.data.data?.id) {
-
-          sessionManager.createSession(response.data, response.data.data.sessionToken);
+    if (response.success && response.data) {
+      // Save the user data as well, not just token
+      if (response.data.data?.sessionToken && response.data.data?.id) {
+        // Save both user data and token
+        sessionManager.createSession(response.data.data, response.data.data.sessionToken);
+        
+        // Also save the user data separately if needed
+        if (response.data.data) {
+          localStorageService.saveUser(response.data.data);
         }
-        return response.data;
       }
-
-      throw new Error(response.error || 'Login failed');
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
+      return response.data;
     }
+
+    throw new Error(response.error || 'Signup failed');
+  } catch (error) {
+    console.error('Signup error:', error);
+    throw error;
   }
+}
 
 }
 

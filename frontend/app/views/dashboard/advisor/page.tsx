@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { 
   Users, UserCheck, UserMinus, Clock, ArrowLeft, 
   StickyNote, Bell, Search, Settings 
 } from "lucide-react"; 
 import { AnimatePresence, motion } from "framer-motion"; 
 
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 // Components Imports
 import { Sidebar } from "../../../../components/navbars/route";
 import { StatCard } from "../../../components/StatCard";
@@ -18,20 +20,12 @@ import { MeetingList } from '../../../components/MeetingList';
 import { AdvisorNotes } from '../../../components/AdvisorNotes';
 import { NotificationPanel } from "../../../components/NotificationPanel";
 import { AdvisoryLogs } from '../../../components/AdvisoryLogs';
+import { useRouter } from "next/navigation";
 type StudentStatus = "Total" | "Regular" | "Irregular";
 
 
 export default function Dashboard() {
-  const goBack = () => {
-  if (navigationStack.length > 1) {
-    const newStack = [...navigationStack];
-    newStack.pop();
-    const last = newStack[newStack.length - 1];
-    setNavigationStack(newStack);
-    setActiveTab(last);
-    setView(last as any);
-  }
-};
+
 const navigateTo = (tab: string) => {
   setNavigationStack(prev => [...prev, tab]);
   setActiveTab(tab);
@@ -39,7 +33,7 @@ const navigateTo = (tab: string) => {
 };
   
     const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
-
+  const [isClient, setIsClient] = useState(false);
   const [view, setView] = useState<string>("overview");
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedBatch, setSelectedBatch] = useState<string>("Fall 2024");
@@ -48,9 +42,32 @@ const navigateTo = (tab: string) => {
   // --- Coordinator Style Notification States ---
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotif, setHasNewNotif] = useState(true);
-
+  const router= useRouter()
   const pastBatches = ["Fall 2023", "Spring 2022"];
 
+    useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsClient(true);
+      // Check authentication
+      if (!sessionManager.hasActiveSession()) {
+        router.push('/signin');
+        return;
+      }
+      
+      // Your dashboard initialization code here
+    }, [router]);
+  
+    if (!isClient) {
+      return (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          </div>
+        </div>
+      );
+    }
+  
   return (
     <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans text-slate-900">
       

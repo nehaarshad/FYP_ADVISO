@@ -24,7 +24,9 @@ export class LocalStorageService {
   setItem<T>(key: string, value: T): void {
     if (this.isBrowser()) {
       localStorage.setItem(key, JSON.stringify(value));
+      return; // Exit early on success
     }
+    // Only log warning when actually on server side
     console.warn('Attempted to set item in localStorage on the server side. This operation is ignored.');
   }
 
@@ -41,6 +43,7 @@ export class LocalStorageService {
   removeItem(key: string): void {
     if (this.isBrowser()) {
       localStorage.removeItem(key);
+      return;
     }
     console.warn('Attempted to remove item from localStorage on the server side. This operation is ignored.');
   }
@@ -60,7 +63,7 @@ export class LocalStorageService {
 
   clearAuthStorage(): void {
     if (this.isBrowser()) {
-        console.log('Clearing auth storage: Removing user and token from localStorage');
+      console.log('Clearing auth storage: Removing user and token from localStorage');
       localStorage.removeItem(this.AuthStorageKeys.USER_KEY);
       localStorage.removeItem(this.AuthStorageKeys.TOKEN_KEY);
     }
@@ -81,6 +84,7 @@ export class LocalStorageService {
 
   // Check if user is authenticated
   isAuthenticated(): boolean {
+    if (!this.isBrowser()) return false;
     return !!this.getToken() && !!this.getItem(this.AuthStorageKeys.USER_KEY);
   }
 
