@@ -60,10 +60,6 @@ export const AdvisorRemarks = ({ onBack }: { onBack?: () => void }) => {
               <ArrowLeft size={20} />
             </button>
           )}
-
-          <div className="h-11 w-11 bg-[#1e3a5f] rounded-xl flex items-center justify-center text-white shadow-md ml-1">
-             <MessageCircle size={22} />
-          </div>
           <div>
              <h2 className="text-xl font-black text-[#1e3a5f] uppercase italic tracking-tight leading-none">Advisor Remarks</h2>
              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Academic Guidance</p>

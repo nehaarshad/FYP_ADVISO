@@ -3,7 +3,8 @@ import {
   AlertTriangle, StickyNote, MessageSquare,
   BookOpen, Bell, UserPlus, UserCog, ShieldCheck,
   Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch,
-  User
+  User,
+  Lightbulb
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";
@@ -39,6 +40,7 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     { key: "AdvisorChat",     label: "Advisor Chat",    icon: <MessageSquare size={20}/> },
     { key: "AdvisoryLogs",     label: "Advisory Logs",    icon: <MessageSquare size={20}/> },
     { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
+    { key: "facultyrecommendation", label: "Faculty Recommendation", icon: <Lightbulb size={20}/> },
    ],
 
   student: [
