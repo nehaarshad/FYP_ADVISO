@@ -35,7 +35,7 @@ export default function LoginPage() {
     console.log("Login Attempt:", { sapId, password });
 
     
-    router.push("/views/dashboard/coordinator");
+    router.push("/views/dashboard/students");
   };
 
   return (
@@ -114,7 +114,7 @@ export default function LoginPage() {
                 Icon={Lock}
               />
 
-              {/* Submit button click pe handleLogin trigger hoga */}
+              {/* Submit button */}
               <button type="submit" className="w-full">
                 <BlueFilledButton text="Sign In" />
               </button>
