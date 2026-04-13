@@ -176,16 +176,25 @@ const getCoursesDetails = async (req, res) => {
             include: [
                 {
                     model: CoursesModel, //course name, code, credits
-                    include: [
-                        {
-                            model: CoursePreReqModel, //course ka preReqCourse
-                            include: [
-                                {
-                                    model: CoursesModel, //preReqCourseDetails
-                                }
-                            ]
-                        }
-                    ]
+                    include: [{
+                        
+                    model: CoursePreReqModel,
+                    as: "prerequisites",  // Courses this course requires (incoming)
+                    include: [{
+                        model: CoursesModel,
+                        as: "prerequisiteCourse"
+                    }]
+                    },
+                    {
+                    model: CoursePreReqModel,
+                    as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
+                    include: [{
+                        model: CoursesModel,
+                        as: "mainCourse"
+                    }]
+                    
+                    }]
+
 
                 },
                 {

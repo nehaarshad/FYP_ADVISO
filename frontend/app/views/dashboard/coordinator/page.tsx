@@ -1,20 +1,21 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Search, Bell, Settings, Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
   FileSearch, ChevronLeft, Database
 } from "lucide-react";
-
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 // Components Imports
 import { Sidebar } from "@/components/navbars/route";
-import { SessionManager } from "@/app/components/SessionManager";
 import { RoadmapSection } from "@/app/components/Roadmaps";
 import { StudentRecords } from "@/app/components/StudentRecords";
-import { Guidelines } from "@/app/components/Guidelines";
+import { Guidelines } from "@/components/Guidelines/Guidelines";
 import { AddFaculty } from "@/app/components/AddFaculty";
 import { AddStudent } from "@/app/components/AddStudents";
-import { NotificationPanel } from "@/app/components/NotificationPanel";
+import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
 import { SettingsModal } from "@/app/components/SettingsModel";
 import { EditStudent } from '@/app/components/EditStudent';
 import { EditAdvisor } from '@/app/components/EditAdvisor';
@@ -27,17 +28,17 @@ import { RequestForms} from "@/app/components/RequestForms";
 
 // IMPORTING YOUR SEPARATE PROFILE COMPONENT
 import { ProfileView } from "@/app/components/ProfileView"; 
+import { SessionManager } from '@/app/components/SessionManager';
 
 export default function CoordinatorDashboard() {
-  const [mounted, setMounted] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
   const [selectedSession, setSelectedSession] = useState("Fall 2025");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showRoadmapOverlay, setShowRoadmapOverlay] = useState(false);
-
-  useEffect(() => { setMounted(true); }, []);
+  const router = useRouter();
 
   const navigateTo = (tab: string) => {
     setNavigationStack(prev => [...prev, tab]);
@@ -54,7 +55,28 @@ export default function CoordinatorDashboard() {
     }
   };
 
-  if (!mounted) return null;
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsClient(true);
+    // Check authentication
+    if (!sessionManager.hasActiveSession()) {
+      router.push('/signin');
+      return;
+    }
+    
+    // Your dashboard initialization code here
+  }, [router]);
+
+  if (!isClient) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">

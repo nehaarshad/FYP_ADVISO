@@ -8,12 +8,12 @@ const StudentStatus = sequelize.define("StudentStatus", {
         primaryKey: true,
     },
     currentStatus: {
-        type: DataTypes.ENUM("regular", "irregular","onProbation","suspended", "graduated"),
+        type: DataTypes.STRING,
         allowNull: false,
     },
     reason: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     studentId: {
         type: DataTypes.INTEGER,

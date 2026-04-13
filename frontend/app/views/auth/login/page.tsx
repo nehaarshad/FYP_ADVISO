@@ -1,21 +1,25 @@
-"use client";
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, Variants, TargetAndTransition } from "framer-motion";
 import Link from 'next/link';
-import { 
-  Mail, 
-  Lock, 
-  ChevronLeft, 
-  AlertCircle 
-} from "lucide-react";
+import { Mail, Lock, ChevronLeft, AlertCircle } from "lucide-react";
 import UniversalInput from "@/components/textsComponents/universalInput";
 import BlueFilledButton from '@/components/buttons/FilledButton/blueFilledButton';
+import { authRepository } from '@/src/repositories/authRepository/authRepository'
+import { LoginCredentials } from '@/src/credentials/authCred/loginCred';
+import Image from 'next/image';
 
 export default function LoginPage() {
+  // Form state
   const [sapId, setSapId] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); // Router initialize
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const fadeUp: Variants = {
     hidden: { opacity: 0, y: 40 },
@@ -30,12 +34,55 @@ export default function LoginPage() {
     }),
   };
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Login Attempt:", { sapId, password });
+  useEffect(() => {
+    if (authRepository.isAuthenticated()) {
+      const user = authRepository.getCurrentUser();
+      console.log("Already authenticated user:", user);
+      if (user && user.data) {
+        redirectBasedOnRole(user.data.role, router);
+      }
+    }
+  }, [router]);
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    router.push("/views/dashboard/students");
+    // Clear previous error
+    setError(null);
+    
+    // Validate inputs
+    if (!sapId.trim()) {
+      setError("SAP ID is required");
+      return;
+    }
+    
+    if (!password.trim()) {
+      setError("Password is required");
+      return;
+    }
+    
+    // Set loading state
+    setIsLoading(true);
+    
+    try {
+      // Prepare credentials
+      const credentials: LoginCredentials = {
+        sapid: sapId,
+        password: password
+      };
+      
+      // Call login API through repository
+      const user = await authRepository.login(credentials);
+      
+      // Redirect based on user role
+      redirectBasedOnRole(user.data!.role, router);
+      
+    } catch (err: any) {
+      // Handle error
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,7 +98,7 @@ export default function LoginPage() {
         transition={{ duration: 0.6 }}
         className="max-w-5xl w-full grid md:grid-cols-2 bg-white/95 backdrop-blur-md rounded-[2.5rem] shadow-[0_40px_100px_-15px_rgba(0,0,0,0.4)] overflow-hidden border border-white/20 relative z-10"
       >
-        {/* LeFT SIDE: BRANDING */}
+        {/* LEFT SIDE: BRANDING */}
         <div className="bg-[#1e3a5f]/90 p-12 text-white flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-400/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
@@ -65,7 +112,9 @@ export default function LoginPage() {
               custom={1} initial="hidden" animate="visible" variants={fadeUp} 
               className="mb-8"
             >
-              <img 
+              <Image 
+                 width={154} 
+                 height={184}  
                 src="/Lightlogo.png" 
                 alt="Riphah Logo" 
                 className="w-32 h-32 object-contain drop-shadow-2xl" 
@@ -90,9 +139,16 @@ export default function LoginPage() {
             transition={{ delay: 0.4 }}
           >
             <div className="mb-10 text-left">
-                <h2 className="text-4xl font-black text-[#1e3a5f] mb-2 tracking-tight">Login</h2>
-                <div className="h-1.5 w-12 bg-[#FDB813] rounded-full"></div>
+              <h2 className="text-4xl font-black text-[#1e3a5f] mb-2 tracking-tight">Login</h2>
+              <div className="h-1.5 w-12 bg-[#FDB813] rounded-full"></div>
             </div>
+            
+            {/* Error Display */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[1.2rem]">
+                <p className="text-red-600 text-sm font-medium">{error}</p>
+              </div>
+            )}
             
             {/* Form tag */}
             <form className="space-y-6" onSubmit={handleLogin}>
@@ -103,6 +159,7 @@ export default function LoginPage() {
                 value={sapId}
                 onChange={setSapId}
                 Icon={Mail}
+                disabled={isLoading}
               />
 
               <UniversalInput 
@@ -112,13 +169,22 @@ export default function LoginPage() {
                 value={password}
                 onChange={setPassword}
                 Icon={Lock}
+                disabled={isLoading}
               />
 
-              {/* Submit button */}
-              <button type="submit" className="w-full">
-                <BlueFilledButton text="Sign In" />
-              </button>
+              <BlueFilledButton text={isLoading ? "Signing In..." : "Sign In"} />
+         
             </form>
+
+            {/* Forgot Password Link */}
+            <div className="mt-4 text-right">
+              <Link 
+                href="/forgot-password" 
+                className="text-sm text-[#1e3a5f] hover:text-[#FDB813] transition-colors font-medium"
+              >
+                Forgot Password?
+              </Link>
+            </div>
 
             <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50/50 rounded-[1.2rem] border border-blue-100/50">
               <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
@@ -133,4 +199,23 @@ export default function LoginPage() {
       </motion.div>
     </div>
   );
+}
+
+function redirectBasedOnRole(role: string, router: any) {
+  switch (role) {
+    case 'student':
+      router.push('/views/dashboard/students');
+      break;
+    case 'advisor':
+      router.push('/views/dashboard/advisor');
+      break;
+    case 'coordinator':
+      router.push('/views/dashboard/coordinator');
+      break;
+    case 'admin':
+      router.push('/views/dashboard/admin');
+      break;
+    default:
+      router.push('/dashboard');
+  }
 }
