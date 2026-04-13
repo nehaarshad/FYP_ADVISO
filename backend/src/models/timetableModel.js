@@ -7,19 +7,21 @@ const TimetableModel = sequelize.define("TimetableModel", {
         autoIncrement: true,
         primaryKey: true,   
     },
-    sessionId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    programId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
     courseOfferingId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
     day:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    
+    venue:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    
+    instructor:{
         type: DataTypes.STRING,
         allowNull: false,
     },

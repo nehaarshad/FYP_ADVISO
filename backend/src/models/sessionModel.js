@@ -8,19 +8,11 @@ const SessionModel = sequelize.define("SessionModel", {
         primaryKey: true,   
     },
     sessionType: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    sessionYear: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    startedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    endAt: {
-        type: DataTypes.DATE,
+    sessionYear: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
 }, {
