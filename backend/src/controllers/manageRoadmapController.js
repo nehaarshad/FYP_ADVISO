@@ -1,4 +1,4 @@
-import RoadmapModel from '../models/RoadmapModel.js';
+import RoadmapModel from '../models/roadmapModel.js';
 import RoadmapCourseCategoryModel from '../models/RoadmapCourseCategoryModel.js';
 import CategoryModel from '../models/categoryModel.js';
 import ProgramModel from '../models/programModel.js';
@@ -209,57 +209,49 @@ const getProgramRoadmaps = async (req, res) => {
             include: [
                 {
                     model: CategoryModel,
-                    include: [
-                        {
-                            model: CourseCategoryModel,
-                            include: [
-                                {
-                                    model: CoursesModel,
-                                    attributes: ["id", "courseName", "courseCredits"],
-                                    include: [
+                }
+            ]
+        },{
+                        model: SemesterRoadmapModel,
+                        include: [
+                            {
+                                model: SemesterCourseModel,
+                                include: [
+                                    {
+                                        model: CourseCategoryModel,
+                                        include: [
                                             {
-                                                model: CoursePreReqModel, //course ka preReqCourse
-                                                include: [
-                                                    {
-                                                        model: CoursesModel, //preReqCourseDetails
-                                                    }
-                                                ]
+                                                model: CoursesModel,
+                                                attributes: ["id", "courseName", "courseCredits"],
+                                                include: [{
+                        
+                                                        model: CoursePreReqModel,
+                                                        as: "prerequisites",  // Courses this course requires (incoming)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "prerequisiteCourse"
+                                                        }]
+                                                        },
+                                                        {
+                                                        model: CoursePreReqModel,
+                                                        as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "mainCourse"
+                                                        }]
+                                                        
+                                                        }]
+                                            },
+                                            {
+                                                model: CategoryModel,
+                                                attributes: ["id", "categoryName", "colorScheme"]
                                             }
                                         ]
-                                },
-                                {
-                                    model: CategoryModel,
-                                    attributes: ["id", "categoryName", "colorScheme"]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            model: SemesterRoadmapModel,
-            include: [
-                {
-                    model: SemesterCourseModel,
-                    include: [
-                        {
-                            model: CourseCategoryModel,
-                            include: [
-                                {
-                                    model: CoursesModel,
-                                    attributes: ["id", "courseName", "courseCredits"]
-                                },
-                                {
-                                    model: CategoryModel,
-                                    attributes: ["id", "categoryName", "colorScheme"]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
     ]
 });
         if (!roadmap) {
@@ -315,35 +307,10 @@ const getBatchRoadmap = async (req, res) => {
                             include: [
                                 {
                                 model: CategoryModel,
-                                include: [
-                                    {
-                                        model: CourseCategoryModel,
-                                        include: [
-                                            {
-                                                model: CoursesModel,
-                                                attributes: ["id", "courseName", "courseCredits"],
-                                                include: [
-                                                        {
-                                                            model: CoursePreReqModel, //course ka preReqCourse
-                                                            include: [
-                                                                {
-                                                                    model: CoursesModel, //preReqCourseDetails
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                            },
-                                            {
-                                                model: CategoryModel,
-                                                attributes: ["id", "categoryName", "colorScheme"]
-                                            }
-                                        ]
-                                    }
-                                ]
                             }
                         ]
                     },
-                    {
+                   {
                         model: SemesterRoadmapModel,
                         include: [
                             {
@@ -354,7 +321,25 @@ const getBatchRoadmap = async (req, res) => {
                                         include: [
                                             {
                                                 model: CoursesModel,
-                                                attributes: ["id", "courseName", "courseCredits"]
+                                                attributes: ["id", "courseName", "courseCredits"],
+                                                include: [{
+                        
+                                                        model: CoursePreReqModel,
+                                                        as: "prerequisites",  // Courses this course requires (incoming)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "prerequisiteCourse"
+                                                        }]
+                                                        },
+                                                        {
+                                                        model: CoursePreReqModel,
+                                                        as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "mainCourse"
+                                                        }]
+                                                        
+                                                        }]
                                             },
                                             {
                                                 model: CategoryModel,

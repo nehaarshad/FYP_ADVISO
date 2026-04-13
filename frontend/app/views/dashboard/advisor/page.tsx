@@ -1,53 +1,70 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
-
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { 
   Users, UserMinus, Clock, Bell, Search, Filter, ChevronDown 
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 // Components Imports
-// import { Sidebar } from "../components/navbars/route";
-import { Sidebar } from "@/components/navbars/route";
-import { StudentList } from "../../../../components/StudentDetails/StudentList";
-import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
-import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
-import AdvisorChat from "../../../../components/Chat/AdvisorChat";
-import { MeetingList } from "../../../../components/MeetingSchedule/MeetingList";
-import Guidelines from "../../../../components/Guidelines/Guidelines";
-import  AdvisoryNotes  from "../../../../components/AdvisorView/AdvisoryNotes";
-import { NotificationPanel } from "../../../../components/Notifications/NotificationPanel"; 
-import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs';
-import { AdvisorProfile } from "../../../../components/AdvisorView/AdvisorProfile";
+import { Sidebar } from "../../../../components/navbars/route";
+import { StatCard } from "../../../components/StatCard";
+import { StudentList } from "../../../components/StudentList";
+import { StudentProfile } from "../../../components/StudentProfile";
+import { StudentTranscript } from "../../../components/StudentTranscript";
+import AdvisorChat from "../../../components/AdvisorChat";
+import { MeetingList } from '../../../components/MeetingList';
+import { AdvisorNotes } from '../../../components/AdvisorNotes';
+import { NotificationPanel } from "../../../components/NotificationPanel";
+import { AdvisoryLogs } from '../../../components/AdvisoryLogs';
+import { useRouter } from "next/navigation";
+type StudentStatus = "Total" | "Regular" | "Irregular";
+
 
 export default function Dashboard() {
-  const [view, setView] = useState<string>("Overview");
-  const [activeTab, setActiveTab] = useState("Total");
+
+const navigateTo = (tab: string) => {
+  setNavigationStack(prev => [...prev, tab]);
+  setActiveTab(tab);
+  setView(tab as any); // important for switching views
+};
+  
+    const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
+  const [isClient, setIsClient] = useState(false);
+  const [view, setView] = useState<string>("overview");
+  const [activeTab, setActiveTab] = useState("overview");
   const [selectedBatch, setSelectedBatch] = useState<string>("Fall 2024");
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotif, setHasNewNotif] = useState(true);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const router= useRouter()
+  const pastBatches = ["Fall 2023", "Spring 2022"];
 
-  // --- Only Update: Navigation Handler Fix ---
-  const navigateTo = (tab: string) => {
-    const target = tab.toLowerCase();
-    
-    // Yahan hum strings ko match kar rahe hain jo sidebar bhej sakta hai
-    if (target === "advisorprofile" || target === "profile") {
-      setView("Advisorprofile");
-    } else {
-      const normalized = tab.charAt(0).toUpperCase() + tab.slice(1).toLowerCase();
-      setView(normalized);
+    useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsClient(true);
+      // Check authentication
+      if (!sessionManager.hasActiveSession()) {
+        router.push('/signin');
+        return;
+      }
+      
+      // Your dashboard initialization code here
+    }, [router]);
+  
+    if (!isClient) {
+      return (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          </div>
+        </div>
+      );
     }
-    
-    setIsFilterOpen(false);
-    if (target === "overview") {
-      setSelectedStudent(null);
-    }
-  };
-
+  
   return (
     <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans text-slate-900">
       
