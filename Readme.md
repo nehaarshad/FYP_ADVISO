@@ -60,7 +60,6 @@ find or create a new batch and assign a specific required program as CS, or SE
 
 
 
-=================================================== to create a jwt token secret run this command===============================================
 
       | node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
