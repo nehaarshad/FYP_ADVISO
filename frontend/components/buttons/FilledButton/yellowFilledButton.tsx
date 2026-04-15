@@ -10,7 +10,7 @@ const FilledButton: React.FC<YellowFilledButtonProps> = ({ text, onClick }) => {
     <div className="flex justify-center mb-20">
       <button
         onClick={onClick}
-        className="px-8 py-3 bg-[#FDB813] text-[#1e3a5f] font-bold text-sm md:text-lg rounded-full flex items-center gap-4 hover:bg-[#e6a800] transition-all"
+        className="px-18 py-3 bg-[#FDB813] text-[#1e3a5f] font-bold text-sm md:text-lg rounded-full flex items-center gap-4 hover:bg-[#e6a800] transition-all"
       >
         {text}
       </button>

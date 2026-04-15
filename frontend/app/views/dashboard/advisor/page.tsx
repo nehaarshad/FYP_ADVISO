@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 // Components Imports
 import { Sidebar } from "../../../../components/navbars/route";
-import { StatCard } from "../../../components/StatCard";
+import {StatCard}  from "@/components/cards/StatCard";
 import { StudentList } from "../../../components/StudentList";
 import { StudentProfile } from "../../../components/StudentProfile";
 import { StudentTranscript } from "../../../components/StudentTranscript";

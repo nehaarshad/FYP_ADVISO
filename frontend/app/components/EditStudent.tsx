@@ -1,4 +1,4 @@
-"use client";
+
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import { UserCog, Search, Save, Hash, GraduationCap, Mail, CheckCircle2 } from "lucide-react";

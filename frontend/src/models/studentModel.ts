@@ -1,3 +1,8 @@
+import {User} from "./userModel";
+import { StudentGuardian } from "./studentGuardianModel";
+import { StudentStatus } from "./studentStatusModel";
+import {Batch} from "./batchModel" 
+
 export interface Student {
   id: number;
   studentName: string;
@@ -11,4 +16,8 @@ export interface Student {
   batchId: number;
   createdAt?: string;
   updatedAt?: string;
+  User:User;
+  StudentStatus:StudentStatus;
+  StudentGuardians: StudentGuardian[];
+  BatchModel: Batch;
 }

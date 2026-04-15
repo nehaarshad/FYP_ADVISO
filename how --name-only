@@ -1,0 +1,61 @@
+[33mcommit 1f2e80ff405a2ac5e592eca1c9296d599e6ac110[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mjannat_branch[m[33m)[m
+Author: NehaArshad <nehaarshad1203@gmail.com>
+Date:   Thu Apr 16 01:05:37 2026 +0500
+
+    create frontend patterns, manage states and api responses
+
+ .../controllers/batchSessionProgramControllers.js  |  11 [32m++[m
+ .../src/controllers/courseOfferingController.js    |   7 [32m+[m[31m-[m
+ backend/src/controllers/manageRoadmapController.js |   7 [32m+[m[31m-[m
+ .../src/controllers/manageUserProfileController.js | 172 [31m-------------------[m
+ backend/src/controllers/registerUserController.js  |  46 [32m++[m[31m---[m
+ backend/src/controllers/resultController.js        |   2 [32m+[m[31m-[m
+ backend/src/controllers/timetableController.js     |   2 [32m+[m[31m-[m
+ backend/src/routes/userRoute.js                    |   2 [32m+[m[31m-[m
+ backend/src/services/llmRecommendationService.js   |   6 [32m+[m[31m-[m
+ ...00089-08b18dee-50a6-4816-9297-86ebc1770419.xlsx | Bin [31m0[m -> [32m10184[m bytes
+ frontend/app/components/AddFaculty.tsx             | 191 [32m+++++++++++++++++[m[31m----[m
+ frontend/app/components/EditAdvisor.tsx            |   2 [32m+[m[31m-[m
+ frontend/app/components/EditStudent.tsx            |   2 [32m+[m[31m-[m
+ frontend/app/components/ProfileView.tsx            | 119 [31m-------------[m
+ frontend/app/components/StudentRecords.tsx         | 181 [32m++++++++++++++++[m[31m---[m
+ frontend/app/layout.tsx                            |   4 [32m+[m[31m-[m
+ frontend/app/logo.png                              | Bin [31m0[m -> [32m3400[m bytes
+ frontend/app/page.tsx                              | 158 [32m+++++++++[m[31m--------[m
+ frontend/app/views/dashboard/advisor/page.tsx      |   2 [32m+[m[31m-[m
+ frontend/app/views/dashboard/coordinator/page.tsx  |  32 [32m++[m[31m--[m
+ frontend/components/Guidelines/Guidelines.tsx      |   4 [32m+[m[31m-[m
+ frontend/components/ProfileView/route.tsx          |  98 [32m+++++++++++[m
+ .../buttons/FilledButton/yellowFilledButton.tsx    |   2 [32m+[m[31m-[m
+ frontend/components/cards/StatCard.tsx             |   7 [32m+[m[31m-[m
+ frontend/components/footer/route.tsx               |  73 [32m++++++++[m
+ frontend/components/navbars/route.tsx              |   1 [32m+[m
+ frontend/package-lock.json                         |  36 [32m+++[m[31m-[m
+ frontend/package.json                              |   3 [32m+[m[31m-[m
+ frontend/src/hooks/advisorHooks/addAdvisor.ts      |  36 [32m++++[m
+ frontend/src/hooks/advisorHooks/updateAdvisor.ts   |  60 [32m+++++++[m
+ .../bulkStudentUpload/useBulkStudentUpload.ts      |  46 [32m+++++[m
+ frontend/src/hooks/studentsHook/addStudent.ts      |  37 [32m++++[m
+ frontend/src/hooks/studentsHook/updateStudent.ts   |  82 [32m+++++++++[m
+ frontend/src/hooks/studentsHook/useStudents.ts     |  93 [32m++++++++++[m
+ frontend/src/models/FacultyAdvisorModel.ts         |   4 [32m+[m
+ frontend/src/models/batchModel.ts                  |   4 [32m+[m
+ frontend/src/models/coordinatorModel.ts            |   2 [32m+[m
+ frontend/src/models/studentModel.ts                |   9 [32m+[m
+ .../userManagementRepository/types/addAdvisor.ts   |   8 [32m+[m
+ .../userManagementRepository/types/addStudent.ts   |  19 [32m++[m
+ .../types/bulkStudentUploader.ts                   |   6 [32m+[m
+ .../types/updateAdvisor.ts                         |  10 [32m++[m
+ .../types/updateStudentStatus.ts                   |   6 [32m+[m
+ .../types/updateStudents.ts                        |  17 [32m++[m
+ .../userManagementRepository/userManagementRepo.ts | 131 [32m++++++++++++++[m
+ .../advisorsRepository/advisorRepository.ts        | 137 [32m+++++++++++++++[m
+ .../coordinatorRepository/coordinatorsRepo.ts      |  98 [32m+++++++++++[m
+ .../studentsRepository/studentsRepo.ts             | 159 [32m+++++++++++++++++[m
+ frontend/src/services/appApis/apiUrl.ts            |   3 [32m+[m[31m-[m
+ .../baseNetworkService/baseNetwork.ts              |  55 [32m++++++[m
+ frontend/src/storage/studentsStore/studentsData.ts |  86 [32m++++++++++[m
+ frontend/src/utilits/const/navBarItems.tsx         |   2 [32m+[m[31m-[m
+ .../studentsFilter/studentsFilterOption.ts         |  12 [32m++[m
+ frontend/tsconfig.json                             |   2 [32m+[m[31m-[m
+ 54 files changed, 1797 insertions(+), 497 deletions(-)

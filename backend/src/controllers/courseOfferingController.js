@@ -48,8 +48,7 @@ const uploadCourseOffering = async (req, res) => {
         console.log("Program lookup result:", program ? program.programName : "No program found");
         if (!program) {
             return res.status(404).json({ 
-                message: 'Program not found',
-                searchedProgram: programName 
+                message: 'Program not found'
             });
         }
         
@@ -157,7 +156,7 @@ const uploadCourseOffering = async (req, res) => {
         }
         
         // Return success response
-        res.status(200).json(offerings);
+        res.status(200).json({data:offerings,success:true});
         
     } catch (error) {
         console.error('Error uploading course offering:', error);
@@ -189,7 +188,7 @@ const getCourseOfferings = async (req, res) => {
         });
         
         console.log(`Retrieved ${offerings.length} course offerings from database`);
-        res.status(200).json(offerings);
+        res.status(200).json({data:offerings,success:true});
     } catch (error) {
         console.error('Error retrieving course offerings:', error);
         res.status(500).json({

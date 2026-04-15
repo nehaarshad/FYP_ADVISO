@@ -127,4 +127,59 @@ export class BaseApiService {
   // post Via Excel Sheet
 
 
+  protected async postExcelFile<T>(
+  url: string,
+  file: File,
+  fileType:string,
+  additionalData?: Record<string, string>
+): Promise<ApiResponse<T>> {
+  try {
+    console.log('Uploading Excel file to:', url);
+    console.log('File name:', file.name, 'Field name: ',fileType);
+
+    
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    if (!fileExtension || !['xls', 'xlsx'].includes(fileExtension)) {
+      return {
+        success: false,
+        error: 'Invalid file type. Please upload an Excel file (.xls or .xlsx)',
+      };
+    }
+
+    const formData = new FormData();
+    
+    formData.append(fileType, file);
+    
+    // Append additional data
+    if (additionalData) {
+      Object.entries(additionalData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+    }
+
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const responseData = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        data: responseData,
+        status: response.status,
+      };
+    } else {
+      throw new Error(responseData.message || responseData.error || 'Excel upload failed');
+    }
+  } catch (error: any) {
+    console.error('Excel file upload error:', error);
+    return {
+      success: false,
+      error: error.message || 'Excel file upload failed',
+    };
+  }
+}
+
 }

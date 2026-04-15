@@ -146,7 +146,7 @@ const matchedOffering = offeringMap.get(normalizedTitle);
         }
         
         
-        res.status(200).json(timetables);
+        res.status(200).json({data:timetables});
         
     } catch (error) {
         console.error('Error:', error);

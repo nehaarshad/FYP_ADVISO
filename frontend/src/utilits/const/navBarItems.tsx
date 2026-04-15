@@ -24,7 +24,7 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
       subItems: [
         { key: "add-student",  label: "New Student",  icon: <GraduationCap size={16}/> },
         { key: "add-faculty",  label: "New Faculty",  icon: <Users size={16}/> },
-        { key: "all-program",  label: "All Students", icon: <Users size={16}/> },
+        { key: "bulk-student-upload",  label: "Add Multiple Students", icon: <Users size={16}/> },
       ]
     },
     { key: "edit-student",    label: "Edit Student",   icon: <UserCog size={20}/>,   group: "Management" },
