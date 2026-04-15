@@ -12,7 +12,7 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 import { Sidebar } from "@/components/navbars/route";
 import { RoadmapSection } from "@/app/components/Roadmaps";
 import { StudentRecords } from "@/app/components/StudentRecords";
-import { Guidelines } from "@/components/Guidelines/Guidelines";
+import Guidelines from "@/components/Guidelines/Guidelines";
 import { AddFaculty } from "@/app/components/AddFaculty";
 import { AddStudent } from "@/app/components/AddStudents";
 import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
@@ -25,11 +25,10 @@ import { BatchResults } from "@/app/components/BatchResults";
 import { CourseCatalog } from "@/app/components/CourseCatalog";
 import { RoadmapView } from "@/app/components/RoadmapView";
 import { RequestForms} from "@/app/components/RequestForms";
-
-// IMPORTING YOUR SEPARATE PROFILE COMPONENT
-import { ProfileView } from "@/app/components/ProfileView"; 
+import { ProfileView } from "@/components/ProfileView/route"; 
 import { SessionManager } from '@/app/components/SessionManager';
-
+import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+import { useUpdateAdvisor } from '@/src/hooks/advisorHooks/updateAdvisor';
 export default function CoordinatorDashboard() {
   const [isClient, setIsClient] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
@@ -39,11 +38,25 @@ export default function CoordinatorDashboard() {
   const [showSettings, setShowSettings] = useState(false);
   const [showRoadmapOverlay, setShowRoadmapOverlay] = useState(false);
   const router = useRouter();
+  const {students} = useStudents();
+  const {advisorData} = useUpdateAdvisor();
+  const activeStudentsCount = students.filter(student => student.User?.isActive === true).length;
+  const formattedCount = activeStudentsCount.toLocaleString();
 
   const navigateTo = (tab: string) => {
     setNavigationStack(prev => [...prev, tab]);
     setActiveTab(tab);
   };
+
+  const getAdvisors=()=>{
+    if(advisorData && advisorData.User)
+    {
+     return advisorData.filter((adv: { User: { isActive: boolean; }; }) => adv.User?.isActive === true).length;
+    }
+    return 0;
+  }
+
+   const activeAdvisorCount =  getAdvisors();
 
   const goBack = () => {
     if (navigationStack.length > 1) {
@@ -64,12 +77,11 @@ export default function CoordinatorDashboard() {
       return;
     }
     
-    // Your dashboard initialization code here
   }, [router]);
 
   if (!isClient) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-white">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading dashboard...</p>
@@ -109,8 +121,8 @@ export default function CoordinatorDashboard() {
             {activeTab === "overview" && (
               <div className="space-y-8 animate-in fade-in duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <StatCard label="Total Students" value="1,240" icon={<Users/>} trend="+12% Since Fall" />
-                    <StatCard label="Batch Advisors" value="48" icon={<ShieldCheck/>} trend="Active" />
+                    <StatCard label="Total Students" value={formattedCount} icon={<Users/>} trend="Active" />
+                    <StatCard label="Batch Advisors" value={activeAdvisorCount} icon={<ShieldCheck/>} trend="Active" />
                     <StatCard label="Requests" value="--" icon={<Clock/>} trend="Coming Soon" color="text-slate-300" />
                 </div>
 
@@ -146,7 +158,7 @@ export default function CoordinatorDashboard() {
                 {activeTab === "timetable" && <Timetable session={selectedSession} />}
                 {activeTab === "results" && <BatchResults />}
                 {activeTab === "course-details" && <CourseCatalog />}
-                {activeTab === "all-program" && <StudentRecords/>}
+                {activeTab === "bulk-student-upload" && <StudentRecords/>}
                 {activeTab === "add-student" && <AddStudent/>}
                 {activeTab === "add-faculty" && <AddFaculty/>}
                 {activeTab === "edit-student" && <EditStudent/>}

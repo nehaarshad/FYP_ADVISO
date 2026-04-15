@@ -1,3 +1,5 @@
+import {User} from "./userModel"
+import { Batch } from "./batchModel";
 export interface BatchAdvisor {
   id: number;
   advisorName: string;
@@ -7,4 +9,6 @@ export interface BatchAdvisor {
   userId: number;
   createdAt?: string;
   updatedAt?: string;
+   User:User;
+   BatchModel: Batch;
 }

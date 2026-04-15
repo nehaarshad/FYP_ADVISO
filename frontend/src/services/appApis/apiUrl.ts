@@ -9,7 +9,7 @@ export default class APIs{
 
           static SignUpUrl = `${APIs.BASE_URL}/registeruser`;
           static LoginUrl = `${APIs.BASE_URL}/login`;
-          static LogOutUrl = `${APIs.BASE_URL}/logout`;
+          static LogOutUrl = `${APIs.BASE_URL}/logout/:id`;
           static ForgetPasswordUrl = `${APIs.BASE_URL}/forgetpassword`;
          
     //register user
@@ -24,6 +24,7 @@ export default class APIs{
 
     //manage users APIS
 
+         static getAllCoordinatorsUrl = `${APIs.BASE_URL}/coordinators`;
          static getAllUsersUrl = `${APIs.BASE_URL}/users`;
          static getAdvisorsUrl = `${APIs.BASE_URL}/advisors`;
          static getStudentsUrl = `${APIs.BASE_URL}/students`;

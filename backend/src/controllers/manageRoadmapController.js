@@ -259,13 +259,12 @@ const getProgramRoadmaps = async (req, res) => {
         }
         
         
-        return res.json( roadmap  );
+        return res.json({data: roadmap } );
         
     } catch (error) {
         console.error("Error in getRoadmapDetails:", error);
         return res.status(500).json({ 
-            error: "Internal Server Error",
-            details: error.message 
+            error:  error.message 
         });
     }
 };
@@ -353,7 +352,7 @@ const getBatchRoadmap = async (req, res) => {
                     }
                 ]
             });
-        return res.json( roadmap  );
+        return res.json( {data:roadmap ,success:true} );
 
     } catch (error) {
         console.error("Error in getBatchRoadmap:", error);

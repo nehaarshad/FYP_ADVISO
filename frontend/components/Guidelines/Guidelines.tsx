@@ -85,7 +85,8 @@ export default function Guidelines() {
         {/* 2. Video Guide Section with External Controls */}
         <div className="relative mb-12 px-2">
           {/* External Left Button */}
-          <button 
+          <button
+          title="PrevVideo" 
             onClick={prevVideo}
             className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#1e3a5f] shadow-lg hover:bg-amber-500 hover:text-white transition-all active:scale-90"
           >
@@ -116,6 +117,7 @@ export default function Guidelines() {
 
           {/* External Right Button */}
           <button 
+          title="NextVideo"
             onClick={nextVideo}
             className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-[#1e3a5f] shadow-lg hover:bg-amber-500 hover:text-white transition-all active:scale-90"
           >

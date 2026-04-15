@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import { ShieldCheck, Layers, Mail, User, CheckCircle2, XCircle, Search, Save } from "lucide-react";

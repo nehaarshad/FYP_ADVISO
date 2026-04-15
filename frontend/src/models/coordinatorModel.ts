@@ -1,3 +1,4 @@
+import {User} from "./userModel"
 export interface Coordinator {
   id: number;
   coordinatorName: string;
@@ -7,4 +8,5 @@ export interface Coordinator {
   userId: number;
   createdAt?: string;
   updatedAt?: string;
+  User: User
 }

@@ -198,7 +198,7 @@ const uploadSessionalResult = async(req,res) =>{
         }
         
          fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
-        return res.status(200).json("Sessional Result file parsed successfully");
+        return res.status(200).json({message:"Sessional Result file parsed successfully",success:true});
  
     } catch (error) {
         console.error("Error in upload sessional result:", error);
