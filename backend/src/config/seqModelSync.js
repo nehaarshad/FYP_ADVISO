@@ -15,7 +15,6 @@ import AdvisorDecision from "../models/AdvisorDecisionModel.js";
 import AdvisorNotes from "../models/AdvisorNotes.js";
 import Coordinator from "../models/coordinatorModel.js";
 import DegreeTranscript from "../models/degreeTranscriptModel.js";
-import EnrolledCoursesModel from "../models/enrolledCoursesModel.js";
 import FacultyRecommendation from "../models/facultyRecommendationModel.js";
 import BatchAdvisor from "../models/FacultyAdvisorModel.js";
 import MeetingReminder from "../models/meetingReminder.js";
@@ -36,7 +35,6 @@ import SupportingVideo from "../models/supportingVideoModel.js";
 import SubmittedRequestForm from "../models/SubmittedRequestForm.js";
 import TimetableModel from "../models/timetableModel.js";
 import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
-import UploadedContentModel from "../models/uploadedContentModel.js";
 import Chat from "../models/ChatsModel.js";
 import relations from "./tableRelations.js";
     
@@ -59,7 +57,6 @@ const models={
     CoursePreReqModel,
     CourseOfferingModel,
     DegreeTranscript,
-    EnrolledCoursesModel,
     FacultyRecommendation,
     SessionalRecommendation,
     SuggestedCourses,
@@ -81,7 +78,6 @@ const models={
     SupportingVideo,
     TimetableModel,
     TranscriptCoursesDetail,
-    UploadedContentModel
 
 }
 

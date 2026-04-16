@@ -5,12 +5,13 @@ import CoursePreReqModel from '../models/coursePreReqModel.js';
 import CourseCategoryModel from '../models/courseCategoryModel.js';
 import { Op } from 'sequelize';
 import CategoryModel from '../models/categoryModel.js';
-
+import fs from 'fs';
 dotenv.config();
 
 const uploadCourseDetail = async (req, res) => {
+     const courseFile = req.file;
     try {
-        const courseFile = req.file;
+       
         if (!courseFile) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
@@ -155,13 +156,16 @@ const uploadCourseDetail = async (req, res) => {
                 console.log(`Added prerequisite: ${prereq.courseCode} `);
             } 
         }
-        
+           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+               
         // Return success response
         res.status(200).json({
             message: 'Course details uploaded successfully',
         });
         
     } catch (error) {
+           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+               
         console.error('Error uploading course detail:', error);
         res.status(500).json({ 
             message: 'Failed to upload course detail',

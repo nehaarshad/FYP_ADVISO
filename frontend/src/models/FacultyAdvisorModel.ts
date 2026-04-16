@@ -1,5 +1,6 @@
 import {User} from "./userModel"
 import { Batch } from "./batchModel";
+import { BatchAssignment } from "./batchAssignmentModel";
 export interface BatchAdvisor {
   id: number;
   advisorName: string;
@@ -11,4 +12,5 @@ export interface BatchAdvisor {
   updatedAt?: string;
    User:User;
    BatchModel: Batch;
+   BatchAssignments?: BatchAssignment[] | null
 }

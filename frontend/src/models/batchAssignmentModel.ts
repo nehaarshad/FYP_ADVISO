@@ -1,3 +1,6 @@
+import { Batch } from "./batchModel";
+import { BatchAdvisor } from "./FacultyAdvisorModel";
+
 export interface BatchAssignment {
   id: number;
   advisorId: number;
@@ -7,4 +10,6 @@ export interface BatchAssignment {
   isCurrentlyAdvised: boolean;
   createdAt?: string;
   updatedAt?: string;
+  BatchModel:Batch;
+  BatchAdvisor:BatchAdvisor
 }

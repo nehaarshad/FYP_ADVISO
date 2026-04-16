@@ -16,7 +16,7 @@ export default function LandingPage() {
 
   // Navigation logic for Login page
   const handleClick = () => {
-    router.push('/views/auth/login'); 
+    router.push('/views/auth/registeration/signup'); 
   };
 
   return (

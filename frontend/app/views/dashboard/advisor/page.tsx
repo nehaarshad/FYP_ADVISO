@@ -6,20 +6,19 @@ import {
   Users, UserMinus, Clock, Bell, Search, Filter, ChevronDown 
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
-// Components Imports
 import { Sidebar } from "../../../../components/navbars/route";
-import {StatCard}  from "@/components/cards/StatCard";
-import { StudentList } from "../../../components/StudentList";
-import { StudentProfile } from "../../../components/StudentProfile";
-import { StudentTranscript } from "../../../components/StudentTranscript";
-import AdvisorChat from "../../../components/AdvisorChat";
-import { MeetingList } from '../../../components/MeetingList';
-import { AdvisorNotes } from '../../../components/AdvisorNotes';
-import { NotificationPanel } from "../../../components/NotificationPanel";
-import { AdvisoryLogs } from '../../../components/AdvisoryLogs';
+import { StudentList } from "@/components/StudentDetails/StudentList";
+import { StudentProfile } from "@/components/StudentDetails/StudentProfile";
+import { StudentTranscript } from "@/components/StudentDetails/StudentTranscript";
+import AdvisorChat from "@/components/Chat/AdvisorChat";
+import { MeetingList } from '@/components/MeetingSchedule/MeetingList';
+import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
+import { AdvisoryLogs } from '@/components/AdvisorView/AdvisoryLogs';
+import { AdvisorProfile } from "@/components/AdvisorView/AdvisorProfile";
+import Guidelines from "@/components/Guidelines/Guidelines";
 import { useRouter } from "next/navigation";
+import AdvisoryNotes from "@/components/AdvisorView/AdvisoryNotes";
 type StudentStatus = "Total" | "Regular" | "Irregular";
 
 
@@ -28,7 +27,7 @@ export default function Dashboard() {
 const navigateTo = (tab: string) => {
   setNavigationStack(prev => [...prev, tab]);
   setActiveTab(tab);
-  setView(tab as any); // important for switching views
+  setView(tab as any); 
 };
   
     const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
@@ -138,7 +137,7 @@ const navigateTo = (tab: string) => {
                       BS SE: <span className="text-amber-500">{selectedBatch}</span>
                     </h3>
 
-                    <div className="relative">
+                    {/* <div className="relative">
                       <button 
                         onClick={() => setIsFilterOpen(!isFilterOpen)}
                         className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase text-[#1e3a5f] hover:border-amber-400 transition-all outline-none"
@@ -170,7 +169,7 @@ const navigateTo = (tab: string) => {
                           </motion.div>
                         )}
                       </AnimatePresence>
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">

@@ -16,6 +16,7 @@ import manageUserRoute from "./src/routes/manageUserRoute.js";
 import authroute from "./src/routes/userRoute.js";
 import resultRoute from "./src/routes/resultRoute.js";
 import transcriptRoute from "./src/routes/transcriptRoute.js";
+import programRoute from "./src/routes/programRoute.js";
 import suggestCoursesRoute from "./src/routes/suggestCoursesRoute.js";
 import path from "path";
 dotenv.config();
@@ -60,6 +61,7 @@ app.use('/auth', suggestCoursesRoute);
 app.use('/auth', manageUserRoute);
 app.use('/auth', resultRoute);
 app.use('/auth', transcriptRoute);
+app.use('/auth', programRoute);
 
 sequelize.authenticate()
   .then(() => {

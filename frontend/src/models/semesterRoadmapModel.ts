@@ -1,3 +1,5 @@
+import { SemesterCourse } from "./semesterCourseModel";
+
 export interface SemesterRoadmap {
   id: number;
   roadmapId: number;
@@ -5,4 +7,5 @@ export interface SemesterRoadmap {
   totalCreditHours: number;
   createdAt?: string;
   updatedAt?: string;
+  SemesterCourseModel:SemesterCourse
 }
