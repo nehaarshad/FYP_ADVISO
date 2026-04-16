@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
 import React, { useState, useEffect } from "react";
@@ -18,7 +19,7 @@ import SubmitRequest from "../../../../components/RequestFoam/SubmitRequest";
 import { StudentChat } from "../../../../components/Chat/StudentChat"; 
 import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRemarks";
 import { Timetable } from "../../../../components/Timetable/Timetable";
-import { RoadmapView } from "@/app/components/RoadmapView";
+// import RoadmapView from "@/app/components/RoadmapView";
 import ViewRecommedCourse from "../../../../components/CourseRecommendation/ViewRecommedCourse";
 
 export default function StudentDashboard() {
@@ -237,7 +238,7 @@ export default function StudentDashboard() {
               {view === "Timetable" && (<Timetable onBack={goBack} />)}
               {view === "RequestsFoam" && <SubmitRequest onBack={goBack} />}
               {view === "Guidelines" && <Guidelines onBack={goBack} />}
-              {view === "Roadmap" && <RoadmapView onClose={goBack} />}
+              {/* {view === "Roadmap" && <RoadmapView onClose={goBack} />} */}
             </div>
           </div>
         </div>

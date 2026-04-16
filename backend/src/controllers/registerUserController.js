@@ -11,6 +11,7 @@ import ExcelJS from 'exceljs';
 import utils from '../utils/sheetProcessingHelperFunction.js';
 const { getCellText } = utils;
 
+import fs from 'fs';
 import { Op } from "sequelize";
 
 const addAdvisor = async(req,res)=>{
@@ -21,7 +22,7 @@ const addAdvisor = async(req,res)=>{
         console.log("Request Body",req.body) 
         const existingUser = await User.findOne({ where: { sapid } });
         if (existingUser) {
-            return res.json("SAP ID Already Exist");
+            return res.json({message:"SAP ID Already Exist"});
         }
         else{
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,13 +35,13 @@ const addAdvisor = async(req,res)=>{
             console.log("Existing Advisor",newUserInfo)
             if(newUserInfo){
                 await newuser.destroy(); // Delete the newly created user if email already exists
-                return res.json("Email Already Exist")
+                return res.json({message:"Email Already Exist"})
             }
              newUserInfo=await BatchAdvisor.create({advisorName,email,contactNumber:number,gender,userId:newuser.id})
            
             console.log("New advisor is added", newuser, newUserInfo)
 
-            return res.status(201).json(newUserInfo)
+            return res.status(201).json({data:newUserInfo,success:true})
 
         }
         
@@ -65,7 +66,7 @@ const updateAdvisor = async(req,res)=>{
 
          existingUser = await BatchAdvisor.findByPk(id);
         if (!existingUser) {
-            return res.json("Batch Advisor Not Found");
+            return res.json({message:"Batch Advisor Not Found"});
         }
 
                         const emailExists = await BatchAdvisor.findOne({
@@ -77,7 +78,7 @@ const updateAdvisor = async(req,res)=>{
 
                 if (emailExists) {
                     console.log("Email already used by another advisor", emailExists)
-                    return res.status(400).json("Email already used by another advisor");
+                    return res.status(400).json({message:"Email already used by another advisor"});
                 }
         else{
 
@@ -88,12 +89,12 @@ const updateAdvisor = async(req,res)=>{
                 const program = await ProgramModel.findOne({where:{programName}})
 
                 if(!program){
-                    return res.status(404).json("Program Not Found")
+                    return res.status(404).json({message:"Program Not Found"})
                 }
 
                 const batch = await BatchModel.findOne({where:{batchName,batchYear,programId:program.id}})
                 if(!batch){
-                    return res.status(404).json("Batch Not Found")
+                    return res.status(404).json({message:"Batch Not Found"})
                 }
 
                 let batchAssignment;
@@ -138,7 +139,7 @@ const updateAdvisor = async(req,res)=>{
 
                         }
 
-        return res.json("advisor updated successfully")
+        return res.json({message:"advisor updated successfully"})
         
         
     } catch (error) {
@@ -157,7 +158,7 @@ const addNewStudent = async(req,res)=>{
 
         const existingUser = await User.findOne({ where: { sapid } });
         if (existingUser) {
-            return res.json("SAP ID Already Exist");
+            return res.status(400).json({error:"SAP ID Already Exist"});
         }
         else{
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -167,17 +168,18 @@ const addNewStudent = async(req,res)=>{
             const program = await ProgramModel.findOne({where:{programName}})
 
             if(!program){
-                return res.status(404).json("Program Not Found")
+                await User.destroy({where:sapid})
+                return res.status(404).json({message:"Program Not Found"})
             }
             const batch = await BatchModel.findOne({where:{batchName,batchYear,programId:program.id}})
             if(!batch){
-                return res.status(404).json("Batch Not Found")
+                return res.status(404).json({message:"Batch Not Found"})
             }
          
             console.log("Batch of Student",batch);
 
             if(!batch){
-                return res.status(404).json("Batch Not Found")
+                return res.status(404).json({message:"Batch Not Found"})
             }
             else{
                 const newUserInfo=await Student.create({studentName,registrationNumber,dateOfBirth,cnic,currentSemester,email,contactNumber,userId:newuser.id,batchId:batch.id})
@@ -196,7 +198,7 @@ const addNewStudent = async(req,res)=>{
                     batch.totalStudent += 1;
                     await batch.save();
 
-                return res.status(201).json("User Created Successfully")
+                return res.status(201).json({message:"User Created Successfully"})
             }
 
         }
@@ -221,22 +223,22 @@ const updateStudent = async(req,res)=>{
                 existingUser = await Student.findByPk(id);
 
         if (!existingUser) {
-            return res.json("Student Not Found");
+            return res.json({message:"Student Not Found"});
         }
             const program = await ProgramModel.findOne({where:{programName}})
 
             if(!program){
-                return res.status(404).json("Program Not Found")
+                return res.status(404).json({message:"Program Not Found"})
             }
             const batch = await BatchModel.findOne({where:{batchName,batchYear,programId:program.id}})
             if(!batch){
-                return res.status(404).json("Batch Not Found")
+                return res.status(404).json({message:"Batch Not Found"})
             }
          
             console.log("Batch of Student",batch);
 
             if(!batch){
-                return res.status(404).json("Batch Not Found")
+                return res.status(404).json({message:"Batch Not Found"})
             }
             else{
                 existingUser=await Student.update({studentName,registrationNumber,dateOfBirth,cnic,currentSemester,email,contactNumber,batchId:batch.id}, {where:{id}})
@@ -264,7 +266,7 @@ const updateStudent = async(req,res)=>{
                     }
                 }
 
-                return res.status(201).json("User updates Successfully")
+                return res.status(201).json({message:"User updates Successfully"})
             }
 
         
@@ -286,12 +288,12 @@ const updateStudentStatus = async(req,res)=>{
 
         existingUser = await User.findOne({where:{sapid,role:"student"},include:[{model:Student}]})
         if (!existingUser) {
-            return res.json("User Not Found");
+            return res.json({message:"User Not Found"});
         }
 
         existingUser = await Student.findOne({where:{studentName:studentname,userId:existingUser.id}});
         if (!existingUser) {
-            return res.json("Student Not Found");
+            return res.json({message:"Student Not Found"});
         }
         const studentStatus =  await StudentStatus.findOne({where:{studentId:existingUser.id}})
             if(studentStatus){
@@ -312,11 +314,12 @@ const updateStudentStatus = async(req,res)=>{
 
 
 const addViaExcelSheet = async(req,res)=>{
+            const studentFile = req.file;
     try {
         const {programName, batchName, batchYear} = req.body;
         console.log("Check Body:", req.body);
 
-        const studentFile = req.file;
+
         if(!studentFile) {
             return res.status(400).json({ error: "No file uploaded" });
         }
@@ -425,6 +428,7 @@ const addViaExcelSheet = async(req,res)=>{
                 // Update batch total student count
                 batch.totalStudent = (batch.totalStudent || 0) + 1;
                 await batch.save();
+                
             
                 
             } catch(error) {
@@ -433,14 +437,15 @@ const addViaExcelSheet = async(req,res)=>{
         }
         
     
-        
-        return res.status(200).json( "Student upload completed", );
+           fs.unlinkSync(studentFile.path); // Delete the uploaded file after processing
+               
+        return res.status(200).json( {message:"Student upload completed",success:true} );
         
     } catch(error) {
         console.error("Error while uploading students via Excel sheet:", error);
+         fs.unlinkSync(studentFile.path); // Delete the uploaded file after processing
         return res.status(500).json({ 
-            error: "Internal Server Error",
-            details: error.message 
+            error: error.message 
         });
     }
 };

@@ -8,11 +8,10 @@ interface StatCardProps {
   icon: LucideIcon;
   isActive: boolean;
   onClick: () => void;
-  // 'AdvisoryLog' variant yahan add kar diya gaya hai
   variant?: 'Recent' | 'Previous' | 'Total' | 'AdvisoryLog';
 }
 
-export const StatCard: React.FC<StatCardProps> = ({ label, value, icon: Icon, isActive, onClick, variant }) => {
+ const StatCard: React.FC<StatCardProps> = ({ label, value, icon: Icon, isActive, onClick, variant }) => {
   
   const getStyles = () => {
     // Agar card ACTIVE hai (Selected)
@@ -64,3 +63,5 @@ export const StatCard: React.FC<StatCardProps> = ({ label, value, icon: Icon, is
     </button>
   );
 };
+
+export default StatCard;

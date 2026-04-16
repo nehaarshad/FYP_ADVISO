@@ -1,4 +1,4 @@
-import RoadmapModel from '../models/RoadmapModel.js';
+import RoadmapModel from '../models/roadmapModel.js';
 import RoadmapCourseCategoryModel from '../models/RoadmapCourseCategoryModel.js';
 import CategoryModel from '../models/categoryModel.js';
 import ProgramModel from '../models/programModel.js';
@@ -15,11 +15,12 @@ import CoursesModel from '../models/coursesModel.js';
 import ExcelJS from 'exceljs';
 import CoursePreReqModel from '../models/coursePreReqModel.js';
 
+import fs from 'fs';
 const uploadNewRoadmap = async (req, res) => {
+    const roadmapFile=req.file; 
     try {
         const { programName, batchName,batchYear, } = req.body;
         console.log("Received data for new roadmap:", req.body);
-        const roadmapFile=req.file; // Access the uploaded file
 
         console.log("Uploaded roadmap file:", roadmapFile);
         const [program] = await ProgramModel.findOrCreate({ where: { programName } }); //find if program exist otherwise create new program like CA
@@ -175,12 +176,14 @@ const uploadNewRoadmap = async (req, res) => {
 
                     
                 }
-
-        return res.json({ message: 'Roadmap uploaded successfully', roadmap });
+   fs.unlinkSync(roadmapFile.path); // Delete the uploaded file after processing
+       
+        return res.json({ message: 'Roadmap uploaded successfully', data:roadmap });
 
     }
     catch (error) {
-        console.log(error); 
+        console.log(error);
+         fs.unlinkSync(roadmapFile.path); 
         return res.json({ error: "Internal Server Error" });
     }
 };
@@ -209,57 +212,49 @@ const getProgramRoadmaps = async (req, res) => {
             include: [
                 {
                     model: CategoryModel,
-                    include: [
-                        {
-                            model: CourseCategoryModel,
-                            include: [
-                                {
-                                    model: CoursesModel,
-                                    attributes: ["id", "courseName", "courseCredits"],
-                                    include: [
+                }
+            ]
+        },{
+                        model: SemesterRoadmapModel,
+                        include: [
+                            {
+                                model: SemesterCourseModel,
+                                include: [
+                                    {
+                                        model: CourseCategoryModel,
+                                        include: [
                                             {
-                                                model: CoursePreReqModel, //course ka preReqCourse
-                                                include: [
-                                                    {
-                                                        model: CoursesModel, //preReqCourseDetails
-                                                    }
-                                                ]
+                                                model: CoursesModel,
+                                                attributes: ["id", "courseName", "courseCredits"],
+                                                include: [{
+                        
+                                                        model: CoursePreReqModel,
+                                                        as: "prerequisites",  // Courses this course requires (incoming)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "prerequisiteCourse"
+                                                        }]
+                                                        },
+                                                        {
+                                                        model: CoursePreReqModel,
+                                                        as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "mainCourse"
+                                                        }]
+                                                        
+                                                        }]
+                                            },
+                                            {
+                                                model: CategoryModel,
+                                                attributes: ["id", "categoryName", "colorScheme"]
                                             }
                                         ]
-                                },
-                                {
-                                    model: CategoryModel,
-                                    attributes: ["id", "categoryName", "colorScheme"]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            model: SemesterRoadmapModel,
-            include: [
-                {
-                    model: SemesterCourseModel,
-                    include: [
-                        {
-                            model: CourseCategoryModel,
-                            include: [
-                                {
-                                    model: CoursesModel,
-                                    attributes: ["id", "courseName", "courseCredits"]
-                                },
-                                {
-                                    model: CategoryModel,
-                                    attributes: ["id", "categoryName", "colorScheme"]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
     ]
 });
         if (!roadmap) {
@@ -267,13 +262,12 @@ const getProgramRoadmaps = async (req, res) => {
         }
         
         
-        return res.json( roadmap  );
+        return res.json({data: roadmap } );
         
     } catch (error) {
         console.error("Error in getRoadmapDetails:", error);
         return res.status(500).json({ 
-            error: "Internal Server Error",
-            details: error.message 
+            error:  error.message 
         });
     }
 };
@@ -315,35 +309,10 @@ const getBatchRoadmap = async (req, res) => {
                             include: [
                                 {
                                 model: CategoryModel,
-                                include: [
-                                    {
-                                        model: CourseCategoryModel,
-                                        include: [
-                                            {
-                                                model: CoursesModel,
-                                                attributes: ["id", "courseName", "courseCredits"],
-                                                include: [
-                                                        {
-                                                            model: CoursePreReqModel, //course ka preReqCourse
-                                                            include: [
-                                                                {
-                                                                    model: CoursesModel, //preReqCourseDetails
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                            },
-                                            {
-                                                model: CategoryModel,
-                                                attributes: ["id", "categoryName", "colorScheme"]
-                                            }
-                                        ]
-                                    }
-                                ]
                             }
                         ]
                     },
-                    {
+                   {
                         model: SemesterRoadmapModel,
                         include: [
                             {
@@ -354,7 +323,25 @@ const getBatchRoadmap = async (req, res) => {
                                         include: [
                                             {
                                                 model: CoursesModel,
-                                                attributes: ["id", "courseName", "courseCredits"]
+                                                attributes: ["id", "courseName", "courseCredits"],
+                                                include: [{
+                        
+                                                        model: CoursePreReqModel,
+                                                        as: "prerequisites",  // Courses this course requires (incoming)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "prerequisiteCourse"
+                                                        }]
+                                                        },
+                                                        {
+                                                        model: CoursePreReqModel,
+                                                        as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
+                                                        include: [{
+                                                            model: CoursesModel,
+                                                            as: "mainCourse"
+                                                        }]
+                                                        
+                                                        }]
                                             },
                                             {
                                                 model: CategoryModel,
@@ -368,7 +355,7 @@ const getBatchRoadmap = async (req, res) => {
                     }
                 ]
             });
-        return res.json( roadmap  );
+        return res.json( {data:roadmap ,success:true} );
 
     } catch (error) {
         console.error("Error in getBatchRoadmap:", error);

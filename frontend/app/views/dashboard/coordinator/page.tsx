@@ -1,41 +1,67 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Search, Bell, Settings, Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
   FileSearch, ChevronLeft, Database
 } from "lucide-react";
-
-// Components Imports
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import { Sidebar } from "@/components/navbars/route";
-import { SessionManager } from "@/app/components/SessionManager";
-import { RoadmapSection } from "@/app/components/Roadmaps";
-import { StudentRecords } from "@/app/components/StudentRecords";
-import { Guidelines } from "@/components/Guidelines/Guidelines";
-import { AddFaculty } from "@/app/components/AddFaculty";
-import { AddStudent } from "@/app/components/AddStudents";
-import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
-import { SettingsModal } from "@/app/components/SettingsModel";
+import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
+import { NotificationPanel } from '@/components/Notifications/NotificationPanel';
+import { SettingsModal } from '@/app/components/SettingsModel';
+import { SessionManager } from '@/app/components/SessionManager';
+import { RoadmapSection } from '@/app/components/Roadmaps';
+import { CourseOffering } from '@/app/components/CourseOffering';
+import { BatchResults } from '@/app/components/BatchResults';
+import { StudentRecords } from '@/app/components/StudentRecords';
+import { CourseCatalog } from '@/app/components/CourseCatalog';
+import { Timetable } from '@/app/components/Timetable';
+import { ProfileView } from '@/components/ProfileView/route';
+import { RequestForms } from '@/app/components/RequestForms';
+import Guidelines from '@/components/Guidelines/Guidelines';
 import { EditStudent } from '@/app/components/EditStudent';
+import { AddFaculty } from '@/app/components/AddFaculty';
+import { AddStudent } from '@/app/components/AddStudents';
 import { EditAdvisor } from '@/app/components/EditAdvisor';
-import { CourseOffering } from "@/app/components/CourseOffering";
-import { Timetable } from "@/app/components/Timetable";
-import { BatchResults } from "@/app/components/BatchResults";
-import { CourseCatalog } from "@/app/components/CourseCatalog";
-import { RoadmapView } from "@/app/components/RoadmapView";
-import { RequestForms} from "@/app/components/RequestForms";
-
-// IMPORTING YOUR SEPARATE PROFILE COMPONENT
-import { ProfileView } from "@/app/components/ProfileView"; 
 
 export default function CoordinatorDashboard() {
-  const [mounted, setMounted] = useState(false);
+  const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
   const [selectedSession, setSelectedSession] = useState("Fall 2025");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [showRoadmapOverlay, setShowRoadmapOverlay] = useState(false);
+  const router = useRouter();
+  
+  const { students, statistics: studentStats, fetchStudents } = useStudents();
+  const { advisors, statistics: advisorStats, fetchAdvisors } = useAdvisors();
+
+  // Real-time statistics that update automatically when stores change
+  const activeStudentsCount = studentStats?.activeStudents || 0;
+  const activeAdvisorCount = advisorStats?.activeAdvisors || 0;
+  const totalStudentsCount = studentStats?.totalStudents || 0;
+  const totalAdvisorsCount = advisorStats?.totalAdvisors || 0;
+
+  useEffect(() => {
+    if (!sessionManager.hasActiveSession()) {
+      router.push('/signin');
+      return;
+    }
+    // Initial data fetch
+    fetchStudents();
+    fetchAdvisors();
+  }, [router]);
+
+  // This effect will run whenever students or advisors data changes
+  useEffect(() => {
+    if (isClient) {
+      console.log('Stats updated - Students:', totalStudentsCount, 'Advisors:', totalAdvisorsCount);
+    }
+  }, [totalStudentsCount, totalAdvisorsCount, isClient]);
 
   const navigateTo = (tab: string) => {
     setNavigationStack(prev => [...prev, tab]);
@@ -45,19 +71,28 @@ export default function CoordinatorDashboard() {
   const goBack = () => {
     if (navigationStack.length > 1) {
       const newStack = [...navigationStack];
-      newStack.pop(); 
+      newStack.pop();
       const lastScreen = newStack[newStack.length - 1];
       setNavigationStack(newStack);
       setActiveTab(lastScreen);
     }
   };
 
-  if (!mounted) return null;
+  if (!isClient) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">
       <Sidebar 
-      userRole='coordinator'
+        userRole='coordinator'
         activeTab={activeTab} 
         setActiveTab={navigateTo} 
       />
@@ -81,25 +116,40 @@ export default function CoordinatorDashboard() {
         </header>
 
         <div className="p-8 max-w-7xl mx-auto w-full flex-1">
-            {/* OVERVIEW SCREEN */}
-            {activeTab === "overview" && (
-              <div className="space-y-8 animate-in fade-in duration-500">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <StatCard label="Total Students" value="1,240" icon={<Users/>} trend="+12% Since Fall" />
-                    <StatCard label="Batch Advisors" value="48" icon={<ShieldCheck/>} trend="Active" />
-                    <StatCard label="Requests" value="--" icon={<Clock/>} trend="Coming Soon" color="text-slate-300" />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <ActionCard icon={<Database/>} label="Manage Session" onClick={() => navigateTo("manage-session")} />
-                  <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
-                  <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
-                  <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
-                  <ActionCard icon={<GraduationCap/>} label="Results" onClick={() => navigateTo("results")} />
-                  <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
-                </div>
+          {activeTab === "overview" && (
+            <div className="space-y-8 animate-in fade-in duration-500">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <StatCard 
+                  label="Total Students" 
+                  value={totalStudentsCount.toLocaleString()} 
+                  icon={<Users/>} 
+                  trend={`${activeStudentsCount} Active`} 
+                />
+                <StatCard 
+                  label="Batch Advisors" 
+                  value={totalAdvisorsCount.toLocaleString()} 
+                  icon={<ShieldCheck/>} 
+                  trend={`${activeAdvisorCount} Active`} 
+                />
+                <StatCard 
+                  label="Requests" 
+				  value="--" 
+				  icon={<Clock/>} 
+				  trend="Coming Soon" 
+				  color="text-slate-300" 
+				/>
               </div>
-            )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <ActionCard icon={<Database/>} label="Manage Session" onClick={() => navigateTo("manage-session")} />
+                <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
+                <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
+                <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
+                <ActionCard icon={<GraduationCap/>} label="Results" onClick={() => navigateTo("results")} />
+                <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
+              </div>
+            </div>
+          )}
 
             {/* DYNAMIC COMPONENT SCREENS */}
             {activeTab !== "overview" && (
@@ -122,29 +172,25 @@ export default function CoordinatorDashboard() {
                 {activeTab === "timetable" && <Timetable session={selectedSession} />}
                 {activeTab === "results" && <BatchResults />}
                 {activeTab === "course-details" && <CourseCatalog />}
-                {activeTab === "all-program" && <StudentRecords/>}
+                {activeTab === "bulk-student-upload" && <StudentRecords/>}
                 {activeTab === "add-student" && <AddStudent/>}
                 {activeTab === "add-faculty" && <AddFaculty/>}
                 {activeTab === "edit-student" && <EditStudent/>}
                 {activeTab === "edit-advisor" && <EditAdvisor/>}
                 {activeTab === "guidelines" && <Guidelines />}
                 {activeTab === "requests" && <RequestForms />}
-                {/* NOW CALLING THE IMPORTED COMPONENT */}
                 {activeTab === "profile" && <ProfileView />}
               </div>
             )}
         </div>
       </main>
 
-      {/* Overlays */}
       {showNotifications && <NotificationPanel onClose={() => setShowNotifications(false)} />}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
-      {showRoadmapOverlay && <RoadmapView onClose={() => setShowRoadmapOverlay(false)} />}
     </div>
   );
 }
 
-// Helper Components
 function ActionCard({ icon, label, onClick }: any) {
   return (
     <div onClick={onClick} className="bg-white p-6 rounded-[1.8rem] border-2 border-slate-50 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#FDB813] hover:shadow-md transition-all min-h-[140px] group">

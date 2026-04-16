@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export default class APIs{
 
-    static BASE_URL = process.env.BASE_URL;
+    static BASE_URL = process.env.NEXT_PUBLIC_API_URL
     
 
     //auth Module
@@ -12,7 +9,7 @@ export default class APIs{
 
           static SignUpUrl = `${APIs.BASE_URL}/registeruser`;
           static LoginUrl = `${APIs.BASE_URL}/login`;
-          static LogOutUrl = `${APIs.BASE_URL}/logout`;
+          static LogOutUrl = `${APIs.BASE_URL}/logout/:id`;
           static ForgetPasswordUrl = `${APIs.BASE_URL}/forgetpassword`;
          
     //register user
@@ -27,11 +24,18 @@ export default class APIs{
 
     //manage users APIS
 
+         static getAllCoordinatorsUrl = `${APIs.BASE_URL}/coordinators`;
          static getAllUsersUrl = `${APIs.BASE_URL}/users`;
          static getAdvisorsUrl = `${APIs.BASE_URL}/advisors`;
          static getStudentsUrl = `${APIs.BASE_URL}/students`;
          static updateUserStatusUrl = `${APIs.BASE_URL}/updateuserstatus`;
          static updateUserRoleUrl = `${APIs.BASE_URL}/updateuserrole`;
+
+
+         // program Urls 
+
+         static getProgramsUrl = `${APIs.BASE_URL}/getPrograms`;
+         static addProgram = `${APIs.BASE_URL}/addProgram`;
 
 
     // process roadmap
@@ -64,6 +68,6 @@ export default class APIs{
         static uploadSessionalResultUrl = `${APIs.BASE_URL}/uploadSessionalResult`;
 
 
-    //process transcripts
+    
 
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client"
 import React, { useState } from "react";
@@ -5,6 +6,8 @@ import {
   Users, UserMinus, Clock, Bell, Search, Filter, ChevronDown, Menu 
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
+
 
 // Components Imports
 import { Sidebar } from "@/components/navbars/route";
@@ -22,8 +25,11 @@ import FacultyRecommendation from "../../../../components/FacultyRecommendation/
 import CourseRecommendation from "../../../../components/CourseRecommendation/CourseRecommendation";
 
 export default function Dashboard() {
-  const [view, setView] = useState<string>("Overview");
-  const [activeTab, setActiveTab] = useState("Total");
+  
+    const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
+  const [isClient, setIsClient] = useState(false);
+  const [view, setView] = useState<string>("overview");
+  const [activeTab, setActiveTab] = useState("overview");
   const [selectedBatch, setSelectedBatch] = useState<string>("Fall 2024");
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -183,7 +189,7 @@ export default function Dashboard() {
                           </motion.div>
                         )}
                       </AnimatePresence>
-                    </div>
+                    </div> 
                   </div>
 
                   {/* Table Wrapper for Horizontal Scroll */}

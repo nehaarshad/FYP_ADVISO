@@ -8,10 +8,12 @@ const { getCellText , parseTime, cleanCourseName,splitCourseWithSlash, normalize
 import ProgramModel from '../models/programModel.js';
 import SessionModel from '../models/sessionModel.js';
 import { Op } from 'sequelize';
+import fs from 'fs';
 
 dotenv.config();
 
 const uploadTimetable = async (req, res) => {
+     const timetableFile = req.file;
     try {
 
         const {sessionType, sessionYear,programName} = req.body;
@@ -35,6 +37,8 @@ const uploadTimetable = async (req, res) => {
         
         console.log("Program lookup result:", program ? program.programName : "No program found");
         if (!program) {
+            fs.unlinkSync(timetableFile.path); // Delete the uploaded file after processing
+        
             return res.status(404).json({ 
                 message: 'Program not found',
                 searchedProgram: programName 
@@ -43,8 +47,8 @@ const uploadTimetable = async (req, res) => {
         
         console.log("Found program:", program.programName);
 
-        const timetableFile = req.file;
         if (!timetableFile) {
+            
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
@@ -94,7 +98,6 @@ const uploadTimetable = async (req, res) => {
             const normalizedTitle = normalizeOfferingName(title);
             console.log(`\n📋 "${title}" -> "${normalizedTitle}"`);
 
-                // ADD THIS:
                 console.log(`   getProgramCode: "${getProgramCode(title)}"`);
                 console.log(`   cleanCourseName: "${cleanCourseName(title)}"`);
 
@@ -103,7 +106,7 @@ const matchedOffering = offeringMap.get(normalizedTitle);
             
             
             if (!matchedOffering) {
-                console.log(`   ❌ No match found`);
+                console.log(`   No match found`);
                 continue;
             }
             
@@ -127,7 +130,7 @@ const matchedOffering = offeringMap.get(normalizedTitle);
             });
             
             if (existing) {
-                console.log(`   ⏭️ Already exists`);
+                console.log(`    Already exists`);
                 continue;
             }
             
@@ -142,13 +145,16 @@ const matchedOffering = offeringMap.get(normalizedTitle);
             });
             
             timetables.push(timetable);
-            console.log(`   ✅ Created entry`);
+            console.log(`    Created entry`);
         }
         
-        
-        res.status(200).json(timetables);
+           fs.unlinkSync(timetableFile.path); // Delete the uploaded file after processing
+               
+        res.status(200).json({data:timetables});
         
     } catch (error) {
+           fs.unlinkSync(timetableFile.path); // Delete the uploaded file after processing
+               
         console.error('Error:', error);
         res.status(500).json({ message: 'Failed to upload timetable', error: error.message });
     }

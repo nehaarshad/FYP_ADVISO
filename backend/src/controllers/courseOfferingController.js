@@ -3,15 +3,15 @@ import ExcelJS from 'exceljs';
 import CourseOfferingModel from '../models/courseOfferingModel.js';
 import BatchModel from '../models/batchModel.js';
 import ProgramModel from '../models/programModel.js';
-import CoursesModel from '../models/coursesModel.js';
 import sheetProcessingHelperFunction from '../utils/sheetProcessingHelperFunction.js';
 const { getCellText } = sheetProcessingHelperFunction;
 import SessionModel from '../models/sessionModel.js';
 import { Op } from 'sequelize';
-
+import fs from 'fs';
 dotenv.config();
 
 const uploadCourseOffering = async (req, res) => {
+     const courseFile = req.file;
     try {
         const {sessionType, sessionYear,programName} = req.body;
         console.log("Received session info:", sessionType, sessionYear);
@@ -26,7 +26,7 @@ const uploadCourseOffering = async (req, res) => {
         if (!session) {
             return res.status(500).json({ message: 'Failed to create or find session' });
         }
-        const courseFile = req.file;
+       
         if (!courseFile) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
@@ -49,8 +49,7 @@ const uploadCourseOffering = async (req, res) => {
         console.log("Program lookup result:", program ? program.programName : "No program found");
         if (!program) {
             return res.status(404).json({ 
-                message: 'Program not found',
-                searchedProgram: programName 
+                message: 'Program not found'
             });
         }
         
@@ -60,7 +59,7 @@ const uploadCourseOffering = async (req, res) => {
         const offerings = [];
         
         // Process rows starting from row 3 (after headers)
-        for (let i = 3; i <= worksheet.rowCount; i++) {
+        for (let i = 2; i <= worksheet.rowCount; i++) {
            const batchInfoCell = worksheet.getCell(i, 1);
             const semesterCourseCell = worksheet.getCell(i, 2);
             const creditsCell = worksheet.getCell(i, 4);
@@ -98,14 +97,20 @@ const uploadCourseOffering = async (req, res) => {
                     });
                     
                     if (!currentBatch) {
-                        console.log(`Batch not found: ${batchName} for program ${program.programName}`);
-                        currentBatch = null;
+                        console.log(`Batch not found: ${batchName} for program ${program.programName}Id ${program.id}, batch Year ${batchYear}`);
+
+                        currentBatch =await BatchModel.create({
+                        
+                            batchName: batchName,
+                            batchYear: batchYear,
+                            programId: program.id
+                        
+                    });
                     } else {
                         console.log(`Found batch: ${currentBatch.batchName} ${currentBatch.batchYear}`);
                     
                         // Process course offering if we have valid course data
             if (semesterCourse && credits && currentBatch) {
-                // Extract course name (remove semester prefix like "SE1-1", "SE2-1", etc.)
                 let courseName = semesterCourse;
                 // Parse credits 
                 let creditHours = parseInt(credits);
@@ -150,11 +155,14 @@ const uploadCourseOffering = async (req, res) => {
             }
         
         }
-        
+           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+               
         // Return success response
-        res.status(200).json(offerings);
+        res.status(200).json({data:offerings,success:true});
         
     } catch (error) {
+           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+               
         console.error('Error uploading course offering:', error);
         res.status(500).json({ 
             message: 'Failed to upload course offering',
@@ -184,7 +192,7 @@ const getCourseOfferings = async (req, res) => {
         });
         
         console.log(`Retrieved ${offerings.length} course offerings from database`);
-        res.status(200).json(offerings);
+        res.status(200).json({data:offerings,success:true});
     } catch (error) {
         console.error('Error retrieving course offerings:', error);
         res.status(500).json({
