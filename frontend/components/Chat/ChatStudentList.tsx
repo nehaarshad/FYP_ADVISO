@@ -1,4 +1,6 @@
+"use client";
 import React from 'react';
+import { ArrowLeft } from "lucide-react"; // Icon import kiya
 
 // Student ki structure define karein
 interface Student {
@@ -9,19 +11,19 @@ interface Student {
   semester: string;
 }
 
-// Props ki types define karein
+// Props ki types define karein - onBack add kar diya
 interface ChatStudentListProps {
   students: Student[];
   selectedId: number | null;
   onSelect: (student: Student) => void;
+  onBack: () => void; // Parent dashboard pe wapas janay k liye
 }
 
-const ChatStudentList: React.FC<ChatStudentListProps> = ({ students, selectedId, onSelect }) => {
+const ChatStudentList: React.FC<ChatStudentListProps> = ({ students, selectedId, onSelect, onBack }) => {
   return (
     <div className="h-full bg-white rounded-3xl p-4 flex flex-col border border-slate-100 shadow-sm overflow-hidden">
-      <h3 className="text-[#1e3a5f] font-black text-[9px] mb-4 uppercase tracking-[0.2em] opacity-40 px-1 shrink-0">
-        Conversations
-      </h3>
+      
+      {/* Header with Back Arrow */}
 
       <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar"> 
         {students.map((student) => {
