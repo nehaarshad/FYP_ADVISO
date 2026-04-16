@@ -14,10 +14,10 @@ const getAllUsers = async (req,res) => {
         const users = await User.findAll({
             attributes: { exclude: ['password'] }
         });
-        return res.status(200).json(users)
+        return res.status(200).json({data:users,success:true})
     } catch (error) {
         console.error("Error while fetching users",error)
-        return res.status(500).json("Internal Server Error")
+        return res.status(500).json({message:"Internal Server Error",success:false})
     }
 }
 
@@ -60,10 +60,10 @@ const getAllStudents = async (req,res) => {
                 
             ]
         })
-        return res.status(200).json(students)
+        return res.status(200).json({data:students,success:true})
      } catch (error) {
         console.error("Error while fetching students",error)
-        return res.status(500).json("Internal Server Error")
+        return res.status(500).json({message:"Internal Server Error",success:false})
      }
 }
 
@@ -90,10 +90,10 @@ const getAllAdvisors = async (req,res) => {
                 }
             ]
         })
-        return res.status(200).json(advisors)
+        return res.status(200).json({data:advisors,success:true})
      } catch (error) {
         console.error("Error while fetching advisors",error)
-        return res.status(500).json("Internal Server Error")
+        return res.status(500).json({message:"Internal Server Error",success:false})
      }
 }
 
@@ -102,7 +102,7 @@ const updateUserStatus = async (req,res) => {
         const {sapid,isActive} = req.body
         const user = await User.findOne({where:{sapid}})
         if(!user){
-            return res.status(404).json("User not found")
+            return res.status(404).json({message:"User not found",success:false})
         }
         user.isActive = isActive
         if(!isActive){
@@ -112,10 +112,10 @@ const updateUserStatus = async (req,res) => {
             user.deactivateAt = null
         }
         await user.save()
-        return res.status(200).json("User status updated successfully")
+        return res.status(200).json({message:"User status updated successfully",success:true})
     } catch (error) {
         console.error("Error while updating user status",error)
-        return res.status(500).json("Internal Server Error")
+        return res.status(500).json({message:"Internal Server Error",success:false})
     }
 }
 
@@ -124,15 +124,15 @@ const updateUserRole = async (req,res) => {
         const {sapid,role} = req.body
         const user = await User.findOne({where:{sapid}})
         if(!user){
-            return res.status(404).json("User not found")
+            return res.status(404).json({message:"User not found",success:true})
         }
         user.role = role
         await user.save()
-        return res.status(200).json("User role updated successfully")
+        return res.status(200).json({message:"User role updated successfully",success:false})
     }
         catch (error) {
         console.error("Error while updating user role",error)
-        return res.status(500).json("Internal Server Error")
+        return res.status(500).json({message:"Internal Server Error",success:false})
     }
 }
 

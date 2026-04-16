@@ -145,7 +145,7 @@ const processStudentTranscript = async (studentData, sessionId, batchId,res) => 
                 CourseDetail.totalCreditHours = module.chrAttempted.toString();
                 await CourseDetail.save();
             }
-            console.log(`  ✓ Processed course: ${module.code} - ${module.name} | Grade: ${module.grade}, Points: ${module.gradePoint}, Earned CHR: ${module.chrEarned}`);
+            console.log(`Processed course: ${module.code} - ${module.name} | Grade: ${module.grade}, Points: ${module.gradePoint}, Earned CHR: ${module.chrEarned}`);
         }
         
    
@@ -164,8 +164,8 @@ const processStudentTranscript = async (studentData, sessionId, batchId,res) => 
         return {studentTranscriptSummary };
         
     } catch (error) {
-        console.error(`❌ Error processing transcript for ${studentData.studentName}:`, error);
-        throw error;
+        console.error(`Error processing transcript for ${studentData.studentName}:`, error);
+        return error;
     }
 };
 
@@ -184,9 +184,9 @@ const getStudentTranscriptSummary = async (req,res) => {
             ]
         });
 
-        return res.status(200).json(studentTranscriptSummary );
+        return res.status(200).json({data:studentTranscriptSummary,success:true} );
     } catch (error) {
-        console.error(`❌ Error fetching transcript summary for student ${id}:`, error);
+        console.error(`Error fetching transcript summary for student ${id}:`, error);
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };

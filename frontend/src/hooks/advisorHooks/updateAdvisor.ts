@@ -1,36 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// hooks/useUpdateAdvisor.ts
 import { useState } from 'react';
-import { advisorProfileRepository, } from '../../repositories/userProfileData/advisorsRepository/advisorRepository';
-import {UpdateAdvisorData} from "../../repositories/userManagementRepository/types/updateAdvisor"
-import {userManagementRepository} from "../../repositories/userManagementRepository/userManagementRepo"
+import { UpdateAdvisorData } from "../../repositories/userManagementRepository/types/updateAdvisor";
+import { userManagementRepository } from '../../repositories/userManagementRepository/userManagementRepo';
+import { useAdvisorStore } from '../../storage/advisorStore/advisorsData';
 
 export const useUpdateAdvisor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [advisorData, setAdvisorData] = useState<any>(null);
+  const { updateAdvisor: updateInStore, fetchAdvisors, getAdvisorBySapId } = useAdvisorStore();
 
-  const fetchAdvisor = async (id: number) => {
-    setIsLoading(true);
-    setError(null);
+  const fetchAdvisorBySapIdFromStore = async (sapid: number) => {
+    // First try to get from store
+    let advisor = getAdvisorBySapId(sapid);
     
-    try {
-      const response = await advisorProfileRepository.getAdvisorById(advisorData,id);
-      
-      if (response) {
-        setAdvisorData(response);
-        return { success: true, data: response };
-      } else {
-        setError( 'Advisor not found');
-        return { success: false, error: response };
-      }
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-      return { success: false, error: err.message };
-    } finally {
-      setIsLoading(false);
+    // If not in store, fetch all advisors
+    if (!advisor) {
+      await fetchAdvisors(true);
+      advisor = getAdvisorBySapId(sapid);
     }
+    
+    return advisor;
   };
 
   const updateAdvisor = async (id: number, data: UpdateAdvisorData) => {
@@ -43,6 +33,10 @@ export const useUpdateAdvisor = () => {
       
       if (response.success) {
         setSuccess(true);
+        // Update in store immediately
+        updateInStore(id, data as any);
+        // Refresh from backend to ensure consistency
+        await fetchAdvisors(true);
         return { success: true, data: response.data };
       } else {
         setError(response.error || 'Failed to update advisor');
@@ -56,5 +50,11 @@ export const useUpdateAdvisor = () => {
     }
   };
 
-  return { fetchAdvisor, updateAdvisor, advisorData, isLoading, error, success };
+  return { 
+    fetchAdvisorBySapIdFromStore, 
+    updateAdvisor, 
+    isLoading, 
+    error, 
+    success 
+  };
 };

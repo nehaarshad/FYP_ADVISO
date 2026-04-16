@@ -11,6 +11,7 @@ import ExcelJS from 'exceljs';
 import utils from '../utils/sheetProcessingHelperFunction.js';
 const { getCellText } = utils;
 
+import fs from 'fs';
 import { Op } from "sequelize";
 
 const addAdvisor = async(req,res)=>{
@@ -157,7 +158,7 @@ const addNewStudent = async(req,res)=>{
 
         const existingUser = await User.findOne({ where: { sapid } });
         if (existingUser) {
-            return res.json({message:"SAP ID Already Exist"});
+            return res.status(400).json({error:"SAP ID Already Exist"});
         }
         else{
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -167,6 +168,7 @@ const addNewStudent = async(req,res)=>{
             const program = await ProgramModel.findOne({where:{programName}})
 
             if(!program){
+                await User.destroy({where:sapid})
                 return res.status(404).json({message:"Program Not Found"})
             }
             const batch = await BatchModel.findOne({where:{batchName,batchYear,programId:program.id}})
@@ -312,11 +314,12 @@ const updateStudentStatus = async(req,res)=>{
 
 
 const addViaExcelSheet = async(req,res)=>{
+            const studentFile = req.file;
     try {
         const {programName, batchName, batchYear} = req.body;
         console.log("Check Body:", req.body);
 
-        const studentFile = req.file;
+
         if(!studentFile) {
             return res.status(400).json({ error: "No file uploaded" });
         }
@@ -434,11 +437,13 @@ const addViaExcelSheet = async(req,res)=>{
         }
         
     
-        
+           fs.unlinkSync(studentFile.path); // Delete the uploaded file after processing
+               
         return res.status(200).json( {message:"Student upload completed",success:true} );
         
     } catch(error) {
         console.error("Error while uploading students via Excel sheet:", error);
+         fs.unlinkSync(studentFile.path); // Delete the uploaded file after processing
         return res.status(500).json({ 
             error: error.message 
         });

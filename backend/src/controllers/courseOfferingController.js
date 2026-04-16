@@ -7,10 +7,11 @@ import sheetProcessingHelperFunction from '../utils/sheetProcessingHelperFunctio
 const { getCellText } = sheetProcessingHelperFunction;
 import SessionModel from '../models/sessionModel.js';
 import { Op } from 'sequelize';
-
+import fs from 'fs';
 dotenv.config();
 
 const uploadCourseOffering = async (req, res) => {
+     const courseFile = req.file;
     try {
         const {sessionType, sessionYear,programName} = req.body;
         console.log("Received session info:", sessionType, sessionYear);
@@ -25,7 +26,7 @@ const uploadCourseOffering = async (req, res) => {
         if (!session) {
             return res.status(500).json({ message: 'Failed to create or find session' });
         }
-        const courseFile = req.file;
+       
         if (!courseFile) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
@@ -154,11 +155,14 @@ const uploadCourseOffering = async (req, res) => {
             }
         
         }
-        
+           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+               
         // Return success response
         res.status(200).json({data:offerings,success:true});
         
     } catch (error) {
+           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+               
         console.error('Error uploading course offering:', error);
         res.status(500).json({ 
             message: 'Failed to upload course offering',

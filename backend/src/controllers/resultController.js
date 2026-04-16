@@ -15,6 +15,8 @@ const uploadSessionalResult = async(req,res) =>{
 
         const resultFile = req.file;
         if(!resultFile){
+             fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
+       
             return res.status(400).json({ error: "No file uploaded" });
         }
 
@@ -46,6 +48,8 @@ const uploadSessionalResult = async(req,res) =>{
         }
         
         if (headerRowIndex === -1) {
+             fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
+       
             throw new Error('Could not find header row in the sheet');
         }
 
@@ -194,14 +198,18 @@ const uploadSessionalResult = async(req,res) =>{
         }
         
         if(processedCount === 0) {
+             fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
             throw new Error('No student data found in the sheet');
         }
-        
          fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
-        return res.status(200).json({message:"Sessional Result file parsed successfully",success:true});
+       
+        
+         return res.status(200).json({message:"Sessional Result file parsed successfully",success:true});
  
     } catch (error) {
         console.error("Error in upload sessional result:", error);
+         fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
+       
         return res.status(500).json({
             success: false,
             error: "Something went wrong, Try Again",

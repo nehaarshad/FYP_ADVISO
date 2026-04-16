@@ -13,7 +13,6 @@ import AdvisorDecision from "../models/AdvisorDecisionModel.js";
 import AdvisorNotes from "../models/AdvisorNotes.js";
 import Coordinator from "../models/coordinatorModel.js";
 import DegreeTranscript from "../models/degreeTranscriptModel.js";
-import EnrolledCoursesModel from "../models/enrolledCoursesModel.js";
 import FacultyRecommendation from "../models/facultyRecommendationModel.js";
 import BatchAdvisor from "../models/FacultyAdvisorModel.js";
 import MeetingReminder from "../models/meetingReminder.js";
@@ -34,7 +33,6 @@ import SupportingVideo from "../models/supportingVideoModel.js";
 import SubmittedRequestForm from "../models/SubmittedRequestForm.js";
 import TimetableModel from "../models/timetableModel.js";
 import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
-import UploadedContentModel from "../models/uploadedContentModel.js";
 import Chat from "../models/ChatsModel.js";
 import SessionalRecommendation from "../models/sessionalRecommdentationModel.js";
 import SuggestedCourses from "../models/suggestedCoursesModel.js";
@@ -70,9 +68,6 @@ export default function relations() {
 
   Student.hasOne(StudentStatus, { foreignKey: "studentId" });
   StudentStatus.belongsTo(Student, { foreignKey: "studentId" });
-
-  Student.hasMany(EnrolledCoursesModel, { foreignKey: "studentId" });
-  EnrolledCoursesModel.belongsTo(Student, { foreignKey: "studentId" });
 
   Student.hasOne(DegreeTranscript, { foreignKey: "studentId" });
   DegreeTranscript.belongsTo(Student, { foreignKey: "studentId" });
@@ -197,16 +192,9 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
         targetKey: "id",
     });
 
-  // ==================== Session & Enrollment ====================
+  // ==================== Session  ====================
   SessionModel.hasMany(CourseOfferingModel, { foreignKey: "sessionId" });
   CourseOfferingModel.belongsTo(SessionModel, { foreignKey: "sessionId" });
-
-  SessionModel.hasMany(UploadedContentModel, { foreignKey: "sessionId" });
-  UploadedContentModel.belongsTo(SessionModel, { foreignKey: "sessionId" });
-
-  EnrolledCoursesModel.belongsTo(SessionModel, { foreignKey: "sessionId" });
-  SessionModel.hasMany(EnrolledCoursesModel, { foreignKey: "sessionId" });
-
 // ==================== Roadmap & Semester ====================
 RoadmapModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "roadmapId", });
 RoadmapCourseCategoryModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId",  });
@@ -246,9 +234,6 @@ CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId
   // ==================== Transcripts Management ====================
   SessionalTranscript.hasMany(TranscriptCoursesDetail, { foreignKey: "sessionalTranscriptId" });
   TranscriptCoursesDetail.belongsTo(SessionalTranscript, { foreignKey: "sessionalTranscriptId" });
-
-  SessionalTranscript.hasMany(EnrolledCoursesModel, { foreignKey: "enrolledCoursesId" });
-  EnrolledCoursesModel.belongsTo(SessionalTranscript, { foreignKey: "enrolledCoursesId" });
 
   SessionalTranscript.hasOne(SessionModel, { foreignKey: "sessionId" });
   SessionModel.belongsTo(SessionalTranscript, { foreignKey: "sessionId" });

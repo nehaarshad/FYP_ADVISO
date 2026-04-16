@@ -15,11 +15,12 @@ import CoursesModel from '../models/coursesModel.js';
 import ExcelJS from 'exceljs';
 import CoursePreReqModel from '../models/coursePreReqModel.js';
 
+import fs from 'fs';
 const uploadNewRoadmap = async (req, res) => {
+    const roadmapFile=req.file; 
     try {
         const { programName, batchName,batchYear, } = req.body;
         console.log("Received data for new roadmap:", req.body);
-        const roadmapFile=req.file; // Access the uploaded file
 
         console.log("Uploaded roadmap file:", roadmapFile);
         const [program] = await ProgramModel.findOrCreate({ where: { programName } }); //find if program exist otherwise create new program like CA
@@ -175,12 +176,14 @@ const uploadNewRoadmap = async (req, res) => {
 
                     
                 }
-
-        return res.json({ message: 'Roadmap uploaded successfully', roadmap });
+   fs.unlinkSync(roadmapFile.path); // Delete the uploaded file after processing
+       
+        return res.json({ message: 'Roadmap uploaded successfully', data:roadmap });
 
     }
     catch (error) {
-        console.log(error); 
+        console.log(error);
+         fs.unlinkSync(roadmapFile.path); 
         return res.json({ error: "Internal Server Error" });
     }
 };

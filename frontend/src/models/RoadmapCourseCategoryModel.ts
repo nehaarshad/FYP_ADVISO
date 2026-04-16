@@ -1,3 +1,5 @@
+import { Category } from "./categoryModel";
+
 export interface RoadmapCourseCategory {
   id: number;
   categoryId: number;
@@ -5,4 +7,5 @@ export interface RoadmapCourseCategory {
   requiredCredits: number;
   createdAt?: string;
   updatedAt?: string;
+  CategoryModel:Category
 }

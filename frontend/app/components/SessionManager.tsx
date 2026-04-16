@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React from 'react';
 import { CloudUpload, Upload } from "lucide-react";
@@ -10,17 +11,6 @@ export function SessionManager({ selectedSession, setSelectedSession }: any) {
         <div>
           <h2 className="text-xl font-black text-[#1e3a5f] uppercase italic tracking-tighter">Session Repository</h2>
 
-        </div>
-        <div className="flex gap-2 bg-slate-100 p-1.5 rounded-xl">
-          {["Fall 2025", "Spring 2026"].map(s => (
-            <button 
-              key={s} 
-              onClick={() => setSelectedSession(s)} 
-              className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase transition-all ${selectedSession === s ? 'bg-[#1e3a5f] text-white shadow-md' : 'text-slate-400 hover:text-[#1e3a5f]'}`}
-            >
-              {s}
-            </button>
-          ))}
         </div>
       </div>
 
@@ -35,7 +25,7 @@ export function SessionManager({ selectedSession, setSelectedSession }: any) {
           <div className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">File Category</label>
-              <select className="w-full p-4 bg-slate-50 border border-slate-100 rounded-[1.2rem] text-xs font-bold focus:ring-2 focus:ring-[#FDB813] outline-none cursor-pointer">
+              <select title='uploadType' className="w-full p-4 bg-slate-50 border border-slate-100 rounded-[1.2rem] text-xs font-bold focus:ring-2 focus:ring-[#FDB813] outline-none cursor-pointer">
                 <option>Course Offering</option>
                 <option>Sessional Timetable</option>
                 <option>Batch Results</option>

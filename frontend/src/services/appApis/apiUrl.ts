@@ -32,6 +32,12 @@ export default class APIs{
          static updateUserRoleUrl = `${APIs.BASE_URL}/updateuserrole`;
 
 
+         // program Urls 
+
+         static getProgramsUrl = `${APIs.BASE_URL}/getPrograms`;
+         static addProgram = `${APIs.BASE_URL}/addProgram`;
+
+
     // process roadmap
 
     static uploadRoadmapUrl = `${APIs.BASE_URL}/upload`;
@@ -62,6 +68,6 @@ export default class APIs{
         static uploadSessionalResultUrl = `${APIs.BASE_URL}/uploadSessionalResult`;
 
 
-    //process transcripts
+    
 
 }

@@ -42,20 +42,25 @@ export const useStudents = () => {
     setFilters({ currentSemester });
   }, [setFilters]);
 
+  // Safely get unique values with optional chaining and fallbacks
   const getUniqueBatchNames = useMemo(() => {
-    return [...new Set(students.map(s => s.BatchModel.batchName))];
+    if (!students || !Array.isArray(students)) return [];
+    return [...new Set(students.map(s => s.BatchModel?.batchName).filter(Boolean))];
   }, [students]);
 
   const getUniqueBatchYears = useMemo(() => {
-    return [...new Set(students.map(s => s.BatchModel.batchYear))];
+    if (!students || !Array.isArray(students)) return [];
+    return [...new Set(students.map(s => s.BatchModel?.batchYear).filter(Boolean))];
   }, [students]);
 
   const getUniquePrograms = useMemo(() => {
-    return [...new Set(students.map(s => s.BatchModel.ProgramModel.programName))];
+    if (!students || !Array.isArray(students)) return [];
+    return [...new Set(students.map(s => s.BatchModel?.ProgramModel?.programName).filter(Boolean))];
   }, [students]);
 
   const getUniqueStatuses = useMemo(() => {
-    return [...new Set(students.map(s => s.StudentStatus.currentStatus))];
+    if (!students || !Array.isArray(students)) return [];
+    return [...new Set(students.map(s => s.StudentStatus?.currentStatus).filter(Boolean))];
   }, [students]);
 
   return {
@@ -68,8 +73,8 @@ export const useStudents = () => {
     statistics,
     
     // Metadata
-    totalCount: filteredStudents.length,
-    totalAllCount: students.length,
+    totalCount: filteredStudents?.length || 0,
+    totalAllCount: students?.length || 0,
     
     // Unique values for filters
     batchNames: getUniqueBatchNames,

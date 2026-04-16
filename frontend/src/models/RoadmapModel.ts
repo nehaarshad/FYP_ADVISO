@@ -1,3 +1,6 @@
+import {RoadmapCourseCategory} from "./RoadmapCourseCategoryModel"
+import { SemesterRoadmap } from "./semesterRoadmapModel";
+
 export interface Roadmap {
   id: number;
   programId: number;
@@ -7,4 +10,6 @@ export interface Roadmap {
   roadmapFilePath: string;
   createdAt?: string;
   updatedAt?: string;
+  RoadmapCourseCategoryModel:RoadmapCourseCategory
+  SemesterRoadmapModel:SemesterRoadmap
 }

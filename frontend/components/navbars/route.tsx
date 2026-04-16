@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+// components/navbars/route.tsx (FIXED)
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,12 +17,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
   const router = useRouter();
   const navItems = NAV_CONFIG[userRole] ?? [];
 
-  const grouped: { group: string | null; items: NavItem[] }[] = [];
+  // Fix: Create unique keys for grouped items
+  const grouped: { group: string; items: NavItem[] }[] = [];
+  
   for (const item of navItems) {
-    const last = grouped[grouped.length - 1];
-    const g = item.group ?? null;
-    if (!last || last.group !== g) grouped.push({ group: g, items: [item] });
-    else last.items.push(item);
+    const groupName = item.group ?? "General";
+    const existingGroup = grouped.find(g => g.group === groupName);
+    
+    if (existingGroup) {
+      existingGroup.items.push(item);
+    } else {
+      grouped.push({ group: groupName, items: [item] });
+    }
   }
 
   return (
@@ -33,13 +39,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
 
       <nav className="flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar">
         {grouped.map(({ group, items }) => (
-          <div key={group ?? "default"} className="py-2">
-            {group && (
-              <p className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">
-                {group}
-              </p>
-            )}
-            {items.map((item) =>
+          <div key={group} className="py-2">
+            <p className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">
+              {group}
+            </p>
+            {items.map((item) => (
               item.subItems ? (
                 <ExpandableItem
                   key={item.key}
@@ -56,7 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
                   onClick={() => setActiveTab(item.key)}
                 />
               )
-            )}
+            ))}
           </div>
         ))}
       </nav>
@@ -88,13 +92,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
   );
 };
 
-function ExpandableItem({ item, activeTab, setActiveTab,}: {
-  item: NavItem; activeTab: string; setActiveTab: (t: string) => void;
+function ExpandableItem({ item, activeTab, setActiveTab }: {
+  item: NavItem; 
+  activeTab: string; 
+  setActiveTab: (t: string) => void;
 }) {
   const isChildActive = item.subItems?.some(s => s.key === activeTab);
   const [open, setOpen] = useState(isChildActive ?? false);
+  
   return (
-    <>
+    <div>
       <button
         onClick={() => setOpen(o => !o)}
         className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all ${
@@ -129,7 +136,7 @@ function ExpandableItem({ item, activeTab, setActiveTab,}: {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
 
@@ -147,4 +154,3 @@ function SidebarItem({ icon, label, active, onClick }: any) {
     </div>
   );
 }
-

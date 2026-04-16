@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from 'react';
 import { 
@@ -44,7 +45,7 @@ export function RoadmapSection() {
                 <CloudUpload size={32} />
               </div>
               <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Drop File to Sync</p>
-              <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" />
+              <input title='file' type="file" className="absolute inset-0 opacity-0 cursor-pointer" />
             </div>
           </div>
 
@@ -124,10 +125,10 @@ function FileRow({ name, type, date }: any) {
       <div className="flex items-center gap-8">
         <p className="text-[9px] font-black text-slate-300 uppercase italic">{date}</p>
         <div className="flex gap-2">
-          <button className="p-3 bg-white text-slate-400 hover:text-[#1e3a5f] rounded-xl shadow-sm border border-slate-100 transition-all">
+          <button title='link' className="p-3 bg-white text-slate-400 hover:text-[#1e3a5f] rounded-xl shadow-sm border border-slate-100 transition-all">
             <ExternalLink size={14}/>
           </button>
-          <button className="p-3 bg-white text-slate-400 hover:text-red-500 rounded-xl shadow-sm border border-slate-100 transition-all">
+          <button title='trash' className="p-3 bg-white text-slate-400 hover:text-red-500 rounded-xl shadow-sm border border-slate-100 transition-all">
             <Trash2 size={14}/>
           </button>
         </div>

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// repositories/userManagement/UserManagementRepository.ts
 import { BaseApiService } from '../../services/baseApiServices/baseNetworkService/baseNetwork';
 import APIs from '../../services/appApis/apiUrl';
 import { ApiResponse } from '../../services/baseApiServices/ApiResponseType/apiResponseType'
