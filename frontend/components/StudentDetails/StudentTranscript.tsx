@@ -2,10 +2,6 @@
 import React from 'react';
 import { 
   ArrowLeft, 
-  Download, 
-  Printer, 
-  FileText, 
-  CheckCircle2 
 } from 'lucide-react';
 
 interface TranscriptProps {
@@ -15,6 +11,7 @@ interface TranscriptProps {
 
 export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
   const defaultTranscript = [
+    // ... (Your defaultTranscript data remains the same)
     {
       semester: "Semester 1", sgpa: "3.85",
       courses: [
@@ -69,7 +66,7 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
 
   const displayTranscript = student?.transcript || defaultTranscript;
 
- const getTypeText = (type: string) => {
+  const getTypeText = (type: string) => {
     switch(type) {
       case "Computing Core": return "text-red-800";
       case "Mathematics and Science Foundation": return "text-rose-600";
@@ -83,92 +80,115 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
   };
 
   return (
-    <div className="animate-in slide-in-from-right duration-500 h-full flex flex-col bg-slate-50/50">
+    <div className="animate-in slide-in-from-right duration-500 h-full flex flex-col bg-slate-50/50 overflow-hidden">
       
       {/* Top Navigation */}
-      <div className="p-6">
+      <div className="p-4 md:p-6 shrink-0">
         <button 
           onClick={onBack} 
-          className="p-1 hover:bg-slate-100 rounded-full text-black transition-colors"
+          className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors"
         >
           <ArrowLeft size={20} />
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-0">
-        <div className="max-w-6xl mx-auto space-y-8 pb-20">
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-8 rounded-[2.2rem] border border-slate-100 shadow-sm mx-6 items-center">
-  {/* Student Name - Size increased and Vertically Centered */}
-  <div className="flex flex-col justify-center">
-    <p className="text-2xl font-black text-[#1e3a5f] uppercase not-italic leading-none">
-      {student?.name || "N/A"}
-    </p>
-  </div>
+      <div className="flex-1 overflow-y-auto px-4 md:px-6">
+        <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 pb-20">
+          
+          {/* Header Card - Responsive Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.2rem] border border-slate-100 shadow-sm items-center">
+            
+            <div className="flex flex-col justify-center text-center sm:text-left">
+              <p className="text-xl md:text-2xl font-black text-[#1e3a5f] uppercase leading-tight">
+                {student?.name || "N/A"}
+              </p>
+              <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">Student Transcript</p>
+            </div>
 
-  {/* CGPA - Now closer to the name and centered */}
-  <div className="flex flex-col justify-center md:border-l md:border-slate-50 md:pl-8">
-    <p className="text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">CGPA</p>
-    <p className="text-3xl font-black text-amber-500 not-italic leading-none">
-      {student?.cgpa || "3.78"}
-    </p>
-  </div>
+            <div className="flex flex-col justify-center items-center sm:items-start md:border-l md:border-slate-100 md:pl-8">
+              <p className="text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Cumulative GPA</p>
+              <p className="text-3xl font-black text-amber-500 leading-none">
+                {student?.cgpa || "3.78"}
+              </p>
+            </div>
 
-  {/* Total Requirement - Right Aligned */}
-  <div className="text-right flex flex-col justify-center">
-    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Requirement</p>
-    <p className="text-xl font-black text-[#1e3a5f]">
-      85 <span className="text-slate-300">/ 130</span> 
-      <span className="text-[10px] text-slate-400 uppercase ml-1">Hrs</span>
-    </p>
-  </div>
-</div>
+            <div className="text-center md:text-right flex flex-col justify-center sm:col-span-2 md:col-span-1">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Degree Progress</p>
+              <p className="text-xl font-black text-[#1e3a5f]">
+                85 <span className="text-slate-300">/ 130</span> 
+                <span className="text-[10px] text-slate-400 uppercase ml-1">Hrs</span>
+              </p>
+            </div>
+          </div>
 
-          {/* Semester Tables */}
+          {/* Semester Sections */}
           {displayTranscript.map((sem: any, idx: number) => (
-            <div key={idx} className="bg-white rounded-[1.5rem] overflow-hidden border border-slate-100 shadow-sm mx-6">
-              <div className="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex justify-between items-center">
-                
-                <h3 className="text-sm font-black text-[#1e3a5f] uppercase tracking-widest not-italic">{sem.semester}</h3>
-                <span className="px-4 py-1.5 bg-white rounded-xl border border-slate-200 text-xs font-black text-amber-600">
-                  GPA: {sem.sgpa}
+            <div key={idx} className="bg-white rounded-[1.2rem] md:rounded-[1.5rem] overflow-hidden border border-slate-100 shadow-sm">
+              <div className="bg-slate-50/50 px-6 md:px-8 py-4 md:py-5 border-b border-slate-100 flex flex-row justify-between items-center">
+                <h3 className="text-xs md:text-sm font-black text-[#1e3a5f] uppercase tracking-widest">{sem.semester}</h3>
+                <span className="px-3 py-1 md:px-4 md:py-1.5 bg-white rounded-xl border border-slate-200 text-[10px] md:text-xs font-black text-amber-600 whitespace-nowrap">
+                  SGPA: {sem.sgpa}
                 </span>
               </div>
               
-              <table className="w-full text-left table-fixed">
-                <thead>
-                  <tr className="text-[11px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-50">
-                    <th className="px-8 py-5 w-[35%]">Course Title</th>
-                    <th className="px-4 py-5 w-[35%] text-left">Course Category</th>
-                    <th className="px-4 py-5 w-[15%] text-center">Cr. Hrs</th>
-                    <th className="px-8 py-5 w-[15%] text-center">Grade</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {sem.courses.map((course: any, cIdx: number) => (
-                    <tr key={cIdx} className="hover:bg-slate-50/30 transition-colors">
-                      
-                      <td className="px-8 py-4 font-bold text-[#1e3a5f] text-xs uppercase not-italic tracking-tight truncate">
-                        {course.name}
-                      </td>
-                      <td className="px-5 py-5">
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-tighter text-black ${getTypeText(course.type)}`}>
-                          {course.type}
-                        </span>
-                      </td>
-                      <td className="px-4 py-5 text-center font-black text-slate-500 text-xs">{course.cr}</td>
-                      <td className="px-8 py-5 text-center">
-                        <span className={`text-xs font-black ${
-                          course.grade === 'F' 
-                            ? 'text-red-600' 
-                            : 'text-green-600'
-                        }`}>
-                          {course.grade}
-                        </span>
-                      </td>
+              {/* Desktop Table View (Hidden on Mobile) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-50">
+                      <th className="px-8 py-4 w-[40%]">Course Title</th>
+                      <th className="px-4 py-4 w-[30%]">Category</th>
+                      <th className="px-4 py-4 text-center">Cr.</th>
+                      <th className="px-8 py-4 text-center">Grade</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-50">
+                    {sem.courses.map((course: any, cIdx: number) => (
+                      <tr key={cIdx} className="hover:bg-slate-50/30 transition-colors">
+                        <td className="px-8 py-4 font-bold text-[#1e3a5f] text-xs uppercase tracking-tight">
+                          {course.name}
+                        </td>
+                        <td className="px-4 py-4">
+                          <span className={`text-[10px] font-bold uppercase ${getTypeText(course.type)}`}>
+                            {course.type}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-center font-black text-slate-500 text-xs">{course.cr}</td>
+                        <td className="px-8 py-4 text-center">
+                          <span className={`text-xs font-black ${course.grade === 'F' ? 'text-red-600' : 'text-green-600'}`}>
+                            {course.grade}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card View (Hidden on Desktop) */}
+              <div className="md:hidden divide-y divide-slate-100">
+                {sem.courses.map((course: any, cIdx: number) => (
+                  <div key={cIdx} className="p-5 flex flex-col gap-2">
+                    <div className="flex justify-between items-start gap-4">
+                      <p className="font-black text-[#1e3a5f] text-xs uppercase leading-tight">
+                        {course.name}
+                      </p>
+                      <span className={`text-xs font-black shrink-0 ${course.grade === 'F' ? 'text-red-600' : 'text-green-600'}`}>
+                        {course.grade}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-end">
+                      <span className={`text-[9px] font-black uppercase tracking-tight max-w-[70%] ${getTypeText(course.type)}`}>
+                        {course.type}
+                      </span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">
+                        {course.cr} Credits
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
             </div>
           ))}
         </div>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import ChatStudentList from './ChatStudentList';
 import ChatArea from './ChatArea';
+import { ArrowLeft } from 'lucide-react';
 
 export type Student = {
   id: number;
@@ -13,13 +14,17 @@ export type Student = {
 
 export type Message = {
   id: number;
-  studentId: number; // Student se link karne ke liye
+  studentId: number; 
   sender: "advisor" | "student";
   text: string;
   time: string;
 };
 
-const AdvisorChat: React.FC = () => {
+interface AdvisorChatProps {
+  onBack?: () => void;
+}
+
+const AdvisorChat: React.FC<AdvisorChatProps> = ({ onBack }) => {
   const students: Student[] = [
     { id: 1, name: "Ali Khan", sapId: "SAP-2021-001", batch: "Fall 2021", semester: "7th" },
     { id: 2, name: "Ayesha Malik", sapId: "SAP-2021-014", batch: "Fall 2021", semester: "7th" },
@@ -27,7 +32,6 @@ const AdvisorChat: React.FC = () => {
 
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   
-  // Dummy data with studentId
   const [allMessages, setAllMessages] = useState<Message[]>([
     { id: 1, studentId: 1, sender: "advisor", text: "Ali, please visit my office tomorrow.", time: "10:30 AM" },
     { id: 2, studentId: 1, sender: "student", text: "Okay sir, I will be there.", time: "10:35 AM" },
@@ -46,25 +50,47 @@ const AdvisorChat: React.FC = () => {
     setAllMessages((prev) => [...prev, newMessage]);
   };
 
+  // Logic: If in a chat, go back to list. If in list, go back to dashboard.
+  const handleBackAction = () => {
+    if (selectedStudent) {
+      setSelectedStudent(null);
+    } else if (onBack) {
+      onBack();
+    }
+  };
+
   return (
-    <div className="flex gap-4 h-[520px] max-w-6xl mx-auto bg-transparent w-full overflow-hidden">
-      {/* LEFT: Student List (35%) */}
-      <div className="w-[35%] h-full">
-        <ChatStudentList 
-          students={students} 
-          selectedId={selectedStudent?.id || null} 
-          onSelect={setSelectedStudent} 
-        />
+    <div className="flex flex-col gap-4 w-full max-w-6xl mx-auto overflow-hidden p-4 md:p-0">
+      
+      {/* --- SINGLE BACK ARROW --- */}
+      <div className="flex items-center">
+        <button 
+          onClick={handleBackAction} 
+          className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors border border-slate-100 outline-none"
+        >
+          <ArrowLeft size={20} />
+        </button>
       </div>
 
-      {/* RIGHT: Chat Area (65%) */}
-      <div className="w-[65%] h-full">
-        <ChatArea 
-          selectedStudent={selectedStudent} 
-          // Sirf selected student ke messages filter karke bhejein
-          messages={allMessages.filter(m => m.studentId === selectedStudent?.id)} 
-          onSendMessage={addMessage} 
-        />
+      <div className="flex flex-col md:flex-row gap-4 h-full md:h-[520px] bg-transparent w-full overflow-hidden">
+        {/* LEFT: Student List (35%) */}
+        <div className={`w-full md:w-[35%] h-full ${selectedStudent ? 'hidden md:block' : 'block'}`}>
+          <ChatStudentList 
+            students={students} 
+            selectedId={selectedStudent?.id || null} 
+            onSelect={setSelectedStudent} 
+            onBack={handleBackAction} 
+          />
+        </div>
+
+        {/* RIGHT: Chat Area (65%) */}
+        <div className={`w-full md:w-[65%] h-full ${!selectedStudent ? 'hidden md:block' : 'block'}`}>
+          <ChatArea 
+            selectedStudent={selectedStudent} 
+            messages={allMessages.filter(m => m.studentId === selectedStudent?.id)} 
+            onSendMessage={addMessage} 
+          />
+        </div>
       </div>
     </div>
   );

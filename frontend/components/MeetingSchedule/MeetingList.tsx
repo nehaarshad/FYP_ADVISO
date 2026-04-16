@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { Calendar, Clock, ChevronDown, ChevronUp, Search, Check, X, Edit2 } from 'lucide-react';
+import { Calendar, Clock, ChevronDown, ChevronUp, Search, Check, X, Edit2, ArrowLeft } from 'lucide-react';
 
 interface Meeting {
   id: string;
@@ -13,7 +13,7 @@ interface Meeting {
   summary: string;
 }
 
-export const MeetingList = () => {
+export const MeetingList = ({ onBack }: { onBack?: () => void }) => {
   const [advisorMeetings, setAdvisorMeetings] = useState<Meeting[]>([
     { id: '1', title: 'Academic Meeting', day: 'Monday', date: 'Mar 10, 2026', time: '10:30 AM', room: 'Room 204', studentName: 'Ahmed Ali', summary: 'Credit hours discussed.' },
     { id: '2', title: 'Academic Meeting', day: 'Tuesday', date: 'Mar 15, 2026', time: '02:00 PM', room: 'Zoom', studentName: 'Sara Khan', summary: 'GPA strategy review.' },
@@ -45,13 +45,21 @@ export const MeetingList = () => {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 h-full overflow-y-auto pb-10">
-      <h2 className="text-2xl font-black text-[#1e3a5f] uppercase tracking-tight mb-8">
-        Batch Meetings
-      </h2>
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 h-full overflow-y-auto pb-10 px-4 md:px-0">
+      <div className="flex flex-col gap-4 mb-8">
+        <button 
+          onClick={onBack} 
+          className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors w-fit"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] uppercase tracking-tight">
+          Batch Meetings
+        </h2>
+      </div>
 
-      <div className="w-full bg-white rounded-[2.5rem] shadow-sm border border-slate-100 p-8">
-        <h3 className="text-xs font-black text-[#1e3a5f] uppercase tracking-[0.2em] mb-8">
+      <div className="w-full bg-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-sm border border-slate-100 p-5 md:p-8">
+        <h3 className="text-[10px] md:text-xs font-black text-[#1e3a5f] uppercase tracking-[0.2em] mb-6 md:mb-8">
           Meeting Schedule
         </h3>
 
@@ -62,30 +70,30 @@ export const MeetingList = () => {
             const isEditing = editingId === meet.id;
 
             return (
-              <div key={meet.id} className="flex flex-col p-5 bg-slate-50/50 rounded-2xl border border-transparent transition-all">
+              <div key={meet.id} className="flex flex-col p-4 md:p-5 bg-slate-50/50 rounded-2xl border border-transparent transition-all">
                 {/* Meeting Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 bg-white rounded-2xl flex flex-col items-center justify-center flex-shrink-0 border border-slate-200 shadow-sm">
-                      <span className="text-[10px] font-black uppercase text-slate-800">{meet.day.substring(0, 3)}</span>
-                      <span className="text-2xl font-black leading-none text-[#1e3a5f]">{meet.date.split(' ')[1].replace(',', '')}</span>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4 md:gap-6">
+                    <div className="w-14 h-14 md:w-16 md:h-16 bg-white rounded-2xl flex flex-col items-center justify-center flex-shrink-0 border border-slate-200 shadow-sm">
+                      <span className="text-[9px] md:text-[10px] font-black uppercase text-slate-800">{meet.day.substring(0, 3)}</span>
+                      <span className="text-xl md:text-2xl font-black leading-none text-[#1e3a5f]">{meet.date.split(' ')[1].replace(',', '')}</span>
                     </div>
 
-                    <div>
-                      <p className="text-sm font-black text-[#1e3a5f] uppercase">{meet.title}</p>
-                      <div className="flex items-center gap-5 mt-2">
-                        <div className="flex items-center gap-1.5 text-slate-600 text-[10px] font-bold">
+                    <div className="min-w-0">
+                      <p className="text-xs md:text-sm font-black text-[#1e3a5f] uppercase truncate">{meet.title}</p>
+                      <div className="flex flex-wrap items-center gap-3 md:gap-5 mt-2">
+                        <div className="flex items-center gap-1.5 text-slate-600 text-[9px] md:text-[10px] font-bold">
                           <Clock size={12} className="text-amber-500" /> {meet.time}
                         </div>
-                        <div className="flex items-center gap-1.5 text-slate-600 text-[10px] font-bold">
+                        <div className="flex items-center gap-1.5 text-slate-600 text-[9px] md:text-[10px] font-bold">
                           <Calendar size={12} className="text-amber-500" /> {meet.date}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4">
-                    <span className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border ${
+                  <div className="flex items-center justify-between md:justify-end gap-4">
+                    <span className={`px-4 md:px-6 py-1.5 md:py-2 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest border ${
                       isDone ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'
                     }`}>
                       {isDone ? 'Done' : 'Pending'}
@@ -106,8 +114,8 @@ export const MeetingList = () => {
                         </div>
                         <input 
                           type="text"
-                          className="w-full pl-12 pr-24 py-3 bg-white border border-slate-200 rounded-xl text-[11px] font-medium text-slate-600 focus:ring-2 focus:ring-[#1e3a5f]/5 outline-none transition-all shadow-inner"
-                          placeholder="Write meeting summary here..."
+                          className="w-full pl-10 md:pl-12 pr-20 md:pr-24 py-3 bg-white border border-slate-200 rounded-xl text-[10px] md:text-[11px] font-medium text-slate-600 focus:ring-2 focus:ring-[#1e3a5f]/5 outline-none transition-all shadow-inner"
+                          placeholder="Meeting summary..."
                           autoFocus
                           value={tempSummary}
                           onChange={(e) => setTempSummary(e.target.value)}
@@ -123,8 +131,8 @@ export const MeetingList = () => {
                       </div>
                     ) : (
                       <div className="flex justify-between items-start bg-white/40 p-3 rounded-xl border border-slate-100 group">
-                        <p className="text-[11px] text-slate-500 font-medium leading-relaxed pr-8">
-                          <span className="font-black text-[#1e3a5f] uppercase text-[9px] mr-2">Meeting Summary:</span>
+                        <p className="text-[10px] md:text-[11px] text-slate-500 font-medium leading-relaxed pr-8">
+                          <span className="font-black text-[#1e3a5f] uppercase text-[8px] md:text-[9px] mr-2">Meeting Summary:</span>
                           {meet.summary || "No summary available for this meeting."}
                         </p>
                         <button 
