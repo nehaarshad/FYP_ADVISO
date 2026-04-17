@@ -1,131 +1,290 @@
-"use client";
-import React from 'react';
-import { ChevronRight, User } from 'lucide-react';
-// --- 1. CURRENT BATCH (FALL 2024) - 10 STUDENTS ---
-const currentBatchData = [
-  { id: 'c1', name: 'Ahmed Ali', status: 'Irregular', academicStatus: 'Ungraduated', code: '10293', cgpa: '2.85' },
-  { id: 'c2', name: 'Sara Khan', status: 'Regular', academicStatus: 'Ungraduated', code: '55821', cgpa: '3.42' },
-  { id: 'c3', name: 'Zainab Bibi', status: 'Regular', academicStatus: 'Ungraduated', code: '39402', cgpa: '3.15' },
-  { id: 'c4', name: 'Hamza Sheikh', status: 'Regular', academicStatus: 'Ungraduated', code: '99201', cgpa: '2.90' },
-  { id: 'c5', name: 'Dua Fatima', status: 'Regular', academicStatus: 'Ungraduated', code: '22831', cgpa: '3.75' },
-  { id: 'c6', name: 'Fahad Mustafa', status: 'Irregular', academicStatus: 'Ungraduated', code: '44512', cgpa: '2.10' },
-  { id: 'c7', name: 'Zoya Ahmed', status: 'Regular', academicStatus: 'Ungraduated', code: '11203', cgpa: '3.88' },
-  { id: 'c8', name: 'Usman Ghani', status: 'Regular', academicStatus: 'Ungraduated', code: '66782', cgpa: '3.25' },
-  { id: 'c9', name: 'Eshal Malik', status: 'Irregular', academicStatus: 'Ungraduated', code: '33491', cgpa: '1.95' },
-  { id: 'c10', name: 'Bilal Nasir', status: 'Regular', academicStatus: 'Ungraduated', code: '88902', cgpa: '3.50' },
-];
+// components/students/StudentList.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
 
-const historicalData: Record<string, any[]> = {
-  // --- 2. FALL 2023 - 10 STUDENTS ---
-  'Fall 2023': [
-    { id: 'f1', name: 'Valeeja Jamil', status: 'Regular', academicStatus: 'Graduated', code: '48291', cgpa: '3.89' },
-    { id: 'f2', name: 'Bilal Hassan', status: 'Irregular', academicStatus: 'Ungraduated', code: '77492', cgpa: '2.10' },
-    { id: 'f3', name: 'Hassan Raza', status: 'Regular', academicStatus: 'Ungraduated', code: '12930', cgpa: '3.10' },
-    { id: 'f4', name: 'Rida Zehra', status: 'Irregular', academicStatus: 'Suspended', code: '90021', cgpa: '1.80' },
-    { id: 'f5', name: 'Omer Shah', status: 'Irregular', academicStatus: 'Pending Fees', code: '55612', cgpa: '2.40' },
-    { id: 'f6', name: 'Sana Javed', status: 'Regular', academicStatus: 'Graduated', code: '77210', cgpa: '3.65' },
-    { id: 'f7', name: 'Asad Vasti', status: 'Regular', academicStatus: 'Graduated', code: '33411', cgpa: '3.40' },
-    { id: 'f8', name: 'Muneeb Butt', status: 'Irregular', academicStatus: 'Ungraduated', code: '11902', cgpa: '2.20' },
-    { id: 'f9', name: 'Hira Mani', status: 'Regular', academicStatus: 'Graduated', code: '55672', cgpa: '3.55' },
-    { id: 'f10', name: 'Babar Azam', status: 'Regular', academicStatus: 'Graduated', code: '10101', cgpa: '3.99' },
-  ],
-  // --- 3. SPRING 2023 - 10 STUDENTS ---
-  'Spring 2023': [
-    { id: 's1', name: 'Meerab Jan', status: 'Regular', academicStatus: 'Graduated', code: '11029', cgpa: '3.95' },
-    { id: 's2', name: 'Zohaib Ali', status: 'Regular', academicStatus: 'Graduated', code: '33201', cgpa: '2.95' },
-    { id: 's3', name: 'Kashif Abbasi', status: 'Irregular', academicStatus: 'Freeze', code: '22109', cgpa: '2.15' },
-    { id: 's4', name: 'Nimra Khan', status: 'Regular', academicStatus: 'Graduated', code: '44561', cgpa: '3.20' },
-    { id: 's5', name: 'Talat Hussain', status: 'Regular', academicStatus: 'Graduated', code: '66712', cgpa: '3.45' },
-    { id: 's6', name: 'Maya Ali', status: 'Regular', academicStatus: 'Graduated', code: '99021', cgpa: '3.70' },
-    { id: 's7', name: 'Feroze Khan', status: 'Irregular', academicStatus: 'Ungraduated', code: '33412', cgpa: '1.50' },
-    { id: 's8', name: 'Sajal Aly', status: 'Regular', academicStatus: 'Graduated', code: '11290', cgpa: '3.80' },
-    { id: 's9', name: 'Ahad Raza', status: 'Regular', academicStatus: 'Graduated', code: '44321', cgpa: '3.10' },
-    { id: 's10', name: 'Kubra Khan', status: 'Regular', academicStatus: 'Graduated', code: '55610', cgpa: '3.35' },
-  ]
-};
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { 
+  Search, User, Mail, Phone, 
+  CheckCircle, XCircle, 
+  Users, GraduationCap, Eye, Edit,
+  Loader2, AlertCircle, Calendar, BookOpen
+} from 'lucide-react';
+import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+import { StudentDetailsModal } from './StudentDetailsModal';
+import { EditStudent } from '@/app/components/EditStudent';
 
-interface StudentListProps {
-  selectedBatch: string;
-  activeTab: string;
-  onViewProfile: (student: any) => void;
-}
 
-export const StudentList = ({ selectedBatch, activeTab, onViewProfile }: StudentListProps) => {
-  // Batch selection logic
-  const batchData = selectedBatch === 'Fall 2024' 
-    ? currentBatchData 
-    : historicalData[selectedBatch] || [];
+export function StudentList(){
+  const [searchInput, setSearchInput] = useState('');
+  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
+  const [filterBatch, setFilterBatch] = useState('');
+  const [filterProgram, setFilterProgram] = useState('');
+   const [showEditModal, setShowEditModal] = useState(false);
+ 
+  const {
+    students,
+    isLoading,
+    error,
+    searchStudents,
+    fetchStudents,
+    batchNames,
+    programs,
+    statistics,
+  } = useStudents();
 
-  // Filter logic (Total / Regular / Irregular)
-  const filteredStudents = batchData.filter(student => {
-    if (activeTab === 'Total') return true;
-    return student.status === activeTab;
-  });
+  const handleSearch = () => {
+    searchStudents(searchInput);
+  };
+
+  const handleViewDetails = (student: any) => {
+    setSelectedStudent(student);
+    setShowDetailsModal(true);
+  };
+
+const editStudent = (std: any) => {
+    setSelectedStudent(std);
+    setShowEditModal(true);
+  };
+
+  // Apply filters
+  let filteredStudents = students;
+  if (filterStatus !== 'all') {
+    filteredStudents = filteredStudents.filter(s => 
+      filterStatus === 'active' ? s.User?.isActive : !s.User?.isActive
+    );
+  }
+  if (filterBatch) {
+    filteredStudents = filteredStudents.filter(s => s.BatchModel?.batchName === filterBatch);
+  }
+  if (filterProgram) {
+    filteredStudents = filteredStudents.filter(s => s.BatchModel?.ProgramModel?.programName === filterProgram);
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Loader2 size={40} className="animate-spin text-[#FDB813] mx-auto mb-4" />
+          <p className="text-slate-500 font-bold">Loading students...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
+        <AlertCircle size={48} className="text-red-500 mx-auto mb-4" />
+        <p className="text-red-600 font-bold mb-2">Error loading students</p>
+        <p className="text-red-500 text-sm">{error}</p>
+        <button 
+          onClick={() => fetchStudents(true)}
+          className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-bold"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full overflow-hidden">
-      <table className="w-full border-separate border-spacing-0">
-        <thead>
-          <tr className="bg-slate-50/50">
-            <th className="text-left p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Student Details</th>
-            <th className="text-left p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Roll Code</th>
-            <th className="text-left p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
-            <th className="text-right p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Action</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-slate-50">
-          {filteredStudents.length > 0 ? (
-            filteredStudents.map((student) => (
-              <tr key={student.id} className="hover:bg-slate-50/80 transition-all group">
-                <td className="p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 text-[#1e3a5f] flex items-center justify-center font-bold group-hover:bg-amber-400 group-hover:text-white transition-all">
-                      <User size={18} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-black text-[#1e3a5f] uppercase tracking-tight">{student.name}</p>
-                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">{student.academicStatus}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="p-6">
-                  <span className="text-[11px] font-black text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                    #{student.code}
-                  </span>
-                </td>
-                <td className="p-6">
-                  <span className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-wider border ${
-                    student.status === 'Regular' 
-                      ? 'bg-green-50 text-green-600 border-green-100' 
-                      : 'bg-red-50 text-red-600 border-red-100'
-                  }`}>
-                    {student.status}
-                  </span>
-                </td>
-                <td className="p-6 text-right">
-                  <button 
-                    onClick={() => onViewProfile(student)} 
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-[#1e3a5f] rounded-xl text-[9px] font-black uppercase hover:bg-[#1e3a5f] hover:text-white transition-all shadow-sm"
-                  >
-                    View Details <ChevronRight size={14} />
-                  </button>
-                </td>
+    <div className="space-y-6 animate-in fade-in duration-500">
+
+      {/* Search and Filter Bar */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Search Input */}
+          <div className="flex-1 relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="Search by name, SAP ID, or email..."
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-[#FDB813] outline-none transition-all"
+            />
+          </div>
+          
+          <button
+            onClick={handleSearch}
+            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all"
+          >
+            Search
+          </button>
+        </div>
+
+        {/* Filter Row */}
+        <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-slate-100">
+          <select
+            title="Status"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value as any)}
+            className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+          <select
+            title="Batch"
+            value={filterBatch}
+            onChange={(e) => setFilterBatch(e.target.value)}
+            className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
+          >
+            <option value="">All Batches</option>
+            {batchNames.map(batch => (
+              <option key={batch} value={batch}>{batch}</option>
+            ))}
+          </select>
+
+          <select
+            title="Program"
+            value={filterProgram}
+            onChange={(e) => setFilterProgram(e.target.value)}
+            className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
+          >
+            <option value="">All Programs</option>
+            {programs.map(program => (
+              <option key={program} value={program}>{program}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Students Table */}
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-slate-50 border-b border-slate-100">
+              <tr>
+                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Student</th>
+                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Academic Info</th>
+                <th className="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-wider">Actions</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={4} className="p-20 text-center">
-                <div className="flex flex-col items-center justify-center opacity-40">
-                  <div className="w-12 h-12 rounded-full border-2 border-dashed border-slate-300 animate-spin mb-4" />
-                  <p className="text-slate-500 font-black uppercase text-[10px] tracking-[0.2em]">
-                    No {activeTab !== 'Total' ? activeTab : ''} Students Found
-                  </p>
-                </div>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {filteredStudents.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-12 text-center">
+                    <GraduationCap size={48} className="mx-auto text-slate-300 mb-4" />
+                    <p className="text-slate-500 font-bold">No students found</p>
+                    <p className="text-slate-400 text-sm">Try adjusting your search or filters</p>
+                  </td>
+                </tr>
+              ) : (
+                filteredStudents.map((student: any, index: number) => (
+                  <motion.tr
+                    key={student.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="hover:bg-slate-50/50 transition-colors group"
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center group-hover:bg-[#1e3a5f] transition-colors">
+                          <User size={18} className="text-[#1e3a5f] group-hover:text-white" />
+                        </div>
+                        <div>
+                          <p className="font-black text-[#1e3a5f] text-sm uppercase tracking-tight">
+                            {student.studentName}
+                          </p>
+                          <p className="text-[10px] text-slate-400 uppercase tracking-wider">
+                            SAP ID: {student.User?.sapid}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Mail size={12} className="text-slate-400" />
+                          <p className="text-[11px] text-slate-600">{student.email}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Phone size={12} className="text-slate-400" />
+                          <p className="text-[11px] text-slate-600">{student.contactNumber || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <GraduationCap size={12} className="text-slate-400" />
+                          <p className="text-[11px] font-bold text-[#1e3a5f]">
+                            {student.BatchModel?.ProgramModel?.programName}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar size={12} className="text-slate-400" />
+                          <p className="text-[9px] text-slate-400">
+                            {student.BatchModel?.batchName} {student.BatchModel?.batchYear} | Sem {student.currentSemester}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase ${
+                        student.User?.isActive 
+                          ? 'bg-green-100 text-green-700' 
+                          : 'bg-red-100 text-red-700'
+                      }`}>
+                        {student.User?.isActive ? (
+                          <CheckCircle size={10} />
+                        ) : (
+                          <XCircle size={10} />
+                        )}
+                        {student.User?.isActive ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleViewDetails(student)}
+                          className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
+                          title="View Details"
+                        >
+                          <Eye size={16} />
+                        </button>
+                        <button
+                          onClick={() =>editStudent(student)}
+                          className="p-2 rounded-lg text-slate-400 hover:text-[#FDB813] hover:bg-slate-100 transition-all"
+                          title="Edit"
+                        >
+                          <Edit size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Student Details Modal */}
+      <StudentDetailsModal
+        isOpen={showDetailsModal}
+        student={selectedStudent}
+        onClose={() => setShowDetailsModal(false)}
+      />
+      <EditStudent
+          isOpen={showEditModal}
+          student={selectedStudent}  // Change from advisor to student
+          onClose={() => setShowEditModal(false)}
+          onSuccess={() => {
+            setShowEditModal(false);
+            fetchStudents(true);
+          }}
+        />
     </div>
   );
-};
+}

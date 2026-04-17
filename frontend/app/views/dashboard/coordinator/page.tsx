@@ -23,12 +23,13 @@ import { Timetable } from '@/app/components/Timetable';
 import { ProfileView } from '@/components/ProfileView/route';
 import { RequestForms } from '@/app/components/RequestForms';
 import Guidelines from '@/components/Guidelines/Guidelines';
-import { EditStudent } from '@/app/components/EditStudent';
 import { AddFaculty } from '@/app/components/AddFaculty';
 import { AddStudent } from '@/app/components/AddStudents';
 import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
+import { StudentList } from '@/components/StudentDetails/StudentList';
+
 
 export default function CoordinatorDashboard() {
   const [isClient] = useState(() => typeof window !== 'undefined');
@@ -39,8 +40,8 @@ export default function CoordinatorDashboard() {
   const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
   
-  const { students, statistics: studentStats, fetchStudents } = useStudents();
-  const { advisors, statistics: advisorStats, fetchAdvisors } = useAdvisors();
+  const {  statistics: studentStats, fetchStudents } = useStudents();
+  const { statistics: advisorStats, fetchAdvisors } = useAdvisors();
 
   // Real-time statistics that update automatically when stores change
   const activeStudentsCount = studentStats?.activeStudents || 0;
@@ -170,7 +171,7 @@ export default function CoordinatorDashboard() {
                 {activeTab === "bulk-student-upload" && <StudentRecords/>}
                 {activeTab === "add-student" && <AddStudent/>}
                 {activeTab === "add-faculty" && <AddFaculty/>}
-                {activeTab === "edit-student" && <EditStudent/>}
+                {activeTab === "edit-student" && <StudentList />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines />}
                 {activeTab === "requests" && <RequestForms />}

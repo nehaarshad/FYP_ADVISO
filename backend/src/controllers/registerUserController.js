@@ -171,7 +171,7 @@ const addNewStudent = async(req,res)=>{
                 await User.destroy({where:sapid})
                 return res.status(404).json({message:"Program Not Found"})
             }
-            const batch = await BatchModel.findOne({where:{batchName,batchYear,programId:program.id}})
+            const [batch] = await BatchModel.findOrCreate({where:{batchName,batchYear,programId:program.id}})
             if(!batch){
                 return res.status(404).json({message:"Batch Not Found"})
             }

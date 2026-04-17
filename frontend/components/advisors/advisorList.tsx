@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Search, Filter, X, User, Mail, Phone, 
+  Search, User, Mail, Phone, 
   CheckCircle, XCircle, 
   Users, Layers, Eye, Edit,
   Loader2, AlertCircle
