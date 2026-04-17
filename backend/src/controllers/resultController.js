@@ -9,11 +9,12 @@ import fs from 'fs';
 const {processStudentTranscript} = StudentTranscript
 
 const uploadSessionalResult = async(req,res) =>{
+    const resultFile = req.file;
     try {
         const {sessionType, sessionYear, programName, batchName, batchYear} = req.body;
         console.log("Check Body:", req.body);
 
-        const resultFile = req.file;
+        
         if(!resultFile){
              fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
        

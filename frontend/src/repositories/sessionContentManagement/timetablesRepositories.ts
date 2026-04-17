@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseApiService } from "@/src/services/baseApiServices/baseNetworkService/baseNetwork";
-import { ApiResponse } from "@/src/services/baseApiServices/ApiResponseType/apiResponseType";
-import APIs from "@/src/services/appApis/apiUrl"
-import { UploadTimetableData } from "./types/uploadTimetable";
+import { BaseApiService } from '../../services/baseApiServices/baseNetworkService/baseNetwork';
+import AppApis from '../../services/appApis/apiUrl';
+import { ApiResponse } from '../../services/baseApiServices/ApiResponseType/apiResponseType';
+import { Timetable } from '@/src/models/timetableModel';
+import { UploadTimetableData } from './types/uploadTimetable';
+
 
 class TimetableRepository extends BaseApiService {
   private static instance: TimetableRepository;
-  private timetablesCache: any[] = [];
+  private timetablesCache: Timetable[] = [];
+  private lastFetchTime: number = 0;
+  private cacheDuration: number = 5 * 60 * 1000;
 
   private constructor() {
     super();
@@ -19,13 +23,12 @@ class TimetableRepository extends BaseApiService {
     return TimetableRepository.instance;
   }
 
-  // Timetable Methods
   async uploadTimetable(data: UploadTimetableData): Promise<ApiResponse<any>> {
     try {
       const response = await this.postExcelFile(
-        APIs.uploadTimeTableUrl,
+        AppApis.uploadTimeTableUrl,
         data.file,
-        "timetableFile",
+        'timetableFile',
         {
           sessionType: data.sessionType,
           sessionYear: data.sessionYear,
@@ -34,7 +37,7 @@ class TimetableRepository extends BaseApiService {
       );
       
       if (response.success) {
-        this.timetablesCache = [];
+        this.clearCache();
       }
       
       return response;
@@ -44,17 +47,29 @@ class TimetableRepository extends BaseApiService {
     }
   }
 
-  async getTimetables(forceRefresh: boolean = false): Promise<ApiResponse<any>> {
+  async getTimetables(forceRefresh: boolean = false): Promise<ApiResponse<Timetable[]>> {
     const now = Date.now();
-    if (!forceRefresh && this.timetablesCache.length > 0 ) {
+    if (!forceRefresh && this.timetablesCache.length > 0 && (now - this.lastFetchTime) < this.cacheDuration) {
       console.log('Returning cached timetables');
       return { success: true, data: this.timetablesCache };
     }
 
     try {
-      const response = await this.getApiResponse(APIs.getTimetableUrl);
+      const response = await this.getApiResponse<any>(AppApis.getTimetableUrl);
+      
       if (response.success && response.data) {
-        //this.timetablesCache = response.data.data || response.data;
+        let timetablesData: Timetable[] = [];
+        if (Array.isArray(response.data)) {
+          timetablesData = response.data;
+        } else if (response.data.data && Array.isArray(response.data.data)) {
+          timetablesData = response.data.data;
+        } else {
+          timetablesData = [];
+        }
+        
+        this.timetablesCache = timetablesData;
+        this.lastFetchTime = now;
+        return { success: true, data: timetablesData };
       }
       return response;
     } catch (error) {
@@ -63,9 +78,33 @@ class TimetableRepository extends BaseApiService {
     }
   }
 
+  getTimetablesBySession(timetables: Timetable[], sessionType: string, sessionYear: string): Timetable[] {
+    return timetables.filter(t => 
+      t.CourseOfferingModel?.SessionModel?.sessionType === sessionType && 
+      t.CourseOfferingModel?.SessionModel?.sessionYear === parseInt(sessionYear)
+    );
+  }
+
+  getTimetablesByProgram(timetables: Timetable[], programName: string): Timetable[] {
+    return timetables.filter(t => 
+      t.CourseOfferingModel?.ProgramModel?.programName === programName
+    );
+  }
+
+  getTimetablesByBatch(timetables: Timetable[], batchName: string, batchYear: string): Timetable[] {
+    return timetables.filter(t => 
+      t.CourseOfferingModel?.BatchModel?.batchName === batchName && 
+      t.CourseOfferingModel?.BatchModel?.batchYear === batchYear
+    );
+  }
+
+  getTimetablesByDay(timetables: Timetable[], day: string): Timetable[] {
+    return timetables.filter(t => t.day === day);
+  }
 
   clearCache(): void {
     this.timetablesCache = [];
+    this.lastFetchTime = 0;
   }
 }
 

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BaseApiService } from "@/src/services/baseApiServices/baseNetworkService/baseNetwork";
-import { ApiResponse } from "@/src/services/baseApiServices/ApiResponseType/apiResponseType";
-import APIs from "@/src/services/appApis/apiUrl"
-import { UploadResultData } from "./types/uploadResult";
+import { BaseApiService } from '../../services/baseApiServices/baseNetworkService/baseNetwork';
+import AppApis from '../../services/appApis/apiUrl';
+import { ApiResponse } from '../../services/baseApiServices/ApiResponseType/apiResponseType';
+import { UploadResultData } from './types/uploadResult';
 
 class ResultsRepository extends BaseApiService {
   private static instance: ResultsRepository;
@@ -21,9 +21,9 @@ class ResultsRepository extends BaseApiService {
   async uploadSessionalResult(data: UploadResultData): Promise<ApiResponse<any>> {
     try {
       const response = await this.postExcelFile(
-        APIs.uploadSessionalResultUrl,
+        AppApis.uploadSessionalResultUrl,
         data.file,
-        "resultFile",
+        'resultFile',
         {
           sessionType: data.sessionType,
           sessionYear: data.sessionYear,
@@ -38,7 +38,6 @@ class ResultsRepository extends BaseApiService {
       throw error;
     }
   }
-
 }
 
-export const resultRepository = ResultsRepository.getInstance();
+export const resultsRepository = ResultsRepository.getInstance();
