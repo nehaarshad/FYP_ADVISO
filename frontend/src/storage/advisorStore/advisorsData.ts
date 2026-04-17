@@ -1,5 +1,6 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from 'zustand';
 import { BatchAdvisor } from '@/src/models/FacultyAdvisorModel';
 import { FilterOptions } from "../../utilits/filterOptions/studentsFilter/studentsFilterOption";
@@ -18,7 +19,8 @@ interface AdvisorState {
   setFilters: (filters: Partial<FilterOptions>) => void;
   clearFilters: () => void;
   applyFilters: () => void;
-  updateAdvisor : (id: number, updatedData: any)=>void;
+  addAdvisor: (advisor: BatchAdvisor) => void;  // Add this
+  updateAdvisor: (id: number, updatedData: any) => void;
   getAdvisorById: (id: number) => BatchAdvisor | undefined;
   getAdvisorBySapId: (sapid: number) => BatchAdvisor | undefined;
   clearError: () => void;
@@ -35,7 +37,6 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
   isInitialized: false,
 
   fetchAdvisors: async (forceRefresh = false) => {
-   
     const { isLoading, isInitialized } = get();
     if (isLoading) return;
     if (isInitialized && !forceRefresh) return;
@@ -91,27 +92,46 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
     get().applyFilters();
   },
 
-  updateAdvisor: (id: number, updatedData: any) => {
-  set((state) => {
-    const updatedAdvisors = state.advisors.map((advisor) =>
-      advisor.id === id
-        ? {
-            ...advisor,
-            ...updatedData,
-            User: {
-              ...advisor.User,
-              isActive: updatedData.isCurrentlyAdvised
-            }
-          }
-        : advisor
-    );
+  // Add this method
+  addAdvisor: (advisor: BatchAdvisor) => {
+    set((state) => {
+      const updatedAdvisors = [advisor, ...state.advisors];
+      const updatedStatistics = {
+        totalAdvisors: updatedAdvisors.length,
+        activeAdvisors: updatedAdvisors.filter(a => a.User?.isActive === true).length,
+        inactiveAdvisors: updatedAdvisors.filter(a => a.User?.isActive === false).length,
+      };
+      
+      return {
+        advisors: updatedAdvisors,
+        filteredAdvisors: updatedAdvisors,
+        statistics: updatedStatistics,
+      };
+    });
+    get().applyFilters();
+  },
 
-    return {
-      advisors: updatedAdvisors,
-      filteredAdvisors: updatedAdvisors
-    };
-  });
-},
+  updateAdvisor: (id: number, updatedData: any) => {
+    set((state) => {
+      const updatedAdvisors = state.advisors.map((advisor) =>
+        advisor.id === id
+          ? {
+              ...advisor,
+              ...updatedData,
+              User: {
+                ...advisor.User,
+                isActive: updatedData.isCurrentlyAdvised
+              }
+            }
+          : advisor
+      );
+
+      return {
+        advisors: updatedAdvisors,
+        filteredAdvisors: updatedAdvisors
+      };
+    });
+  },
 
   applyFilters: () => {
     const { advisors, filters } = get();

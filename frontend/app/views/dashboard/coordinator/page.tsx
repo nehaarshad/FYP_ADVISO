@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { 
   Search, Bell, Settings, Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
-  FileSearch, ChevronLeft, Database
+  FileSearch, ChevronLeft, Database,
+  SearchCheck
 } from "lucide-react";
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import { Sidebar } from "@/components/navbars/route";
@@ -137,11 +138,11 @@ export default function CoordinatorDashboard() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <ActionCard icon={<Database/>} label="Manage Session" onClick={() => navigateTo("manage-session")} />
+                 <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
+                <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
                 <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
                 <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
                 <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
-                <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
                 <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
               </div>
             </div>
@@ -156,16 +157,10 @@ export default function CoordinatorDashboard() {
                 >
                   <ChevronLeft size={16} /> Back
                 </button>
-                
-                {activeTab === "manage-session" && (
-                   <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
-                     <SessionManager selectedSession={selectedSession} setSelectedSession={setSelectedSession}/>
-                   </div>
-                )}
 
                 {activeTab === "roadmaps" && <RoadmapSection />}
-                {activeTab === "course-offering" && <CourseOffering session={selectedSession} />}
-                {activeTab === "timetable" && <Timetable session={selectedSession} />}
+                {activeTab === "course-offering" && <CourseOffering />}
+                {activeTab === "timetable" && <Timetable />}
                 {activeTab === "results" && <BatchResults />}
                 {activeTab === "course-details" && <CourseCatalog />}
                 {activeTab === "bulk-student-upload" && <StudentRecords/>}

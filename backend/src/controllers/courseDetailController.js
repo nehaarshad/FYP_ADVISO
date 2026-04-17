@@ -176,36 +176,36 @@ const uploadCourseDetail = async (req, res) => {
 
 const getCoursesDetails = async (req, res) => {
     try {
-        const courses = await CourseCategoryModel.findAll({  //program all course categorywise courses
+        const courses = await CoursesModel.findAll({
             include: [
                 {
-                    model: CoursesModel, //course name, code, credits
+                    model: CourseCategoryModel,
                     include: [{
-                        
+                        model: CategoryModel
+                    }],
+                    required: false  
+                },
+                {
                     model: CoursePreReqModel,
-                    as: "prerequisites",  // Courses this course requires (incoming)
+                    as: "prerequisites",
                     include: [{
                         model: CoursesModel,
                         as: "prerequisiteCourse"
-                    }]
-                    },
-                    {
+                    }],
+                    required: false
+                },
+                {
                     model: CoursePreReqModel,
-                    as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
+                    as: "usedAsPrerequisiteFor",
                     include: [{
                         model: CoursesModel,
                         as: "mainCourse"
-                    }]
-                    
-                    }]
-
-
-                },
-                {
-                    model: CategoryModel, //category name
+                    }],
+                    required: false
                 }
             ]
         });
+        
         res.status(200).json({
             message: 'Courses details retrieved successfully',
             data: courses

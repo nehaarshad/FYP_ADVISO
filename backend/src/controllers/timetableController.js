@@ -167,6 +167,7 @@ const getTimetable = async (req, res) => {
             include: [
             {
                 model: CourseOfferingModel,
+                required:false,
                 include: [
                     { model: BatchModel, attributes: ['id', 'batchName', 'batchYear'] },
                     { model: ProgramModel, attributes: ['id', 'programName'] },

@@ -1,3 +1,5 @@
+import { CourseOffering } from "./courseOfferingModel";
+
 export interface Timetable {
   id: number;
   courseOfferingId: number;
@@ -8,4 +10,6 @@ export interface Timetable {
   endTime: string;
   createdAt?: string;
   updatedAt?: string;
+  CourseOfferingModel?:CourseOffering;
+  
 }
