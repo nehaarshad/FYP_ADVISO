@@ -26,7 +26,9 @@ import Guidelines from '@/components/Guidelines/Guidelines';
 import { EditStudent } from '@/app/components/EditStudent';
 import { AddFaculty } from '@/app/components/AddFaculty';
 import { AddStudent } from '@/app/components/AddStudents';
-import { EditAdvisor } from '@/app/components/EditAdvisor';
+import { AddProgram } from '@/components/program/addNewprogram/route';
+import { ProgramList } from '@/components/program/programList/programList';
+import { AdvisorsList } from '@/components/advisors/advisorList';
 
 export default function CoordinatorDashboard() {
   const [isClient] = useState(() => typeof window !== 'undefined');
@@ -48,20 +50,13 @@ export default function CoordinatorDashboard() {
 
   useEffect(() => {
     if (!sessionManager.hasActiveSession()) {
-      router.push('/signin');
+      router.push('/login');
       return;
     }
     // Initial data fetch
     fetchStudents();
     fetchAdvisors();
   }, [router]);
-
-  // This effect will run whenever students or advisors data changes
-  useEffect(() => {
-    if (isClient) {
-      console.log('Stats updated - Students:', totalStudentsCount, 'Advisors:', totalAdvisorsCount);
-    }
-  }, [totalStudentsCount, totalAdvisorsCount, isClient]);
 
   const navigateTo = (tab: string) => {
     setNavigationStack(prev => [...prev, tab]);
@@ -145,7 +140,7 @@ export default function CoordinatorDashboard() {
                 <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
                 <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
                 <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
-                <ActionCard icon={<GraduationCap/>} label="Results" onClick={() => navigateTo("results")} />
+                <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
                 <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
               </div>
             </div>
@@ -176,10 +171,12 @@ export default function CoordinatorDashboard() {
                 {activeTab === "add-student" && <AddStudent/>}
                 {activeTab === "add-faculty" && <AddFaculty/>}
                 {activeTab === "edit-student" && <EditStudent/>}
-                {activeTab === "edit-advisor" && <EditAdvisor/>}
+                {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines />}
                 {activeTab === "requests" && <RequestForms />}
                 {activeTab === "profile" && <ProfileView />}
+                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>
+)}
               </div>
             )}
         </div>

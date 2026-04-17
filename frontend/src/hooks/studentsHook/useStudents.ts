@@ -1,5 +1,5 @@
-
-import { useEffect, useCallback, useMemo } from 'react';
+// src/hooks/studentsHook/useStudents.ts
+import { useEffect, useCallback, useMemo, useRef } from 'react';
 import { useStudentStore } from '../../storage/studentsStore/studentsData';
 
 export const useStudents = () => {
@@ -18,9 +18,14 @@ export const useStudents = () => {
     clearError,
   } = useStudentStore();
 
+  const hasFetched = useRef(false);
+
   useEffect(() => {
-    fetchStudents();
-  }, []);
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchStudents();
+    }
+  }, [fetchStudents]);
 
   const searchStudents = useCallback((searchTerm: string) => {
     setFilters({ searchTerm });
@@ -42,7 +47,6 @@ export const useStudents = () => {
     setFilters({ currentSemester });
   }, [setFilters]);
 
-  // Safely get unique values with optional chaining and fallbacks
   const getUniqueBatchNames = useMemo(() => {
     if (!students || !Array.isArray(students)) return [];
     return [...new Set(students.map(s => s.BatchModel?.batchName).filter(Boolean))];
@@ -64,25 +68,18 @@ export const useStudents = () => {
   }, [students]);
 
   return {
-    // Data
     students: filteredStudents,
     allStudents: students,
     isLoading,
     error,
     filters,
     statistics,
-    
-    // Metadata
     totalCount: filteredStudents?.length || 0,
     totalAllCount: students?.length || 0,
-    
-    // Unique values for filters
     batchNames: getUniqueBatchNames,
     batchYears: getUniqueBatchYears,
     programs: getUniquePrograms,
     statuses: getUniqueStatuses,
-    
-    // Actions
     fetchStudents,
     searchStudents,
     filterByBatch,

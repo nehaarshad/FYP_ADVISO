@@ -12,17 +12,17 @@ interface AdvisorState {
   error: string | null;
   filters: FilterOptions;
   statistics: any | null;
+  isInitialized: boolean;
 
-  // Actions
   fetchAdvisors: (forceRefresh?: boolean) => Promise<void>;
-  addAdvisor: (advisor: BatchAdvisor) => void;
-  updateAdvisor: (id: number, updatedData: Partial<BatchAdvisor>) => void;
   setFilters: (filters: Partial<FilterOptions>) => void;
   clearFilters: () => void;
   applyFilters: () => void;
+  updateAdvisor : (id: number, updatedData: any)=>void;
   getAdvisorById: (id: number) => BatchAdvisor | undefined;
   getAdvisorBySapId: (sapid: number) => BatchAdvisor | undefined;
   clearError: () => void;
+  reset: () => void;
 }
 
 export const useAdvisorStore = create<AdvisorState>((set, get) => ({
@@ -32,17 +32,23 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
   error: null,
   filters: {},
   statistics: null,
+  isInitialized: false,
 
   fetchAdvisors: async (forceRefresh = false) => {
+   
+    const { isLoading, isInitialized } = get();
+    if (isLoading) return;
+    if (isInitialized && !forceRefresh) return;
+    
     set({ isLoading: true, error: null });
     try {
       const response = await advisorProfileRepository.fetchAllAdvisors(forceRefresh);
-      console.log("Fetch all advisors: ",response)
+      
       let advisorsArray: BatchAdvisor[] = [];
       if (Array.isArray(response)) {
         advisorsArray = response;
-      } else if (response !== null && typeof response === 'object' && 'data' in response && Array.isArray((response as { data: unknown }).data)) {
-        advisorsArray = (response as { data: BatchAdvisor[] }).data;
+      } else if (response && 'data' in (response as any) && Array.isArray((response as any).data)) {
+        advisorsArray = (response as any).data;
       } else {
         advisorsArray = [];
       }
@@ -57,7 +63,8 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
         advisors: advisorsArray, 
         filteredAdvisors: advisorsArray,
         statistics,
-        isLoading: false 
+        isLoading: false,
+        isInitialized: true
       });
       
       get().applyFilters();
@@ -72,42 +79,6 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
     }
   },
 
-  addAdvisor: (advisor: BatchAdvisor) => {
-    set((state) => {
-      const newAdvisors = [advisor, ...state.advisors];
-      const newStatistics = {
-        totalAdvisors: newAdvisors.length,
-        activeAdvisors: newAdvisors.filter(a => a.User?.isActive === true).length,
-        inactiveAdvisors: newAdvisors.filter(a => a.User?.isActive === false).length,
-      };
-      return {
-        advisors: newAdvisors,
-        filteredAdvisors: newAdvisors,
-        statistics: newStatistics,
-      };
-    });
-    get().applyFilters();
-  },
-
-  updateAdvisor: (id: number, updatedData: Partial<BatchAdvisor>) => {
-    set((state) => {
-      const updatedAdvisors = state.advisors.map(advisor =>
-        advisor.id === id ? { ...advisor, ...updatedData } : advisor
-      );
-      const newStatistics = {
-        totalAdvisors: updatedAdvisors.length,
-        activeAdvisors: updatedAdvisors.filter(a => a.User?.isActive === true).length,
-        inactiveAdvisors: updatedAdvisors.filter(a => a.User?.isActive === false).length,
-      };
-      return {
-        advisors: updatedAdvisors,
-        filteredAdvisors: updatedAdvisors,
-        statistics: newStatistics,
-      };
-    });
-    get().applyFilters();
-  },
-
   setFilters: (filters: Partial<FilterOptions>) => {
     set((state) => ({ 
       filters: { ...state.filters, ...filters } 
@@ -119,6 +90,28 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
     set({ filters: {} });
     get().applyFilters();
   },
+
+  updateAdvisor: (id: number, updatedData: any) => {
+  set((state) => {
+    const updatedAdvisors = state.advisors.map((advisor) =>
+      advisor.id === id
+        ? {
+            ...advisor,
+            ...updatedData,
+            User: {
+              ...advisor.User,
+              isActive: updatedData.isCurrentlyAdvised
+            }
+          }
+        : advisor
+    );
+
+    return {
+      advisors: updatedAdvisors,
+      filteredAdvisors: updatedAdvisors
+    };
+  });
+},
 
   applyFilters: () => {
     const { advisors, filters } = get();
@@ -147,4 +140,16 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
   },
 
   clearError: () => set({ error: null }),
+  
+  reset: () => {
+    set({ 
+      advisors: [], 
+      filteredAdvisors: [], 
+      isLoading: false, 
+      error: null, 
+      filters: {}, 
+      statistics: null, 
+      isInitialized: false 
+    });
+  },
 }));
