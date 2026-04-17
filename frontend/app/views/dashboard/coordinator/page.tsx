@@ -14,7 +14,7 @@ import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 import { NotificationPanel } from '@/components/Notifications/NotificationPanel';
 import { SettingsModal } from '@/app/components/SettingsModel';
 import { SessionManager } from '@/app/components/SessionManager';
-import { RoadmapSection } from '@/app/components/Roadmaps';
+import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
 import { BatchResults } from '@/app/components/BatchResults';
 import { StudentRecords } from '@/app/components/StudentRecords';
