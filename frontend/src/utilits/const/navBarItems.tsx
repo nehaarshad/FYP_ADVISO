@@ -30,7 +30,7 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
         { key: "bulk-student-upload", label: "Add Multiple Students", icon: <FileSpreadsheet size={16}/> },
       ]
     },
-    { key: "edit-student", label: "Edit Student", icon: <UserCog size={20}/>, group: "Users Management" },
+    { key: "edit-student", label: "Student", icon: <GraduationCap size={20}/>, group: "Users Management" },
     { key: "edit-advisor", label: "Batch Advisor", icon: <ShieldCheck size={20}/>, group: "Users Management" },
     { key: "requests", label: "Requests", icon: <FileText size={20}/>, group: "Communication" }, 
     { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Communication" },

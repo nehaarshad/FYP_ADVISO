@@ -4,7 +4,7 @@ import React , {useState} from 'react';
 import { motion } from "framer-motion";
 import { GraduationCap, Hash, Mail, ArrowRight, User, Phone, Calendar, CreditCard, AlertCircle } from "lucide-react";
 import { useAddStudent } from '@/src/hooks/studentsHook/addStudent';
-//import { useProgram } from '@/src/hooks/userManagement/useProgram';
+import { usePrograms } from '@/src/hooks/programHook/useProgram';
 
 export function AddStudent() {
   const [formData, setFormData] = useState({
@@ -28,7 +28,8 @@ export function AddStudent() {
   });
   
   const { addStudent, isLoading, error, success } = useAddStudent();
-  //const { fetchPrograms, programs } = useProgram();
+  const { programs, programOptions, isLoading: programsLoading } = usePrograms();
+  
 
   React.useEffect(() => {
    // fetchPrograms();
@@ -185,12 +186,10 @@ export function AddStudent() {
                 className="w-full p-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
                 required
               >
-                <option value="">Select Program</option>
-                 <option  value="Software Engineering">BS Software Engineering</option>
-                 <option  value="Computer Science">BS Computer Science</option>
-                {/* {programs.map((p: any) => (
+                <option value="" disabled>Select Program</option>
+                {programs.map((p: any) => (
                   <option key={p.id} value={p.programName}>{p.programName}</option>
-                ))} */}
+                ))}
               </select>
             </div>
             <InputField 

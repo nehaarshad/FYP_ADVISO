@@ -1,21 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// src/repositories/userProfileData/advisorsRepository/advisorRepository.ts (Add debug logs)
 import { ApiResponse } from '../../../services/baseApiServices/ApiResponseType/apiResponseType';
 import { BaseApiService } from '../../../services/baseApiServices/baseNetworkService/baseNetwork';
 import AppApis from '../../../services/appApis/apiUrl';
 import { BatchAdvisor } from '@/src/models/FacultyAdvisorModel';
-import {FilterOptions} from "../../../utilits/filterOptions/studentsFilter/studentsFilterOption"
-import { addAttrValue } from 'framer-motion';
+import { FilterOptions } from "../../../utilits/filterOptions/studentsFilter/studentsFilterOption";
 
 export class AdvisorProfileRepository extends BaseApiService {
   private static instance: AdvisorProfileRepository;
-
-  //to cacahe and avoid multiple api calls for the same data 
   private advisorCache: BatchAdvisor[] = [];
+  private lastFetchTime: number = 0;
+  private cacheDuration: number = 5 * 60 * 1000;
 
   private constructor() {
     super();
   }
 
-   apiUrl: string = AppApis.LoginUrl;
   static getInstance(): AdvisorProfileRepository {
     if (!AdvisorProfileRepository.instance) {
       AdvisorProfileRepository.instance = new AdvisorProfileRepository();
@@ -23,115 +23,126 @@ export class AdvisorProfileRepository extends BaseApiService {
     return AdvisorProfileRepository.instance;
   }
 
-async fetchAllAdvisors(forceRefresh: boolean = false): Promise<BatchAdvisor[]> {
-    // Check cache
-  
-    if (!forceRefresh && this.advisorCache.length > 0 ) {
-      console.log('Returning cached student data');
+  async fetchAllAdvisors(forceRefresh: boolean = false): Promise<BatchAdvisor[]> {
+    const now = Date.now();
+    if (!forceRefresh && this.advisorCache.length > 0 && (now - this.lastFetchTime) < this.cacheDuration) {
+      console.log('Returning cached advisor data', this.advisorCache.length);
       return this.advisorCache;
     }
 
     try {
       const response = await this.getApiResponse<BatchAdvisor[]>(AppApis.getAdvisorsUrl);
+      console.log('=== ADVISOR API RESPONSE ===');
+      console.log('Full Response:', JSON.stringify(response, null, 2));
+      console.log('Response success:', response.success);
+      console.log('Response data:', response.data);
       
-      if (response.success && response.data) {
-        this.advisorCache = response.data;
-        return this.advisorCache;
+      let advisorsData: BatchAdvisor[] = [];
+      
+      // Handle different response formats
+      if (Array.isArray(response)) {
+        // Response is directly an array
+        advisorsData = response;
+        console.log('Response is array, length:', advisorsData.length);
+      } else if (response.success && response.data) {
+        // Response is ApiResponse with data
+        if (Array.isArray(response.data)) {
+          advisorsData = response.data;
+          console.log('Data is array, length:', advisorsData.length);
+        } else if ('data' in response.data && Array.isArray((response.data as any).data)) {
+          advisorsData = (response.data as any).data;
+          console.log('Data is nested in data.data, length:', advisorsData.length);
+        } else {
+          console.warn('Unexpected advisor data format:', response.data);
+          advisorsData = [];
+        }
       } else {
-        throw new Error(response.error || 'Failed to fetch advisors');
+        console.warn('Unexpected response format:', response);
+        advisorsData = [];
       }
+      
+      console.log('Final advisors data length:', advisorsData.length);
+      console.log('First advisor sample:', advisorsData[0]);
+      
+      this.advisorCache = advisorsData;
+      this.lastFetchTime = now;
+      return this.advisorCache;
+      
     } catch (error) {
       console.error('Error fetching advisors:', error);
-      throw error;
+      this.advisorCache = [];
+      return this.advisorCache;
     }
   }
 
-  filterAdvisors(advisor: BatchAdvisor[], options: FilterOptions): BatchAdvisor[] {
-    let filtered = [...advisor];
+  filterAdvisors(advisors: BatchAdvisor[], options: FilterOptions): BatchAdvisor[] {
+    console.log('Filtering advisors with options:', options);
+    console.log('Advisors before filter:', advisors?.length);
+    
+    if (!advisors || !Array.isArray(advisors)) {
+      console.warn('filterAdvisors called with invalid advisors array');
+      return [];
+    }
+    
+    let filtered = [...advisors];
 
-    // Filter by SAP ID
     if (options.sapid) {
       const sapidStr = String(options.sapid);
       filtered = filtered.filter(adv => 
-        String(adv.User.sapid).includes(sapidStr)
+        adv.User && String(adv.User.sapid).includes(sapidStr)
       );
+      console.log('After SAP ID filter:', filtered.length);
     }
 
-    // Filter by name
     if (options.advName) {
       filtered = filtered.filter(adv =>
-        adv.advisorName.toLowerCase().includes(options.advName!.toLowerCase())
+        adv.advisorName && adv.advisorName.toLowerCase().includes(options.advName!.toLowerCase())
       );
-    }
-    // Filter by 
-    if (options.batchName && options.batchYear && options.programName) {
-      filtered = filtered.filter(adv =>
-        adv.BatchModel.batchName.toLowerCase().includes(options.batchName!.toLowerCase()) 
-                && 
-        adv.BatchModel.batchYear.includes(options.batchYear!)
-                &&
-        adv.BatchModel.ProgramModel.programName.toLowerCase().includes(options.programName!.toLowerCase())
-    
-      );
+      console.log('After name filter:', filtered.length);
     }
 
-    // Filter by active status
-    if (options.isActive !== undefined) {
-      filtered = filtered.filter(adv =>
-        adv.User.isActive === options.isActive
-      );
-    }
-
-    // search term (search bar)
     if (options.searchTerm) {
       const term = options.searchTerm.toLowerCase();
       filtered = filtered.filter(adv =>
-        String(adv.User.sapid).includes(term) ||
-        adv.advisorName.toLowerCase().includes(term) ||
-        adv.email.toLowerCase().includes(term) ||
-        adv.BatchModel.batchName.toLowerCase().includes(term) ||
-        adv.BatchModel.batchYear.includes(term) ||
-        adv.BatchModel.ProgramModel.programName.toLowerCase().includes(term) 
+        (adv.User && String(adv.User.sapid).includes(term)) ||
+        (adv.advisorName && adv.advisorName.toLowerCase().includes(term)) ||
+        (adv.email && adv.email.toLowerCase().includes(term))
       );
+      console.log('After search term filter:', filtered.length);
     }
 
     return filtered;
   }
 
-
-  getCachedStudents(): BatchAdvisor[] {
+  getCachedAdvisors(): BatchAdvisor[] {
     return this.advisorCache;
   }
 
   clearCache(): void {
     this.advisorCache = [];
+    this.lastFetchTime = 0;
   }
 
-  getAdvisorById(adv: BatchAdvisor[], id: number): BatchAdvisor | undefined {
-    return adv.find(adv => adv.id === id);
+  getAdvisorById(advisors: BatchAdvisor[], id: number): BatchAdvisor | undefined {
+    if (!advisors || !Array.isArray(advisors)) return undefined;
+    return advisors.find(adv => adv.id === id);
   }
 
-  getAdvisorBySapId(adv: BatchAdvisor[], sapid: number): BatchAdvisor | undefined {
-    return adv.find(adv => adv.User.sapid === sapid);
+  getAdvisorBySapId(advisors: BatchAdvisor[], sapid: number): BatchAdvisor | undefined {
+    if (!advisors || !Array.isArray(advisors)) return undefined;
+    return advisors.find(adv => adv.User && adv.User.sapid === sapid);
   }
 
-  // Get students by batch
-  getAdvisorByBatchAndProgram(adv: BatchAdvisor[], batchName: string, batchYear: string,programName: string): BatchAdvisor[] {
-    return adv.filter(adv =>
-      adv.BatchModel.batchName === batchName &&
-      adv.BatchModel.batchYear === batchYear &&
-       adv.BatchModel.ProgramModel.programName === programName
-    );
-  }
-
-  // Get statistics
-  getAdvisorStatistics(adv: BatchAdvisor[]) {
+  getAdvisorStatistics(advisors: BatchAdvisor[]) {
+    if (!advisors || !Array.isArray(advisors)) {
+      return { totalAdvisors: 0, activeAdvisors: 0, inactiveAdvisors: 0 };
+    }
     return {
-      totalAdvisors: adv.length,
+      totalAdvisors: advisors.length,
+      activeAdvisors: advisors.filter(a => a.User && a.User.isActive === true).length,
+      inactiveAdvisors: advisors.filter(a => a.User && a.User.isActive === false).length,
     };
   }
-
 }
-
 
 export const advisorProfileRepository = AdvisorProfileRepository.getInstance();

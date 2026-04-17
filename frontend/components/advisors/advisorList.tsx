@@ -1,4 +1,4 @@
-// components/students/StudentList.tsx
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
@@ -7,68 +7,48 @@ import { motion } from 'framer-motion';
 import { 
   Search, User, Mail, Phone, 
   CheckCircle, XCircle, 
-  Users, GraduationCap, Eye, Edit,
-  Loader2, AlertCircle, Calendar, BookOpen
+  Users, Layers, Eye, Edit,
+  Loader2, AlertCircle
 } from 'lucide-react';
-import { useStudents } from '@/src/hooks/studentsHook/useStudents';
-import { StudentDetailsModal } from './StudentDetailsModal';
-import { EditStudent } from '@/app/components/EditStudent';
+import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
+import { AdvisorDetailsModal } from './advisorDetailModal';
+import { EditAdvisor } from '../../app/components/EditAdvisor';
 
-
-export function StudentList(){
+export function AdvisorsList() {
   const [searchInput, setSearchInput] = useState('');
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
+  const [selectedAdvisor, setSelectedAdvisor] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
-  const [filterBatch, setFilterBatch] = useState('');
-  const [filterProgram, setFilterProgram] = useState('');
-   const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
  
   const {
-    students,
+    advisors,
     isLoading,
     error,
-    searchStudents,
-    fetchStudents,
-    batchNames,
-    programs,
-    statistics,
-  } = useStudents();
+    searchAdvisors,
+    fetchAdvisors,
+  } = useAdvisors();
 
   const handleSearch = () => {
-    searchStudents(searchInput);
+    searchAdvisors(searchInput);
   };
 
-  const handleViewDetails = (student: any) => {
-    setSelectedStudent(student);
+  const handleViewDetails = (advisor: any) => {
+    setSelectedAdvisor(advisor);
     setShowDetailsModal(true);
   };
 
-const editStudent = (std: any) => {
-    setSelectedStudent(std);
+  const editAdvisor = (advisor: any) => {
+    setSelectedAdvisor(advisor);
     setShowEditModal(true);
   };
 
-  // Apply filters
-  let filteredStudents = students;
-  if (filterStatus !== 'all') {
-    filteredStudents = filteredStudents.filter(s => 
-      filterStatus === 'active' ? s.User?.isActive : !s.User?.isActive
-    );
-  }
-  if (filterBatch) {
-    filteredStudents = filteredStudents.filter(s => s.BatchModel?.batchName === filterBatch);
-  }
-  if (filterProgram) {
-    filteredStudents = filteredStudents.filter(s => s.BatchModel?.ProgramModel?.programName === filterProgram);
-  }
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <Loader2 size={40} className="animate-spin text-[#FDB813] mx-auto mb-4" />
-          <p className="text-slate-500 font-bold">Loading students...</p>
+          <p className="text-slate-500 font-bold">Loading advisors...</p>
         </div>
       </div>
     );
@@ -78,10 +58,10 @@ const editStudent = (std: any) => {
     return (
       <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
         <AlertCircle size={48} className="text-red-500 mx-auto mb-4" />
-        <p className="text-red-600 font-bold mb-2">Error loading students</p>
+        <p className="text-red-600 font-bold mb-2">Error loading advisors</p>
         <p className="text-red-500 text-sm">{error}</p>
         <button 
-          onClick={() => fetchStudents(true)}
+          onClick={() => fetchAdvisors(true)}
           className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-bold"
         >
           Try Again
@@ -92,7 +72,6 @@ const editStudent = (std: any) => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-
       {/* Search and Filter Bar */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
         <div className="flex flex-col md:flex-row gap-4">
@@ -109,79 +88,44 @@ const editStudent = (std: any) => {
             />
           </div>
           
-          <button
-            onClick={handleSearch}
-            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all"
-          >
-            Search
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleSearch}
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all"
+            >
+              Search
+            </button>
+          </div>
         </div>
 
-        {/* Filter Row */}
-        <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-slate-100">
-          <select
-            title="Status"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
-            className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
-          >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-
-          <select
-            title="Batch"
-            value={filterBatch}
-            onChange={(e) => setFilterBatch(e.target.value)}
-            className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
-          >
-            <option value="">All Batches</option>
-            {batchNames.map(batch => (
-              <option key={batch} value={batch}>{batch}</option>
-            ))}
-          </select>
-
-          <select
-            title="Program"
-            value={filterProgram}
-            onChange={(e) => setFilterProgram(e.target.value)}
-            className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
-          >
-            <option value="">All Programs</option>
-            {programs.map(program => (
-              <option key={program} value={program}>{program}</option>
-            ))}
-          </select>
-        </div>
       </div>
 
-      {/* Students Table */}
+      {/* Advisors Table */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Student</th>
+                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Advisor</th>
                 <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Contact</th>
-                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Academic Info</th>
+                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Batch Assignment</th>
                 <th className="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {filteredStudents.length === 0 ? (
+              {advisors.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center">
-                    <GraduationCap size={48} className="mx-auto text-slate-300 mb-4" />
-                    <p className="text-slate-500 font-bold">No students found</p>
-                    <p className="text-slate-400 text-sm">Try adjusting your search or filters</p>
+                    <Users size={48} className="mx-auto text-slate-300 mb-4" />
+                    <p className="text-slate-500 font-bold">No advisors found</p>
+                    <p className="text-slate-400 text-sm">Try adjusting your filters</p>
                   </td>
                 </tr>
               ) : (
-                filteredStudents.map((student: any, index: number) => (
+                advisors.map((advisor: any, index: number) => (
                   <motion.tr
-                    key={student.id}
+                    key={advisor.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
@@ -194,10 +138,10 @@ const editStudent = (std: any) => {
                         </div>
                         <div>
                           <p className="font-black text-[#1e3a5f] text-sm uppercase tracking-tight">
-                            {student.studentName}
+                            {advisor.advisorName}
                           </p>
                           <p className="text-[10px] text-slate-400 uppercase tracking-wider">
-                            SAP ID: {student.User?.sapid}
+                            SAP ID: {advisor.User?.sapid}
                           </p>
                         </div>
                       </div>
@@ -206,56 +150,57 @@ const editStudent = (std: any) => {
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <Mail size={12} className="text-slate-400" />
-                          <p className="text-[11px] text-slate-600">{student.email}</p>
+                          <p className="text-[11px] text-slate-600">{advisor.email}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <Phone size={12} className="text-slate-400" />
-                          <p className="text-[11px] text-slate-600">{student.contactNumber || 'N/A'}</p>
+                          <p className="text-[11px] text-slate-600">{advisor.contactNumber}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <GraduationCap size={12} className="text-slate-400" />
-                          <p className="text-[11px] font-bold text-[#1e3a5f]">
-                            {student.BatchModel?.ProgramModel?.programName}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Calendar size={12} className="text-slate-400" />
+                      {advisor.BatchAssignments && advisor.BatchAssignments.length > 0 ? (
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <Layers size={12} className="text-slate-400" />
+                            <p className="text-[11px] font-bold text-[#1e3a5f]">
+                              {advisor.BatchAssignments[0]?.BatchModel?.batchName} {advisor.BatchAssignments[0]?.BatchModel?.batchYear}
+                            </p>
+                          </div>
                           <p className="text-[9px] text-slate-400">
-                            {student.BatchModel?.batchName} {student.BatchModel?.batchYear} | Sem {student.currentSemester}
+                            {advisor.BatchAssignments[0]?.BatchModel?.ProgramModel?.programName}
                           </p>
                         </div>
-                      </div>
+                      ) : (
+                        <p className="text-[11px] text-slate-400 italic">Not Assigned</p>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase ${
-                        student.User?.isActive 
+                        advisor.User?.isActive 
                           ? 'bg-green-100 text-green-700' 
                           : 'bg-red-100 text-red-700'
                       }`}>
-                        {student.User?.isActive ? (
+                        {advisor.User?.isActive ? (
                           <CheckCircle size={10} />
                         ) : (
                           <XCircle size={10} />
                         )}
-                        {student.User?.isActive ? 'Active' : 'Inactive'}
+                        {advisor.User?.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center gap-2">
                         <button
-                          onClick={() => handleViewDetails(student)}
+                          onClick={() => handleViewDetails(advisor)}
                           className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="View Details"
                         >
                           <Eye size={16} />
                         </button>
-                        <button
-                          onClick={() =>editStudent(student)}
-                          className="p-2 rounded-lg text-slate-400 hover:text-[#FDB813] hover:bg-slate-100 transition-all"
+                         <button
+                          onClick={() => editAdvisor(advisor)}
+                          className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="Edit"
                         >
                           <Edit size={16} />
@@ -270,21 +215,17 @@ const editStudent = (std: any) => {
         </div>
       </div>
 
-      {/* Student Details Modal */}
-      <StudentDetailsModal
+      {/* Advisor Details Modal */}
+      <AdvisorDetailsModal
         isOpen={showDetailsModal}
-        student={selectedStudent}
+        advisor={selectedAdvisor}
         onClose={() => setShowDetailsModal(false)}
       />
-      <EditStudent
-          isOpen={showEditModal}
-          student={selectedStudent}  // Change from advisor to student
-          onClose={() => setShowEditModal(false)}
-          onSuccess={() => {
-            setShowEditModal(false);
-            fetchStudents(true);
-          }}
-        />
+      <EditAdvisor
+        isOpen={showEditModal}
+        advisor={selectedAdvisor}
+        onClose={() => setShowEditModal(false)}
+      />
     </div>
   );
 }

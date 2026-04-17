@@ -4,11 +4,13 @@ import { create } from 'zustand';
 import { Student } from '@/src/models/studentModel';
 import { FilterOptions } from "../../utilits/filterOptions/studentsFilter/studentsFilterOption";
 import { studentProfileRepository } from '../../repositories/userProfileData/studentsRepository/studentsRepo';
+import { tr } from 'framer-motion/client';
 
 interface StudentState {
   students: Student[];
   filteredStudents: Student[];
   isLoading: boolean;
+  isInitialized: boolean;
   error: string | null;
   filters: FilterOptions;
   statistics: any | null;
@@ -33,8 +35,15 @@ export const useStudentStore = create<StudentState>((set, get) => ({
   error: null,
   filters: {},
   statistics: null,
+  isInitialized: false,
+
 
   fetchStudents: async (forceRefresh = false) => {
+     const { isLoading, isInitialized } = get();
+  if (isLoading) return;
+  if (isInitialized && !forceRefresh) return;
+  
+  set({ isLoading: true, error: null });
     set({ isLoading: true, error: null });
     try {
       const response: any = await studentProfileRepository.fetchAllStudents(forceRefresh);
@@ -58,6 +67,7 @@ export const useStudentStore = create<StudentState>((set, get) => ({
         students: studentsArray, 
         filteredStudents: studentsArray,
         statistics,
+        isInitialized:true,
         isLoading: false 
       });
       

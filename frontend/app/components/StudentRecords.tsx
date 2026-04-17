@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, FileSpreadsheet, CheckCircle, AlertCircle } from 'lucide-react';
 import { useBulkUpload } from '@/src/hooks/contentUploader/bulkStudentUpload/useBulkStudentUpload';
+import { usePrograms } from '@/src/hooks/programHook/useProgram';
 
 export function StudentRecords() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -14,12 +15,22 @@ export function StudentRecords() {
     batchYear: ''
   });
   
+    const { programs, programOptions, isLoading: programsLoading } = usePrograms();
   const { bulkUpload, isLoading, error, success, uploadProgress } = useBulkUpload();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
     }
+  };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+  
+    setFormData({
+      ...formData,
+      [name]: name === "currentSemester" ? Number(value) : value
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,14 +93,21 @@ export function StudentRecords() {
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
               Program Name *
             </label>
-            <input
-              type="text"
-              value={formData.programName}
-              onChange={(e) => setFormData({ ...formData, programName: e.target.value })}
-              placeholder="e.g., Software Engineering"
-              className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[1.8rem] text-sm font-bold focus:ring-2 focus:ring-[#FDB813] outline-none text-[#1e3a5f]"
-              required
-            />
+            <select 
+           title='Program'
+                name="programName"
+                value={formData.programName}
+                onChange={handleChange}
+                  className="w-full p-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
+             required
+                >
+              <option value="">Select Program</option>
+              {programs.map(program => (
+                <option key={program.id} value={program.programName}>
+                  {program.programName}
+                </option>
+      ))}
+    </select>
           </div>
 
           {/* Batch Name and Year */}
@@ -98,14 +116,19 @@ export function StudentRecords() {
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
                 Batch Name *
               </label>
-              <input
-                type="text"
+               <select 
+              title='batch'
+                name="batchName"
                 value={formData.batchName}
-                onChange={(e) => setFormData({ ...formData, batchName: e.target.value })}
-                placeholder="e.g., SPRING"
-                className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[1.8rem] text-sm font-bold focus:ring-2 focus:ring-[#FDB813] outline-none text-[#1e3a5f]"
+                onChange={handleChange}
+                className="w-full p-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
                 required
-              />
+              >
+                <option value="">Select Batch</option>
+                 <option key="FALL" value="FALL">FALL</option>
+                  <option key="SPRING" value="SPRING">SPRING</option>
+                 <option key="SUMMER" value="SUMMER">SUMMER</option>
+              </select>
             </div>
 
             <div className="space-y-2">
