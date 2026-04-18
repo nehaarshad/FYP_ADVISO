@@ -10,24 +10,11 @@ import {
 } from "lucide-react";
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import { Sidebar } from "@/components/navbars/route";
-import { RoadmapSection } from "@/app/components/Roadmaps";
-import { StudentRecords } from "@/app/components/StudentRecords";
-import Guidelines from "@/components/Guidelines/Guidelines";
-import { AddFaculty } from "@/app/components/AddFaculty";
-import { AddStudent } from "@/app/components/AddStudents";
 import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
 import { SettingsModal } from "@/app/components/SettingsModel";
-import { EditStudent } from '@/app/components/EditStudent';
-import { EditAdvisor } from '@/app/components/EditAdvisor';
-import { CourseOffering } from "@/app/components/CourseOffering";
-import { Timetable } from "@/app/components/Timetable";
-import { BatchResults } from "@/app/components/BatchResults";
-import { CourseCatalog } from "@/app/components/CourseCatalog";
 import { RoadmapView } from "@/app/components/RoadmapView";
-import { RequestForms} from "@/app/components/RequestForms";
 
 // IMPORTING YOUR SEPARATE PROFILE COMPONENT
-import {CoordinatorProfile} from "@/app/components/ProfileView"; 
 import { SessionManager } from '@/app/components/SessionManager';
 import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
@@ -44,6 +31,8 @@ import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
+import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 
 
 export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
@@ -182,10 +171,10 @@ export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.
                 {activeTab === "add-faculty" && <AddFaculty/>}
                 {activeTab === "edit-student" && <StudentList />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
-                {activeTab === "guidelines" && <Guidelines />}
+                {activeTab === "guidelines" && <Guidelines onBack={goBack} />}
                 {activeTab === "requests" && <RequestForms />}
                 {/* NOW CALLING THE IMPORTED COMPONENT */}
-                {activeTab === "profile" && <CoordinatorProfile />}
+                {activeTab === "profile" && <ProfileView />}
               </div>
             )}
         </div>
