@@ -10,19 +10,18 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 
 
 // Components Imports
-import { Sidebar } from "@/components/navbars/route";
-import { StudentList } from "../../../../components/StudentDetails/StudentList";
-import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
-import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
-import AdvisorChat from "../../../../components/Chat/AdvisorChat";
-import { MeetingList } from "../../../../components/MeetingSchedule/MeetingList";
-import Guidelines from "../../../../components/Guidelines/Guidelines";
-import AdvisoryNotes from "../../../../components/AdvisorView/AdvisoryNotes";
-import { NotificationPanel } from "../../../../components/Notifications/NotificationPanel";
-import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs';
-import { AdvisorProfile } from "../../../../components/AdvisorView/AdvisorProfile";
-import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation";
-import CourseRecommendation from "../../../../components/CourseRecommendation/CourseRecommendation";
+import { Sidebar } from "../../../../components/navbars/route";
+import { StudentList } from "../../../components/StudentList";
+import { StudentProfile } from "../../../components/StudentProfile";
+import { StudentTranscript } from "../../../components/StudentTranscript";
+import AdvisorChat from "../../../components/AdvisorChat";
+import { MeetingList } from '../../../components/MeetingList';
+import { AdvisorNotes } from '../../../components/AdvisorNotes';
+import { NotificationPanel } from "../../../components/NotificationPanel";
+import { AdvisoryLogs } from '../../../components/AdvisoryLogs';
+import { useRouter } from "next/navigation";
+type StudentStatus = "Total" | "Regular" | "Irregular";
+
 
 export default function Dashboard() {
   
@@ -231,16 +230,11 @@ export default function Dashboard() {
 )}
               {view === "Transcript" && selectedStudent && (
                 <StudentTranscript student={selectedStudent} onBack={() => setView("Studentprofile")} />
-              )}
-              {view === 'Notes' && <AdvisoryNotes onBack={() => setView("Overview")} />}
-              {view === 'Advisorchat' && (
-  <AdvisorChat onBack={() => setView('Overview')} />)}
-              {/* Inside your Dashboard render logic */}
-{view === 'Meetings' && (
-  <MeetingList onBack={() => setView("Overview")} />)}
-              {view === 'Advisorylogs' && (
-  <AdvisoryLogs onBack={() => setView('Overview')} />)}
-              {view === "Guidelines" && <Guidelines onBack={() => setView("Overview")} />}
+                )}
+                {view === 'Notes' && <AdvisoryNotes />}
+                {view === 'Advisorchat' && <AdvisorChat />}
+                {view === 'Meetings' && <MeetingList />}
+              {view === "Guidelines" && <Guidelines />}
             </div>
           </div>
         </div>
