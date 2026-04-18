@@ -10,10 +10,24 @@ import {
 } from "lucide-react";
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import { Sidebar } from "@/components/navbars/route";
-import { useStudents } from '@/src/hooks/studentsHook/useStudents';
-import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
-import { NotificationPanel } from '@/components/Notifications/NotificationPanel';
-import { SettingsModal } from '@/app/components/SettingsModel';
+import { RoadmapSection } from "@/app/components/Roadmaps";
+import { StudentRecords } from "@/app/components/StudentRecords";
+import Guidelines from "@/components/Guidelines/Guidelines";
+import { AddFaculty } from "@/app/components/AddFaculty";
+import { AddStudent } from "@/app/components/AddStudents";
+import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
+import { SettingsModal } from "@/app/components/SettingsModel";
+import { EditStudent } from '@/app/components/EditStudent';
+import { EditAdvisor } from '@/app/components/EditAdvisor';
+import { CourseOffering } from "@/app/components/CourseOffering";
+import { Timetable } from "@/app/components/Timetable";
+import { BatchResults } from "@/app/components/BatchResults";
+import { CourseCatalog } from "@/app/components/CourseCatalog";
+import { RoadmapView } from "@/app/components/RoadmapView";
+import { RequestForms} from "@/app/components/RequestForms";
+
+// IMPORTING YOUR SEPARATE PROFILE COMPONENT
+import {CoordinatorProfile} from "@/app/components/ProfileView"; 
 import { SessionManager } from '@/app/components/SessionManager';
 import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
@@ -32,8 +46,8 @@ import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
 
 
-export default function CoordinatorDashboard() {
-  const [isClient] = useState(() => typeof window !== 'undefined');
+export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
+  const [isClient, setIsClient] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
   const [selectedSession, setSelectedSession] = useState("Fall 2025");
@@ -170,9 +184,8 @@ export default function CoordinatorDashboard() {
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines />}
                 {activeTab === "requests" && <RequestForms />}
-                {activeTab === "profile" && <ProfileView />}
-                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>
-)}
+                {/* NOW CALLING THE IMPORTED COMPONENT */}
+                {activeTab === "profile" && <CoordinatorProfile />}
               </div>
             )}
         </div>
