@@ -11,14 +11,18 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 
 // Components Imports
 import { Sidebar } from "../../../../components/navbars/route";
-import { StudentList } from "../../../components/StudentList";
-import { StudentProfile } from "../../../components/StudentProfile";
-import { StudentTranscript } from "../../../components/StudentTranscript";
-import AdvisorChat from "../../../components/AdvisorChat";
-import { MeetingList } from '../../../components/MeetingList';
-import { AdvisorNotes } from '../../../components/AdvisorNotes';
-import { NotificationPanel } from "../../../components/NotificationPanel";
-import { AdvisoryLogs } from '../../../components/AdvisoryLogs';
+import { StudentList } from "../../../../components/StudentDetails/StudentList";
+import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
+import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
+import AdvisorChat from "../../../../components/Chat/AdvisorChat";
+import { MeetingList } from '../../../../components/MeetingSchedule/MeetingList';
+import AdvisoryNotes from '../../../../components/AdvisorView/AdvisoryNotes';
+import { NotificationPanel } from "../../../../components/Notifications/NotificationPanel";
+import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs';
+import CourseRecommendation from "../../../../components/CourseRecommendation/CourseRecommendation";
+import { AdvisorProfile } from "../../../../components/AdvisorView/AdvisorProfile";
+import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation";
+import Guidelines from "../../../../components/Guidelines/Guidelines";
 import { useRouter } from "next/navigation";
 type StudentStatus = "Total" | "Regular" | "Irregular";
 
@@ -197,7 +201,7 @@ export default function Dashboard() {
                       <StudentList 
                         selectedBatch={selectedBatch} 
                         activeTab={activeTab as any} 
-                        onViewProfile={(s) => { setSelectedStudent(s); setView("Studentprofile"); }} 
+                        onViewProfile={(s: any) => { setSelectedStudent(s); setView("Studentprofile"); }} 
                       />
                     </div>
                   </div>
@@ -231,10 +235,10 @@ export default function Dashboard() {
               {view === "Transcript" && selectedStudent && (
                 <StudentTranscript student={selectedStudent} onBack={() => setView("Studentprofile")} />
                 )}
-                {view === 'Notes' && <AdvisoryNotes />}
+                {view === 'Notes' && <AdvisoryNotes onBack={() => setView("Overview")} />}
                 {view === 'Advisorchat' && <AdvisorChat />}
                 {view === 'Meetings' && <MeetingList />}
-              {view === "Guidelines" && <Guidelines />}
+              {view === "Guidelines" && <Guidelines onBack={() => setView("Overview")} />}
             </div>
           </div>
         </div>
