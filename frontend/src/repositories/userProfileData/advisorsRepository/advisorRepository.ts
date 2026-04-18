@@ -51,7 +51,7 @@ export class AdvisorProfileRepository extends BaseApiService {
           console.log('Data is array, length:', advisorsData.length);
         } else if ('data' in response.data && Array.isArray((response.data as any).data)) {
           advisorsData = (response.data as any).data;
-          console.log('Data is nested in data.data, length:', advisorsData.length);
+          console.log('Data is nested in data.data, length:', advisorsData);
         } else {
           console.warn('Unexpected advisor data format:', response.data);
           advisorsData = [];

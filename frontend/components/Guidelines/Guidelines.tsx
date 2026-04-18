@@ -72,7 +72,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
       
       {/* Top Navigation - Consistent Back Arrow Style */}
       <div className="p-4 md:p-6 shrink-0">
-        <button 
+        <button     title="btn"
           onClick={onBack} 
           className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors outline-none"
         >
@@ -97,7 +97,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
           {/* Video Guide Carousel */}
           <div className="relative mb-12">
             {/* Desktop Navigation Buttons */}
-            <button 
+            <button    title="btn"
               onClick={prevVideo}
               className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-20 h-12 w-12 bg-white border border-slate-200 rounded-full items-center justify-center text-[#1e3a5f] shadow-lg hover:bg-slate-50 transition-all active:scale-90"
             >
@@ -120,8 +120,8 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
                     </button>
                     {/* Mobile Navigation inside card */}
                     <div className="flex md:hidden gap-2">
-                       <button onClick={prevVideo} className="p-2 bg-blue-800 rounded-lg"><ChevronLeft size={18} /></button>
-                       <button onClick={nextVideo} className="p-2 bg-blue-800 rounded-lg"><ChevronRight size={18} /></button>
+                       <button    title="btn" onClick={prevVideo} className="p-2 bg-blue-800 rounded-lg"><ChevronLeft size={18} /></button>
+                       <button    title="btn" onClick={nextVideo} className="p-2 bg-blue-800 rounded-lg"><ChevronRight size={18} /></button>
                     </div>
                   </div>
                 </div>
@@ -135,6 +135,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
             </div>
 
             <button 
+            title="btn"
               onClick={nextVideo}
               className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-20 h-12 w-12 bg-white border border-slate-200 rounded-full items-center justify-center text-[#1e3a5f] shadow-lg hover:bg-slate-50 transition-all active:scale-90"
             >

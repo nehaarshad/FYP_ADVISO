@@ -133,11 +133,6 @@ const logout=async(req,res)=>{
     
         try {
             const {id}= req.params;
-            const token = req.header('Authorization'); 
-    
-            if (!token) {
-                return res.status(401).json({ message: 'No token provided',success:false });
-            }
     
             await User.update({ sessionToken: null }, { where: { id } });
             console.log('Logged out successfully');

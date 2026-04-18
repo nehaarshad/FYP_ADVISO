@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { 
   Search, Bell, Settings, Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
-  FileSearch, ChevronLeft, Database,
+  FileSearch, ChevronLeft, 
   SearchCheck
 } from "lucide-react";
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
@@ -14,7 +14,6 @@ import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 import { NotificationPanel } from '@/components/Notifications/NotificationPanel';
 import { SettingsModal } from '@/app/components/SettingsModel';
-import { SessionManager } from '@/app/components/SessionManager';
 import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
 import { BatchResults } from '@/app/components/BatchResults';
@@ -36,7 +35,6 @@ export default function CoordinatorDashboard() {
   const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
-  const [selectedSession, setSelectedSession] = useState("Fall 2025");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
@@ -168,7 +166,7 @@ export default function CoordinatorDashboard() {
                 {activeTab === "add-faculty" && <AddFaculty/>}
                 {activeTab === "edit-student" && <StudentList />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
-                {activeTab === "guidelines" && <Guidelines />}
+                {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}
                 {activeTab === "profile" && <ProfileView />}
                 {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>

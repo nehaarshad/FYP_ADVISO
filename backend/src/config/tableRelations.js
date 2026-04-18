@@ -101,8 +101,8 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   ProgramModel.hasMany(CourseOfferingModel, { foreignKey: "programId" });
   CourseOfferingModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
-  BatchModel.hasOne(RoadmapModel, { foreignKey: "roadmapId" });
-  RoadmapModel.belongsTo(BatchModel, { foreignKey: "roadmapId" });
+  RoadmapModel.hasMany(BatchModel, { foreignKey: "roadmapId" });
+  BatchModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });
 
   // ==================== Batch & Assignment ====================
   BatchAssignment.belongsTo(BatchModel, { foreignKey: "batchId" });

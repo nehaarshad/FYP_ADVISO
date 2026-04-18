@@ -25,6 +25,7 @@ export default class APIs{
     //manage users APIS
 
          static getAllCoordinatorsUrl = `${APIs.BASE_URL}/coordinators`;
+         static getUserByIdUrl = `${APIs.BASE_URL}/getUserById/:id`;
          static getAllUsersUrl = `${APIs.BASE_URL}/users`;
          static getAdvisorsUrl = `${APIs.BASE_URL}/advisors`;
          static getStudentsUrl = `${APIs.BASE_URL}/students`;
@@ -67,7 +68,8 @@ export default class APIs{
 
         static uploadSessionalResultUrl = `${APIs.BASE_URL}/uploadSessionalResult`;
 
+    // transcript
+       static getStudentTranscriptSummaryUrl = `${APIs.BASE_URL}/getStudentTranscriptSummary/:id`;
 
-    
 
 }

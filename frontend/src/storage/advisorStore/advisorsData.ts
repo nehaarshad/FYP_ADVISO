@@ -15,7 +15,7 @@ interface AdvisorState {
   statistics: any | null;
   isInitialized: boolean;
 
-  fetchAdvisors: (forceRefresh?: boolean) => Promise<void>;
+  fetchAdvisors: (forceRefresh?: boolean) => Promise<any>;
   setFilters: (filters: Partial<FilterOptions>) => void;
   clearFilters: () => void;
   applyFilters: () => void;
@@ -38,14 +38,16 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
 
   fetchAdvisors: async (forceRefresh = false) => {
     const { isLoading, isInitialized } = get();
-    if (isLoading) return;
-    if (isInitialized && !forceRefresh) return;
+  
+  if (isInitialized && !forceRefresh) return get().advisors;
+  if (isLoading && !forceRefresh) return get().advisors;
     
     set({ isLoading: true, error: null });
     try {
       const response = await advisorProfileRepository.fetchAllAdvisors(forceRefresh);
       
       let advisorsArray: BatchAdvisor[] = [];
+      console.log("in advisor store response ",response)
       if (Array.isArray(response)) {
         advisorsArray = response;
       } else if (response && 'data' in (response as any) && Array.isArray((response as any).data)) {
@@ -69,6 +71,7 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
       });
       
       get().applyFilters();
+      return advisorsArray;
     } catch (error: any) {
       console.error('Fetch advisors error:', error);
       set({ 
@@ -77,6 +80,7 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
         advisors: [],
         filteredAdvisors: []
       });
+      return [];
     }
   },
 

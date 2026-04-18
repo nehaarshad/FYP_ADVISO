@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import OutlinedTextHeading from "@/components/textsComponents/OutlinedTextHeading";
 import { motion } from "framer-motion";
@@ -10,13 +11,24 @@ import {
 import LandingFooter from "@/components/footer/route"
 import SmallFeature from "@/components/cards/featureCards";
 import { useRouter } from 'next/navigation';
+import { authRepository } from "@/src/repositories/authRepository/authRepository";
+import { useEffect } from "react";
 
 export default function LandingPage() {
   const router = useRouter();
 
-  // Navigation logic for Login page
+  useEffect(() => {
+    if (authRepository.isAuthenticated()) {
+      const user = authRepository.getCurrentUser();
+      console.log("Already authenticated user:", user);
+      if (user && user.data) {
+        redirectBasedOnRole(user.data.role, router);
+      }
+    }
+  }, [router]);
+  
   const handleClick = () => {
-    router.push('/views/auth/registeration/signup'); 
+    router.push('/views/auth/login'); 
   };
 
   return (
@@ -95,4 +107,23 @@ export default function LandingPage() {
     </>
  
   );
+}
+
+function redirectBasedOnRole(role: string, router: any) {
+  switch (role) {
+    case 'student':
+      router.push('/views/dashboard/students');
+      break;
+    case 'advisor':
+      router.push('/views/dashboard/advisor');
+      break;
+    case 'coordinator':
+      router.push('/views/dashboard/coordinator');
+      break;
+    case 'admin':
+      router.push('/views/dashboard/admin');
+      break;
+    default:
+      router.push('/dashboard');
+  }
 }

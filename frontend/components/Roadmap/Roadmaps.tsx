@@ -283,25 +283,6 @@ export function RoadmapSection() {
                 )}
               </select>
               
-              <select
-                title='batch'
-                value={selectedBatch}
-                onChange={(e) => setSelectedBatch(e.target.value)}
-                className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold"
-              >
-                <option value="">All Batches</option>
-                <option value="FALL">FALL</option>
-                <option value="SPRING">SPRING</option>
-                <option value="SUMMER">SUMMER</option>
-              </select>
-              
-              <input
-                type="text"
-                placeholder="Batch Year"
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
-                className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold w-28"
-              />
             </div>
             
             {error && (
