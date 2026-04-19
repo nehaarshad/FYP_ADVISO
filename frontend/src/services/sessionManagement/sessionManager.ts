@@ -16,6 +16,7 @@ export class SessionManager {
 
   // Create session after successful login/signup
   createSession<T>(user: T, token: string): void {
+    this.localStorageService.saveUser(user);
     this.localStorageService.saveToken(token);
   }
 

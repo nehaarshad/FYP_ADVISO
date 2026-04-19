@@ -19,19 +19,7 @@ export const CourseOffering = () => {
   const { offerings, isLoading, error, fetchOfferings, uploadOffering, uploadProgress } = useCourseOffering();
   const { programs } = usePrograms();
 
-  // Get unique session years from offerings
-  const getUniqueSessionYears = () => {
-    if (!offerings || offerings.length === 0) return [];
-    const years = new Set(offerings.map((o: any) => o.SessionModel?.sessionYear).filter(Boolean));
-    return Array.from(years).sort().reverse();
-  };
 
-  // Get unique session types from offerings
-  const getUniqueSessionTypes = () => {
-    if (!offerings || offerings.length === 0) return [];
-    const types = new Set(offerings.map((o: any) => o.SessionModel?.sessionType).filter(Boolean));
-    return Array.from(types);
-  };
 
   useEffect(() => {
     fetchOfferings();
@@ -94,9 +82,6 @@ export const CourseOffering = () => {
     setSelectedSessionYear('');
     setSelectedProgram('');
   };
-
-  const sessionYears = getUniqueSessionYears();
-
   return (
     <>
       <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100">
@@ -312,18 +297,14 @@ export const CourseOffering = () => {
 
               <div>
                 <label className="text-[10px] font-black text-slate-400 uppercase">Session Year *</label>
-                <select
+                <input
                   title='Session Year'
                   value={selectedSessionYear}
                   onChange={(e) => setSelectedSessionYear(e.target.value)}
                   className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
                   required
                 >
-                  <option value="">Select Session Year</option>
-                  {[2024, 2025, 2026, 2027, 2028].map((year) => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
+                </input>
               </div>
 
               <div>

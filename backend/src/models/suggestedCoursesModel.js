@@ -45,7 +45,7 @@ const SuggestedCourses = sequelize.define("SuggestedCourses", {
         allowNull: true,
     },
     timeSlot: {
-        type: DataTypes.STRING,
+        type: DataTypes.JSON,
         allowNull: true,
     },
 }, {

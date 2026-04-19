@@ -1,6 +1,7 @@
 import { BaseApiService } from '../../services/baseApiServices/baseNetworkService/baseNetwork';
 import AppApis from '../../services/appApis/apiUrl';
 import { sessionManager } from '../../services/sessionManagement/sessionManager';
+import paramsUrl from '@/src/utilits/constructUrl/constructParamsUrl';
 
 export class LogoutRepository extends BaseApiService {
   private static instance: LogoutRepository;
@@ -19,8 +20,9 @@ export class LogoutRepository extends BaseApiService {
   async logout(userId: number): Promise<void> {
     try {
     
+      const url = paramsUrl(AppApis.LogOutUrl,{ id: userId.toString() })
       const response = await this.postApiWithJson(
-        `${AppApis.LogOutUrl}/${userId}`,
+        url,
         {},
       );
 

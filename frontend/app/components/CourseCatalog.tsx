@@ -228,7 +228,7 @@ export const CourseCatalog = () => {
                     return (
                       <tr key={course.id} className="hover:bg-slate-50 transition-colors">
                         <td className="p-4 text-xs font-black text-slate-900 border-r border-slate-200 uppercase">
-                          {courseData?.courseCode || 'N/A'}
+                          {courseData?.courseCode || '-----'}
                         </td>
                         <td className="p-4 border-r border-slate-200">
                           <p className="text-[11px] text-slate-900 font-bold uppercase">{courseData?.courseName || 'N/A'}</p>

@@ -16,8 +16,8 @@ export interface Student {
   batchId: number;
   createdAt?: string;
   updatedAt?: string;
-  User:User;
-  StudentStatus:StudentStatus;
-  StudentGuardians: StudentGuardian[];
-  BatchModel: Batch;
+  User?:User;
+  StudentStatus?:StudentStatus;
+  StudentGuardians?: StudentGuardian[];
+  BatchModel?: Batch;
 }

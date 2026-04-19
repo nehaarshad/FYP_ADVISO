@@ -17,6 +17,7 @@ import FacultyRecommendation from "../models/facultyRecommendationModel.js";
 import BatchAdvisor from "../models/FacultyAdvisorModel.js";
 import MeetingReminder from "../models/meetingReminder.js";
 import Message from "../models/messagesModel.js";
+import AdvisorFinalRecommendation from "../models/advisorFinalCourseRecommendation.js";
 import ProgramModel from "../models/programModel.js";
 import RecommendationCategory from "../models/RecommendationModel.js";
 import RequestFormType from "../models/RequestFormTypeModel.js";
@@ -101,8 +102,8 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   ProgramModel.hasMany(CourseOfferingModel, { foreignKey: "programId" });
   CourseOfferingModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
-  BatchModel.hasOne(RoadmapModel, { foreignKey: "roadmapId" });
-  RoadmapModel.belongsTo(BatchModel, { foreignKey: "roadmapId" });
+  RoadmapModel.hasMany(BatchModel, { foreignKey: "roadmapId" });
+  BatchModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });
 
   // ==================== Batch & Assignment ====================
   BatchAssignment.belongsTo(BatchModel, { foreignKey: "batchId" });
@@ -192,9 +193,23 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
         targetKey: "id",
     });
 
+      // ==================== course Recommendations  ====================
+
+  AdvisorFinalRecommendation.belongsTo(Student, { foreignKey: 'studentId',  as: 'Student' });
+  AdvisorFinalRecommendation.belongsTo(SessionModel,{ foreignKey: 'sessionId',   as: 'Session' });
+  AdvisorFinalRecommendation.belongsTo(SessionalRecommendation, { foreignKey: 'sessionalRecommendationId', as: 'LLMRecommendation' });
+  AdvisorFinalRecommendation.belongsTo(BatchAdvisor, { foreignKey: 'advisorId',  as: 'Advisor' });
+ 
+  Student.hasMany(AdvisorFinalRecommendation,    { foreignKey: 'studentId' });
+  SessionModel.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionId' });
+  SessionalRecommendation.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionalRecommendationId' });
+  SessionalRecommendation.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionalRecommendationId' });
+
   // ==================== Session  ====================
+
   SessionModel.hasMany(CourseOfferingModel, { foreignKey: "sessionId" });
   CourseOfferingModel.belongsTo(SessionModel, { foreignKey: "sessionId" });
+
 // ==================== Roadmap & Semester ====================
 RoadmapModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "roadmapId", });
 RoadmapCourseCategoryModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId",  });

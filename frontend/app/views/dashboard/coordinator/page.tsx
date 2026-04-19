@@ -5,17 +5,15 @@ import { useRouter } from 'next/navigation';
 import { 
   Search, Bell, Settings, Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
-  FileSearch, ChevronLeft, Database,
+  FileSearch, ChevronLeft, 
   SearchCheck
 } from "lucide-react";
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import { Sidebar } from "@/components/navbars/route";
-import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
-import { SettingsModal } from "@/app/components/SettingsModel";
-import { RoadmapView } from "@/app/components/RoadmapView";
-
-// IMPORTING YOUR SEPARATE PROFILE COMPONENT
-import { SessionManager } from '@/app/components/SessionManager';
+import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
+import { NotificationPanel } from '@/components/Notifications/NotificationPanel';
+import { SettingsModal } from '@/app/components/SettingsModel';
 import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
 import { BatchResults } from '@/app/components/BatchResults';
@@ -39,7 +37,6 @@ export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.
   const [isClient, setIsClient] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
-  const [selectedSession, setSelectedSession] = useState("Fall 2025");
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
@@ -171,7 +168,7 @@ export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.
                 {activeTab === "add-faculty" && <AddFaculty/>}
                 {activeTab === "edit-student" && <StudentList />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
-                {activeTab === "guidelines" && <Guidelines onBack={goBack} />}
+                {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}
                 {/* NOW CALLING THE IMPORTED COMPONENT */}
                 {activeTab === "profile" && <ProfileView />}

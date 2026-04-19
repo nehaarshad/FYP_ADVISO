@@ -1,3 +1,5 @@
+import { SessionalTranscript } from "./sessionalTranscriptModel";
+
 export interface DegreeTranscript {
   id: number;
   totalEarnedCreditHours: string;
@@ -5,4 +7,5 @@ export interface DegreeTranscript {
   studentId: number;
   createdAt?: string;
   updatedAt?: string;
+  SessionalTranscripts: SessionalTranscript[];
 }

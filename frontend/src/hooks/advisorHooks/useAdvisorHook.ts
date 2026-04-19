@@ -18,15 +18,6 @@ export const useAdvisors = () => {
     clearError,
   } = useAdvisorStore();
 
-  // Use a ref to track if initial fetch has been done
-  const hasFetched = useRef(false);
-
-  useEffect(() => {
-    if (!hasFetched.current) {
-      hasFetched.current = true;
-      fetchAdvisors();
-    }
-  }, [fetchAdvisors]);
 
   const searchAdvisors = useCallback((searchTerm: string) => {
     setFilters({ searchTerm });

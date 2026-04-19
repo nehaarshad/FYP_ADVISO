@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/navbars/route.tsx (FIXED)
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, LogOut } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { NAV_CONFIG, NavItem, UserRole } from "@/src/utilits/const/navBarItems";
+import { useAuth } from "@/src/hooks/authHook/useAuth";
+import { sessionManager } from "@/src/services/sessionManagement/sessionManager";
+import { useUserProfile } from "@/src/hooks/profileHook/useProfile";
 
 interface SidebarProps {
   userRole: UserRole;
@@ -15,9 +18,32 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActiveTab }) => {
   const router = useRouter();
+  const [userInitial, setUserInitial] = useState<string>("A");
+  const { logout } = useAuth();
+   const { getDisplayName } = useUserProfile();
+  
+  
   const navItems = NAV_CONFIG[userRole] ?? [];
 
-  // Fix: Create unique keys for grouped items
+
+  const handleLogout = async () => {
+    try {
+      const currentUser = sessionManager.getCurrentUser<any>();
+      if (currentUser?.id) {
+        await logout(currentUser.id);
+      } else {
+        // Force logout if no user ID
+        sessionManager.destroySession();
+      }
+      router.push("/views/auth/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Force redirect even if error
+      sessionManager.destroySession();
+      router.push("/views/auth/login");
+    }
+  };
+
   const grouped: { group: string; items: NavItem[] }[] = [];
   
   for (const item of navItems) {
@@ -65,25 +91,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
         ))}
       </nav>
 
-      <div className="p-2">
+      {/* User Profile Section */}
+      <div className="p-2 mt-auto">
         <div className={`p-5 rounded-[2rem] border transition-all group ${
           activeTab === "profile"
             ? "bg-white/20 border-white/20 shadow-lg"
             : "bg-gradient-to-b from-white/10 to-transparent border-white/5 hover:bg-white/5"
         }`}>
-          <div onClick={() => setActiveTab("profile")} className="flex items-center gap-3 mb-1 cursor-pointer">
-            <div className="h-10 w-10 rounded-full bg-[#FDB813] border-2 border-[#1e3a5f] flex items-center justify-center font-black text-[#1e3a5f] text-xs uppercase">
-              {userRole.charAt(0).toUpperCase()}
+          <div onClick={() => setActiveTab("profile")} className="flex items-center gap-3 mb-3 cursor-pointer">
+            <div className="h-10 w-10 rounded-full bg-[#FDB813] border-2 border-[#1e3a5f] flex items-center justify-center font-black text-[#1e3a5f] text-sm uppercase">
+              {userInitial}
             </div>
-            <div>
-              <p className="text-xs font-black italic">Aleena Ayub</p>
-              <p className="text-[10px] opacity-50 font-bold uppercase tracking-tighter">{userRole}</p>
+            <div className="flex-1">
+              <p className="text-sm font-black italic truncate max-w-[120px]">{getDisplayName()}</p>
+              <p className="text-[9px] opacity-50 font-bold uppercase tracking-tighter">{userRole}</p>
             </div>
           </div>
           <button
-            onClick={() => router.push("/views/auth/login")}
-            className="w-full py-2 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
+            onClick={handleLogout}
+            className="w-full py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
           >
+            <LogOut size={14} />
             Sign Out
           </button>
         </div>
