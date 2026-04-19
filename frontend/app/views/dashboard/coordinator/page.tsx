@@ -29,10 +29,12 @@ import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
+import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 
 
-export default function CoordinatorDashboard() {
-  const [isClient] = useState(() => typeof window !== 'undefined');
+export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
+  const [isClient, setIsClient] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -168,9 +170,8 @@ export default function CoordinatorDashboard() {
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}
+                {/* NOW CALLING THE IMPORTED COMPONENT */}
                 {activeTab === "profile" && <ProfileView />}
-                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>
-)}
               </div>
             )}
         </div>
