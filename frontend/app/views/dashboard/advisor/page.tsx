@@ -16,6 +16,7 @@ import { Sidebar } from "@/components/navbars/route";
 import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
 import { MeetingList } from "../../../../components/MeetingSchedule/MeetingList";
 import AdvisoryNotes from "../../../../components/AdvisorView/AdvisoryNotes";
+import { AdvisoryParentScreen } from '@/components/AdvisorView/advisoryNavPtterrn';
 import AdvisorChat from "../../../../components/Chat/AdvisorChat";
 import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs';
 import Guidelines from "../../../../components/Guidelines/Guidelines";
@@ -31,6 +32,7 @@ export default function AdvisorDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotif, setHasNewNotif] = useState(true);
+  const [showRecommendations, setShowRecommendations] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   
   const { assignedBatches, isLoading: batchesLoading } = useAdvisorAssignedBatches();
@@ -198,6 +200,18 @@ export default function AdvisorDashboard() {
                     {view === "advisor-chat" && (
                       <AdvisorChat onBack={() => setView("overview")} />
                     )}
+                    {/* Recommendation Flow View */}
+                    {view === "recommendations" && selectedStudent && (
+                      <AdvisoryParentScreen
+                        student={selectedStudent}
+                        onBack={() => {
+                          setView("student-profile");
+                          setShowRecommendations(false);
+                        }}
+                        isAdvisor={true}
+                        onViewTranscript={handleViewTranscript}
+                      />
+                    )}
 
                     {view === "advisory-logs" && (
                       <AdvisoryLogs onBack={() => setView("overview")} />
@@ -227,6 +241,10 @@ export default function AdvisorDashboard() {
               onBack={handleBackToOverview}
               onViewTranscript={handleViewTranscript}
               isAdvisor={true}
+              onNavigateToCourseRec={() => {
+                
+                setView("recommendations");
+              }}
             />
           )}
 

@@ -19,7 +19,7 @@ import { RoadmapDetailView } from '../Roadmap/RoadmapView';
 
 interface StudentProfileProps {
   student: any;
-  selectedBatch: string;
+  selectedBatch?: string;
   onBack: () => void;
   onViewTranscript: () => void;
   isAdvisor?: boolean;
@@ -103,7 +103,7 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
                   <ArrowLeft size={20} />
                 </button>
 
-        {isAdvisor && (
+        {isAdvisor && student.StudentStatus?.currentStatus !== 'Relegated' && (
           <button 
             onClick={onNavigateToCourseRec}
             className="flex items-center gap-2 bg-amber-400 text-[#1e3a5f] opacity-80 px-4 md:px-5 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase hover:bg-amber-300 transition-all "

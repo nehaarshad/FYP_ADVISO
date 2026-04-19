@@ -71,5 +71,12 @@ export default class APIs{
     // transcript
        static getStudentTranscriptSummaryUrl = `${APIs.BASE_URL}/getStudentTranscriptSummary/:id`;
 
+         // recommendCourses
+       static recommendSessionalCoursesUrl = `${APIs.BASE_URL}/suggestCourses/:id`;
+       static finalizeSessionalCourseRecommendationUrl = `${APIs.BASE_URL}/finalize`;
+       static getAdvisoryLogsUrl = `${APIs.BASE_URL}/advisor/:advisorId`;
+       static getRecommendationByIdUrl = `${APIs.BASE_URL}/getRecommendation/:id`;
+       static getStudentRecommendationsUrl = `${APIs.BASE_URL}/student/:studentId`;
+
 
 }

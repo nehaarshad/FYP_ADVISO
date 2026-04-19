@@ -1,138 +1,390 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// components/CourseRecommendation/ViewRecommedCourse.tsx
+import React, { useEffect, useState } from 'react';
+import { 
+  ArrowLeft, 
+  AlertCircle, 
+  BookOpen, 
+  Clock, 
+  Calendar,
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
+  Info,
+  ChevronDown,
+  ChevronUp,
+  RefreshCw
+} from 'lucide-react';
+import { useStudentRecommendations } from '@/src/hooks/recommendationHook/useStudentRecommendation';
 
-import React from "react";
-import { BookOpen, Info, CheckCircle2, LayoutGrid, Zap, ArrowLeft } from "lucide-react";
-
-interface SuggestedCourse {
-  id: string;
-  name: string;
-  code: string;
-  credits: number;
-  category: string;
-  advisorNote: string;
-  basis: string;
-}
-
-interface ViewRecommedProps {
-  suggestedCourses: SuggestedCourse[];
-  advisorName: string;
-  lastUpdated: string;
+interface ViewRecommedCourseProps {
   onBack?: () => void;
 }
 
-export default function ViewRecommedCourse({ suggestedCourses, advisorName, lastUpdated, onBack }: ViewRecommedProps) {
-  // Static content update logic for the example
-  const updatedCourses = suggestedCourses.map((course, index) => ({
-    ...course,
-    advisorNote: index === 0 
-      ? "You have already cleared Software Engineering (SE-201), so this is the next mandatory step."
-      : "For graduation, you need additional elective credits. This course aligns with your interest in backend development."
-  }));
+export const ViewRecommedCourse: React.FC<ViewRecommedCourseProps> = ({ 
+  onBack 
+}) => {
+  const [expandedCourses, setExpandedCourses] = useState<Set<number>>(new Set());
+  
+  // Use the hook
+  const { 
+    recommendations, 
+    isLoading, 
+    error, 
+    fetchStudentRecommendations 
+  } = useStudentRecommendations();
+
+  // Fetch recommendations when component mounts
+  useEffect(() => {
+    fetchStudentRecommendations();
+  }, [fetchStudentRecommendations]);
+
+  const toggleCourseExpand = (courseId: number | null, index: number) => {
+    const key = courseId !== null ? courseId : index;
+    setExpandedCourses(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(key)) {
+        newSet.delete(key);
+      } else {
+        newSet.add(key);
+      }
+      return newSet;
+    });
+  };
+
+  const getActionBadge = (actionRequired: string) => {
+    switch (actionRequired) {
+      case 'REGISTER':
+        return { color: 'bg-green-100 text-green-700 border-green-200', icon: CheckCircle2, text: 'Register' };
+      case 'RETAKE':
+        return { color: 'bg-red-100 text-red-700 border-red-200', icon: XCircle, text: 'Must Retake' };
+      case 'IMPROVEMENT_RECOMMENDED':
+        return { color: 'bg-orange-100 text-orange-700 border-orange-200', icon: AlertTriangle, text: 'Improvement Recommended' };
+      case 'SUBSTITUTE':
+        return { color: 'bg-blue-100 text-blue-700 border-blue-200', icon: Info, text: 'Substitute Available' };
+      default:
+        return { color: 'bg-gray-100 text-gray-700 border-gray-200', icon: BookOpen, text: actionRequired };
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'critical':
+        return 'border-l-red-500 bg-red-50/30';
+      case 'high':
+        return 'border-l-orange-500 bg-orange-50/30';
+      case 'medium':
+        return 'border-l-yellow-500 bg-yellow-50/30';
+      default:
+        return 'border-l-gray-300 bg-white';
+    }
+  };
+
+  const handleRefresh = () => {
+    fetchStudentRecommendations();
+  };
+
+  if (isLoading) {
+    return (
+      <div className="animate-in fade-in duration-500 w-full max-w-5xl mx-auto p-4 md:p-6">
+        <button   
+          title='btn'
+          onClick={onBack} 
+          className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 mb-6"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <div className="space-y-4">
+          <div className="h-32 bg-slate-100 rounded-2xl animate-pulse" />
+          <div className="h-64 bg-slate-100 rounded-2xl animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="animate-in fade-in duration-500 w-full max-w-5xl mx-auto p-4 md:p-6">
+        <button 
+          title='btn'
+          onClick={onBack} 
+          className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 mb-6"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <div className="flex flex-col items-center py-20 bg-white rounded-2xl border border-slate-100">
+          <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mb-4">
+            <AlertCircle size={28} className="text-red-400" />
+          </div>
+          <p className="text-sm font-black text-[#1e3a5f] uppercase tracking-tight mb-1">
+            No Recommendations Found
+          </p>
+          <p className="text-[10px] text-slate-400 font-bold text-center max-w-xs">
+            {error}
+          </p>
+          <button
+            onClick={handleRefresh}
+            className="mt-6 px-4 py-2 bg-[#1e3a5f] text-white text-xs font-bold rounded-xl hover:bg-amber-500 transition-colors flex items-center gap-2"
+          >
+            <RefreshCw size={14} />
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if recommendations exist and have courses
+  if (!recommendations || !recommendations.courses || recommendations.courses.length === 0) {
+    return (
+      <div className="animate-in fade-in duration-500 w-full max-w-5xl mx-auto p-4 md:p-6">
+        <button  
+          title='btn'
+          onClick={onBack} 
+          className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 mb-6"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <div className="flex flex-col items-center py-20 bg-white rounded-2xl border border-slate-100">
+          <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center mb-4">
+            <BookOpen size={28} className="text-amber-400" />
+          </div>
+          <p className="text-sm font-black text-[#1e3a5f] uppercase tracking-tight mb-1">
+            No Course Recommendations
+          </p>
+          <p className="text-[10px] text-slate-400 font-bold text-center max-w-xs">
+            Your advisor hasn&lsquo;t provided any course recommendations for this session.
+          </p>
+          <button
+            onClick={handleRefresh}
+            className="mt-6 px-4 py-2 bg-[#1e3a5f] text-white text-xs font-bold rounded-xl hover:bg-amber-500 transition-colors flex items-center gap-2"
+          >
+            <RefreshCw size={14} />
+            Refresh
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full space-y-4 md:space-y-6 px-1 md:px-0">
-      {/* Back Arrow Navigation */}
-      <button 
-        onClick={onBack} 
-        className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors outline-none"
-      >
-        <ArrowLeft size={20} />
-      </button>
-
-      {/* Top Banner: Advisor Info */}
-      <div className="bg-gradient-to-br from-[#1e3a5f] to-[#2d5a8e] p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] text-white shadow-xl relative overflow-hidden">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <h2 className="text-xl md:text-2xl font-black uppercase tracking-tighter leading-none">
-              Recommended Courses
-            </h2>
-            <p className="text-blue-100 text-[9px] md:text-[10px] font-bold uppercase mt-2 tracking-wide">
-              Suggested by <span className="text-white underline">{advisorName}</span>
-              <span className="block md:inline md:ml-2 opacity-70 mt-1 md:mt-0">• {lastUpdated}</span>
+    <div className="animate-in fade-in duration-500 w-full max-w-5xl mx-auto p-4 md:p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <button  
+          title='btn'
+          onClick={onBack} 
+          className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 hover:bg-slate-50 transition-colors"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleRefresh}
+            className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 hover:bg-slate-50 transition-colors"
+            title="Refresh recommendations"
+          >
+            <RefreshCw size={18} />
+          </button>
+          <div className="text-right">
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+              {new Date(recommendations.sentAt).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+              })}
             </p>
           </div>
-          
-          <div className="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex flex-col items-center md:items-end">
-            <p className="text-[8px] md:text-[9px] font-black uppercase opacity-60 tracking-widest">Total Suggestions</p>
-            <p className="text-lg md:text-xl font-black text-white leading-none mt-1">{updatedCourses.length} Courses</p>
-          </div>
         </div>
-        
-        <Zap className="absolute -right-6 -bottom-6 text-white/5 w-32 h-32 md:w-40 md:h-40" />
       </div>
 
-      {/* Suggested Course List */}
-      <div className="grid grid-cols-1 gap-4">
-        {updatedCourses.length > 0 ? (
-          updatedCourses.map((course) => (
-            <div 
-              key={course.id}
-              className="bg-white border-2 border-slate-100 p-5 md:p-6 rounded-[2rem] md:rounded-[2.5rem] shadow-sm flex flex-col md:flex-row items-start md:items-stretch gap-4 md:gap-6"
-            >
-              {/* Icon & Category */}
-              <div className="flex flex-row md:flex-col items-center md:items-center gap-3 shrink-0 w-full md:w-auto pb-3 md:pb-0 border-b md:border-b-0 border-slate-50">
-                <div className="h-12 w-12 md:h-14 md:w-14 bg-slate-50 rounded-xl md:rounded-2xl flex items-center justify-center text-[#1e3a5f] shadow-inner border border-slate-100">
-                  <BookOpen size={20} className="md:w-6 md:h-6" />
-                </div>
-                <div className="flex flex-col md:items-center gap-1">
-                  <span className="px-3 py-1 bg-amber-50 text-amber-600 text-[8px] font-black uppercase rounded-lg border border-amber-100">
-                    {course.category}
-                  </span>
-                </div>
-              </div>
+      {/* Header Info */}
+      <div className="bg-gradient-to-r from-[#1e3a5f] to-[#2a4a6e] rounded-2xl p-6 mb-6 text-white">
+        <h2 className="text-xl md:text-2xl font-black tracking-tight mb-2">
+          Your Course Recommendations
+        </h2>
+        <p className="text-sm text-white/80">
+          Based on your academic progress and program requirements
+        </p>
+        <div className="flex flex-wrap gap-4 mt-4 pt-2 border-t border-white/20">
+          <div className="flex items-center gap-2">
+            <Calendar size={14} className="text-amber-400" />
+            <span className="text-xs font-medium">
+              Session: {recommendations.sessionType} {recommendations.sessionYear}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <BookOpen size={14} className="text-amber-400" />
+            <span className="text-xs font-medium">
+              Total Credits: {recommendations.totalCredits}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 size={14} className="text-green-400" />
+            <span className="text-xs font-medium">
+              {recommendations.courses.length} Courses
+            </span>
+          </div>
+        </div>
+      </div>
 
-              {/* Course Content */}
-              <div className="flex-1 space-y-4 w-full">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                  <div>
-                    <h3 className="text-base md:text-lg font-black text-[#1e3a5f] uppercase tracking-tight leading-tight">
-                      {course.name}
-                    </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">{course.code}</span>
-                      <span className="h-1 w-1 bg-slate-300 rounded-full"></span>
-                      <span className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">{course.credits} Credits</span>
+      {/* Notes if any */}
+      {recommendations.notes && (
+        <div className="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+          <p className="text-xs text-blue-700">{recommendations.notes}</p>
+        </div>
+      )}
+
+      {/* Courses List */}
+      <div className="space-y-4">
+        <h3 className="text-[11px] font-black text-[#1e3a5f] uppercase tracking-widest border-l-4 border-amber-400 pl-3 mb-4">
+          Recommended Courses ({recommendations.courses.length})
+        </h3>
+        
+        {recommendations.courses.map((course: any, index: number) => {
+          const actionBadge = getActionBadge(course.actionRequired);
+          const ActionIcon = actionBadge.icon;
+          const courseKey = course.courseId !== null ? course.courseId : index;
+          const isExpanded = expandedCourses.has(courseKey);
+          
+          return (
+            <div 
+              key={`course-${courseKey}`}
+              className={`bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all ${getPriorityColor(course.priority)} border-l-4`}
+            >
+              {/* Course Header */}
+              <div 
+                className="p-5 cursor-pointer hover:bg-slate-50/50 transition-colors" 
+                onClick={() => toggleCourseExpand(course.courseId, index)}
+              >
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
+                  <div className="flex-1">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-[#1e3a5f]/10 rounded-xl flex items-center justify-center">
+                          <BookOpen size={18} className="text-[#1e3a5f]" />
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-sm md:text-base font-black text-[#1e3a5f] mb-1">
+                          {course.courseName}
+                        </h4>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          <span className="text-[9px] font-black bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md uppercase">
+                            {course.category}
+                          </span>
+                          <span className="text-[9px] font-black bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md uppercase">
+                            {course.credits} Credits
+                          </span>
+                          <span className={`text-[9px] font-black px-2 py-0.5 rounded-md uppercase border ${actionBadge.color}`}>
+                            <ActionIcon size={10} className="inline mr-1" />
+                            {actionBadge.text}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  
-                  <div className="inline-flex items-center gap-1.5 bg-blue-50 px-3 py-1.5 md:py-1 rounded-full border border-blue-100 self-start">
-                    <CheckCircle2 size={12} className="text-blue-500" />
-                    <span className="text-[8px] md:text-[9px] font-black text-blue-600 uppercase tracking-tighter">
-                      {course.basis}
-                    </span>
+                  <div className="flex items-center gap-3">
+                    {course.timeSlot && (
+                      <div className="hidden md:flex items-center gap-1 text-[9px] font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded-md">
+                        <Clock size={10} />
+                        <span>Schedule Available</span>
+                      </div>
+                    )}
+                    {isExpanded ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
                   </div>
-                </div>
-
-                {/* Advisor's Note - Updated Text & Non-Italic */}
-                <div className="bg-slate-50/80 p-4 rounded-2xl border border-dashed border-slate-200">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Info size={12} className="text-[#1e3a5f]" />
-                    <span className="text-[8px] md:text-[9px] font-black text-[#1e3a5f] uppercase tracking-widest">Advisor's Note</span>
-                  </div>
-                  <p className="text-[10px] md:text-[11px] font-bold text-slate-600 leading-relaxed">
-                    "{course.advisorNote}"
-                  </p>
                 </div>
               </div>
+
+              {/* Expanded Details */}
+              {isExpanded && (
+                <div className="border-t border-slate-100 p-5 bg-slate-50/50 space-y-4">
+                  {/* Reason */}
+                  <div>
+                    <h5 className="text-[9px] font-black text-[#1e3a5f] uppercase tracking-wider mb-2">
+                      Advisor Note
+                    </h5>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {course.reason}
+                    </p>
+                  </div>
+
+                  {/* Schedule */}
+                  {course.timeSlot && (
+                    <div>
+                      <h5 className="text-[9px] font-black text-[#1e3a5f] uppercase tracking-wider mb-2">
+                        Schedule
+                      </h5>
+                      <p className="text-xs font-mono text-slate-700 bg-white p-2 rounded-lg border border-slate-100">
+                        {course.timeSlot}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Offered Program */}
+                  {course.offeredProgram && (
+                    <div>
+                      <h5 className="text-[9px] font-black text-[#1e3a5f] uppercase tracking-wider mb-2">
+                        Offered Program
+                      </h5>
+                      <p className="text-xs text-slate-600">
+                        {course.offeredProgram}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Substitute Courses */}
+                  {course.substituteCourses && course.substituteCourses.length > 0 && (
+                    <div>
+                      <h5 className="text-[9px] font-black text-amber-600 uppercase tracking-wider mb-2">
+                        Substitute Options
+                      </h5>
+                      <div className="space-y-2">
+                        {course.substituteCourses.map((sub: any, idx: number) => (
+                          <div key={idx} className="bg-white p-3 rounded-lg border border-amber-100">
+                            <p className="text-xs font-bold text-[#1e3a5f]">{sub.courseName}</p>
+                            <div className="flex gap-2 mt-1">
+                              <span className="text-[8px] font-bold text-slate-500 uppercase">
+                                {sub.credits} Credits
+                              </span>
+                              <span className="text-[8px] font-bold text-slate-500 uppercase">
+                                {sub.category}
+                              </span>
+                              {sub.semester && (
+                                <span className="text-[8px] font-bold text-amber-600 uppercase">
+                                  Semester {sub.semester}
+                                </span>
+                              )}
+                            </div>
+                            {sub.reason && (
+                              <p className="text-[9px] text-slate-500 mt-1">{sub.reason}</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          ))
-        ) : (
-          <div className="text-center py-16 md:py-20 bg-slate-50 rounded-[2.5rem] md:rounded-[3rem] border-2 border-dashed border-slate-200 px-6">
-            <LayoutGrid className="mx-auto text-slate-300 mb-4" size={40} />
-            <p className="text-slate-400 font-black uppercase text-[10px] md:text-[12px] tracking-widest leading-none">No recommendations yet</p>
-          </div>
-        )}
+          );
+        })}
       </div>
 
-      {/* Helpful Hint */}
-      <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100 flex flex-col sm:flex-row items-center sm:items-start gap-3">
-        <div className="h-8 w-8 bg-amber-500 rounded-lg flex items-center justify-center text-white shrink-0 shadow-lg shadow-amber-200">
-          <Zap size={16} />
+      {/* Footer with summary */}
+      <div className="mt-8 p-4 bg-slate-50 rounded-xl border border-slate-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Info size={14} className="text-slate-400" />
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+              Need help?
+            </span>
+          </div>
+          <p className="text-[9px] text-slate-500">
+            Contact your academic advisor for questions about these recommendations
+          </p>
         </div>
-        <p className="text-[9px] md:text-[10px] font-bold text-amber-800 leading-snug text-center sm:text-left">
-          These suggestions were made based on your academic roadmap. You can officially register for these courses during your next enrollment window.
-        </p>
       </div>
     </div>
   );
-}
+};

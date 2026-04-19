@@ -22,7 +22,7 @@ import SubmitRequest from "../../../../components/RequestFoam/SubmitRequest";
 import { StudentChat } from "../../../../components/Chat/StudentChat"; 
 import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRemarks";
 import { Timetable } from "../../../../components/Timetable/Timetable";
-import ViewRecommedCourse from "../../../../components/CourseRecommendation/ViewRecommedCourse";
+import { ViewRecommedCourse } from "../../../../components/CourseRecommendation/ViewRecommedCourse";
 import { RoadmapDetailView } from "../../../../components/Roadmap/RoadmapView";
 
 // ===== IMPORT YOUR HOOKS =====
@@ -124,7 +124,7 @@ useEffect(() => {
       id: student.id,
       studentName: student.studentName  || 'Student',
       email: student.email ,
-      sapid: student.User.sapid,
+      sapid: student.User?.sapid,
       batch: student.BatchModel?.batchName || 'N/A',
       batchYear: student.BatchModel?.batchYear || 'N/A',
       department: student.BatchModel?.ProgramModel?.programName || 'N/A',
@@ -382,9 +382,6 @@ useEffect(() => {
               {/* Course Recommendations View */}
               {view === "CourseRecommendation" && (
                 <ViewRecommedCourse 
-                  suggestedCourses={[]} 
-                  advisorName="Your Academic Advisor" 
-                  lastUpdated="Recent" 
                   onBack={goBack} 
                 />
               )}

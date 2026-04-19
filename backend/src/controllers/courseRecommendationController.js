@@ -4,11 +4,14 @@ import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js"
 import SessionalTranscript from "../models/sessionalTranscriptModel.js"
 import DegreeTranscript from "../models/degreeTranscriptModel.js"
 import CategoryModel from "../models/categoryModel.js"
+import User from "../models/userModel.js";
 import CourseCategoryModel from "../models/courseCategoryModel.js"
 import CoursesModel from "../models/coursesModel.js"
 import RoadmapModel from "../models/roadmapModel.js";
 import Student from "../models/studentModel.js";
 import getCreditHours from "../utils/getAllowedCredits.js";
+import AdvisorFinalRecommendation from '../models/advisorFinalCourseRecommendation.js';
+import BatchAdvisor from '../models/FacultyAdvisorModel.js'; 
 import mapCourseOfferingsWithUnClearRoadmap from "../utils/sesssionOfferedCourses.js"
 import transcriptAnalyzer from "../utils/fetchFWDgradeCourses.js";
 import CourseOfferingModel from "../models/courseOfferingModel.js";
@@ -45,7 +48,9 @@ const recommendCourses = async (req, res) => {
             return res.status(404).json({ success: false, message: "Student not found" });
         }
 
-        console.log("Student found:", student);
+        const session = await SessionModel.findOne({ where: { sessionType, sessionYear } });
+      if (!session) return res.status(404).json({ success: false, message: 'Session not found' });
+ 
 
         const degreeTranscript = await DegreeTranscript.findOne({ 
             where: { studentId: student.id } 
@@ -94,34 +99,58 @@ const recommendCourses = async (req, res) => {
                 studentStatus: student.StudentStatus ? student.StudentStatus.currentStatus : "Unknown"
             }
         );
-        console.log("Suggested Courses:", suggestedCourses);
+      //  console.log("Suggested Courses:", suggestedCourses);
 
-        // Get new course offering list along with timetable
-            let offeredCourses = await CourseOfferingModel.findAll({
-                
-                include: [
-                    {
-                        model: BatchModel,
-                       
-                    },
-                    {
-                        model: ProgramModel
-                    },
-                    {
-                        model: SessionModel,
-                        where: { 
-                            sessionType: sessionType,
-                            sessionYear: sessionYear
-                        }
-                    },
-                    {
-                        model: TimetableModel, 
-                        
-                    }
-                ]
+                 let offeredCourses = await CourseOfferingModel.findAll({
+            where: { sessionId: session.id },
+            include: [
+                { model: BatchModel },
+                { model: ProgramModel }
+            ]
+        });
+
+        if(!offeredCourses){
+            return res.json({error:"No courses offered in this session yet",success:false})
+        }
+
+        console.log(`Found ${offeredCourses.length} course offerings for session ${session.id}`);
+const courseOfferingIds = offeredCourses.map(course => course.id);
+        
+        let timetablesMap = new Map();
+        
+        if (courseOfferingIds.length > 0) {
+            const timetables = await TimetableModel.findAll({
+                where: { 
+                    courseOfferingId: courseOfferingIds 
+                },
+                raw: true
             });
+            
+            console.log(`Found ${timetables.length} timetables for these course offerings`);
+             if(!timetables){
+            return res.json({error:"No Timetable set for this session yet",success:false})
+        }
 
-         console.log("Offered Courses Count:", offeredCourses);
+            // Group timetables by courseOfferingId
+            timetables.forEach(timetable => {
+                const courseId = timetable.courseOfferingId;
+                if (!timetablesMap.has(courseId)) {
+                    timetablesMap.set(courseId, []);
+                }
+                timetablesMap.get(courseId).push(timetable);
+            });
+        }
+
+        // STEP 3: Attach timetables to each course offering
+        offeredCourses = offeredCourses.map(course => {
+            const courseJson = course.toJSON();
+            const courseTimetables = timetablesMap.get(course.id) || [];
+            
+            return {
+                ...courseJson,
+                timetables: courseTimetables
+            };
+        });
 
         const roadmapId = student.BatchModel.roadmapId;
         // Get student roadmap from the already fetched data
@@ -185,9 +214,10 @@ const recommendCourses = async (req, res) => {
             console.warn("No roadmap found for student's batch");
             return res.json({message:"Roadmap not found",success:false})
         }
+        if (!roadmap.SemesterRoadmapModels?.length) {
+            return res.status(400).json({ success: false, message: 'Roadmap has no semester data' });
+        }
         
-        console.log("Roadmap:  ", roadmap)
-       
             if (roadmap && roadmap.SemesterRoadmapModels) {
                   const { roadmapCourses } = await mapCourseOfferingsWithUnClearRoadmap(
                                         suggestedCourses, 
@@ -213,34 +243,15 @@ const recommendCourses = async (req, res) => {
                         }))
                     };
         
-        // Prepare offered courses for LLM
-        const offeredCoursesForLLM = offeredCourses.map(oc => ({
-            courseName: oc.courseName,
-            credits: oc.credits,
-            category: oc.courseCategory,
-            timetables: (oc.TimetableModels || []).map(t => ({
-                day: t.day,
-                startTime: t.startTime,
-                endTime: t.endTime,
-                venue: t.venue,
-                instructor: t.instructor,
-                program: oc.ProgramModel?.programName || 'N/A',
-                batch: oc.BatchModel?.batchName || 'N/A'
-            }))
-        }));
         
         const llmRecommendations = await llmRecommendationService.generateRecommendations(
             studentDataForLLM,
-            offeredCoursesForLLM,
+            offeredCourses,
             allowedCHR,
+            student.BatchModel?.programName || 'SE', 
             student.StudentStatus.currentStatus
         );
-        
-        // Save to database
-        const session = await SessionModel.findOne({
-            where: { sessionType, sessionYear }
-        });
-        
+    
         const sessionalRecommendation = await SessionalRecommendation.create({
             recommendationText: llmRecommendations.detailedExplanation,
             recommendedCoursesSummary: llmRecommendations.summary,
@@ -259,23 +270,25 @@ const recommendCourses = async (req, res) => {
                 ];
 
         
-        for (const rec of allRecommendations) {
-          const suggestedCourses = await SuggestedCourses.create({
-                 courseName: rec.courseName,
-                credits: rec.credits,
-                category: rec.category,
-                sessionalRecommendationId: sessionalRecommendation.id,
-                priority: rec.priority || llmRecommendationService.generateRecommendations(rec),
-                reason: rec.reason,
-                isOffered: rec.isOffered || false,
-                offeredProgram: rec.offeredProgram,
-                timeSlot: rec.timeSlot
-            });
-        }
+                await Promise.all( allRecommendations.map(rec =>
+                            SuggestedCourses.create({
+                                courseName:                 rec.courseName,
+                                credits:                    rec.credits,
+                                category:                   rec.category,
+                                sessionalRecommendationId:  sessionalRecommendation.id,
+                                priority:                   rec.priority.toUpperCase(),  
+                                reason:                     rec.reason,
+                                isOffered:                  rec.isOffered    || false,
+                                offeredProgram:             rec.offeredProgram || null,
+                                timeSlot:                   rec.timeSlot      || null,
+                            })
+            )
+        );
         
         return res.status(200).json({
             success: true,
             data: {
+                sessionId:session.id,
                 allowedCreditHours: allowedCHR,
                 llmRecommendations: llmRecommendations,
                 savedRecommendationId: sessionalRecommendation.id
@@ -283,6 +296,8 @@ const recommendCourses = async (req, res) => {
         });
         
     }
+       return res.status(400).json({ success: false, message: 'Roadmap has no semester data' });
+
 } catch (error) {
         console.error("Error recommending courses:", error);
         res.status(500).json({ 
@@ -293,5 +308,279 @@ const recommendCourses = async (req, res) => {
     }
 };
 
+ const finalizeRecommendation = async (req, res) => {
+    try {
+        const {
+            advisorId,
+            studentId,
+            sessionId,
+            sessionalRecommendationId,
+            selectedCourses,
+            notes,
+        } = req.body;
+ 
+        if (!advisorId || !studentId || !sessionId) {
+            return res.status(400).json({
+                success: false,
+                message: 'advisorId, studentId, and sessionId are required',
+            });
+        }
+ 
+        if (!selectedCourses || !Array.isArray(selectedCourses) || selectedCourses.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'At least one course must be selected',
+            });
+        }
 
-export default { recommendCourses };
+        const student = await Student.findByPk(studentId);
+        if (!student) {
+            return res.status(404).json({ success: false, message: 'Student not found' });
+        }
+ 
+        const session = await SessionModel.findByPk(sessionId);
+        if (!session) {
+            return res.status(404).json({ success: false, message: 'Session not found' });
+        }
+
+        const existing = await AdvisorFinalRecommendation.findOne({
+            where: { advisorId, studentId, sessionId },
+        });
+ 
+        const totalCredits = selectedCourses.reduce(
+            (sum, c) => sum + (parseInt(c.credits) || 0), 0
+        );
+ 
+        let finalRec;
+        if (existing) {
+            await existing.update({
+                sessionalRecommendationId: sessionalRecommendationId || existing.sessionalRecommendationId,
+                recommendedCourses: selectedCourses,
+                totalCredits,
+                notes: notes || existing.notes,
+            });
+            finalRec = existing;
+        } else {
+            finalRec = await AdvisorFinalRecommendation.create({
+                advisorId,
+                studentId,
+                sessionId,
+                sessionalRecommendationId: sessionalRecommendationId || null,
+                recommendedCourses: selectedCourses,
+                totalCredits,
+                notes: notes || null,
+            });
+        }
+ 
+        return res.status(200).json({
+            success: true,
+            message: existing
+                ? 'Recommendation updated and sent to student'
+                : 'Recommendation finalized and sent to student',
+            data: {
+                id: finalRec.id,
+                advisorId: finalRec.advisorId,
+                studentId: finalRec.studentId,
+                sessionId: finalRec.sessionId,
+                totalCredits: finalRec.totalCredits,
+                coursesCount: selectedCourses.length,
+                createdAt: finalRec.createdAt,
+                updatedAt: finalRec.updatedAt,
+            },
+        });
+ 
+    } catch (error) {
+        console.error('Finalize recommendation error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+};
+
+ const getAdvisoryLogs = async (req, res) => {
+    try {
+        const { advisorId } = req.params;
+        const {
+            sessionId,
+            studentId,
+            page = 1,
+            limit = 20,
+        } = req.query;
+ 
+        if (!advisorId) {
+            return res.status(400).json({ success: false, message: 'advisorId is required' });
+        }
+ 
+        // ── Build dynamic where clause ───────────────────────────────────────
+        const where = { advisorId: parseInt(advisorId) };
+        if (sessionId) where.sessionId = parseInt(sessionId);
+        if (studentId) where.studentId = parseInt(studentId);
+ 
+        const offset = (parseInt(page) - 1) * parseInt(limit);
+ 
+        const { count, rows: logs } = await AdvisorFinalRecommendation.findAndCountAll({
+            where,
+            include: [
+                {
+                    model: Student,
+                    as: 'Student',
+                    include: [
+                                {
+                            model:User,
+                            attributes:{exclude:["password"]}
+                        },
+                        {
+                            model:BatchModel,
+                            include:[
+                                {
+                                    model:ProgramModel,
+                                },
+                            ]
+                        },
+                    ],
+                },
+                {
+                    model: SessionModel,
+                    as: 'Session',
+                    attributes: ['id', 'sessionType', 'sessionYear'],
+                },
+            ],
+            order: [['createdAt', 'DESC']],
+            limit: parseInt(limit),
+            offset,
+        });
+ 
+        return res.status(200).json({
+            success: true,
+            data: {
+                logs,
+                pagination: {
+                    total: count,
+                    page: parseInt(page),
+                    limit: parseInt(limit),
+                    totalPages: Math.ceil(count / parseInt(limit)),
+                },
+            },
+        });
+ 
+    } catch (error) {
+        console.error('Get advisory logs error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+};
+ 
+ const getRecommendationById = async (req, res) => {
+    try {
+        const { id } = req.params;
+ 
+        const recommendation = await SessionalRecommendation.findOne({
+            where: { id },
+            include: [
+                {
+                    model: SuggestedCourses,
+                    as: 'SuggestedCourses',
+                },
+                {
+                    model: Student,
+                    attributes: ['id', 'studentName', 'currentSemester'],
+                },
+                {
+                    model: SessionModel,
+                    attributes: ['id', 'sessionType', 'sessionYear'],
+                },
+            ],
+        });
+ 
+        if (!recommendation) {
+            return res.status(404).json({ success: false, message: 'Recommendation not found' });
+        }
+ 
+        // Reconstruct the priority-bucketed shape the frontend expects
+        const courses = recommendation.SuggestedCourses || [];
+        const llmRecommendations = {
+            summary: recommendation.recommendedCoursesSummary,
+            recommendations: {
+                critical: courses.filter(c => c.priority === 'critical'),
+                high:     courses.filter(c => c.priority === 'high'),
+                medium:   courses.filter(c => c.priority === 'medium'),
+                low:      courses.filter(c => c.priority === 'low'),
+            },
+            detailedExplanation: recommendation.recommendationText,
+        };
+ 
+        return res.status(200).json({
+            success: true,
+            data: {
+                allowedCreditHours: recommendation.totalCreditsAllowed,
+                llmRecommendations,
+                savedRecommendationId: recommendation.id,
+            },
+        });
+ 
+    } catch (error) {
+        console.error('Get recommendation by ID error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+};
+ 
+ const getStudentRecommendations = async (req, res) => {
+    try {
+        const { studentId } = req.params;
+   
+        const where = { studentId: parseInt(studentId) };
+        
+        const recommendations = await AdvisorFinalRecommendation.findAll({
+            where,
+            include: [
+                {
+                    model: SessionModel,
+                    as: 'Session',
+                    attributes: ['id', 'sessionType', 'sessionYear'],
+                },
+            ],
+            order: [['createdAt', 'DESC']],
+        });
+ 
+        if (!recommendations.length) {
+            return res.status(200).json({
+                success: true,
+                data: [],
+                message: 'No recommendations found for this student',
+            });
+        }
+ 
+        // Shape response to match ViewRecommedCourse component props
+        const shaped = recommendations.map(rec => ({
+            id: rec.id,
+            sessionType: rec.Session?.sessionType,
+            sessionYear: rec.Session?.sessionYear,
+            totalCredits: rec.totalCredits,
+            notes: rec.notes,
+            courses: rec.recommendedCourses,   // the JSON array
+            sentAt: rec.createdAt,
+        }));
+ 
+        return res.status(200).json({ success: true, data: shaped });
+ 
+    } catch (error) {
+        console.error('Get student recommendations error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+};
+
+
+export default { recommendCourses ,finalizeRecommendation, getAdvisoryLogs,getRecommendationById,getStudentRecommendations};
