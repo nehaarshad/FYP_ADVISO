@@ -28,7 +28,7 @@ export default function LandingPage() {
   }, [router]);
   
   const handleClick = () => {
-    router.push('/views/auth/login')
+    router.push('/views/auth/registeration/signup'); 
   };
 
   return (
