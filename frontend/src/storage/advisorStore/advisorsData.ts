@@ -36,7 +36,7 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
   statistics: null,
   isInitialized: false,
 
-  fetchAdvisors: async (forceRefresh = false) => {
+  fetchAdvisors: async (forceRefresh ) => {
     const { isLoading, isInitialized } = get();
   
   if (isInitialized && !forceRefresh) return get().advisors;
@@ -115,27 +115,53 @@ export const useAdvisorStore = create<AdvisorState>((set, get) => ({
     get().applyFilters();
   },
 
-  updateAdvisor: (id: number, updatedData: any) => {
-    set((state) => {
-      const updatedAdvisors = state.advisors.map((advisor) =>
-        advisor.id === id
-          ? {
-              ...advisor,
-              ...updatedData,
-              User: {
-                ...advisor.User,
-                isActive: updatedData.isCurrentlyAdvised
-              }
-            }
-          : advisor
-      );
+updateAdvisor: (id: number, updatedData: any) => {
+  set((state) => {
+    const updatedAdvisors: BatchAdvisor[] = state.advisors.map((advisor) => {
+      if (advisor.id !== id) return advisor;
+
+      const existingBatchAssignment = advisor.BatchAssignments?.[0];
+      const existingBatchModel = existingBatchAssignment?.BatchModel;
 
       return {
-        advisors: updatedAdvisors,
-        filteredAdvisors: updatedAdvisors
-      };
+        ...advisor,
+        advisorName: updatedData.advisorName ?? advisor.advisorName,
+        email: updatedData.email ?? advisor.email,
+        gender: updatedData.gender ?? advisor.gender,
+        contactNumber: updatedData.contactNumber ?? advisor.contactNumber,
+        User: {
+          ...advisor.User,
+          isActive: updatedData.isCurrentlyAdvised ?? advisor.User?.isActive,
+        } as BatchAdvisor['User'],
+        BatchAssignments: existingBatchAssignment
+  ? [
+      {
+        ...existingBatchAssignment,
+        isCurrentlyAdvised: updatedData.isCurrentlyAdvised,
+        BatchModel: {
+          ...existingBatchModel,
+          id: existingBatchModel?.id as number,
+          batchName: updatedData.batchName ?? existingBatchModel?.batchName,
+          batchYear: updatedData.batchYear ?? existingBatchModel?.batchYear,
+          ProgramModel: {
+            ...existingBatchModel?.ProgramModel,
+            programName:
+              updatedData.programName ??
+              existingBatchModel?.ProgramModel?.programName,
+          } as NonNullable<BatchAdvisor['BatchAssignments']>[number]['BatchModel']['ProgramModel'],
+        },
+      } as NonNullable<BatchAdvisor['BatchAssignments']>[number], // ← handles null | undefined
+    ]
+  : advisor.BatchAssignments,
+      } as BatchAdvisor;                                  
     });
-  },
+ get().applyFilters();
+    return {
+      advisors: updatedAdvisors,
+      filteredAdvisors: updatedAdvisors,
+    };
+  });
+},
 
   applyFilters: () => {
     const { advisors, filters } = get();

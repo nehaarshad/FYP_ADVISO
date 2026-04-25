@@ -50,6 +50,7 @@ class RoadmapRepository extends BaseApiService {
         this.programRoadmapsCache = [];
         this.batchRoadmapCache = null;
         this.lastFetchTime = {};
+        this.getProgramRoadmaps(data.programName,true)
       }
       
       return response;
@@ -70,7 +71,9 @@ class RoadmapRepository extends BaseApiService {
     }
 
     try {
-      const url = AppApis.getProgramRoadmapsUrl.replace(':programName', programName);
+         const encodedProgramName = encodeURIComponent(programName);
+      const url = AppApis.getProgramRoadmapsUrl.replace(':programName', encodedProgramName);
+      console.log("get prog roadmap ", url)
       const response = await this.getApiResponse(url);
       
       if (response.success && response.data) {
@@ -125,11 +128,26 @@ class RoadmapRepository extends BaseApiService {
     }
   }
 
-  clearCache(): void {
+// In roadmapRepository.ts, enhance the clearCache method:
+clearCache(programName?: string, batchKey?: string): void {
+  if (programName) {
+    // Clear specific program cache
+    const programCacheKey = `program_${programName}`;
+    delete this.lastFetchTime[programCacheKey];
     this.programRoadmapsCache = [];
+  } else {
+    this.programRoadmapsCache = [];
+  }
+  
+  if (batchKey) {
+    delete this.lastFetchTime[batchKey];
+    this.batchRoadmapCache = null;
+  } else if (!programName) {
+    // Only clear all if no specific parameters
     this.batchRoadmapCache = null;
     this.lastFetchTime = {};
   }
+}
 }
 
 export const roadmapRepository = RoadmapRepository.getInstance();
