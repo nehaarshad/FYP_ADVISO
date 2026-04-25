@@ -11,10 +11,8 @@ export const useUpdateAdvisor = () => {
   const { updateAdvisor: updateInStore, fetchAdvisors, getAdvisorBySapId } = useAdvisorStore();
 
   const fetchAdvisorBySapIdFromStore = async (sapid: number) => {
-    // First try to get from store
     let advisor = getAdvisorBySapId(sapid);
     
-    // If not in store, fetch all advisors
     if (!advisor) {
       await fetchAdvisors(true);
       advisor = getAdvisorBySapId(sapid);
@@ -33,10 +31,7 @@ export const useUpdateAdvisor = () => {
       
       if (response.success) {
         setSuccess(true);
-        // Update in store immediately
         updateInStore(id, data as any);
-        // Refresh from backend to ensure consistency
-        await fetchAdvisors(true);
         return { success: true, data: response.data };
       } else {
         setError(response.error || 'Failed to update advisor');

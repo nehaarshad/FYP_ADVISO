@@ -59,36 +59,47 @@ export const useRoadmap = () => {
   }, []);
 
   const uploadRoadmap = useCallback(async (data: UploadRoadmapData) => {
-    setIsLoading(true);
-    setError(null);
-    setUploadProgress(0);
+  setIsLoading(true);
+  setError(null);
+  setUploadProgress(0);
+  
+  try {
+    const interval = setInterval(() => {
+      setUploadProgress(prev => Math.min(prev + 10, 90));
+    }, 200);
     
-    try {
-      const interval = setInterval(() => {
-        setUploadProgress(prev => Math.min(prev + 10, 90));
-      }, 200);
+    const response = await roadmapRepository.uploadRoadmap(data);
+    
+    clearInterval(interval);
+    setUploadProgress(100);
+    
+    if (response.success) {
+      // Clear repository cache
+      roadmapRepository.clearCache();
       
-      const response = await roadmapRepository.uploadRoadmap(data);
+      // Clear React hook cache for ALL relevant keys
+      hasFetched.current = {};
       
-      clearInterval(interval);
-      setUploadProgress(100);
+      // Force refresh all relevant data
+      await fetchProgramRoadmaps(data.programName, true);
       
-      if (response.success) {
-        // Clear relevant caches
-        roadmapRepository.clearCache();
-        hasFetched.current = {};
-        return { success: true, data: response.data };
-      } else {
-        setError(response.error || 'Upload failed');
-        return { success: false, error: response.error };
+      // If batch info is provided, also refresh batch roadmap
+      if (data.batchName && data.batchYear) {
+        await fetchBatchRoadmap(data.batchName, data.batchYear, data.programName, true);
       }
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-      return { success: false, error: err.message };
-    } finally {
-      setIsLoading(false);
+      
+      return { success: true, data: response.data };
+    } else {
+      setError(response.error || 'Upload failed');
+      return { success: false, error: response.error };
     }
-  }, []);
+  } catch (err: any) {
+    setError(err.message || 'An error occurred');
+    return { success: false, error: err.message };
+  } finally {
+    setIsLoading(false);
+  }
+}, [fetchProgramRoadmaps, fetchBatchRoadmap]);
 
   const clearError = useCallback(() => setError(null), []);
 

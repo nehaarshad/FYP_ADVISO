@@ -9,15 +9,87 @@ export default function detectSummaryRow(worksheet) {
   console.log(`\nDetecting summary row in "${worksheet.name}"`);
   console.log(`   Total rows: ${maxRow}, Total columns: ${maxCol}`);
   
-  // Process the last two rows
-  const summaryRowNum = maxRow - 1;
-  const creditsRowNum = maxRow;
-  
-  console.log(`   Summary row: ${summaryRowNum}, Credits row: ${creditsRowNum}`);
-  
   if (maxRow < 4) {
     throw new Error(`Sheet "${worksheet.name}": insufficient rows to detect summary row.`);
   }
+  
+  // Scan from bottom to find the last row with data (not empty)
+  let lastDataRow = null;
+  for (let row = maxRow; row >= 1; row--) {
+    let hasData = false;
+    for (let c = 1; c <= maxCol; c++) {
+      const cell = worksheet.getCell(row, c);
+    if (!cell.value) continue;
+    const val = getCellText(cell);
+    if (!val) continue;
+    const color = getCellColor(cell);
+    if (color && val && val.match(REGEXS.CREDITS_TEXT)) {
+      hasData=true
+    }
+    }
+    if (hasData) {
+      lastDataRow = row;
+      break;
+    }
+  }
+  
+  if (!lastDataRow) {
+    throw new Error(`Sheet "${worksheet.name}": No data found in sheet.`);
+  }
+  
+  console.log(`   Last row with data: ${lastDataRow}`);
+  
+  // The credits row is the last data row
+  const creditsRowNum = lastDataRow;
+  // The summary row is the row above credits row
+  const summaryRowNum = creditsRowNum - 1;
+  
+  // Validate that summary row exists
+  if (summaryRowNum < 1) {
+    throw new Error(`Sheet "${worksheet.name}": No row above credits row found.`);
+  }
+  
+  // Verify that summary row has colored cells (categories)
+  let coloredCellsInSummary = 0;
+  for (let c = 1; c <= maxCol; c++) {
+    const cell = worksheet.getCell(summaryRowNum, c);
+    if (!cell.value) continue;
+    const val = getCellText(cell);
+    if (!val) continue;
+    const color = getCellColor(cell);
+    if (color && val && !REGEXS.NUMBER_ONLY.test(val)) {
+      coloredCellsInSummary++;
+    }
+  }
+  
+  if (coloredCellsInSummary < 4) {
+    console.log(`   Warning: Summary row ${summaryRowNum} only has ${coloredCellsInSummary} colored cells (expected >=4)`);
+    // Try to find alternative: maybe summary row is 2 rows above?
+    const alternativeSummaryRow = creditsRowNum - 2;
+    if (alternativeSummaryRow >= 1) {
+      let altColoredCells = 0;
+      for (let c = 1; c <= maxCol; c++) {
+        const cell = worksheet.getCell(alternativeSummaryRow, c);
+        if (!cell.value) continue;
+        const val = getCellText(cell);
+        if (!val) continue;
+        const color = getCellColor(cell);
+        if (color && val && !REGEXS.NUMBER_ONLY.test(val)) {
+          altColoredCells++;
+        }
+      }
+      if (altColoredCells >= 4) {
+        console.log(`   Using alternative summary row: ${alternativeSummaryRow} (2 rows above credits)`);
+        summaryRowNum = alternativeSummaryRow;
+      } else {
+        throw new Error(`Sheet "${worksheet.name}": Summary row ${summaryRowNum} has insufficient categories (${coloredCellsInSummary}). Found ${altColoredCells} in row ${alternativeSummaryRow}`);
+      }
+    } else {
+      throw new Error(`Sheet "${worksheet.name}": Summary row ${summaryRowNum} has insufficient categories (${coloredCellsInSummary}).`);
+    }
+  }
+  
+  console.log(`   Summary row: ${summaryRowNum}, Credits row: ${creditsRowNum}`);
   
   // Process summary row
   const coloredCells = [];
@@ -70,14 +142,14 @@ export default function detectSummaryRow(worksheet) {
     let creditValue = 0;
     
     // Try to extract credit number from various formats
-    if (REGEXS.CREDITS_TEXT.test(val)) {
+    if (REGEXS.CREDITS_TEXT && REGEXS.CREDITS_TEXT.test(val)) {
       isCreditText = true;
       const match = val.match(REGEXS.CREDITS_TEXT);
       creditValue = match ? parseInt(match[1], 10) : 0;
       console.log(`   → Matched CREDITS_TEXT: ${creditValue}`);
     }
     // Check if it's just a number
-    else if (REGEXS.NUMBER_ONLY.test(val)) {
+    else if (REGEXS.NUMBER_ONLY && REGEXS.NUMBER_ONLY.test(val)) {
       isCreditText = true;
       creditValue = parseInt(val, 10);
       console.log(`   → Matched NUMBER_ONLY: ${creditValue}`);
@@ -92,14 +164,13 @@ export default function detectSummaryRow(worksheet) {
     
     if (isCreditText && creditValue > 0) {
       creditsData.push({ col: c, value: val, creditValue, color });
-      console.log(`Added to creditsData: ${creditValue} credits`);
+      console.log(`   Added to creditsData: ${creditValue} credits`);
     }
   }
   
   if (creditsData.length === 0) {
     throw new Error(`Sheet "${worksheet.name}": No credit data found in credits row.`);
   }
-  
   
   // categories array by matching with credits data
   const categories = [];
@@ -122,7 +193,9 @@ export default function detectSummaryRow(worksheet) {
         color: category.color,
         requiredCredits: matchedCredit,
       });
-    } 
+    } else {
+      console.log(`   Warning: No credit match found for category "${category.name}" with color ${category.color}`);
+    }
   }
   
   console.log(`\n Summary row detection complete:`);

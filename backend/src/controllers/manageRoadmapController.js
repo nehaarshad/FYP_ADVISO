@@ -75,7 +75,6 @@ const uploadNewRoadmap = async (req, res) => {
                 const [Category] = await CategoryModel.findOrCreate({
                     where: { categoryName: category.name ,colorScheme:category.color},
                     });
-                console.log(`Manage course category: ${Category.categoryName} (ID: ${Category.id})`);
                 const isexist=await RoadmapCourseCategoryModel.findOne({where:{
 
                     roadmapId: roadmap.id, //1
@@ -178,7 +177,7 @@ const uploadNewRoadmap = async (req, res) => {
                 }
    fs.unlinkSync(roadmapFile.path); // Delete the uploaded file after processing
        
-        return res.json({ message: 'Roadmap uploaded successfully', data:roadmap });
+        return res.status(201).json({ message: 'Roadmap uploaded successfully', data:roadmap });
 
     }
     catch (error) {
@@ -197,11 +196,12 @@ const getProgramRoadmaps = async (req, res) => {
         // Find program by name
         const program = await ProgramModel.findOne({ 
             where: { 
-                programName: programName 
+                 programName 
             } 
         });
 
         if (!program) {
+            console.log("program not found")
             return res.status(404).json({ error: "Program not found" });
         }
        const roadmap = await RoadmapModel.findAll({
@@ -258,11 +258,12 @@ const getProgramRoadmaps = async (req, res) => {
     ]
 });
         if (!roadmap) {
+            console.log("roadmap not found")
             return res.status(404).json({ error: "Roadmap not found for this program" });
         }
         
         
-        return res.json({data: roadmap } );
+        return res.status(200).json({data: roadmap } );
         
     } catch (error) {
         console.error("Error in getRoadmapDetails:", error);

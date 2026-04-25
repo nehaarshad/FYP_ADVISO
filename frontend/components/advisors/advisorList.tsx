@@ -159,22 +159,38 @@ export function AdvisorsList() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      {advisor.BatchAssignments && advisor.BatchAssignments.length > 0 ? (
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Layers size={12} className="text-slate-400" />
-                            <p className="text-[11px] font-bold text-[#1e3a5f]">
-                              {advisor.BatchAssignments[0]?.BatchModel?.batchName} {advisor.BatchAssignments[0]?.BatchModel?.batchYear}
-                            </p>
-                          </div>
-                          <p className="text-[9px] text-slate-400">
-                            {advisor.BatchAssignments[0]?.BatchModel?.ProgramModel?.programName}
-                          </p>
-                        </div>
-                      ) : (
-                        <p className="text-[11px] text-slate-400 italic">Not Assigned</p>
-                      )}
-                    </td>
+                        {(() => {
+                          // Find the active batch assignment
+                          const activeAssignment = advisor.BatchAssignments?.find(
+                            (assignment: any) => assignment.isCurrentlyAdvised === true
+                          );
+                          const displayAssignment = activeAssignment || advisor.BatchAssignments?.[0];
+                          
+                          if (displayAssignment) {
+                            return (
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-2">
+                                  <Layers size={12} className="text-slate-400" />
+                                  <p className="text-[11px] font-bold text-[#1e3a5f]">
+                                    {displayAssignment.BatchModel?.batchName} {displayAssignment.BatchModel?.batchYear}
+                                  </p>
+                                </div>
+                                <p className="text-[9px] text-slate-400">
+                                  {displayAssignment.BatchModel?.ProgramModel?.programName}
+                                </p>
+                                {displayAssignment.isCurrentlyAdvised && (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[8px] font-black">
+                                    <CheckCircle size={8} />
+                                    Current
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          } else {
+                            return <p className="text-[11px] text-slate-400 italic">Not Assigned</p>;
+                          }
+                        })()}
+                      </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase ${
                         advisor.User?.isActive 

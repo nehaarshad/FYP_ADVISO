@@ -126,7 +126,7 @@ const updateAdvisor = async(req,res)=>{
 
                 } else {
                     // 5. If not exists → create new
-                    await BatchAssignment.create({
+                   batchAssignment= await BatchAssignment.create({
                         advisorId: id,
                         batchId: batch.id,
                         startDate: new Date(),

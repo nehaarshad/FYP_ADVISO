@@ -30,6 +30,7 @@ export function RoadmapSection() {
   const roadmapsCache = useRef<Map<string, any[]>>(new Map());
 
   useEffect(() => {
+     clearError()
     fetchPrograms();
   }, []);
 

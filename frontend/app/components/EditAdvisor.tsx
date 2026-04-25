@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
@@ -8,6 +9,7 @@ import { useUpdateAdvisor } from '@/src/hooks/advisorHooks/updateAdvisor';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 import { usePrograms } from '@/src/hooks/programHook/useProgram';
 import { BatchAdvisor } from '@/src/models/FacultyAdvisorModel';
+import { advisorProfileRepository } from '@/src/repositories/userProfileData/advisorsRepository/advisorRepository';
 
 interface EditAdvisorProp {
   isOpen: boolean;
@@ -25,27 +27,33 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
   const { updateAdvisor, isLoading, error } = useUpdateAdvisor();
   const { fetchAdvisors } = useAdvisors();
 
-  useEffect(() => {
-    if (advisor) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setFormData({
-        id: advisor.id,
-        advisorName: advisor.advisorName || '',
-        sapid: advisor.User?.sapid || '',
-        email: advisor.email || '',
-        gender: advisor.gender || 'Male',
-        contactNumber: advisor.contactNumber || '',
-        batchName: advisor.BatchAssignments?.[0]?.BatchModel?.batchName || '',
-        batchYear: advisor.BatchAssignments?.[0]?.BatchModel?.batchYear || '',
-        programName: advisor.BatchAssignments?.[0]?.BatchModel?.ProgramModel?.programName || '',
-        isCurrentlyAdvised: advisor.BatchAssignments?.[0]?.isCurrentlyAdvised || false
-      });
-      const initialStatus = advisor.User?.isActive ? "Active" : "Inactive";
-      setStatus(initialStatus);
-      setUpdateSuccess(false);
-      setUpdateError(null);
-    }
-  }, [advisor]);
+ useEffect(() => {
+  if (advisor) {
+    const currentAssignment = advisor.BatchAssignments?.find(
+      (assignment: any) => assignment.isCurrentlyAdvised === true
+    );
+    
+    const activeAssignment = currentAssignment || advisor.BatchAssignments?.[0];
+    
+    setFormData({
+      id: advisor.id,
+      advisorName: advisor.advisorName || '',
+      sapid: advisor.User?.sapid || '',
+      email: advisor.email || '',
+      gender: advisor.gender || 'Male',
+      contactNumber: advisor.contactNumber || '',
+      batchName: activeAssignment?.BatchModel?.batchName || '',
+      batchYear: activeAssignment?.BatchModel?.batchYear || '',
+      programName: activeAssignment?.BatchModel?.ProgramModel?.programName || '',
+      isCurrentlyAdvised: activeAssignment?.isCurrentlyAdvised || false
+    });
+    
+    const initialStatus = advisor.User?.isActive ? "Active" : "Inactive";
+    setStatus(initialStatus);
+    setUpdateSuccess(false);
+    setUpdateError(null);
+  }
+}, [advisor]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -68,12 +76,13 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
     });
     
     if (result.success) {
-      setUpdateSuccess(true);
-      await fetchAdvisors(true);
-      setTimeout(() => {
-        setUpdateSuccess(false);
-        onClose(); // Close modal after successful update
-      }, 2000);
+        setUpdateSuccess(true);
+    advisorProfileRepository.clearCache();
+    await fetchAdvisors(true);    
+    setTimeout(() => {
+      setUpdateSuccess(false);
+      onClose(); 
+    }, 2000);
     } else {
       setUpdateError(result.error || "Failed to update advisor");
     }

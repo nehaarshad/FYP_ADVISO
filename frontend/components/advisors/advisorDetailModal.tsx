@@ -14,6 +14,10 @@ interface AdvisorDetailsModalProps {
 export function AdvisorDetailsModal({ isOpen, advisor, onClose, }: AdvisorDetailsModalProps) {
   if (!isOpen || !advisor) return null;
 
+const currentBatch = advisor?.BatchAssignments?.find(
+  (a: any) => a.isCurrentlyAdvised === true
+);
+const activeAssignment = currentBatch || advisor?.BatchAssignments?.[0];
 
   return (
     <AnimatePresence>
@@ -76,7 +80,7 @@ export function AdvisorDetailsModal({ isOpen, advisor, onClose, }: AdvisorDetail
               </div>
 
               {/* Batch Assignment */}
-              {advisor.BatchAssignments && advisor.BatchAssignments.length > 0 && (
+              {activeAssignment && (
                 <div>
                   <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-4">
                     Batch Assignment
@@ -85,19 +89,19 @@ export function AdvisorDetailsModal({ isOpen, advisor, onClose, }: AdvisorDetail
                     <div className="grid grid-cols-2 gap-4">
                       <InfoRow 
                         label="Batch" 
-                        value={`${advisor.BatchAssignments[0]?.BatchModel?.batchName} ${advisor.BatchAssignments[0]?.BatchModel?.batchYear}`}
+                        value={`${activeAssignment.BatchModel?.batchName} ${activeAssignment.BatchModel?.batchYear}`}
                       />
                       <InfoRow 
                         label="Program" 
-                        value={advisor.BatchAssignments[0]?.BatchModel?.ProgramModel?.programName}
+                        value={activeAssignment.BatchModel?.ProgramModel?.programName}
                       />
                       <InfoRow 
                         label="Start Date" 
-                        value={advisor.BatchAssignments[0]?.startDate ? new Date(advisor.BatchAssignments[0].startDate).toLocaleDateString() : 'N/A'}
+                        value={activeAssignment.startDate ? new Date(activeAssignment.startDate).toLocaleDateString() : 'N/A'}
                       />
                       <InfoRow 
                         label="Currently Advised" 
-                        value={advisor.BatchAssignments[0]?.isCurrentlyAdvised ? 'Yes' : 'No'}
+                        value={activeAssignment.isCurrentlyAdvised ? 'Yes' : 'No'}
                       />
                     </div>
                   </div>

@@ -9,6 +9,7 @@ import { UserCog, Save, Hash, GraduationCap, Mail, CheckCircle2, AlertCircle, Lo
 import { useUpdateStudent } from '@/src/hooks/studentsHook/updateStudent';
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { Student } from '@/src/models/studentModel';
+import { usePrograms } from '@/src/hooks/programHook/useProgram';
 
 interface EditStudentProp {
   isOpen: boolean;
@@ -22,12 +23,14 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
   const [formData, setFormData] = useState<any>(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
-  
+    const { programs, programOptions, isLoading: programsLoading } = usePrograms();
+    
   const { updateStudent, isLoading, error } = useUpdateStudent();
   const { fetchStudents } = useStudents();
 
   // Populate form when student prop changes
   useEffect(() => {
+    setUpdateError(null)
     if (student && isOpen) {
       setFormData({
         id: student.id,
@@ -209,18 +212,19 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-400 ml-5">Program *</label>
-                  <select 
-                    title="program name"
-                    name="programName"
-                    value={formData.programName}
-                    onChange={handleChange}
-                    className="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/30 cursor-pointer"
-                    required
-                  >
-                    <option value="">Select Program</option>
-                    <option value="Computer Science">BS Computer Science</option>
-                    <option value="Software Engineering">BS Software Engineering</option>
-                  </select>
+                   <select 
+              title='Program'
+                name="programName"
+                value={formData.programName}
+                onChange={handleChange}
+                className="w-full p-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
+                required
+              >
+                <option value="" disabled>Select Program</option>
+                {programs.map((p: any) => (
+                  <option key={p.id} value={p.programName}>{p.programName}</option>
+                ))}
+              </select>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <EditField 
