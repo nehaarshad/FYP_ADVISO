@@ -29,12 +29,9 @@ import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
-import { useStudents } from '@/src/hooks/studentsHook/useStudents';
-import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 
 
-export default function CoordinatorDashboard() {
-  //resolve conflict
+export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
   const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
@@ -167,7 +164,9 @@ export default function CoordinatorDashboard() {
                 {activeTab === "bulk-student-upload" && <StudentRecords/>}
                 {activeTab === "add-student" && <AddStudent/>}
                 {activeTab === "add-faculty" && <AddFaculty/>}
-                {activeTab === "edit-student" && <StudentList />}
+                {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={''} onViewProfile={function (s: any): void {
+                throw new Error('Function not implemented.');
+              } } />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}

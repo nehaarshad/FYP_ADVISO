@@ -56,10 +56,12 @@ const editStudent = (std: any) => {
     );
   }
   if (filterBatch) {
-    filteredStudents = filteredStudents.filter(s => s.BatchModel?.batchName === filterBatch);
+    filteredStudents = filteredStudents.filter((s) => {
+      return s.BatchModel?.batchName === filterBatch;
+    });
   }
   if (filterProgram) {
-    filteredStudents = filteredStudents.filter(s => s.BatchModel?.ProgramModel?.programName === filterProgram);
+    filteredStudents = filteredStudents.filter((s: any) => s.BatchModel?.ProgramModel?.programName === filterProgram);
   }
 
   if (isLoading) {
