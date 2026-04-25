@@ -20,6 +20,18 @@ const User = sequelize.define("User", {
         type: DataTypes.ENUM("student", "advisor","admin","coordinator"),
         allowNull: false,
     },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+    },
+    sessionToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    deactivateAt:{
+        type: DataTypes.DATE,
+        allowNull: true,
+    }
 }, {
     timestamps: true,
 });
