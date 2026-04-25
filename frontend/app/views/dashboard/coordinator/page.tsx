@@ -33,8 +33,9 @@ import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 
 
-export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
-  const [isClient, setIsClient] = useState(false);
+export default function CoordinatorDashboard() {
+  //resolve conflict
+  const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
   const [showNotifications, setShowNotifications] = useState(false);
