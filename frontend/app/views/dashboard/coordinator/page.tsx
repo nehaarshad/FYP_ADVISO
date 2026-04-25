@@ -32,6 +32,7 @@ import { StudentList } from '@/components/StudentDetails/StudentList';
 
 
 export default function CoordinatorDashboard() {
+  //resolve conflict
   const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
