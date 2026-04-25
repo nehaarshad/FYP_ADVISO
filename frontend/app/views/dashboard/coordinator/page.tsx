@@ -48,7 +48,7 @@ export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.
   const totalStudentsCount = studentStats?.totalStudents || 0;
   const totalAdvisorsCount = advisorStats?.totalAdvisors || 0;
 
-  useEffect(() => {
+  useEffect (() => {
     if (!sessionManager.hasActiveSession()) {
       router.push('/login');
       return;
