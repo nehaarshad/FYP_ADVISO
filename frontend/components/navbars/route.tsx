@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// components/navbars/route.tsx (FIXED)
+// components/navbars/route.tsx (FIXED - No Scroll)
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -20,11 +20,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
   const router = useRouter();
   const [userInitial, setUserInitial] = useState<string>("A");
   const { logout } = useAuth();
-   const { getDisplayName } = useUserProfile();
-  
+  const { getDisplayName } = useUserProfile();
   
   const navItems = NAV_CONFIG[userRole] ?? [];
-
 
   const handleLogout = async () => {
     try {
@@ -32,13 +30,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
       if (currentUser?.id) {
         await logout(currentUser.id);
       } else {
-        // Force logout if no user ID
         sessionManager.destroySession();
       }
       router.push("/views/auth/login");
     } catch (error) {
       console.error("Logout error:", error);
-      // Force redirect even if error
       sessionManager.destroySession();
       router.push("/views/auth/login");
     }
@@ -58,12 +54,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
   }
 
   return (
-    <aside className="w-70 bg-[#1e3a5f] text-white flex flex-col p-4 shrink-0 shadow-xl z-50 h-full">
-      <div className="p-8 mb-4">
+    <aside className="h-screen w-70 bg-[#1e3a5f] text-white flex flex-col p-4 shrink-0 shadow-xl z-50 overflow-hidden">
+      <div className="p-8 mb-4 flex-shrink-0">
         <img src="/Lightlogo.png" alt="Adviso Logo" className="w-32 h-auto object-contain drop-shadow-md" />
       </div>
 
-      <nav className="flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar">
+      <nav className="flex-1 px-4 space-y-1 overflow-y-hidden">
         {grouped.map(({ group, items }) => (
           <div key={group} className="py-2">
             <p className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">
@@ -91,8 +87,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
         ))}
       </nav>
 
-      {/* User Profile Section */}
-      <div className="p-2 mt-auto">
+      {/* User Profile Section - Always visible, no scroll */}
+      <div className="p-2 mt-auto flex-shrink-0">
         <div className={`p-5 rounded-[2rem] border transition-all group ${
           activeTab === "profile"
             ? "bg-white/20 border-white/20 shadow-lg"
