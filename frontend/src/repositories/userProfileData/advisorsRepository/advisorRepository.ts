@@ -25,7 +25,7 @@ export class AdvisorProfileRepository extends BaseApiService {
 
   async fetchAllAdvisors(forceRefresh: boolean = false): Promise<BatchAdvisor[]> {
     const now = Date.now();
-    if (!forceRefresh && this.advisorCache.length > 0 && (now - this.lastFetchTime) < this.cacheDuration) {
+    if (!forceRefresh && this.advisorCache.length > 0 ) {
       console.log('Returning cached advisor data', this.advisorCache.length);
       return this.advisorCache;
     }

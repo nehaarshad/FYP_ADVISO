@@ -13,6 +13,9 @@ function detectSemesters(worksheet, semesterHeaderRow) {
       console.log(`Checking cell ${r},${c} with value "${cell.value}" for semester label...`);
       const val = String(cell.value ?? "").trim();
       console.log(`Extracted value for cell ${r},${c}: "${val}"`);
+      if(!val){
+        break;
+      }
       if (REGEXS.SEMESTER_LABEL.test(val)) {
         semCells.push({ col: c, label: val });
         console.log(`   Found semester label: "${val}" at column ${c}`);

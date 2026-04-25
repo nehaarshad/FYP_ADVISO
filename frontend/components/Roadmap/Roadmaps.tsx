@@ -16,9 +16,6 @@ import { RoadmapDetailView } from './RoadmapView';
 
 export function RoadmapSection() {
   const [selectedProgram, setSelectedProgram] = useState<string>('');
-  const [selectedBatch, setSelectedBatch] = useState<string>('');
-  const [selectedYear, setSelectedYear] = useState<string>('');
-  const [showFilter, setShowFilter] = useState(false);
   const [selectedRoadmap, setSelectedRoadmap] = useState<any>(null);
   const [showDetailView, setShowDetailView] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -34,6 +31,7 @@ export function RoadmapSection() {
   const roadmapsCache = useRef<Map<string, any[]>>(new Map());
 
   useEffect(() => {
+     clearError()
     fetchPrograms();
   }, []);
 
