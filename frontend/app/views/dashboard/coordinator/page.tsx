@@ -29,6 +29,8 @@ import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
+import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 
 
 export default function CoordinatorDashboard() {
@@ -169,9 +171,8 @@ export default function CoordinatorDashboard() {
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}
+                {/* NOW CALLING THE IMPORTED COMPONENT */}
                 {activeTab === "profile" && <ProfileView />}
-                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>
-)}
               </div>
             )}
         </div>
