@@ -10,7 +10,7 @@ class LLMRecommendationService {
         this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
             try {
-            this.model = this.genAI.getGenerativeModel({ model:  "models/gemini-2.5-flash" });
+            this.model = this.genAI.getGenerativeModel({ model:  "models/gemini-2.0-flash" });
             } catch (err) {
             console.error("Model load failed:", err);
             }
