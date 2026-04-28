@@ -15,12 +15,12 @@ import { StudentDetailsModal } from './StudentDetailsModal';
 import { EditStudent } from '@/app/components/EditStudent';
 
 
-export function StudentList(){
+export function StudentList({ selectedBatch, activeTab, onViewProfile }: { selectedBatch: string, activeTab: string, onViewProfile: (s: any) => void }){
   const [searchInput, setSearchInput] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
-  const [filterBatch, setFilterBatch] = useState('');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>(activeTab === 'Total' ? 'all' : activeTab === 'Regular' ? 'active' : 'inactive');
+  const [filterBatch, setFilterBatch] = useState(selectedBatch);
   const [filterProgram, setFilterProgram] = useState('');
    const [showEditModal, setShowEditModal] = useState(false);
  
@@ -40,8 +40,7 @@ export function StudentList(){
   };
 
   const handleViewDetails = (student: any) => {
-    setSelectedStudent(student);
-    setShowDetailsModal(true);
+    onViewProfile(student);
   };
 
 const editStudent = (std: any) => {
@@ -57,10 +56,12 @@ const editStudent = (std: any) => {
     );
   }
   if (filterBatch) {
-    filteredStudents = filteredStudents.filter(s => s.BatchModel?.batchName === filterBatch);
+    filteredStudents = filteredStudents.filter((s) => {
+      return s.BatchModel?.batchName === filterBatch;
+    });
   }
   if (filterProgram) {
-    filteredStudents = filteredStudents.filter(s => s.BatchModel?.ProgramModel?.programName === filterProgram);
+    filteredStudents = filteredStudents.filter((s: any) => s.BatchModel?.ProgramModel?.programName === filterProgram);
   }
 
   if (isLoading) {

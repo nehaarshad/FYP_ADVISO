@@ -31,8 +31,7 @@ import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
 
 
-export default function CoordinatorDashboard() {
-  //resolve conflict
+export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
   const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
@@ -49,7 +48,7 @@ export default function CoordinatorDashboard() {
   const totalStudentsCount = studentStats?.totalStudents || 0;
   const totalAdvisorsCount = advisorStats?.totalAdvisors || 0;
 
-  useEffect(() => {
+  useEffect (() => {
     if (!sessionManager.hasActiveSession()) {
       router.push('/login');
       return;
@@ -165,13 +164,14 @@ export default function CoordinatorDashboard() {
                 {activeTab === "bulk-student-upload" && <StudentRecords/>}
                 {activeTab === "add-student" && <AddStudent/>}
                 {activeTab === "add-faculty" && <AddFaculty/>}
-                {activeTab === "edit-student" && <StudentList />}
+                {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={''} onViewProfile={function (s: any): void {
+                throw new Error('Function not implemented.');
+              } } />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}
+                {/* NOW CALLING THE IMPORTED COMPONENT */}
                 {activeTab === "profile" && <ProfileView />}
-                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>
-)}
               </div>
             )}
         </div>
