@@ -36,9 +36,7 @@ class LLMRecommendationService {
 
     parseLLMResponse(responseText) {
         try {
-
-            console.log("LLM RESPONSE:\n\n ", responseText)
-            // Clean the response text
+            console.log("Recommendation Response:\n\n ", responseText);
             let cleanText = responseText.trim();
             if (cleanText.startsWith('```json')) {
                 cleanText = cleanText.replace(/```json\n?/g, '').replace(/```\n?/g, '');
@@ -48,17 +46,11 @@ class LLMRecommendationService {
             }
             return JSON.parse(cleanText);
         } catch (error) {
-            console.error("Failed to parse LLM response:", error);
+            console.error("Failed to parse recommendation response:", error);
             throw error;
         }
     }
+}
 
-     getPriorityLevel(rec) {
-    if (rec.actionRequired === 'RETAKE' || rec.actionRequired === 'REQUEST_SPECIAL_OFFERING') return 'CRITICAL';
-    if (rec.actionRequired === 'SUBSTITUTE') return 'LOW';
-    if (rec.reason?.includes('D grade')) return 'MEDIUM';
-    return 'HIGH';
-}
-}
 const llmRecommendationService = new LLMRecommendationService();
 export default llmRecommendationService;

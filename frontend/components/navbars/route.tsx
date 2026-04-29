@@ -63,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole, activeTab, setActive
         <img src="/Lightlogo.png" alt="Adviso Logo" className="w-32 h-auto object-contain drop-shadow-md" />
       </div>
 
-      <nav className="flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar">
+      <nav className="flex-1 px-4 space-y-1 no-scrollbar overflow-y-auto">
         {grouped.map(({ group, items }) => (
           <div key={group} className="py-2">
             <p className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">
