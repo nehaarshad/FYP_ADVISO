@@ -176,7 +176,7 @@ const recommendCourses = async (req, res) => {
         
         const llmRecommendations = await llmRecommendationService.generateRecommendations(
             studentDataForRecommendation,
-            filteredCourses.filteredCourses, // Use filtered data from first API
+            filteredCourses,
             allowedCHR,
             student.BatchModel?.programName || 'SE',
             student.StudentStatus.currentStatus

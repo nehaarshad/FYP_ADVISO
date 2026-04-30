@@ -70,8 +70,11 @@ class RoadmapRepository extends BaseApiService {
     }
 
     try {
-      const url = AppApis.getProgramRoadmapsUrl.replace(':programName', programName);
+      const url = AppApis.getProgramRoadmapsUrl.replace(':programName', encodeURIComponent(programName));
+       console.log("url to get program roadmap ", url)
       const response = await this.getApiResponse(url);
+      console.log("roadmap response: ",response)
+      
       
       if (response.success && response.data) {
         let roadmapsData = [];

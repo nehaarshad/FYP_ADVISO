@@ -54,88 +54,27 @@ ${JSON.stringify(roadmapCourses, null, 2)}
 ## ALL COURSE OFFERINGS THIS SESSION:
 ${JSON.stringify(offeredCourses, null, 2)}
 
-## TASK 1: EXTRACT ELECTIVE & SUPPORTING COURSES FROM OFFERINGS
-Extract ALL courses from course offerings where:
-1. Category name ENDS WITH "Elective" (case-insensitive)
-
-For ${program} program, prioritize courses where category starts with:
-- "SE" (Software Engineering) ENDS WITH "Supporting" (case-insensitive) OR INCLUDES "Domain Elective" (case-insensitive)
-- "CS" (Computer Science)  ENDS WITH "Supporting" (case-insensitive) OR INCLUDES "Domain Elective" (case-insensitive)
-
-For each elective/supporting course, include:
-- Full course details (id, name, credits, category, offeredProgram)
-- Timetable information (if available)
-- Why this elective is relevant to ${program} student
-
-## TASK 2: MARK ROADMAP COURSES
-For each roadmap course, determine:
-1. **isOffered**: Check if course exists in offeredCourses (consider &/and are similar )
-2. **offeredDetails**: If offered, include the offering details (program, batch, timetable)
-3. **availabilityStatus**: One of these values:
-   - "OFFERED_SAME_PROGRAM" - Offered for same program
-   - "OFFERED_DIFFERENT_PROGRAM" - Offered but for different program
-   - "OFFERED_DIFFERENT_SEMESTER" - Offered but different semester
-   - "NOT_OFFERED" - Not offered in current session
-
-## TASK 3: CREATE FILTERED COURSE LIST
-Produce a filtered list containing:
-1. **eligibleElectives**: Courses from Task 1 that student hasn't completed AND are relevant
-2. **offeredRoadmapCourses**: Roadmap courses marked as offered
-3. **notOfferedRoadmapCourses**: Roadmap courses marked as not offered
-4. **crossProgramCourses**: Roadmap courses offered in different programs
+## Filter roadmap courses against offered courses. 
+   Extract all electives/supporting courses (category ends with "Elective" or includes "Supporting"/"Domain Elective" for SE/CS). 
+   Mark each roadmap course as offered (same/different program/semester) or not offered. 
+   Return filtered list with offered roadmap courses, not offered roadmap courses, cross-program courses, and eligible electives with relevance explanation.
 
 ## RESPONSE FORMAT (VALID JSON ONLY):
 
 {
-    "filteredCourses": {
-        "eligibleElectives": [
-            {
-                "courseId": number,
-                "courseName": "string",
-                "credits": number,
-                "category": "string",
-                "offeredProgram": "string",
-                "offeredBatch": "string",
-                "timeSlots": ["string"],
-                "relevanceToProgram": "string",
-                "selectionReason": "string"
-            }
-        ],
-        "offeredRoadmapCourses": [
-            {
-                "courseId": number,
-                "courseName": "string",
-                "credits": number,
-                "category": "string",
-                "semester": number,
-                "offeredProgram": "string",
-                "offeredBatch": "string",
-                "timeSlots": ["string"],
-                "availabilityStatus": "string"
-            }
-        ],
-        "notOfferedRoadmapCourses": [
-            {
-                "courseId": number,
-                "courseName": "string",
-                "credits": number,
-                "category": "string",
-                "semester": number,
-                "reason": "string"
-            }
-        ],
-        "crossProgramCourses": [
-            {
-                "courseId": number,
-                "courseName": "string",
-                "credits": number,
-                "category": "string",
-                "offeredProgram": "string",
-                "canRegister": boolean,
-                "registrationNote": "string"
-            }
-        ]
-    },
+    "filteredCourses": [
+        {
+            "courseId": "number",
+            "courseName": "string",
+            "credits": "number",
+            "category": "string",
+            "offeredProgram": "string",
+            "offeredBatch": "string",
+            "timeSlots": ["string"],
+            "relevanceToProgram": "string",
+            "selectionReason": "string"
+        }
+    ]
 }
 
 ## IMPORTANT NOTES:
