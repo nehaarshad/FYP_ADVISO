@@ -15,6 +15,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ADVISO",
   description: "An Academic Batch Advisory System",
+    manifest: '/manifest.webmanifest',
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: 'ADVISO',
+    },
 };
 
 export default function RootLayout({
