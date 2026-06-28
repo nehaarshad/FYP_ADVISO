@@ -1,3 +1,22 @@
+### To Run the project ###
+frontend -> npm run dev
+backend -> node index.js
+
+##  .env file  ##
+**frontend**
+NEXT_PUBLIC_API_URL = "http://192.168.18.4:5000/auth"         //192.168.18.4 replace it with your system ip4 address
+
+**backend**
+BASE_URL=http://localhost:5500
+DATABASE=adviso
+USERNAME=root
+PASSWORD=database@12345
+HOST=localhost
+PORT=5000
+JWT_SECRET=4eb4cb77ac55d4b6c97a6696dc17f595db197a9b3ef13cc1ad6c1ae98f50e8b3125c1ae044cc4daa140c9a4c9f1248c6c77c08f530358f29fbd159a6de88cc3e
+JWT_EXPIRES_IN=1h
+GEMINI_API_KEY=AIzaSyDDi26oMqT5X9ACZfffMl6711Lfkey_a70
+
                         Adviso - Academic Batch Advisory System
 ->  Adviso is a specialized management system designed for Riphah International University to streamline academic advising, roadmap tracking, and batch coordination. 
 
