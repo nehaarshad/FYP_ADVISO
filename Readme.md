@@ -1,3 +1,37 @@
+                        Adviso - Academic Batch Advisory System
+->  Adviso is a specialized management system designed for Riphah International University to streamline academic advising, roadmap tracking, and batch coordination. 
+
+-> It automates the complex process of mapping degree requirements from Excel sheets to a structured relational database
+###### FRONTEND & UI/UX IMPLEMENTATION DETAILS
+1. Reactive Dashboard Architecture
+
+Implemented a role-based access control (RBAC) dashboard for Advisors, Students, and Coordinators using Next.js.
+
+Optimized state management to handle real-time updates for advisory session requests and approvals.
+
+2. Visual Roadmap Visualization
+
+Designed an interactive grid system to render the RoadmapSemesterModel data, allowing students to visualize their academic journey semester-by-semester.
+
+Developed color-coded course cards that sync with the CourseCategory background colors defined in the Excel processing logic for visual consistency.
+
+3. Dynamic Forms & Validations
+
+Built complex forms for Faculty and Student Profile Management with real-time field validation to ensure data integrity before sending it to the backend.
+
+Integrated Framer Motion for smooth transitions between different advisory modules and modal views.
+
+4. Optimized Data Fetching & Search
+
+Implemented client-side filtering and search using SAP IDs to allow advisors to quickly access specific student transcripts and records from large batches.
+
+Integrated loading states and skeleton screens to provide a seamless UX during heavy data parsing (Excel uploads).
+
+5. Responsive Sessional Timetable View
+
+Developed a responsive timetable layout that maps timetableCourseOfferingMapping data into a readable format for both mobile and desktop views.
+
+Handled edge cases for course naming (singular/plural) to ensure the UI remains consistent with the database records.
 ###### PROGRAM COURSE DETAILS SHEET PROCESSING STEPS ######
 
 // Although some course code remains same but their credit or name vary by roadmap version
@@ -47,20 +81,7 @@ find or create a new batch and assign a specific required program as CS, or SE
 3. list of courses to highlights that which course have a preReq or have not (this preReq course also fetch from sheet)
                   -> If preReq course name is given in sheet, then this course details are comes from the MAP variable access via this courseName
 4. In last step, in CoursePreReqModel, find or create a new instance by providing a courseId and PreReqCourseId(that might be a null)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       | node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
       //plural->sigular difference  not found->timetableCourseOfferingMapping
+                      

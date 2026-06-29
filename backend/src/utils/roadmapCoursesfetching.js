@@ -1,11 +1,40 @@
 import REGEXS from "./regexs.js";
 import sheetProcessingHelperFunction from "./sheetProcessingHelperFunction.js";
 const { getCellColor, parseCourse, getCellText ,maxConsecutiveEmptyCells} = sheetProcessingHelperFunction;
+const { getCellColor, parseCourse, getCellText ,maxConsecutiveEmptyCells} = sheetProcessingHelperFunction;
 
 function extractCourses(worksheet, firstCourseRow, categories) {
   const maxCol = worksheet.columnCount;
   const maxRow = worksheet.rowCount;
+  const maxRow = worksheet.rowCount;
   const courses = [];
+
+  let lastDataRow = null;
+  for (let row = maxRow; row >= 1; row--) {
+    let hasData = false;
+    for (let c = 1; c <= maxCol; c++) {
+      const cell = worksheet.getCell(row, c);
+    if (!cell.value) continue;
+    const val = getCellText(cell);
+    if (!val) continue;
+    const color = getCellColor(cell);
+    if (color && val && val.match(REGEXS.CREDITS_TEXT)) {
+      hasData=true
+    }
+    }
+    if (hasData) {
+      lastDataRow = row;
+      break;
+    }
+  }
+  
+  if (!lastDataRow) {
+    throw new Error(`Sheet "${worksheet.name}": No data found in sheet.`);
+  }
+  
+  console.log(`   Last row with data: ${lastDataRow}`);
+  
+  const finalCourseRow = lastDataRow - 2; //exclude credit cal cells //last row is empty row
 
   let lastDataRow = null;
   for (let row = maxRow; row >= 1; row--) {
@@ -81,8 +110,12 @@ function extractCourses(worksheet, firstCourseRow, categories) {
       if (cell.color) {
         categoryName = categories.find(cat => cat.color === cell.color)?.name || null;
       }
+      if (cell.color) {
+        categoryName = categories.find(cat => cat.color === cell.color)?.name || null;
+      }
       
       courses.push({
+        semesterNo: cell.col,
         semesterNo: cell.col,
         courseName: name,
         credits,
@@ -93,6 +126,8 @@ function extractCourses(worksheet, firstCourseRow, categories) {
     }
   }
 }
+      console.log(`  → Added: ${name} (${credits} cr) at semester ${cell.col}`);
+  
   
   console.log(`Total courses extracted: ${courses.length}`,courses);
   return courses;

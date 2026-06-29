@@ -9,9 +9,10 @@ const sequelize= new Sequelize(
     {
        host: process.env.HOST ,
        dialect:"mysql",
+      port: process.env.DB_PORT || 3307,
        logging: false,  
     }
 )
 
 
-export default sequelize
+export default sequelize;

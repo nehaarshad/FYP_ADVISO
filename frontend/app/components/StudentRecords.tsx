@@ -73,129 +73,23 @@ export function StudentRecords() {
 
       <div className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm space-y-6">
         
-        {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-[1.5rem] flex items-center gap-3">
-            <AlertCircle className="text-red-500" size={20} />
-            <p className="text-red-600 text-sm font-medium">{error}</p>
-          </div>
-        )}
-
-        {success && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-[1.5rem] flex items-center gap-3">
-            <CheckCircle className="text-green-500" size={20} />
-            <p className="text-green-600 text-sm font-medium">Students uploaded successfully!</p>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Program Name */}
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
-              Program Name *
-            </label>
-            <select 
-           title='Program'
-                name="programName"
-                value={formData.programName}
-                onChange={handleChange}
-                  className="w-full p-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
-             required
-                >
-              <option value="">Select Program</option>
-              {programs.map(program => (
-                <option key={program.id} value={program.programName}>
-                  {program.programName}
-                </option>
-      ))}
-    </select>
-          </div>
-
-          {/* Batch Name and Year */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
-                Batch Name *
-              </label>
-               <select 
-              title='batch'
-                name="batchName"
-                value={formData.batchName}
-                onChange={handleChange}
-                className="w-full p-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
-                required
-              >
-                <option value="">Select Batch</option>
-                 <option key="FALL" value="FALL">FALL</option>
-                  <option key="SPRING" value="SPRING">SPRING</option>
-                 <option key="SUMMER" value="SUMMER">SUMMER</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
-                Batch Year *
-              </label>
-              <input
-                type="text"
-                value={formData.batchYear}
-                onChange={(e) => setFormData({ ...formData, batchYear: e.target.value })}
-                placeholder="e.g., 2023"
-                className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[1.8rem] text-sm font-bold focus:ring-2 focus:ring-[#FDB813] outline-none text-[#1e3a5f]"
-                required
-              />
-            </div>
-          </div>
-
-          {/* File Upload */}
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
-              Excel File *
-            </label>
-            <div className="relative">
-              <input
-                title='studentFile'
-                type="file"
-                accept=".xlsx,.xls"
-                onChange={handleFileChange}
-                className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[1.8rem] text-sm font-bold focus:ring-2 focus:ring-[#FDB813] outline-none text-[#1e3a5f] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1e3a5f] file:text-white hover:file:bg-[#FDB813] hover:file:text-[#1e3a5f]"
-                required
-              />
-              {selectedFile && (
-                <div className="mt-2 flex items-center gap-2 text-sm text-green-600">
-                  <FileSpreadsheet size={16} />
-                  <span>{selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Upload Progress */}
-          {isLoading && (
-            <div className="space-y-2">
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div 
-                  className="bg-[#FDB813] h-2.5 rounded-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
-                ></div>
-              </div>
-              <p className="text-xs text-center text-slate-500">Uploading... {uploadProgress}%</p>
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <button 
-            type="submit"
-            disabled={isLoading || !selectedFile}
-            className="w-full py-5 bg-[#1e3a5f] text-white rounded-[1.8rem] font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-          >
-            <Upload size={18} />
-            {isLoading ? 'Processing...' : 'Process Records'}
-          </button>
-        </form>
-
-        <div className="text-xs text-center text-slate-400">
-          Supported format: .xlsx, .xls (Max 5MB)
+        {/* Category Selection */}
+        <div className="space-y-2">
+          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
+            Upload Type
+          </label>
+          <select className="w-full p-5mm bg-slate-50 border border-slate-100 rounded-[1.8rem] text-sm font-bold focus:ring-2 focus:ring-[#FDB813] outline-none appearance-none cursor-pointer text-[#1e3a5f]">
+            <option>New Student List (.csv)</option>
+            <option>Batch Enrollment (.xlsx)</option>
+            <option>Course Registration Data</option>
+          </select>
         </div>
+        {/* Action Button */}
+        <button 
+          className="w-full py-5 bg-[#1e3a5f] text-white rounded-[1.8rem] font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] active:scale-95 transition-all"
+        >
+          Process Records
+        </button>
       </div>
     </motion.div>
   );
