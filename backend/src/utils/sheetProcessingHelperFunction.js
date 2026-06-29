@@ -42,8 +42,7 @@ function parseCredits(raw) {
 }
 
 function getCellText(cell) {
-    if (!cell || !cell.value) return '';
-    
+
     // Handle different cell value types
     if (typeof cell.value === 'string') {
       return cell.value.trim();

@@ -5,9 +5,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  CloudUpload, FileText, ExternalLink, Trash2, 
-  Filter, ChevronDown, CheckCircle2, Eye, X,
-  BookOpen, GraduationCap, Clock, Calendar, Layers,
+  CloudUpload, Eye, 
+  BookOpen, GraduationCap,  Calendar, Layers,
   Loader2, AlertCircle
 } from "lucide-react";
 import { useRoadmap } from '@/src/hooks/contentUploader/roadmapUploader/roadmapHook';

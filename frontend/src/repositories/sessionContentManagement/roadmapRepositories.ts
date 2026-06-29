@@ -75,6 +75,8 @@ class RoadmapRepository extends BaseApiService {
       const url = AppApis.getProgramRoadmapsUrl.replace(':programName', encodedProgramName);
       console.log("get prog roadmap ", url)
       const response = await this.getApiResponse(url);
+      console.log("roadmap response: ",response)
+      
       
       if (response.success && response.data) {
         let roadmapsData = [];

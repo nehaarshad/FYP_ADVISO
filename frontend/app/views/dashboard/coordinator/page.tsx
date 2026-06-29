@@ -31,7 +31,12 @@ import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
 
 
+<<<<<<< HEAD
+export default function CoordinatorDashboard() {
+  //resolve conflict
+=======
 export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
+>>>>>>> c49a3e23be6918c48f509e44c4052943cb583fca
   const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
@@ -155,7 +160,7 @@ export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.
                 >
                   <ChevronLeft size={16} /> Back
                 </button>
-
+                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
                 {activeTab === "roadmaps" && <RoadmapSection />}
                 {activeTab === "course-offering" && <CourseOffering />}
                 {activeTab === "timetable" && <Timetable />}

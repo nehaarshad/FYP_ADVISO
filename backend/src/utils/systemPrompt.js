@@ -4,9 +4,7 @@ export const buildPrompt = (studentData, offeredCourses, allowedCredits, program
 You are an academic advisor for a university's ${program} program. Your task is to recommend courses for a student based on their academic history, roadmap, and course offerings.
 
 ## STUDENT INFORMATION:
-- Current Semester: ${studentData.currentSemester}
-- Allowed Credit Hours: ${allowedCredits}
-- STUDENT ACADEMIC STATUS: ${studentStatus}
+- Current Semester: ${studentData.currentSemester}, Allowed Credit Hours: ${allowedCredits}, STUDENT ACADEMIC STATUS: ${studentStatus}
 
 ## STUDENT ACADEMIC STATUS BASED PROGRAM RULE:
 - If student status is Relegated then only F , W & D Grade courses are suggested to register, no new course is allowed to register.
@@ -25,10 +23,7 @@ ${JSON.stringify(studentData.withdrawnCourses, null, 2)}
 ### D GRADE COURSES (Low Passing):
 ${JSON.stringify(studentData.dGradedCourses, null, 2)}
 
-## ELIGIBLE COURSES FROM ROADMAP (Prerequisites Cleared):
-${JSON.stringify(studentData.eligibleCourses, null, 2)}
-
-## COURSE OFFERINGS THIS SESSION:
+## ELIGIBLE FILTERED COURSES THIS SESSION:
 ${JSON.stringify(offeredCourses, null, 2)}
 
 

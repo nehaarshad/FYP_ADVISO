@@ -23,24 +23,22 @@ import SemesterCourseModel from "../models/semesterCourseModel.js";
 import RoadmapCourseCategoryModel from "../models/RoadmapCourseCategoryModel.js";
 import TimetableModel from "../models/timetableModel.js";
 import llmRecommendationService from "../services/llmRecommendationService.js";
+import courseFilteringService from "../services/courseFilteringService.js";
 import SessionalRecommendation from "../models/sessionalRecommdentationModel.js";
 import SuggestedCourses from "../models/suggestedCoursesModel.js";
 
+// recommendCourses controller (updated)
 const recommendCourses = async (req, res) => {
     try {
         const { id } = req.params;
         const { sessionType, sessionYear } = req.body;
         
+        // Fetch student data (same as before)
         const student = await Student.findOne({
             where: { id },
             include: [
-                { 
-                    model: StudentStatus,
-                   
-                },
-                { 
-                    model: BatchModel,
-                }
+                { model: StudentStatus },
+                { model: BatchModel, include: { model: ProgramModel } }
             ]
         });
 
@@ -49,49 +47,20 @@ const recommendCourses = async (req, res) => {
         }
 
         const session = await SessionModel.findOne({ where: { sessionType, sessionYear } });
-      if (!session) return res.status(404).json({ success: false, message: 'Session not found' });
- 
+        if (!session) return res.status(404).json({ success: false, message: 'Session not found' });
 
-        const degreeTranscript = await DegreeTranscript.findOne({ 
-            where: { studentId: student.id } 
-        });
-
+        // Fetch transcripts and analyze (same as before)
+        const degreeTranscript = await DegreeTranscript.findOne({ where: { studentId: student.id } });
         if (!degreeTranscript) {
-            return res.status(404).json({ success: false, message: "Degree transcript not found for the student" });
+            return res.status(404).json({ success: false, message: "Degree transcript not found" });
         }
 
         const sessionalTranscript = await SessionalTranscript.findAll({
             where: { degreeTranscriptId: degreeTranscript.id },
-            include: [
-                {
-                    model: TranscriptCoursesDetail,
-                
-                }
-            ]
+            include: [{ model: TranscriptCoursesDetail }]
         });
 
-        if (!sessionalTranscript || sessionalTranscript.length === 0) {
-            return res.status(404).json({ success: false, message: "Sessional transcript not found for the student" });
-        }
-
-        let hasCourseDetails = false;
-        for (const transcript of sessionalTranscript) {
-            const details = transcript.TranscriptCoursesDetails || transcript.TranscriptCoursesDetails;
-            if (details && details.length > 0) {
-                hasCourseDetails = true;
-                break;
-            }
-        }
-
-        if (!hasCourseDetails) {
-            return res.status(400).json({ success: false, message: "No course details found in sessional transcripts" });
-        }
-
-        // Determine allowed credit hours based on CGPA
-        let allowedCHR = getCreditHours(parseFloat(degreeTranscript.currentCGPA));
-        console.log("Allowed Credit Hours:", allowedCHR);
-
-        // Extract F, W and D grade courses
+        // Analyze transcript for F, W, D grades
         let suggestedCourses = transcriptAnalyzer.analyzeTranscript(
             sessionalTranscript,
             {
@@ -99,39 +68,23 @@ const recommendCourses = async (req, res) => {
                 studentStatus: student.StudentStatus ? student.StudentStatus.currentStatus : "Unknown"
             }
         );
-      //  console.log("Suggested Courses:", suggestedCourses);
 
-                 let offeredCourses = await CourseOfferingModel.findAll({
+        // Get offered courses with timetables
+        let offeredCourses = await CourseOfferingModel.findAll({
             where: { sessionId: session.id },
-            include: [
-                { model: BatchModel },
-                { model: ProgramModel }
-            ]
+            include: [{ model: BatchModel }, { model: ProgramModel }]
         });
 
-        if(!offeredCourses){
-            return res.json({error:"No courses offered in this session yet",success:false})
-        }
-
-        console.log(`Found ${offeredCourses.length} course offerings for session ${session.id}`);
-const courseOfferingIds = offeredCourses.map(course => course.id);
-        
+        // Attach timetables to offered courses
+        const courseOfferingIds = offeredCourses.map(course => course.id);
         let timetablesMap = new Map();
         
         if (courseOfferingIds.length > 0) {
             const timetables = await TimetableModel.findAll({
-                where: { 
-                    courseOfferingId: courseOfferingIds 
-                },
+                where: { courseOfferingId: courseOfferingIds },
                 raw: true
             });
             
-            console.log(`Found ${timetables.length} timetables for these course offerings`);
-             if(!timetables){
-            return res.json({error:"No Timetable set for this session yet",success:false})
-        }
-
-            // Group timetables by courseOfferingId
             timetables.forEach(timetable => {
                 const courseId = timetable.courseOfferingId;
                 if (!timetablesMap.has(courseId)) {
@@ -141,117 +94,95 @@ const courseOfferingIds = offeredCourses.map(course => course.id);
             });
         }
 
-        // STEP 3: Attach timetables to each course offering
-        offeredCourses = offeredCourses.map(course => {
-            const courseJson = course.toJSON();
-            const courseTimetables = timetablesMap.get(course.id) || [];
-            
-            return {
-                ...courseJson,
-                timetables: courseTimetables
-            };
+        offeredCourses = offeredCourses.map(course => ({
+            ...course.toJSON(),
+            timetables: timetablesMap.get(course.id) || []
+        }));
+
+        // Get roadmap and eligible courses
+        const roadmapId = student.BatchModel.roadmapId;
+        const roadmap = await RoadmapModel.findOne({
+            where: { id: roadmapId },
+            include: [
+                { model: RoadmapCourseCategoryModel, include: [{ model: CategoryModel }] },
+                {
+                    model: SemesterRoadmapModel,
+                    include: [{
+                        model: SemesterCourseModel,
+                        include: [{
+                            model: CourseCategoryModel,
+                            include: [{
+                                model: CoursesModel,
+                                attributes: ["id", "courseName", "courseCredits"],
+                                include: [
+                                    { model: CoursePreReqModel, as: "prerequisites", include: [{ model: CoursesModel, as: "prerequisiteCourse" }] },
+                                    { model: CoursePreReqModel, as: "usedAsPrerequisiteFor", include: [{ model: CoursesModel, as: "mainCourse" }] }
+                                ]
+                            }, {
+                                model: CategoryModel,
+                                attributes: ["id", "categoryName", "colorScheme"]
+                            }]
+                        }]
+                    }]
+                }
+            ]
         });
 
-        const roadmapId = student.BatchModel.roadmapId;
-        // Get student roadmap from the already fetched data
-        let roadmap = await RoadmapModel.findOne({
-                    where: { id: roadmapId },
-                    include: [
-                        {
-                            model: RoadmapCourseCategoryModel,
-                            include: [
-                                {
-                                model: CategoryModel,
+        const { roadmapCourses } = await mapCourseOfferingsWithUnClearRoadmap(
+            suggestedCourses,
+            roadmap.SemesterRoadmapModels
+        );
 
-                            }
-                        ]
-                    },
-                    {
-                        model: SemesterRoadmapModel,
-                        include: [
-                            {
-                                model: SemesterCourseModel,
-                                include: [
-                                    {
-                                        model: CourseCategoryModel,
-                                        include: [
-                                            {
-                                                model: CoursesModel,
-                                                attributes: ["id", "courseName", "courseCredits"],
-                                                include: [{
-                        
-                                                        model: CoursePreReqModel,
-                                                        as: "prerequisites",  // Courses this course requires (incoming)
-                                                        include: [{
-                                                            model: CoursesModel,
-                                                            as: "prerequisiteCourse"
-                                                        }]
-                                                        },
-                                                        {
-                                                        model: CoursePreReqModel,
-                                                        as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
-                                                        include: [{
-                                                            model: CoursesModel,
-                                                            as: "mainCourse"
-                                                        }]
-                                                        
-                                                        }]
-                                            },
-                                            {
-                                                model: CategoryModel,
-                                                attributes: ["id", "categoryName", "colorScheme"]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            });
+        const studentDataForFiltering = {
+            studentStatus: student.StudentStatus.currentStatus,
+            currentSemester: student.currentSemester
+        };
+
+        const roadmapCoursesForFiltering = roadmapCourses.filter(c => 
+            c.prerequisiteStatus === 'CLEAR' && 
+            c.status !== 'Completed' &&
+            c.actionRequired !== 'RETAKE'
+        ).map(c => ({
+            courseId: c.id,
+            courseName: c.courseName,
+            credits: c.credits,
+            category: c.categoryName,
+            semester: c.semester
+        }));
+
+        // ============ FIRST API CALL ============
+        console.log("Making first API call to filter courses...");
+        const filteredCourses = await courseFilteringService.filterAndMarkCourses(
+            studentDataForFiltering,
+            offeredCourses,
+            roadmapCoursesForFiltering,
+            student.BatchModel?.programName || 'SE',
+            student.currentSemester
+        );
+
+        console.log("filtered courses ",filteredCourses)
         
-        if (!roadmap) {
-            console.warn("No roadmap found for student's batch");
-            return res.json({message:"Roadmap not found",success:false})
-        }
-        if (!roadmap.SemesterRoadmapModels?.length) {
-            return res.status(400).json({ success: false, message: 'Roadmap has no semester data' });
-        }
-        
-            if (roadmap && roadmap.SemesterRoadmapModels) {
-                  const { roadmapCourses } = await mapCourseOfferingsWithUnClearRoadmap(
-                                        suggestedCourses, 
-                                        roadmap.SemesterRoadmapModels,
-                                    );
-                
-                const studentDataForLLM = {
-                        currentSemester: student.currentSemester,
-                        cgpa: degreeTranscript.currentCGPA,
-                        failedCourses: suggestedCourses.failedCourses || [],
-                        withdrawnCourses: suggestedCourses.withdrawnCourses || [],
-                        dGradedCourses: suggestedCourses.dGradedCourses || [],
-                        eligibleCourses: roadmapCourses.filter(c => 
-                            c.prerequisiteStatus === 'CLEAR' && 
-                            c.status !== 'Completed' &&
-                            c.actionRequired !== 'RETAKE'
-                        ).map(c => ({
-                            courseId: c.id,
-                            courseName: c.courseName,
-                            credits: c.credits,
-                            category: c.categoryName,
-                            semester: c.semester
-                        }))
-                    };
-        
+        const studentDataForRecommendation = {
+            currentSemester: student.currentSemester,
+            cgpa: degreeTranscript.currentCGPA,
+            failedCourses: suggestedCourses.failedCourses || [],
+            withdrawnCourses: suggestedCourses.withdrawnCourses || [],
+            dGradedCourses: suggestedCourses.dGradedCourses || []
+        };
+
+        // ============ SECOND API CALL ============
+        console.log("Making second API call to generate recommendations...");
+        const allowedCHR = getCreditHours(parseFloat(degreeTranscript.currentCGPA));
         
         const llmRecommendations = await llmRecommendationService.generateRecommendations(
-            studentDataForLLM,
-            offeredCourses,
+            studentDataForRecommendation,
+            filteredCourses,
             allowedCHR,
-            student.BatchModel?.programName || 'SE', 
+            student.BatchModel?.programName || 'SE',
             student.StudentStatus.currentStatus
         );
-    
+
+        // Save recommendations to database
         const sessionalRecommendation = await SessionalRecommendation.create({
             recommendationText: llmRecommendations.detailedExplanation,
             recommendedCoursesSummary: llmRecommendations.summary,
@@ -260,50 +191,46 @@ const courseOfferingIds = offeredCourses.map(course => course.id);
             sessionId: session.id,
             studentId: student.id
         });
-        
+
         // Save suggested courses
         const allRecommendations = [
-                    ...(llmRecommendations.recommendations.critical || []).map(c => ({ ...c, priority: 'critical' })),
-                    ...(llmRecommendations.recommendations.high || []).map(c => ({ ...c, priority: 'high' })),
-                    ...(llmRecommendations.recommendations.medium || []).map(c => ({ ...c, priority: 'medium' })),
-                    ...(llmRecommendations.recommendations.low || []).map(c => ({ ...c, priority: 'low' }))
-                ];
+            ...(llmRecommendations.recommendations.critical || []).map(c => ({ ...c, priority: 'critical' })),
+            ...(llmRecommendations.recommendations.high || []).map(c => ({ ...c, priority: 'high' })),
+            ...(llmRecommendations.recommendations.medium || []).map(c => ({ ...c, priority: 'medium' })),
+            ...(llmRecommendations.recommendations.low || []).map(c => ({ ...c, priority: 'low' }))
+        ];
 
-        
-                await Promise.all( allRecommendations.map(rec =>
-                            SuggestedCourses.create({
-                                courseName:                 rec.courseName,
-                                credits:                    rec.credits,
-                                category:                   rec.category,
-                                sessionalRecommendationId:  sessionalRecommendation.id,
-                                priority:                   rec.priority.toUpperCase(),  
-                                reason:                     rec.reason,
-                                isOffered:                  rec.isOffered    || false,
-                                offeredProgram:             rec.offeredProgram || null,
-                                timeSlot:                   rec.timeSlot      || null,
-                            })
-            )
-        );
-        
+        await Promise.all(allRecommendations.map(rec =>
+            SuggestedCourses.create({
+                courseName: rec.courseName,
+                credits: rec.credits,
+                category: rec.category,
+                sessionalRecommendationId: sessionalRecommendation.id,
+                priority: rec.priority.toUpperCase(),
+                reason: rec.reason,
+                isOffered: rec.isOffered || false,
+                offeredProgram: rec.offeredProgram || null,
+                timeSlot: rec.timeSlot || null,
+            })
+        ));
+
         return res.status(200).json({
             success: true,
             data: {
-                sessionId:session.id,
+                sessionId: session.id,
                 allowedCreditHours: allowedCHR,
+                filteredCourses: filteredCourses, // Include filtered courses for transparency
                 llmRecommendations: llmRecommendations,
                 savedRecommendationId: sessionalRecommendation.id
             }
         });
-        
-    }
-       return res.status(400).json({ success: false, message: 'Roadmap has no semester data' });
 
-} catch (error) {
+    } catch (error) {
         console.error("Error recommending courses:", error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Internal server error", 
-            error: error.message 
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message
         });
     }
 };
