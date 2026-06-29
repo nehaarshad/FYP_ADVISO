@@ -43,7 +43,7 @@ function extractCourses(worksheet, firstCourseRow, categories) {
   for (let c = 1; c <= maxCol; c++) {
     const cell = worksheet.getCell(r, c);
     if (cell.value) {
-      const rawText = String(cell.value).trim();
+      const rawText = getCellText(cell);
       if (rawText) {
         nonEmptyCells.push({ col: c, value: rawText, color: getCellColor(cell) });
       }
@@ -56,7 +56,7 @@ function extractCourses(worksheet, firstCourseRow, categories) {
     continue;
   }
   
-  // Skip rows that have very few courses (e.g., less than 2 courses)
+  // Skip rows that have very few courses (e.g., less than 1 course)
   let courseCount = 0;
   for (const cell of nonEmptyCells) {
     const { name, credits } = parseCourse(cell.value);
@@ -65,7 +65,7 @@ function extractCourses(worksheet, firstCourseRow, categories) {
     }
   }
   
-  if (courseCount < 2) {
+  if (courseCount < 1) {
     console.log(`Row ${r} skipped (only ${courseCount} valid courses found out of ${nonEmptyCells.length} cells)`);
     continue;
   }

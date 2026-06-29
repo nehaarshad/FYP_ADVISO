@@ -52,8 +52,6 @@ const uploadNewRoadmap = async (req, res) => {
            }
         });
 
-        console.log("Existing roadmap found in database:", roadmap);
-
         if (!roadmap) {
             roadmap = await RoadmapModel.create({
                 programId: program.id,
@@ -62,6 +60,8 @@ const uploadNewRoadmap = async (req, res) => {
                 roadmapFilePath: pathUrl, 
             });
         }
+                console.log("Existing roadmap found in database:", roadmap);
+
        if(batch){
         await BatchModel.update(
             { roadmapId: roadmap.id }, // Update roadmapId for the batch

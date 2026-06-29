@@ -156,7 +156,7 @@ export default function CoordinatorDashboard() {
                 >
                   <ChevronLeft size={16} /> Back
                 </button>
-
+                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
                 {activeTab === "roadmaps" && <RoadmapSection />}
                 {activeTab === "course-offering" && <CourseOffering />}
                 {activeTab === "timetable" && <Timetable />}
