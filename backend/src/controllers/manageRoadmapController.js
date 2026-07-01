@@ -16,6 +16,7 @@ import ExcelJS from 'exceljs';
 import CoursePreReqModel from '../models/coursePreReqModel.js';
 
 import fs from 'fs';
+
 const uploadNewRoadmap = async (req, res) => {
     const roadmapFile=req.file; 
     try {
@@ -367,9 +368,65 @@ const getBatchRoadmap = async (req, res) => {
     }
 };
 
+const assignRoadmapToBatch = async (req, res) => {
+    try {
+        const { roadmapId, batchName, batchYear, programName } = req.body;
+        
+        console.log("Assigning roadmap to batch:", { roadmapId, batchName, batchYear, programName });
+        
+        // Find the program
+        const program = await ProgramModel.findOne({ 
+            where: { programName } 
+        });
+        
+        if (!program) {
+            return res.status(404).json({ error: "Program not found" });
+        }
+        
+        let batch = await BatchModel.findOne({
+            where: {
+                batchName,
+                batchYear,
+                programId: program.id
+            }
+        });
+        
+        if (!batch) {
+            batch = await BatchModel.create({
+                batchName,
+                batchYear,
+                programId: program.id,
+                roadmapId: roadmapId
+            });
+            console.log("Created new batch and assigned roadmap:", batch);
+        } else {
+            // Update existing batch with roadmap
+            await BatchModel.update(
+                { roadmapId: roadmapId },
+                { where: { id: batch.id } }
+            );
+            console.log("Updated existing batch with roadmap:", batch);
+        }
+        console.log("Successfully assigned roadmap to batch:", { roadmapId, batchName, batchYear, programName });
+        
+        return res.status(200).json({ 
+            success: true, 
+            message: 'Roadmap assigned to batch successfully',
+        });
+        
+    } catch (error) {
+        console.error("Error in assignRoadmapToBatch:", error);
+        return res.status(500).json({ 
+            error: "Internal Server Error",
+            details: error.message 
+        });
+    }
+};
+
 
 export default {
     uploadNewRoadmap,
     getProgramRoadmaps,
-    getBatchRoadmap
+    getBatchRoadmap,
+    assignRoadmapToBatch
 }

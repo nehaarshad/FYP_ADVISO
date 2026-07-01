@@ -24,11 +24,13 @@ function maxConsecutiveEmptyCells(values) {
 function parseCourse(raw) {
   const text = String(raw ?? "").replace(/\n/g, " ").trim(); //conert into string and trim
   const match = text.match(REGEXS.COURSE_CREDITS);
+  console.log(`   Parsing course: "${text}" → match:`, match);
   if (match) {
-    const credits = parseInt(match[1], 10) + (match[2] ? parseInt(match[2], 10) : 0);// sum credits (3+1) → 4
+   const credits = match[2] ? `${match[1]}+${match[2]}` : `${match[1]}`;
+     console.log(`    course: "${text}" → credits:`, credits);
     return { name: text.slice(0, match.index).trim(), credits }; // "Course Name (3)" → { name: "Course Name", credits: 3 }, "Course Name (3+1)" → { name: "Course Name", credits: 4 }
   }
-  return { name: text, credits: 2 };
+  return { name: text, credits: 0 }; // No credits found, return 0 for credits
 }
 
  //convert per category credits -> "39 Credit Hrs." or plain "130" → number of credits
