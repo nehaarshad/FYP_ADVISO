@@ -31,8 +31,12 @@ import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
 
 
+<<<<<<< HEAD
 export default function CoordinatorDashboard() {
   //resolve conflict
+=======
+export default function CoordinatorDashboard(): import("react/jsx-runtime").JSX.Element {
+>>>>>>> c49a3e23be6918c48f509e44c4052943cb583fca
   const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);

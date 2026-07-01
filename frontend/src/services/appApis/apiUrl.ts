@@ -44,7 +44,7 @@ export default class APIs{
     static uploadRoadmapUrl = `${APIs.BASE_URL}/upload`;
     static getProgramRoadmapsUrl = `${APIs.BASE_URL}/roadmap-details/:programName`;
     static getSepecifBatchProgramRoadmapsUrl = `${APIs.BASE_URL}/batch-roadmap/:batchName/:batchYear/:programName`;
-    static assignRoadmapToBatchUrl = `${APIs.BASE_URL}/assign-to-batch`;
+
 
     //process courseDetails
 

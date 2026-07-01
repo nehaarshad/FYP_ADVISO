@@ -146,11 +146,9 @@ export function RoadmapDetailView({ isOpen, roadmap, onClose }: RoadmapDetailVie
                                     <div className="font-bold">
                                       {course.courseName}
                                     </div>
-                                    {course.courseCredits != 0 && (
-                                      <div className="text-[11px]">
-                                        {course.courseCredits} Cr. Hrs.
-                                      </div>
-                                    )}
+                                    <div className="text-[11px]">
+                                      {course.courseCredits} Credit Hrs.
+                                    </div>
                                   </>
                                 ) : (
                                   '-'
@@ -196,6 +194,8 @@ export function RoadmapDetailView({ isOpen, roadmap, onClose }: RoadmapDetailVie
 
                 </table>
               </div>
+
+            
             </div>
 
             {/* FOOTER */}
@@ -207,7 +207,6 @@ export function RoadmapDetailView({ isOpen, roadmap, onClose }: RoadmapDetailVie
                 Close
               </button>
             </div>
-
           </motion.div>
         </motion.div>
       )}
