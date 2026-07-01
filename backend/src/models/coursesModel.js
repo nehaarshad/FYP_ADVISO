@@ -16,7 +16,7 @@ const CoursesModel = sequelize.define("CoursesModel", {
         allowNull: false,
     },
     courseCredits: {  // course name and code same but credits may change (CN)
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
 }, {
