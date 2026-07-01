@@ -130,31 +130,7 @@ class RoadmapRepository extends BaseApiService {
     }
   }
 
-  async assignRoadmapToBatch(data: {
-    roadmapId: number;
-    batchName: string;
-    batchYear: string;
-    programName: string;
-  }): Promise<ApiResponse<any>> {
-    try {
-      const response = await this.postApiWithJson(
-        AppApis.assignRoadmapToBatchUrl,
-        data
-      );
-      
-      if (response.success) {
-        this.clearCache(data.programName);
-        const batchKey = `batch_${data.batchName}_${data.batchYear}_${data.programName}`;
-        this.clearCache(undefined, batchKey);
-      }
-      
-      return response;
-    } catch (error) {
-      console.error('Assign roadmap to batch error:', error);
-      throw error;
-    }
-  }
-
+// In roadmapRepository.ts, enhance the clearCache method:
 clearCache(programName?: string, batchKey?: string): void {
   if (programName) {
     // Clear specific program cache
