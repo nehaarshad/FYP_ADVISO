@@ -90,6 +90,11 @@ const uploadNewRoadmap = async (req, res) => {
             
                 });
                 }
+
+                await RoadmapCourseCategoryModel.update(
+                    { requiredCredits: category.requiredCredits }, // Update requiredCredits for the roadmap-category association
+                    { where: { roadmapId: roadmap.id, categoryId: Category.id } } // Find the association by roadmapId and categoryId
+                );
                 console.log(`   Saved category details for: ${category.name}`);
             }
 
@@ -106,6 +111,10 @@ const uploadNewRoadmap = async (req, res) => {
                 semesterNo: sem.semesterNo,
                 totalCreditHours: sem.totalCreditHours,
             });
+            await SemesterRoadmapModel.update(
+                { totalCreditHours: sem.totalCreditHours }, // Update totalCreditHours for the semester roadmap
+                { where: { roadmapId: roadmap.id, semesterNo: sem.semesterNo } }
+            );
             console.log(`   Saved semester details for: ${sem.semesterNo}`);
         }
          }

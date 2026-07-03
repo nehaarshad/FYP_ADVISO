@@ -4,13 +4,7 @@ import { BaseApiService } from '../../services/baseApiServices/baseNetworkServic
 import AppApis from '../../services/appApis/apiUrl';
 import { ApiResponse } from '../../services/baseApiServices/ApiResponseType/apiResponseType';
 import { Roadmap } from '@/src/models/RoadmapModel';
-
-export interface UploadRoadmapData {
-  file: File;
-  programName: string;
-  batchName?: string;
-  batchYear?: string;
-}
+import { UploadRoadmapData } from './types/uploadRoadmap';
 
 class RoadmapRepository extends BaseApiService {
   private static instance: RoadmapRepository;

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// app/components/CourseCatalog.tsx
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Search, Book, Eye, Upload, Loader2, AlertCircle, CheckCircle, X } from "lucide-react";
+import { Search, Book, Eye, Upload, Loader2, AlertCircle, CheckCircle, X, Edit2 } from "lucide-react";
 import { useCourseCatalog } from '@/src/hooks/courseDetailHook/useCourseDetails';
+import { EditCourseModal } from '@/components/courseComponents/editcourse';
+
 
 export const CourseCatalog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,6 +13,7 @@ export const CourseCatalog = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   
   const { 
     courses, 
@@ -20,11 +22,14 @@ export const CourseCatalog = () => {
     uploadProgress, 
     uploadSuccess,
     categories,
+    dropdownCourses,
     fetchCourses, 
     uploadCourseDetail, 
     searchCourses,
     filterByCategory,
-    clearUploadSuccess
+    clearUploadSuccess,
+    updateCourse,
+    loadDropdownCourses
   } = useCourseCatalog();
 
   useEffect(() => {
@@ -39,7 +44,7 @@ export const CourseCatalog = () => {
     } else {
       filterByCategory('');
     }
-  }, [searchTerm, selectedCategory, courses]);
+  }, [searchTerm, selectedCategory]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -72,39 +77,75 @@ export const CourseCatalog = () => {
     setShowDetailModal(true);
   };
 
-  // Helper function to get course data (handles both old and new structure)
+  const handleEditCourse = async (course: any) => {
+    setSelectedCourse(course);
+    await loadDropdownCourses();
+    setShowEditModal(true);
+  };
+
+  const handleSaveCourse = async (courseId: number, data: any) => {
+    return await updateCourse(courseId, data);
+  };
+
+  // Helper function to get course data
   const getCourseData = (course: any) => {
-    // New structure: course has direct properties
     if (course.courseCode !== undefined || course.courseName !== undefined) {
       return course;
     }
-    // Old structure: course has CoursesModel
     return course.CoursesModel || course;
   };
 
-  // Helper function to get category (handles both old and new structure)
-  const getCategory = (course: any) => {
-    // New structure: course has CourseCategoryModels array with CategoryModel inside
+  // Get ALL categories for a course
+  const getAllCategories = (course: any) => {
     if (course.CourseCategoryModels && course.CourseCategoryModels.length > 0) {
-      return course.CourseCategoryModels[0].CategoryModel;
+      return course.CourseCategoryModels.map((cc:any) => cc.CategoryModel).filter(Boolean);
     }
-    // Old structure: course has CategoryModel directly
     if (course.CategoryModel) {
-      return course.CategoryModel;
+      return [course.CategoryModel];
     }
-    return null;
+    return [];
   };
 
-  // Format prerequisites for display
+  const hasNoCategory = (course: any) => {
+    return getAllCategories(course).length === 0;
+  };
+
+  const renderCategoryBadges = (course: any) => {
+    const categories = getAllCategories(course);
+    
+    if (categories.length === 0) {
+      return (
+        <span className="text-[10px] font-bold uppercase text-gray-500">
+          Uncategorized
+        </span>
+      );
+    }
+    
+    return (
+      <div className="flex flex-wrap gap-1">
+        {categories.map((cat:any, index:any) => (
+          <span 
+            key={index}
+            className="px-2 py-0.5 rounded text-[9px] font-bold uppercase whitespace-nowrap"
+            style={{
+              backgroundColor: parseColorScheme(cat.colorScheme),
+              color: '#000000'
+            }}
+          >
+            {cat.categoryName}
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   const getPrerequisites = (course: any) => {
     const courseData = getCourseData(course);
     const prereqs = courseData?.prerequisites || [];
     if (prereqs.length === 0) return 'None';
-    if (prereqs.length === null) return 'None';
     return prereqs.map((p: any) => p.prerequisiteCourse?.courseName || 'None').join(', ');
   };
 
-  // Get used as prerequisite for display
   const getUsedAsPrerequisiteFor = (course: any) => {
     const courseData = getCourseData(course);
     const usedAs = courseData?.usedAsPrerequisiteFor || [];
@@ -112,13 +153,11 @@ export const CourseCatalog = () => {
     return usedAs.map((p: any) => p.mainCourse?.courseName || 'Unknown').join(', ');
   };
 
-  // Get credit hours in display format
   const getCreditDisplay = (credits: number) => {
     if (!credits && credits !== 0) return '0 Credits';
     return `${credits} Credit${credits !== 1 ? 's' : ''}`;
   };
 
-  // Parse color scheme (handles FF prefix)
   const parseColorScheme = (colorScheme: string) => {
     if (!colorScheme) return '#e5e7eb';
     if (colorScheme.startsWith('FF')) {
@@ -206,7 +245,7 @@ export const CourseCatalog = () => {
                   <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Code</th>
                   <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Course Name</th>
                   <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Credit</th>
-                  <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Category</th>
+                  <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Categories</th>
                   <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest text-center">Action</th>
                 </tr>
               </thead>
@@ -221,12 +260,9 @@ export const CourseCatalog = () => {
                 ) : (
                   courses.map((course: any) => {
                     const courseData = getCourseData(course);
-                    const category = getCategory(course);
-                    const categoryName = category?.categoryName || 'Uncategorized';
-                    const hasNoCategory = course.CourseCategoryModels?.length === 0 || (!category && !course.CategoryModel);
                     
                     return (
-                      <tr key={course.id} className="hover:bg-slate-50 transition-colors">
+                      <tr key={course.id} className="hover:bg-slate-50 transition-colors group">
                         <td className="p-4 text-xs font-black text-slate-900 border-r border-slate-200 uppercase">
                           {courseData?.courseCode || '-----'}
                         </td>
@@ -236,25 +272,26 @@ export const CourseCatalog = () => {
                         <td className="p-4 text-xs font-black text-slate-900 border-r border-slate-200">
                           {getCreditDisplay(courseData?.courseCredits)}
                         </td>
-                        <td 
-                          className="p-4 border-r border-slate-200"
-                          style={{
-                            backgroundColor: hasNoCategory ? '#f3f4f6' : parseColorScheme(category?.colorScheme),
-                            color: hasNoCategory ? '#6b7280' : '#000000'
-                          }}
-                        >
-                          <span className="text-[10px] font-bold uppercase">
-                            {categoryName}
-                          </span>
+                        <td className="p-4 border-r border-slate-200">
+                          {renderCategoryBadges(course)}
                         </td>
                         <td className="p-4 text-center">
-                          <button 
-                            onClick={() => handleViewDetails(course)}
-                            className="text-slate-400 hover:text-slate-900 transition-colors"
-                            title="View Details"
-                          >
-                            <Eye size={16} />
-                          </button>
+                          <div className="flex items-center justify-center gap-2">
+                            <button 
+                              onClick={() => handleViewDetails(course)}
+                              className="text-slate-400 hover:text-slate-900 transition-colors"
+                              title="View Details"
+                            >
+                              <Eye size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleEditCourse(course)}
+                              className="text-slate-400 hover:text-[#FDB813] transition-colors"
+                              title="Edit Course"
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -265,14 +302,7 @@ export const CourseCatalog = () => {
           </div>
         )}
         
-        {/* Show uncategorized count if any */}
-        {courses.filter((c: any) => getCategory(c) === null).length > 0 && (
-          <div className="mt-4 text-right">
-            <span className="text-[9px] text-amber-600 bg-amber-50 px-2 py-1 rounded">
-              ⚠️ {courses.filter((c: any) => getCategory(c) === null).length} course(s) without category
-            </span>
-          </div>
-        )}
+      
       </div>
 
       {/* Upload Modal */}
@@ -290,10 +320,9 @@ export const CourseCatalog = () => {
                 <label className="text-[10px] font-black text-slate-400 uppercase">Excel File</label>
                 <div className="relative">
                   <input
-                    title='btn'
+                    title='upload file'
                     type="file"
                     accept=".xlsx,.xls"
-                    id="file-upload"
                     onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     required
@@ -342,13 +371,13 @@ export const CourseCatalog = () => {
         </div>
       )}
 
-      {/* Course Detail Modal */}
+      {/* Detail Modal */}
       {showDetailModal && selectedCourse && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
               <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Course Details</h3>
-              <button title='btn' onClick={() => setShowDetailModal(false)} className="p-1 hover:bg-slate-100 rounded">
+              <button title='Close' onClick={() => setShowDetailModal(false)} className="p-1 hover:bg-slate-100 rounded">
                 <X size={20} />
               </button>
             </div>
@@ -357,7 +386,6 @@ export const CourseCatalog = () => {
                 <InfoRow label="Course Code" value={getCourseData(selectedCourse)?.courseCode || 'N/A'} />
                 <InfoRow label="Course Name" value={getCourseData(selectedCourse)?.courseName || 'N/A'} />
                 <InfoRow label="Credit Hours" value={getCourseData(selectedCourse)?.courseCredits || 0} />
-                <InfoRow label="Category" value={getCategory(selectedCourse)?.categoryName || 'Uncategorized'} />
                 <InfoRow label="Prerequisites" value={getPrerequisites(selectedCourse)} />
                 <InfoRow label="Used As Prerequisite For" value={getUsedAsPrerequisiteFor(selectedCourse)} />
               </div>
@@ -365,6 +393,15 @@ export const CourseCatalog = () => {
           </div>
         </div>
       )}
+
+      {/* Edit Modal */}
+      <EditCourseModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        course={selectedCourse}
+        onSave={handleSaveCourse}
+        allCourses={dropdownCourses}
+      />
     </>
   );
 };
