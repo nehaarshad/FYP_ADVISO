@@ -50,6 +50,7 @@ export default class APIs{
 
     static uploadCourseDetailUrl = `${APIs.BASE_URL}/uploadCourseDetail`;
     static getCourseDetailUrl = `${APIs.BASE_URL}/getCoursesDetails`;
+    static updateCourseDetailUrl = `${APIs.BASE_URL}/updateCourse/:courseId`;
 
 
     //procecourseOffering

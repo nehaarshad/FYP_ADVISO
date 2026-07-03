@@ -18,7 +18,7 @@ import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
 import { BatchResults } from '@/app/components/BatchResults';
 import { StudentRecords } from '@/app/components/StudentRecords';
-import { CourseCatalog } from '@/app/components/CourseCatalog';
+import { CourseCatalog } from '@/components/courseComponents/CourseCatalog';
 import { Timetable } from '@/app/components/Timetable';
 import { ProfileView } from '@/components/ProfileView/route';
 import { RequestForms } from '@/app/components/RequestForms';

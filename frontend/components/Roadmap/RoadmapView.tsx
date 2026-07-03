@@ -102,7 +102,7 @@ export function RoadmapDetailView({ isOpen, roadmap, onClose }: RoadmapDetailVie
                         <th key={sem.id} className="border p-2 text-center">
                           Semester {sem.semesterNo}
                           <div className="text-[10px] opacity-70">
-                            {sem.totalCreditHours} cr
+                            {sem.totalCreditHours} Credit Hrs.
                           </div>
                         </th>
                       ))}
@@ -148,7 +148,7 @@ export function RoadmapDetailView({ isOpen, roadmap, onClose }: RoadmapDetailVie
                                     </div>
                                     {course.courseCredits != 0 && (
                                       <div className="text-[11px]">
-                                        {course.courseCredits} Cr. Hrs.
+                                        {course.courseCredits} Credits
                                       </div>
                                     )}
                                   </>

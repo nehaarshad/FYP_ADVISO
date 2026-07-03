@@ -30,7 +30,7 @@ const uploadCourseDetail = async (req, res) => {
             const courseCode = worksheet.getCell(i, 1).value?.toString().trim();
             const prerequisiteCourse = worksheet.getCell(i, 2).value?.toString().trim();
             const courseName = worksheet.getCell(i, 3).value?.toString().trim();
-            const creditHours = worksheet.getCell(i, 4).value;
+            const creditHours = worksheet.getCell(i, 4).value?.toString().trim() || null;
             
             // Skip empty rows
             if (!courseCode || !courseName) {
@@ -46,7 +46,7 @@ const uploadCourseDetail = async (req, res) => {
                         { courseCode: courseCode },
                         { 
                             courseName: courseName,
-                            courseCredits: parseInt(creditHours)
+                            courseCredits: creditHours
                         }
                     ]
                 }
@@ -68,14 +68,14 @@ const uploadCourseDetail = async (req, res) => {
                 // Checking if course name or credits are different
                 if (existingCourse.courseName !== courseName  //t
                           || 
-                    existingCourse.courseCredits !== parseInt(creditHours)  //f
+                    existingCourse.courseCredits !== creditHours  //f
                 ) {
 
                     // create new course if its name or credits are changed
                  existingCourse =    await CoursesModel.create({
                         courseCode: courseCode,
                         courseName: courseName,
-                        courseCredits: parseInt(creditHours)
+                        courseCredits: creditHours
                     });
                     console.log(`Created new course due to name/credits change: ${courseCode} - ${courseName}`);
                     
@@ -102,7 +102,7 @@ const uploadCourseDetail = async (req, res) => {
                 const newCourse = await CoursesModel.create({
                     courseCode: courseCode,
                     courseName: courseName,
-                    courseCredits: parseInt(creditHours)
+                    courseCredits: creditHours
                 });
                 courseId = newCourse.id;
                 console.log(`Created new course: ${courseCode} - ${courseName}`);
@@ -112,7 +112,7 @@ const uploadCourseDetail = async (req, res) => {
             coursesMap.set(courseName, {
                 id: courseId,
                 code: courseCode,
-                credits: parseInt(creditHours)
+                credits: creditHours
             });
             
             console.log(`Course mapped: ${courseName} -> ID: ${courseId}, Code: ${courseCode}, Credits: ${creditHours}`);

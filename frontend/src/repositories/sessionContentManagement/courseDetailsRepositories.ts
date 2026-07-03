@@ -1,17 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/repositories/courseManagement/courseCatalogRepository.ts
 import { BaseApiService } from '../../services/baseApiServices/baseNetworkService/baseNetwork';
 import AppApis from '../../services/appApis/apiUrl';
 import { ApiResponse } from '../../services/baseApiServices/ApiResponseType/apiResponseType';
 import { CourseCategory } from '@/src/models/courseCategoryModel';
-
-export interface UploadCourseDetailData {
-  file: File;
-}
+import { UploadCourseDetailData } from './types/uploadCourseDetail';
+import { UpdateCourseCredentialsData } from './types/updateCourseDetailData';
+import { DropdownCourse } from '@/components/courseComponents/types/courseoption';
 
 class CourseCatalogRepository extends BaseApiService {
   private static instance: CourseCatalogRepository;
   private coursesCache: CourseCategory[] = [];
+  private dropdownCache: DropdownCourse[] = [];
   private lastFetchTime: number = 0;
   private cacheDuration: number = 5 * 60 * 1000;
 
@@ -67,6 +66,10 @@ class CourseCatalogRepository extends BaseApiService {
         
         this.coursesCache = coursesData;
         this.lastFetchTime = now;
+        
+        // Update dropdown cache
+        this.updateDropdownCache(coursesData);
+        
         return { success: true, data: coursesData };
       }
       return response;
@@ -76,29 +79,135 @@ class CourseCatalogRepository extends BaseApiService {
     }
   }
 
-  // Helper methods for filtering
-  getCoursesByCategory(courses: CourseCategory[], categoryName: string): CourseCategory[] {
-    return courses.filter(course => 
-      course.CategoryModel?.categoryName === categoryName
-    );
+  private updateDropdownCache(coursesData: CourseCategory[]): void {
+    this.dropdownCache = coursesData.map((course: any) => {
+      const courseData = course.CoursesModel || course;
+      return {
+        id: course.id || courseData.id,
+        courseCode: courseData.courseCode || 'N/A',
+        courseName: courseData.courseName || 'Unknown'
+      };
+    });
   }
 
-  getCoursesByProgram(courses: CourseCategory[], programName: string): CourseCategory[] {
-    return courses;
+  async getCoursesForDropdown(searchTerm?: string): Promise<ApiResponse<DropdownCourse[]>> {
+    try {
+      // If we have cached data and no search term, return cached
+      if (!searchTerm && this.dropdownCache.length > 0) {
+        return { success: true, data: this.dropdownCache };
+      }
+
+      // Fetch fresh data
+      const response = await this.getApiResponse<any>(AppApis.getCourseDetailUrl);
+      
+      if (response.success && response.data) {
+        let coursesData: any[] = [];
+        if (Array.isArray(response.data)) {
+          coursesData = response.data;
+        } else if (response.data.data && Array.isArray(response.data.data)) {
+          coursesData = response.data.data;
+        } else {
+          coursesData = [];
+        }
+
+        // Transform to dropdown format
+        let dropdownData = coursesData.map((course: any) => {
+          const courseData = course.CoursesModel || course;
+          return {
+            id: course.id || courseData.id,
+            courseCode: courseData.courseCode || 'N/A',
+            courseName: courseData.courseName || 'Unknown'
+          };
+        });
+
+        // Apply search filter if searchTerm is provided
+        if (searchTerm && searchTerm.trim() !== '') {
+          const term = searchTerm.toLowerCase().trim();
+          dropdownData = dropdownData.filter((course: DropdownCourse) =>
+            course.courseCode?.toLowerCase().includes(term) ||
+            course.courseName?.toLowerCase().includes(term)
+          );
+        }
+
+        // Update cache if no search term
+        if (!searchTerm) {
+          this.dropdownCache = dropdownData;
+        }
+
+        return { success: true, data: dropdownData };
+      }
+      return response;
+    } catch (error) {
+      console.error('Get courses for dropdown error:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Failed to fetch courses',
+        data: []
+      };
+    }
   }
 
-  searchCourses(courses: CourseCategory[], searchTerm: string): CourseCategory[] {
-    const term = searchTerm.toLowerCase();
-    return courses.filter(course =>
-      course.CoursesModel?.courseCode?.toLowerCase().includes(term) ||
-      course.CoursesModel?.courseName?.toLowerCase().includes(term) ||
-      course.CategoryModel?.categoryName?.toLowerCase().includes(term)
-    );
+
+  async updateCourseCredentials(
+    courseId: number,
+    data: UpdateCourseCredentialsData
+  ): Promise<ApiResponse<any>> {
+    try {
+      if (!courseId) {
+        return {
+          success: false,
+          message: 'Course ID is required',
+        };
+      }
+
+      const { courseCode, courseName, courseCredits, prerequisiteIds } = data;
+      if (
+        courseCode === undefined && 
+        courseName === undefined && 
+        courseCredits === undefined &&
+        prerequisiteIds === undefined
+      ) {
+        return {
+          success: false,
+          message: 'At least one field is required to update'
+        };
+      }
+
+      const url = AppApis.updateCourseDetailUrl.replace(':courseId', courseId.toString());
+      const response = await this.updateApiWithJson<ApiResponse<any>>(
+        url,
+        {
+          "courseCode": courseCode,
+          "courseName": courseName,
+          "courseCredits": courseCredits,
+          "prerequisiteIds": prerequisiteIds
+        }
+      );
+
+      // Clear cache on successful update
+      if (response.success) {
+        this.clearCache();
+      }
+
+      return response;
+    } catch (error) {
+      console.error('Update course credentials error:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Failed to update course credentials',
+        data: null as any
+      };
+    }
   }
 
   clearCache(): void {
     this.coursesCache = [];
+    this.dropdownCache = [];
     this.lastFetchTime = 0;
+  }
+
+  getDropdownCache(): DropdownCourse[] {
+    return this.dropdownCache;
   }
 }
 

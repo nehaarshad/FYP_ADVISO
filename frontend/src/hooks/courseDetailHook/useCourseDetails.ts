@@ -1,25 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/hooks/courseManagement/useCourseCatalog.ts
-import { useState, useCallback, useRef } from 'react';
-import { courseCatalogRepository } from '@/src/repositories/sessionContentManagement/courseDetailsRepositories';
-import { CourseCategory } from '@/src/models/courseCategoryModel';
-import { UploadCourseDetailData } from '@/src/repositories/sessionContentManagement/types/uploadCourseDetail';
 
-interface CategoryInfo {
-  categoryName: string;
-  colorScheme: string;
-}
+import { DropdownCourse } from '@/components/courseComponents/types/courseoption';
+import { CourseCategory } from '@/src/models/courseCategoryModel';
+import { courseCatalogRepository } from '@/src/repositories/sessionContentManagement/courseDetailsRepositories';
+import { UpdateCourseCredentialsData } from '@/src/repositories/sessionContentManagement/types/updateCourseDetailData';
+import { UploadCourseDetailData } from '@/src/repositories/sessionContentManagement/types/uploadCourseDetail';
+import { useState, useCallback, useRef } from 'react';
 
 export const useCourseCatalog = () => {
   const [courses, setCourses] = useState<CourseCategory[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<CourseCategory[]>([]);
-  const [categoriesMap, setCategoriesMap] = useState<Map<string, CategoryInfo>>(new Map());
+  const [categoriesMap, setCategoriesMap] = useState<Map<string, any>>(new Map());
+  const [dropdownCourses, setDropdownCourses] = useState<DropdownCourse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const hasFetched = useRef(false);
 
+  /**
+   * Fetch all courses
+   */
   const fetchCourses = useCallback(async (forceRefresh: boolean = false) => {
     if (hasFetched.current && !forceRefresh) return;
 
@@ -31,8 +33,8 @@ export const useCourseCatalog = () => {
         setCourses(response.data);
         setFilteredCourses(response.data);
 
-        // Build categories map from CourseCategoryModels → CategoryModel
-        const newMap = new Map<string, CategoryInfo>();
+        // Build categories map
+        const newMap = new Map<string, any>();
         response.data.forEach((course: CourseCategory) => {
           const categoryModels = (course as any).CourseCategoryModels;
           if (Array.isArray(categoryModels)) {
@@ -41,6 +43,7 @@ export const useCourseCatalog = () => {
               if (cat?.categoryName && cat?.colorScheme) {
                 if (!newMap.has(cat.categoryName)) {
                   newMap.set(cat.categoryName, {
+                    id: cat.id,
                     categoryName: cat.categoryName,
                     colorScheme: cat.colorScheme,
                   });
@@ -50,6 +53,10 @@ export const useCourseCatalog = () => {
           }
         });
         setCategoriesMap(newMap);
+
+        // Load dropdown courses
+        await loadDropdownCourses();
+
         hasFetched.current = true;
       } else {
         throw new Error(response.error || 'Failed to fetch courses');
@@ -61,6 +68,23 @@ export const useCourseCatalog = () => {
     }
   }, []);
 
+  /**
+   * Load courses for dropdown
+   */
+  const loadDropdownCourses = useCallback(async (searchTerm?: string) => {
+    try {
+      const response = await courseCatalogRepository.getCoursesForDropdown(searchTerm);
+      if (response.success && response.data) {
+        setDropdownCourses(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading dropdown courses:', error);
+    }
+  }, []);
+
+  /**
+   * Upload course detail
+   */
   const uploadCourseDetail = useCallback(async (data: UploadCourseDetailData) => {
     setIsLoading(true);
     setError(null);
@@ -92,56 +116,100 @@ export const useCourseCatalog = () => {
     }
   }, [fetchCourses]);
 
+  /**
+   * Search courses by code or name
+   */
   const searchCourses = useCallback((searchTerm: string) => {
     if (!searchTerm.trim()) {
       setFilteredCourses(courses);
     } else {
-      const filtered = courseCatalogRepository.searchCourses(courses, searchTerm);
+      const term = searchTerm.toLowerCase().trim();
+      const filtered = courses.filter((course: any) => {
+        const courseData = course.CoursesModel || course;
+        const courseCode = courseData?.courseCode?.toLowerCase() || '';
+        const courseName = courseData?.courseName?.toLowerCase() || '';
+        return courseCode.includes(term) || courseName.includes(term);
+      });
       setFilteredCourses(filtered);
     }
   }, [courses]);
 
-  // src/hooks/courseDetailHook/useCourseDetails.ts
-// Find the filterByCategory function and replace it with this:
+  /**
+   * Filter courses by category
+   */
+  const filterByCategory = useCallback((categoryName: string) => {
+    if (!categoryName) {
+      setFilteredCourses(courses);
+    } else {
+      const filtered = courses.filter((course: any) => {
+        if (course.CourseCategoryModels && Array.isArray(course.CourseCategoryModels)) {
+          return course.CourseCategoryModels.some((ccm: any) => 
+            ccm.CategoryModel?.categoryName === categoryName
+          );
+        }
+        if (course.CategoryModel) {
+          return course.CategoryModel.categoryName === categoryName;
+        }
+        return false;
+      });
+      setFilteredCourses(filtered);
+    }
+  }, [courses]);
 
-const filterByCategory = useCallback((categoryName: string) => {
-  if (!categoryName) {
-    setFilteredCourses(courses);
-  } else {
-    // Filter courses based on category name
-    const filtered = courses.filter((course: any) => {
-      // New structure: course has CourseCategoryModels array
-      if (course.CourseCategoryModels && Array.isArray(course.CourseCategoryModels)) {
-        return course.CourseCategoryModels.some((ccm: any) => 
-          ccm.CategoryModel?.categoryName === categoryName
-        );
+  /**
+   * Update course credentials
+   */
+  const updateCourse = useCallback(async (
+    courseId: number,
+    data: UpdateCourseCredentialsData
+  ) => {
+    setIsUpdating(true);
+    setError(null);
+    
+    try {
+      const response = await courseCatalogRepository.updateCourseCredentials(courseId, data);
+      
+      if (response.success) {
+        // Refresh courses after update
+        await fetchCourses(true);
+        return { success: true, data: response.data };
+      } else {
+        setError(response.message || 'Failed to update course');
+        return { success: false, error: response.message };
       }
-      // Old structure: direct CategoryModel
-      if (course.CategoryModel) {
-        return course.CategoryModel.categoryName === categoryName;
-      }
-      return false;
-    });
-    setFilteredCourses(filtered);
-  }
-}, [courses]);
+    } catch (err: any) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    } finally {
+      setIsUpdating(false);
+    }
+  }, [fetchCourses]);
 
+  /**
+   * Clear filters and show all courses
+   */
   const clearFilters = useCallback(() => {
     setFilteredCourses(courses);
   }, [courses]);
 
+  /**
+   * Clear upload success state
+   */
   const clearUploadSuccess = useCallback(() => setUploadSuccess(false), []);
 
-  // Convert FFRRGGBB / #RRGGBB → usable #RRGGBB hex
+  /**
+   * Convert ARGB to hex color
+   */
   const convertARGBToHex = useCallback((argb: string): string => {
     if (!argb) return '#64748b';
     if (argb.startsWith('#')) return argb;
-    // Strip leading FF alpha channel (e.g. "FFFF0000" → "FF0000")
     const stripped = argb.length === 8 ? argb.substring(2) : argb;
     return `#${stripped}`;
   }, []);
 
-  // Get color with opacity as rgba string
+  /**
+   * Get color with opacity
+   */
   const getColorWithOpacity = useCallback((colorScheme: string, opacity: number = 0.15): string => {
     const hex = convertARGBToHex(colorScheme);
     const r = parseInt(hex.slice(1, 3), 16);
@@ -150,14 +218,18 @@ const filterByCategory = useCallback((categoryName: string) => {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   }, [convertARGBToHex]);
 
-  // Look up colorScheme by category name — returns raw colorScheme string or fallback
+  /**
+   * Get category color by name
+   */
   const getCategoryColor = useCallback((categoryName: string): string => {
     if (!categoryName) return '#64748b';
     const found = categoriesMap.get(categoryName);
     return found?.colorScheme ?? '#64748b';
   }, [categoriesMap]);
 
-  // Returns { color, backgroundColor, borderColor } style object for a category
+  /**
+   * Get category style object
+   */
   const getCategoryStyle = useCallback((categoryName: string) => {
     const colorScheme = getCategoryColor(categoryName);
     const textColor = convertARGBToHex(colorScheme);
@@ -169,10 +241,8 @@ const filterByCategory = useCallback((categoryName: string) => {
     };
   }, [getCategoryColor, convertARGBToHex, getColorWithOpacity]);
 
-  // All unique categories as a flat list of names (backward compat)
   const categories = Array.from(categoriesMap.keys());
 
-  // All unique categories with resolved hex colors
   const categoriesWithColors = Array.from(categoriesMap.values()).map(cat => ({
     name: cat.categoryName,
     colorScheme: cat.colorScheme,
@@ -182,7 +252,9 @@ const filterByCategory = useCallback((categoryName: string) => {
   return {
     courses: filteredCourses,
     allCourses: courses,
+    dropdownCourses,
     isLoading,
+    isUpdating,
     error,
     uploadProgress,
     uploadSuccess,
@@ -195,6 +267,8 @@ const filterByCategory = useCallback((categoryName: string) => {
     filterByCategory,
     clearFilters,
     clearUploadSuccess,
+    updateCourse,
+    loadDropdownCourses,
     getCategoryColor,
     convertARGBToHex,
     getColorWithOpacity,
