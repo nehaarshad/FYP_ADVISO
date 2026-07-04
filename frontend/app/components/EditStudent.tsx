@@ -262,9 +262,12 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
                     onChange={handleChange}
                     className="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/30 cursor-pointer"
                   >
-                    <option value="Promoted">Promoted</option>
-                    <option value="Relegated">Relegated</option>
-                    <option value="Probation">Probation</option>
+                    <option value="">Select Status</option>
+                <option key="Regular" value="Regular">New Admission</option>
+                 <option key="Promoted" value="Promoted">Promoted</option>
+                  <option key="Promoted on 1st Prob" value="Promoted on 1st Prob">Promoted on 1st Prob</option>
+                 <option key="Promoted on 2nd Prob" value="Promoted on 2nd Prob">Promoted on 2nd Prob</option>
+                 <option key="Relegated" value="Relegated">Relegated</option>
                   </select>
                 </div>
               </div>

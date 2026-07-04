@@ -8,14 +8,16 @@ import {
   Search, User, Mail, Phone, 
   CheckCircle, XCircle, 
   Users, GraduationCap, Eye, Edit,
-  Loader2, AlertCircle, Calendar, BookOpen
+  Loader2, AlertCircle, Calendar, BookOpen,
+  Power
 } from 'lucide-react';
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { StudentDetailsModal } from './StudentDetailsModal';
 import { EditStudent } from '@/app/components/EditStudent';
+import { useAuth } from '@/src/hooks/authHook/useAuth';
 
 
-export function StudentList({ selectedBatch, activeTab, onViewProfile }: { selectedBatch: string, activeTab: string, onViewProfile: (s: any) => void }){
+export function StudentList({ selectedBatch, activeTab }: { selectedBatch: string, activeTab: string }){
   const [searchInput, setSearchInput] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -23,6 +25,9 @@ export function StudentList({ selectedBatch, activeTab, onViewProfile }: { selec
   const [filterBatch, setFilterBatch] = useState(selectedBatch);
   const [filterProgram, setFilterProgram] = useState('');
    const [showEditModal, setShowEditModal] = useState(false);
+     const [updatingStatus, setUpdatingStatus] = useState<number | null>(null);
+     const [statusError, setStatusError] = useState<string | null>(null);
+    
  
   const {
     students,
@@ -35,13 +40,50 @@ export function StudentList({ selectedBatch, activeTab, onViewProfile }: { selec
     statistics,
   } = useStudents();
 
+    const { updateUserStatus } = useAuth();
+    
   const handleSearch = () => {
     searchStudents(searchInput);
   };
 
   const handleViewDetails = (student: any) => {
-    onViewProfile(student);
+    setShowDetailsModal(true);
+ //   onViewProfile(student);
   };
+
+    const handleToggleStatus = async (student: any) => {
+      try {
+        setUpdatingStatus(student.id);
+        setStatusError(null);
+        
+        // Determine current status
+        const currentStatus = student.User?.isActive ? 'inactive' : 'active';
+        const sapid = student.User?.sapid;
+        
+        if (!sapid) {
+          throw new Error('SAP ID not found for this student');
+        }
+  
+        // Call the update status function
+        const result = await updateUserStatus(sapid, currentStatus);
+        
+        if (result.success) {
+          // Refresh the students list to reflect the change
+          await fetchStudents(true);
+          
+          // Optional: Show success toast/notification
+          console.log(`Student ${student.firstName} ${currentStatus === 'active' ? 'activated' : 'deactivated'} successfully`);
+        } else {
+          throw new Error(result.error || 'Failed to update status');
+        }
+      } catch (error: any) {
+        setStatusError(error.message || 'Failed to update student status');
+        console.error('Error toggling student status:', error);
+        
+      } finally {
+        setUpdatingStatus(null);
+      }
+    };
 
 const editStudent = (std: any) => {
     setSelectedStudent(std);
@@ -233,16 +275,11 @@ const editStudent = (std: any) => {
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase ${
-                        student.User?.isActive 
+                        student.studentStatus?.currentStatus === 'Regular' || student.studentStatus?.currentStatus === 'New Admission' || student.studentStatus?.currentStatus === 'Promoted' || student.User?.isActive === true
                           ? 'bg-green-100 text-green-700' 
                           : 'bg-red-100 text-red-700'
                       }`}>
-                        {student.User?.isActive ? (
-                          <CheckCircle size={10} />
-                        ) : (
-                          <XCircle size={10} />
-                        )}
-                        {student.User?.isActive ? 'Active' : 'Inactive'}
+                        {student.studentStatus?.currentStatus || 'New Admission'} 
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -261,6 +298,33 @@ const editStudent = (std: any) => {
                         >
                           <Edit size={16} />
                         </button>
+                        {/* Toggle Status Button */}
+                                                <button
+                                                  onClick={() => handleToggleStatus(student)}
+                                                  disabled={updatingStatus === student.id}
+                                                  className={`p-2 rounded-lg transition-all flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider ${
+                                                    student.User?.isActive
+                                                      ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
+                                                      : 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200'
+                                                  } ${
+                                                    updatingStatus === student.id ? 'opacity-50 cursor-not-allowed' : ''
+                                                  }`}
+                                                  title={student.User?.isActive ? 'Deactivate Account' : 'Activate Account'}
+                                                >
+                                                  {updatingStatus === student.id ? (
+                                                    <>
+                                                      <Loader2 size={14} className="animate-spin" />
+                                                      <span className="hidden sm:inline">Processing...</span>
+                                                    </>
+                                                  ) : (
+                                                    <>
+                                                      <Power size={14} />
+                                                      <span className="hidden sm:inline">
+                                                        {student.User?.isActive ? 'Deactivate' : 'Activate'}
+                                                      </span>
+                                                    </>
+                                                  )}
+                                                </button>
                       </div>
                     </td>
                   </motion.tr>

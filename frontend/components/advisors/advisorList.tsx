@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
@@ -8,17 +7,21 @@ import {
   Search, User, Mail, Phone, 
   CheckCircle, XCircle, 
   Users, Layers, Eye, Edit,
-  Loader2, AlertCircle
+  Loader2, AlertCircle, Power,
+  Trash2
 } from 'lucide-react';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 import { AdvisorDetailsModal } from './advisorDetailModal';
 import { EditAdvisor } from '../../app/components/EditAdvisor';
+import { useAuth } from '@/src/hooks/authHook/useAuth';
 
 export function AdvisorsList() {
   const [searchInput, setSearchInput] = useState('');
   const [selectedAdvisor, setSelectedAdvisor] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState<number | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
  
   const {
     advisors,
@@ -27,6 +30,8 @@ export function AdvisorsList() {
     searchAdvisors,
     fetchAdvisors,
   } = useAdvisors();
+
+  const { updateUserStatus } = useAuth();
 
   const handleSearch = () => {
     searchAdvisors(searchInput);
@@ -42,6 +47,41 @@ export function AdvisorsList() {
     setShowEditModal(true);
   };
 
+  // Handle status toggle (activate/deactivate)
+  const handleToggleStatus = async (advisor: any) => {
+    try {
+      setUpdatingStatus(advisor.id);
+      setStatusError(null);
+      
+      // Determine current status
+      const currentStatus = advisor.User?.isActive ? 'inactive' : 'active';
+      const sapid = advisor.User?.sapid;
+      
+      if (!sapid) {
+        throw new Error('SAP ID not found for this advisor');
+      }
+
+      // Call the update status function
+      const result = await updateUserStatus(sapid, currentStatus);
+      
+      if (result.success) {
+        // Refresh the advisors list to reflect the change
+        await fetchAdvisors(true);
+        
+        // Optional: Show success toast/notification
+        console.log(`Advisor ${advisor.advisorName} ${currentStatus === 'active' ? 'activated' : 'deactivated'} successfully`);
+      } else {
+        throw new Error(result.error || 'Failed to update status');
+      }
+    } catch (error: any) {
+      setStatusError(error.message || 'Failed to update advisor status');
+      console.error('Error toggling advisor status:', error);
+      
+      // Optional: Show error toast/notification
+    } finally {
+      setUpdatingStatus(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -97,8 +137,21 @@ export function AdvisorsList() {
             </button>
           </div>
         </div>
-
       </div>
+
+      {/* Status Error Message */}
+      {statusError && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
+          <AlertCircle size={16} className="text-red-500 flex-shrink-0" />
+          <p className="text-red-600 text-sm font-medium">{statusError}</p>
+          <button 
+            onClick={() => setStatusError(null)}
+            className="ml-auto text-red-400 hover:text-red-600"
+          >
+            ×
+          </button>
+        </div>
+      )}
 
       {/* Advisors Table */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
@@ -160,7 +213,6 @@ export function AdvisorsList() {
                     </td>
                     <td className="px-6 py-4">
                         {(() => {
-                          // Find the active batch assignment
                           const activeAssignment = advisor.BatchAssignments?.find(
                             (assignment: any) => assignment.isCurrentlyAdvised === true
                           );
@@ -206,7 +258,10 @@ export function AdvisorsList() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-1">
+
+
+                        {/* View Details Button */}
                         <button
                           onClick={() => handleViewDetails(advisor)}
                           className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
@@ -214,12 +269,41 @@ export function AdvisorsList() {
                         >
                           <Eye size={16} />
                         </button>
-                         <button
+
+                        {/* Edit Button */}
+                        <button
                           onClick={() => editAdvisor(advisor)}
                           className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="Edit"
                         >
                           <Edit size={16} />
+                        </button>
+                         {/* Toggle Status Button */}
+                        <button
+                          onClick={() => handleToggleStatus(advisor)}
+                          disabled={updatingStatus === advisor.id}
+                          className={`p-2 rounded-lg transition-all flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider ${
+                            advisor.User?.isActive
+                              ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
+                              : 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200'
+                          } ${
+                            updatingStatus === advisor.id ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                          title={advisor.User?.isActive ? 'Deactivate Account' : 'Activate Account'}
+                        >
+                          {updatingStatus === advisor.id ? (
+                            <>
+                              <Loader2 size={14} className="animate-spin" />
+                              <span className="hidden sm:inline">Processing...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Power size={14} />
+                              <span className="hidden sm:inline">
+                                {advisor.User?.isActive ? 'Deactivate' : 'Activate'}
+                              </span>
+                            </>
+                          )}
                         </button>
                       </div>
                     </td>

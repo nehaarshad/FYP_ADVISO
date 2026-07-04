@@ -6,7 +6,7 @@ import { AddAdvisorData } from './types/addAdvisor';
 import {UpdateAdvisorData} from './types/updateAdvisor'
 import { AddStudentData } from './types/addStudent';
 import { UpdateStudentData } from './types/updateStudents';
-import { UpdateStudentStatusData } from './types/updateStudentStatus';
+import { UpdateUserStatusData } from './types/updateStudentStatus';
 import { BulkUploadData } from './types/bulkStudentUploader';
 import { BatchAdvisor } from '@/src/models/FacultyAdvisorModel';
 import paramsUrl from '../../utilits/constructUrl/constructParamsUrl'
@@ -92,18 +92,20 @@ class UserManagementRepository extends BaseApiService {
   }
 
   // Update Student Status
-  async updateStudentStatus(data: UpdateStudentStatusData): Promise<ApiResponse<any>> {
-    try {
-      const response = await this.postApiWithJson(
-        APIs.updateStudentStatusUrl,
-        data
-      );
-      return response;
-    } catch (error) {
-      console.error('Update student status error:', error);
-      throw error;
-    }
+ async updateUserStatus(data: UpdateUserStatusData): Promise<ApiResponse<any>> {
+  try {
+    console.log("Update user status data:", data);
+    const response = await this.updateApiWithJson(
+      APIs.updateUserStatusUrl,
+      data
+    );
+    console.log("Update user status response:", response);
+    return response;
+  } catch (error) {
+    console.error('Update user status error:', error);
+    throw error;
   }
+}
 
   async bulkUploadStudents(data: BulkUploadData): Promise<ApiResponse<any>> {
     try {

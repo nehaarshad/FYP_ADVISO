@@ -241,7 +241,15 @@ const updateStudent = async(req,res)=>{
                 return res.status(404).json({message:"Batch Not Found"})
             }
             else{
-                existingUser=await Student.update({studentName,registrationNumber,dateOfBirth,cnic,currentSemester,email,contactNumber,batchId:batch.id}, {where:{id}})
+                existingUser=await Student.update({
+                    studentName:studentName || existingUser.studentName,
+                    registrationNumber:registrationNumber || existingUser.registrationNumber,
+                    dateOfBirth:dateOfBirth || existingUser.dateOfBirth,
+                    cnic:cnic || existingUser.cnic,
+                    currentSemester:currentSemester || existingUser.currentSemester,
+                    email:email || existingUser.email,
+                    contactNumber:contactNumber || existingUser.contactNumber,
+                    batchId:batch.id}, {where:{id}})
 
                 console.log("Student updated", existingUser)
 
@@ -279,29 +287,24 @@ const updateStudent = async(req,res)=>{
     }
 }
 
-const updateStudentStatus = async(req,res)=>{
+const updateUserStatus = async(req,res)=>{
 
     try {
-        const{sapid,studentname,currentStatus,reason}= req.body;
-
+        const{sapid,currentStatus}= req.body;
+        console.log("Request Body updateUserStatus",req.body)
         let existingUser;
 
-        existingUser = await User.findOne({where:{sapid,role:"student"},include:[{model:Student}]})
+        existingUser = await User.findOne({where:{sapid}})
         if (!existingUser) {
             return res.json({message:"User Not Found"});
         }
 
-        existingUser = await Student.findOne({where:{studentName:studentname,userId:existingUser.id}});
-        if (!existingUser) {
-            return res.json({message:"Student Not Found"});
+        if(currentStatus === "inactive"){
+        await existingUser.update({isActive:false,deactivateAt:new Date()})
         }
-        const studentStatus =  await StudentStatus.findOne({where:{studentId:existingUser.id}})
-            if(studentStatus){
-                await studentStatus.update({currentStatus,reason})
-            }
-            else{
-                await StudentStatus.create({currentStatus,reason,studentId:existingUser.id})    
-            }
+        else{
+            await existingUser.update({isActive:true,deactivateAt:null})
+        }
 
         return res.status(201).json("Student Status Updated Successfully")
     }
@@ -451,4 +454,4 @@ const addViaExcelSheet = async(req,res)=>{
 };
 
 
-export default {addAdvisor,addNewStudent,updateAdvisor,updateStudent,updateStudentStatus,addViaExcelSheet}
+export default {addAdvisor,addNewStudent,updateAdvisor,updateStudent,updateUserStatus,addViaExcelSheet}
