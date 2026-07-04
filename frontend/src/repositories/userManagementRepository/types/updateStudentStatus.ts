@@ -1,6 +1,4 @@
-export interface UpdateStudentStatusData {
+export interface UpdateUserStatusData {
   sapid: string;
-  studentname: string;
   currentStatus: string;
-  reason: string;
 }

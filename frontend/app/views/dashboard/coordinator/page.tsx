@@ -165,9 +165,7 @@ export default function CoordinatorDashboard() {
                 {activeTab === "bulk-student-upload" && <StudentRecords/>}
                 {activeTab === "add-student" && <AddStudent/>}
                 {activeTab === "add-faculty" && <AddFaculty/>}
-                {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={''} onViewProfile={function (s: any): void {
-                throw new Error('Function not implemented.');
-              } } />}
+                {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
                 {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}
