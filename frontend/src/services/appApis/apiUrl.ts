@@ -64,7 +64,10 @@ export default class APIs{
      static uploadTimeTableUrl = `${APIs.BASE_URL}/uploadTimetable`;
     static getTimetableUrl = `${APIs.BASE_URL}/getTimetables`;
 
-
+      // Chat APIs
+      static chatUploadUrl = `${APIs.BASE_URL}/chat/upload`;
+      static chatDeleteUrl = `${APIs.BASE_URL}/chat/delete/:filename`;
+      
     //process results
 
         static uploadSessionalResultUrl = `${APIs.BASE_URL}/uploadSessionalResult`;

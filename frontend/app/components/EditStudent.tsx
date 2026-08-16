@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-// app/components/EditStudent.tsx (Fixed)
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
@@ -23,7 +22,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
   const [formData, setFormData] = useState<any>(null);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
-    const { programs, programOptions, isLoading: programsLoading } = usePrograms();
+    const { programs, isLoading: programsLoading } = usePrograms();
     
   const { updateStudent, isLoading, error } = useUpdateStudent();
   const { fetchStudents } = useStudents();
@@ -45,7 +44,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
         registrationNumber: student.registrationNumber || '',
         dateOfBirth: student.dateOfBirth || '',
         cnic: student.cnic || '',
-        currentStatus: student.StudentStatus?.currentStatus || 'Promoted',
+        currentStatus: student.StudentStatus?.currentStatus || 'New Admission',
         reason: student.StudentStatus?.reason || '',
         fullName: student.StudentGuardians?.[0]?.fullName || '',
         guardianemail: student.StudentGuardians?.[0]?.email || '',
@@ -270,6 +269,13 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
                  <option key="Relegated" value="Relegated">Relegated</option>
                   </select>
                 </div>
+                <EditField 
+                  label="Reason" 
+                  name="reason"
+                  value={formData.reason}
+                  onChange={handleChange}
+                  icon={<AlertCircle size={18}/>}
+                />
               </div>
 
               <div className="border-t border-slate-100 pt-6">

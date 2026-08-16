@@ -1,3 +1,5 @@
+import { User } from "./userModel";
+
 export interface Message {
   id: number;
   senderId: number;
@@ -7,6 +9,9 @@ export interface Message {
   text: string | null;
   receiverId: number;
   chatId: number;
+
   createdAt?: string;
   updatedAt?: string;
+
+  sender?: User;
 }

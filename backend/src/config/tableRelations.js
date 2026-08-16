@@ -52,18 +52,41 @@ export default function relations() {
 
   User.hasMany(BatchAdvisor, { foreignKey: "userId" });
   BatchAdvisor.belongsTo(User, { foreignKey: "userId" });
+// ==================== User & Auth Relations ====================
 
-  User.hasMany(Message, { foreignKey: "senderId" });
-  Message.belongsTo(User, { foreignKey: "senderId" });
+User.hasOne(Admin, {foreignKey: "userId",as: "admin",});
+Admin.belongsTo(User, {foreignKey: "userId",as: "user",});
 
-  User.hasMany(Message, { foreignKey: "receiverId" });
-  Message.belongsTo(User, { foreignKey: "receiverId" }); 
+User.hasMany(Coordinator, {foreignKey: "userId",as: "coordinators",});
+Coordinator.belongsTo(User, {foreignKey: "userId",as: "user",});
 
-  User.hasMany(Chat, { foreignKey: "senderId" });
-  Chat.belongsTo(User, { foreignKey: "senderId" });
 
-  User.hasMany(Chat, { foreignKey: "receiverId" });
-  Message.belongsTo(User, { foreignKey: "receiverId" }); 
+// ==================== STUDENT ↔ USER ====================
+
+User.hasMany(Student, {foreignKey: "userId",as: "students",});
+Student.belongsTo(User, {foreignKey: "userId",as: "user",});
+
+
+// ==================== ADVISOR ↔ USER ====================
+
+User.hasMany(BatchAdvisor, {foreignKey: "userId",as: "batchAdvisors",});
+BatchAdvisor.belongsTo(User, {foreignKey: "userId",as: "user"});
+
+
+// ==================== MESSAGE ↔ USER ====================
+
+User.hasMany(Message, {foreignKey: "senderId",as: "sentMessages",});
+Message.belongsTo(User, {foreignKey: "senderId",as: "sender",});
+User.hasMany(Message, {foreignKey: "receiverId",as: "receivedMessages"});
+Message.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
+
+
+// ==================== CHAT ↔ USER ====================
+
+User.hasMany(Chat, {foreignKey: "senderId",as: "sentChats",});
+Chat.belongsTo(User, {foreignKey: "senderId",as: "sender",});
+User.hasMany(Chat, {foreignKey: "receiverId",as: "receivedChats",});
+Chat.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
 
   // ==================== Student ====================
 
@@ -243,8 +266,8 @@ CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId
     TimetableModel.belongsTo(CourseOfferingModel, { foreignKey: "courseOfferingId",});
     
   // ==================== Chat & Messages ====================
-  ChatsModel.hasMany(Message, { foreignKey: "chatId" });
-  Message.belongsTo(ChatsModel, { foreignKey: "chatId" });
+  ChatsModel.hasMany(Message, { foreignKey: "chatId" ,as: "messages"});
+  Message.belongsTo(ChatsModel, { foreignKey: "chatId" ,as: "messages"});
 
   // ==================== Transcripts Management ====================
   SessionalTranscript.hasMany(TranscriptCoursesDetail, { foreignKey: "sessionalTranscriptId" });

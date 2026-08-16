@@ -19,7 +19,7 @@ import { StudentTranscript } from "../../../../components/StudentDetails/Student
 import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
 import Guidelines from "../../../../components/Guidelines/Guidelines";
 import SubmitRequest from "../../../../components/RequestFoam/SubmitRequest";
-import { StudentChat } from "../../../../components/Chat/StudentChat"; 
+import StudentChat from "../../../../components/Chat/StudentChat"; 
 import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRemarks";
 import { Timetable } from "../../../../components/Timetable/Timetable";
 import { ViewRecommedCourse } from "../../../../components/CourseRecommendation/ViewRecommedCourse";

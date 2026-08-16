@@ -219,6 +219,7 @@ const updateStudent = async(req,res)=>{
         const {id} = req.params;//stdId
         const{studentName,registrationNumber,dateOfBirth,cnic,currentSemester,email,contactNumber,programName,batchName,batchYear,currentStatus,reason,fullName,guardianemail,guardiancontactNumber}= req.body;
 
+        console.log("Request Body",req.body)
             let existingUser;
                 existingUser = await Student.findByPk(id);
 
@@ -253,13 +254,15 @@ const updateStudent = async(req,res)=>{
 
                 console.log("Student updated", existingUser)
 
-                if(currentStatus && reason){
+                if(currentStatus){
                   const studentStatus =  await StudentStatus.findOne({where:{studentId:id}})
                     if(studentStatus){
                         await studentStatus.update({currentStatus,reason})
+                        console.log("Student Status updated",studentStatus)
                     }
                     else{
                         await StudentStatus.create({currentStatus,reason,studentId:id})    
+                        console.log("Student Status created",studentStatus)
                     }
                 }
 

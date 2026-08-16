@@ -48,7 +48,6 @@ const uploadTimetable = async (req, res) => {
         console.log("Found program:", program.programName);
 
         if (!timetableFile) {
-            
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
