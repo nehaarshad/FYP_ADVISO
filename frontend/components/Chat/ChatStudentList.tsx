@@ -34,7 +34,7 @@ const ChatStudentList: React.FC<
 
         <div>
           <h2 className="text-[#1e3a5f] text-sm font-black uppercase tracking-tight">
-            Inbox
+            Inbox 
           </h2>
 
           <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">
@@ -81,9 +81,11 @@ const ChatStudentList: React.FC<
               selectedChatId ===
               chat.chatId;
 
+                const uniqueKey = chat.chatId ? `chat-${chat.chatId}` : `user-${chat.id}`;
+        
             return (
               <button
-                key={chat.chatId}
+                key={uniqueKey}
                 onClick={() =>
                   onSelect(chat)
                 }

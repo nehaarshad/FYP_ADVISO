@@ -9,7 +9,8 @@ export interface Message {
   text: string | null;
   receiverId: number;
   chatId: number;
-
+  senderName: string,
+  senderRole: string,
   createdAt?: string;
   updatedAt?: string;
 

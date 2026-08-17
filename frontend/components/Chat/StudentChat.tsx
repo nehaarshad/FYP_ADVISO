@@ -38,43 +38,28 @@ const StudentChat: React.FC<
       console.log("current user in student chat: ", currentUser)
       const userId = currentUser?.data?.id || currentUser?.id;
 
-  const {
+ const {
     chats,
     messages,
     selectedChat,
-
     loadingChats,
     loadingMessages,
-
     typingUserId,
-
     loadChats,
     openChat,
     sendMessage,
     sendFile,
     markChatAsRead,
     setTyping,
-
     error,
   } = useChat();
 
-  const [inputText, setInputText] =
-    useState("");
+  const [inputText, setInputText] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [uploading, setUploading] =
-    useState(false);
 
-  const scrollRef =
-    useRef<HTMLDivElement>(null);
-
-  const typingTimeoutRef =
-    useRef<ReturnType<
-      typeof setTimeout
-    > | null>(null);
-
-  /*
-   * LOAD CHATS
-   */
   useEffect(() => {
     if (!userId) return;
 
@@ -94,14 +79,11 @@ const StudentChat: React.FC<
     typingUserId,
   ]);
 
-  /*
-   * MARK AS READ
-   */
   useEffect(() => {
     if (!selectedChat) return;
 
     markChatAsRead(
-      selectedChat.chatId
+      selectedChat.chatId!
     );
   }, [
     selectedChat,
@@ -153,9 +135,6 @@ const StudentChat: React.FC<
       }, 1000);
   };
 
-  /*
-   * SEND MESSAGE
-   */
   const handleSendMessage = async (
     e?: React.FormEvent
   ) => {
@@ -187,9 +166,6 @@ const StudentChat: React.FC<
     }
   };
 
-  /*
-   * FILE SELECT
-   */
   const handleFileSelect = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -219,10 +195,7 @@ const StudentChat: React.FC<
     }
   };
 
-  /*
-   * FORMAT TIME
-   */
-  const formatTime = (
+ const formatTime = (
     date?: string
   ) => {
     if (!date) return "";
@@ -246,10 +219,10 @@ const StudentChat: React.FC<
       }
     );
   };
+    const canSendMessages = selectedChat?.canSendMessages !== false;
+  const isReadOnly = selectedChat?.isReadOnly === true;
 
-  /*
-   * LOGIN CHECK
-   */
+
   if (!userId) {
     return (
       <div className="flex items-center justify-center p-10">
@@ -260,9 +233,6 @@ const StudentChat: React.FC<
     );
   }
 
-  /*
-   * LOADING
-   */
   if (
     loadingChats &&
     !selectedChat
@@ -277,9 +247,6 @@ const StudentChat: React.FC<
     );
   }
 
-  /*
-   * ERROR
-   */
   if (error && !selectedChat) {
     return (
       <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-xl items-center justify-center p-6">
@@ -299,9 +266,6 @@ const StudentChat: React.FC<
     );
   }
 
-  /*
-   * NO ADVISOR
-   */
   if (!selectedChat) {
     return (
       <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-xl items-center justify-center">
@@ -357,7 +321,7 @@ const StudentChat: React.FC<
           <div>
 
             <h3 className="font-black uppercase tracking-tight text-[12px] md:text-[14px]">
-              {selectedChat.name}
+              INBOX
             </h3>
 
             <p className="text-[8px] md:text-[10px] font-bold text-blue-300 uppercase tracking-widest leading-none">
@@ -400,21 +364,22 @@ const StudentChat: React.FC<
               className="animate-spin text-[#1e3a5f]"
             />
           </div>
-        ) : messages.length === 0 ? (
-          <div className="h-full flex items-center justify-center">
-
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">
-              Start a conversation with your advisor
-            </p>
-
-          </div>
-        ) : (
+        ) : messages.length === 0 ?  (
+                  <div className="h-full flex items-center justify-center">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">
+                      {selectedChat?.isReadOnly 
+                        ? "No messages with this advisor" 
+                        : "Start a conversation with your advisor"}
+                    </p>
+                  </div>
+                ) : (
           messages.map((msg) => {
 
             const isMine =
               Number(msg.senderId) ===
               Number(userId);
 
+              
             return (
               <div
                 key={msg.id}
@@ -440,9 +405,7 @@ const StudentChat: React.FC<
 >
   {isMine
     ? null
-    : msg.sender?.students?.[0]?.studentName ||
-      msg.sender?.batchAdvisors?.[0]?.advisorName ||
-      msg.sender?.sapid ||  
+    : msg.senderName || 
       "SAP ID"}
 </span>
                     {/* TEXT */}

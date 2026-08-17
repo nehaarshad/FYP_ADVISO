@@ -50,36 +50,22 @@ interface ChatAreaProps {
 const ChatArea: React.FC<
   ChatAreaProps
 > = ({
-  chat,
+chat,
   messages,
   currentUserId,
   loading,
   typingUserId,
-
   onSendMessage,
   onSendFile,
   onMarkAsRead,
   onTyping,
-
   onBack,
 }) => {
-  const [input, setInput] =
-    useState("");
+  const [input, setInput] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [uploading, setUploading] =
-    useState(false);
-
-  const scrollRef =
-    useRef<HTMLDivElement>(null);
-
-  const typingTimeoutRef =
-    useRef<ReturnType<
-      typeof setTimeout
-    > | null>(null);
-
-  /*
-   * SCROLL TO BOTTOM
-   */
   useEffect(() => {
     if (!scrollRef.current) return;
 
@@ -97,13 +83,16 @@ const ChatArea: React.FC<
     if (!chat) return;
 
     onMarkAsRead(
-      chat.chatId
+      chat.chatId!
     );
   }, [
     chat,
     messages.length,
     onMarkAsRead,
   ]);
+
+    const canSend = true;
+
 
   /*
    * SEND
@@ -227,43 +216,26 @@ const ChatArea: React.FC<
   return (
     <div className="h-full flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
 
-      {/* HEADER */}
-      <div className="px-6 py-4 border-b border-slate-50 bg-white shrink-0">
-
+    <div className="px-6 py-4 border-b border-slate-50 bg-white shrink-0">
         <div className="flex items-center gap-3">
-
-          {/* MOBILE BACK */}
           {onBack && (
-            <button
-              onClick={onBack}
-              className="md:hidden p-2 bg-slate-50 rounded-full"
-            >
-              <ArrowLeft
-                size={17}
-              />
+            <button onClick={onBack} className="md:hidden p-2 bg-slate-50 rounded-full">
+              <ArrowLeft size={17} />
             </button>
           )}
 
           <div>
-
             <div className="flex items-center gap-2">
-
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-
               <h2 className="text-[#1e3a5f] font-black text-[14px] uppercase tracking-tight">
                 {chat.name}
               </h2>
-
             </div>
-
             <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-0.5 ml-4 opacity-70">
-              Student
+               Semester {chat.semester}
             </p>
-
           </div>
-
         </div>
-
       </div>
 
       {/* MESSAGES */}
@@ -292,18 +264,14 @@ const ChatArea: React.FC<
         ) : (
           messages.map(
             (message) => {
-              const isMine =
-                Number(
-                  message.senderId
-                ) ===
-                Number(
-                  currentUserId
-                );
+              const isMine = message.sender?.role == 'advisor'
+                  const uniqueKey = chat.chatId ? `chat-${chat.chatId}` : `user-${chat.id}`;
+        
 
               return (
                 <div
                   key={
-                    message.id
+                    uniqueKey + "-" + message.id
                   }
                   className={`flex ${
                     isMine
@@ -323,10 +291,18 @@ const ChatArea: React.FC<
                   >
 
 <span
-  className={`text-[8px] font-black uppercase opacity-60 mt-2 self-start text-[#1e3a5f]`}
+  className={`text-[8px] font-black uppercase  mt-2 self-start underline
+  ${
+                      isMine
+                        ? "text-amber-400"
+                        : "text-[#1e3a5f]   "    }
+                     `}
 >
   {isMine
-    ? null
+    ? message.sender?.students?.[0]?.studentName ||
+      message.sender?.batchAdvisors?.[0]?.advisorName ||
+      message.sender?.sapid ||  
+      "SAP ID"
     : message.sender?.students?.[0]?.studentName ||
       message.sender?.batchAdvisors?.[0]?.advisorName ||
       message.sender?.sapid ||  
@@ -372,7 +348,7 @@ const ChatArea: React.FC<
 
                     {/* TIME */}
                     <span
-                      className={`text-[7px] font-black uppercase opacity-60 mt-2 self-end ${
+                      className={`text-[7px] font-black uppercase opacity-80 mt-2 self-end ${
                         isMine
                           ? "text-amber-400"
                           : "text-slate-400"
@@ -414,50 +390,30 @@ const ChatArea: React.FC<
 
       </div>
 
-      {/* INPUT */}
+  {/* INPUT - Always enabled for advisors */}
       <div className="p-4 bg-white border-t border-slate-50 shrink-0">
-
         <div className="flex gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 items-center focus-within:border-amber-400 transition-all">
-
-          {/* FILE */}
           <label className="p-2 cursor-pointer text-slate-400 hover:text-[#1e3a5f]">
-
             {uploading ? (
-              <Loader2
-                size={16}
-                className="animate-spin"
-              />
+              <Loader2 size={16} className="animate-spin" />
             ) : (
-              <Paperclip
-                size={16}
-              />
+              <Paperclip size={16} />
             )}
-
             <input
               type="file"
               className="hidden"
               disabled={uploading}
-              onChange={
-                handleFileChange
-              }
+              onChange={handleFileChange}
             />
-
           </label>
 
-          {/* INPUT */}
           <input
             type="text"
             placeholder={`Reply to ${chat.name}...`}
             value={input}
-            onChange={(e) =>
-              handleInputChange(
-                e.target.value
-              )
-            }
+            onChange={(e) => handleInputChange(e.target.value)}
             onKeyDown={(e) => {
-              if (
-                e.key === "Enter"
-              ) {
+              if (e.key === "Enter") {
                 e.preventDefault();
                 handleSend();
               }
@@ -465,23 +421,15 @@ const ChatArea: React.FC<
             className="flex-1 bg-transparent text-[#1e3a5f] px-2 py-1.5 outline-none placeholder:text-slate-400 text-[12.5px] font-medium"
           />
 
-          {/* SEND */}
           <button
-            onClick={
-              handleSend
-            }
-            disabled={
-              !input.trim()
-            }
+            onClick={handleSend}
+            disabled={!input.trim()}
             className="bg-[#1e3a5f] p-2.5 rounded-xl text-white hover:bg-amber-500 active:scale-90 transition-all shadow-lg disabled:opacity-40"
           >
             <Send size={14} />
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 };

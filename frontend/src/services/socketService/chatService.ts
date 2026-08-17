@@ -41,7 +41,6 @@ class ChatSocketService {
     if (!this.socket) {
       return this.connect();
     }
-
     return this.socket;
   }
 
@@ -56,44 +55,41 @@ class ChatSocketService {
     this.getSocket().emit("registerUser", userId);
   }
 
-  getUserChats(userId: number): void {
-    this.getSocket().emit("getUserChats", userId);
+  getAdvisorChats(userId: number): void {
+    console.log(`👨‍🏫 Fetching advisor chats for user ${userId}`);
+    this.getSocket().emit("getAdvisorChats", userId);
   }
-
-  getChatMessages(chatId: number, userId: number): void {
-    this.getSocket().emit("getChatMessages", {
-      chatId,
-      userId,
-    });
+  getStudentChats(userId: number): void {
+    console.log(`🎓 Fetching student chats for user ${userId}`);
+    this.getSocket().emit("getStudentChats", userId);
   }
+getChatMessages(studentId: number): void {
+  console.log("🚀 getChatMessages called:", studentId);
 
+  const socket = this.getSocket();
+
+  console.log("🔌 socket connected:", socket.connected);
+
+  socket.emit("getChatMessages", { studentId });
+
+  console.log("📤 getChatMessages emitted");
+}
   sendMessage(data: {
     chatId: number;
-    senderId: number;
     receiverId: number;
     text?: string | null;
     fileAttachment?: string | null;
   }): void {
+    console.log(`📤 Sending message:`, data);
     this.getSocket().emit("sendMessage", data);
   }
 
   markAsRead(chatId: number, userId: number): void {
-    this.getSocket().emit("markAsRead", {
-      chatId,
-      userId,
-    });
+    this.getSocket().emit("markAsRead", { chatId, userId });
   }
 
-  typing(
-    chatId: number,
-    userId: number,
-    isTyping: boolean
-  ): void {
-    this.getSocket().emit("typing", {
-      chatId,
-      userId,
-      isTyping,
-    });
+  typing(chatId: number, userId: number, isTyping: boolean): void {
+    this.getSocket().emit("typing", { chatId, userId, isTyping });
   }
 
   on<T>(event: string, callback: (data: T) => void): void {
