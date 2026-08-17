@@ -12,20 +12,40 @@ export const CourseOffering = () => {
   const [selectedProgram, setSelectedProgram] = useState('');
   const [selectedSessionType, setSelectedSessionType] = useState('');
   const [selectedSessionYear, setSelectedSessionYear] = useState('');
+  const [selectedBatchName, setSelectedBatchName] = useState('');
+  const [selectedBatchYear, setSelectedBatchYear] = useState('');
   const [selectedOffering, setSelectedOffering] = useState<any>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [filteredOfferings, setFilteredOfferings] = useState<any[]>([]);
+  const [availableBatches, setAvailableBatches] = useState<{name: string, year: string}[]>([]);
   
   const { offerings, isLoading, error, fetchOfferings, uploadOffering, uploadProgress } = useCourseOffering();
   const { programs } = usePrograms();
-
-
 
   useEffect(() => {
     fetchOfferings();
   }, []);
 
-  // Filter offerings when session type/year changes
+  // Extract available batches from offerings
+  useEffect(() => {
+    if (offerings && offerings.length > 0) {
+      const batches = new Map<string, {name: string, year: string}>();
+      offerings.forEach(o => {
+        if (o.BatchModel?.batchName && o.BatchModel?.batchYear) {
+          const key = `${o.BatchModel.batchName}-${o.BatchModel.batchYear}`;
+          if (!batches.has(key)) {
+            batches.set(key, {
+              name: o.BatchModel.batchName,
+              year: o.BatchModel.batchYear.toString()
+            });
+          }
+        }
+      });
+      setAvailableBatches(Array.from(batches.values()));
+    }
+  }, [offerings]);
+
+  // Filter offerings when any filter changes
   useEffect(() => {
     if (!offerings || offerings.length === 0) {
       setFilteredOfferings([]);
@@ -46,8 +66,16 @@ export const CourseOffering = () => {
       filtered = filtered.filter(o => o.ProgramModel?.programName === selectedProgram);
     }
 
+    if (selectedBatchName) {
+      filtered = filtered.filter(o => o.BatchModel?.batchName === selectedBatchName);
+    }
+
+    if (selectedBatchYear) {
+      filtered = filtered.filter(o => o.BatchModel?.batchYear === selectedBatchYear);
+    }
+
     setFilteredOfferings(filtered);
-  }, [offerings, selectedSessionType, selectedSessionYear, selectedProgram]);
+  }, [offerings, selectedSessionType, selectedSessionYear, selectedProgram, selectedBatchName, selectedBatchYear]);
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +109,10 @@ export const CourseOffering = () => {
     setSelectedSessionType('');
     setSelectedSessionYear('');
     setSelectedProgram('');
+    setSelectedBatchName('');
+    setSelectedBatchYear('');
   };
+
   return (
     <>
       <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100">
@@ -104,7 +135,7 @@ export const CourseOffering = () => {
             <Filter size={16} className="text-[#1e3a5f]" />
             <h3 className="text-xs font-black text-[#1e3a5f] uppercase tracking-wider">Filter Offerings</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
             <select
               title="Session Type"
               value={selectedSessionType}
@@ -117,7 +148,7 @@ export const CourseOffering = () => {
               <option value="SUMMER">Summer</option>
             </select>
 
-             <input
+            <input
               type="text"
               placeholder="Session Year (e.g., 2024)"
               value={selectedSessionYear}
@@ -137,18 +168,38 @@ export const CourseOffering = () => {
               ))}
             </select>
 
-            {(selectedSessionType || selectedSessionYear || selectedProgram) && (
+            <select
+              title="Batch Name"
+              value={selectedBatchName}
+              onChange={(e) => setSelectedBatchName(e.target.value)}
+              className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+            >
+              <option value="">All Batches</option>
+              <option value="FALL">Fall</option>
+              <option value="SPRING">Spring</option>
+              <option value="SUMMER">Summer</option>
+            </select>
+
+            <input
+              type="text"
+              placeholder="Batch Year (e.g., 2024)"
+              value={selectedBatchYear}
+              onChange={(e) => setSelectedBatchYear(e.target.value)}
+              className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+            />
+
+            {(selectedSessionType || selectedSessionYear || selectedProgram || selectedBatchName || selectedBatchYear) && (
               <button
                 onClick={handleResetFilters}
-                className="px-4 py-2 bg-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-300 transition-all"
+                className="px-4 py-2 bg-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-300 transition-all md:col-span-2"
               >
-                Clear Filters
+                Clear All Filters
               </button>
             )}
           </div>
           
           {/* Active Filters Display */}
-          {(selectedSessionType || selectedSessionYear || selectedProgram) && (
+          {(selectedSessionType || selectedSessionYear || selectedProgram || selectedBatchName || selectedBatchYear) && (
             <div className="flex flex-wrap gap-2 mt-3">
               {selectedSessionType && (
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
@@ -166,6 +217,18 @@ export const CourseOffering = () => {
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
                   Program: {selectedProgram}
                   <button onClick={() => setSelectedProgram('')} className="hover:text-[#FDB813]">×</button>
+                </span>
+              )}
+              {selectedBatchName && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                  Batch: {selectedBatchName}
+                  <button onClick={() => setSelectedBatchName('')} className="hover:text-[#FDB813]">×</button>
+                </span>
+              )}
+              {selectedBatchYear && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                  Batch Year: {selectedBatchYear}
+                  <button onClick={() => setSelectedBatchYear('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
             </div>
@@ -298,13 +361,13 @@ export const CourseOffering = () => {
               <div>
                 <label className="text-[10px] font-black text-slate-400 uppercase">Session Year *</label>
                 <input
+                  type="text"
                   title='Session Year'
                   value={selectedSessionYear}
                   onChange={(e) => setSelectedSessionYear(e.target.value)}
                   className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
                   required
-                >
-                </input>
+                />
               </div>
 
               <div>
@@ -371,6 +434,7 @@ export const CourseOffering = () => {
     </>
   );
 };
+
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (

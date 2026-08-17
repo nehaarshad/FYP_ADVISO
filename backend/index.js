@@ -19,6 +19,9 @@ import transcriptRoute from "./src/routes/transcriptRoute.js";
 import programRoute from "./src/routes/programRoute.js";
 import suggestCoursesRoute from "./src/routes/suggestCoursesRoute.js";
 import CourseManagementRouter from "./src/routes/courseManagementRoute.js";
+import chatRouter from "./src/routes/chatRoute.js";
+import chatService from "./src/services/chatService.js";
+import { Server as SocketServer } from 'socket.io'; 
 import path from "path";
 dotenv.config();
 
@@ -27,6 +30,14 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
+
+// Initialize Socket.IO server
+const io = new SocketServer(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(cors({
   origin: "*", 
@@ -39,8 +50,8 @@ app.use(cors({
   optionsSuccessStatus: 200 
 }));
 
-app.use(bodyparser.json({ limit: '10mb' }));
-app.use(bodyparser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(bodyparser.json({ limit: '50mb' }));
+app.use(bodyparser.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use((req, res, next) => {
     next();
@@ -52,6 +63,8 @@ app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
     cacheControl: true, //Enables Cache-Control headers.
 }));
 
+
+//app routes
 app.use('/auth', authroute);
 app.use('/auth', roadmapRoute);
 app.use('/auth', courseDetailRoute);
@@ -64,6 +77,16 @@ app.use('/auth', resultRoute);
 app.use('/auth', transcriptRoute);
 app.use('/auth', programRoute);
 app.use('/auth', CourseManagementRouter);
+app.use('/auth', chatRouter);
+
+
+// Initialize chat service with Socket.IO
+const { userSockets } = chatService(io);
+
+// Make io and userSockets available globally 
+app.set('io', io);
+app.set('userSockets', userSockets);
+
 
 sequelize.authenticate()
   .then(() => {

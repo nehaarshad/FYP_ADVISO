@@ -1,3 +1,6 @@
+import { BatchAdvisor } from "./FacultyAdvisorModel";
+import { Student } from "./studentModel";
+
  type UserRole = 'student' | 'advisor' | 'admin' | 'coordinator';
 
 export interface User {
@@ -10,4 +13,6 @@ export interface User {
   deactivateAt: string | null;
   createdAt?: string;
   updatedAt?: string;
+  students?:[Student]; 
+  batchAdvisors?:[BatchAdvisor];
 }

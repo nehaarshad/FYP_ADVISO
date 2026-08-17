@@ -79,29 +79,50 @@ function getCellText(cell) {
     return String(cell.value).trim();
   };
 
-  function parseTime (timeStr) {
+function parseTime(timeStr) {
     if (!timeStr) return null;
     
     let cleaned = timeStr.toString().trim().toLowerCase();
     
-    // Handle formats like "1:00p - 2:30p" or "1:00p-2:30p"
+    // Handle "noon" and "midnight" special cases
+    cleaned = cleaned.replace(/\bnoon\b/g, '12:00pm');
+    cleaned = cleaned.replace(/\bmidnight\b/g, '12:00am');
+    
+    // Fix spaces around dash: "9:30a- 11:00" -> "9:30a - 11:00"
+    cleaned = cleaned.replace(/\s*[-–]\s*/g, ' - ');
+    
+    // Split by dash
     if (cleaned.includes('-')) {
         const parts = cleaned.split('-');
         if (parts.length === 2) {
             const startTime = parts[0].trim();
             const endTime = parts[1].trim();
-            return { start: convertTo24Hour(startTime), end: convertTo24Hour(endTime) };
+            
+            // Handle "10:00a - noon" case where endTime might be "noon"
+            const start24 = convertTo24Hour(startTime);
+            const end24 = convertTo24Hour(endTime);
+            
+            if (start24 && end24) {
+                return { start: start24, end: end24 };
+            }
         }
     }
-    return { start: convertTo24Hour(cleaned), end: null };
-};
+    
+    // If no dash, try parsing as single time
+    const singleTime = convertTo24Hour(cleaned);
+    if (singleTime) {
+        return { start: singleTime, end: null };
+    }
+    
+    return null;
+}
 
-const convertTo24Hour = (timeStr) => {
-      if (!timeStr) return null;
+function convertTo24Hour(timeStr) {
+    if (!timeStr) return null;
     
     let time = timeStr.toString().trim().toLowerCase();
     
-    // Handle special cases
+    // Special cases
     const specialCases = {
         'noon': '12:00pm',
         'midnight': '12:00am',
@@ -113,13 +134,11 @@ const convertTo24Hour = (timeStr) => {
         time = specialCases[time];
     }
     
-    // Extract time components using regex
-    // Matches patterns like: 1:00p, 1:00pm, 1p, 1pm, 1:00, etc.
-    const timePattern = /(\d{1,2})(?::(\d{2}))?\s*([ap]m?)?/i;
+    const timePattern = /^(\d{1,2})(?::(\d{2}))?\s*([ap]m?)?$/i;
     const match = time.match(timePattern);
     
     if (!match) {
-        console.log(`      ❌ No time pattern matched for: "${timeStr}"`);
+        console.log(`   ⚠️ Could not parse time: "${timeStr}"`);
         return null;
     }
     
@@ -127,7 +146,7 @@ const convertTo24Hour = (timeStr) => {
     let minutes = match[2] ? parseInt(match[2]) : 0;
     let period = match[3] ? match[3].toLowerCase() : '';
     
-    // If no period specified, assume based on hours
+    // If no period specified, try to infer from context
     if (!period) {
         if (hours >= 0 && hours <= 11) {
             period = 'am';
@@ -139,6 +158,9 @@ const convertTo24Hour = (timeStr) => {
         } else if (hours === 24) {
             hours = 0;
             period = 'am';
+        } else {
+            // Default to AM for hours 1-11 if no period
+            period = 'am';
         }
     }
     
@@ -149,9 +171,9 @@ const convertTo24Hour = (timeStr) => {
         hours = 0;
     }
     
-    // Validate hours
+    // Validate
     if (isNaN(hours) || hours < 0 || hours > 23) {
-        console.log(`      ❌ Invalid hours: ${hours}`);
+        console.log(`   ⚠️ Invalid hours: ${hours} for time: "${timeStr}"`);
         return null;
     }
     
@@ -160,98 +182,112 @@ const convertTo24Hour = (timeStr) => {
     }
     
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
-};
+}
 
-const getProgramCode = (str) => {
+function getProgramCode(str) {
     if (!str) return '';
     
     let text = str.toString().toLowerCase().trim();
     
-    // This regex captures ONLY the FIRST digit after the prefix
-    // It stops at the first non-digit character (dash, space, or end)
-    const match = text.match(/^([a-z]{2,3})[\s-]*(\d)/);
+    // Try multiple patterns
+    const patterns = [
+        // Pattern: "SE-7" or "SE 7" or "SE7" (single digit)
+        /^([a-z]{2,3})[\s-]*(\d{1})(?!\d)/i,
+        // Pattern: "SE71" (two digits)
+        /^([a-z]{2,3})(\d{2})(?!\d)/i,
+        // Pattern: "SE-71" (dash then two digits)
+        /^([a-z]{2,3})[\s-]*(\d{2})(?!\d)/i,
+    ];
     
-    if (match) {
-        const prefix = match[1];  // "se"
-        const firstNumber = match[2]; // "7" (only the first digit)
-        return `${prefix}${firstNumber}`; // Returns "se7"
+    for (const pattern of patterns) {
+        const match = text.match(pattern);
+        if (match) {
+            const prefix = match[1];  // "se"
+            const number = match[2];  // "7" or "71"
+            return `${prefix}${number}`;
+        }
     }
     
     return '';
-};
-// Improved clean course name
-const cleanCourseName = (str) => {
+}
+
+function cleanCourseName(str) {
     if (!str) return '';
     
     let cleaned = str.toString().toLowerCase().trim();
     
-    // Remove program prefix patterns:
-    // SE7-1, SE-7-1, SE71, SE-7, SE7, SE 7
+    // Remove program prefix patterns
     cleaned = cleaned.replace(/^[a-z]{2,3}[\s-]*\d+[\s-]*\d*\s*/i, '');
+    cleaned = cleaned.replace(/^[a-z]{2,3}\d+[\s-]*\d*\s*/i, '');
     
-    // Remove standalone numbers at start (like "7-1" or "71")
+    // Remove standalone numbers at start
     cleaned = cleaned.replace(/^\d+[\s-]*\d*\s*/, '');
     
     // Replace & with 'and'
     cleaned = cleaned.replace(/&/g, 'and');
     
-    // Remove special characters (keep letters, numbers, spaces, and hyphens)
-    cleaned = cleaned.replace(/[^a-z0-9\s-]/g, '');
+    // Remove "and"
+    cleaned = cleaned.replace(/\band\b/gi, '');
+    
+    // Remove special characters (keep letters, numbers, and spaces)
+    cleaned = cleaned.replace(/[^a-z0-9\s]/g, '');
     
     // Remove extra spaces
     cleaned = cleaned.replace(/\s+/g, '');
     
-    // Remove (merge)
-    cleaned = cleaned.replace(/\(merge\)$/i, '');
-    
     return cleaned;
-};
-
-const normalizeOfferingName = (str) => {
+}
+function normalizeOfferingName(str) {
     if (!str) return '';
     
     const programCode = getProgramCode(str);
     const courseName = cleanCourseName(str);
+    const type = getCourseType(str); // Get 'lec' or 'lab'
     
-    // If we found a program code, combine it with cleaned course name
-    if (programCode) {
-        return `${programCode}${courseName}`;
+    if (programCode && courseName) {
+        // Add type suffix if present
+        const suffix = type ? type : '';
+        return `${programCode}${courseName}${suffix}`;
+    }
+    return courseName || str.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+function getCourseType(str) {
+    if (!str) return '';
+    const lower = str.toLowerCase();
+    if (lower.includes('(lab)') || lower.includes('lab)') || 
+        lower.includes('laboratory') || lower.includes('(lab')) {
+        return 'lab';
+    }
+    if (lower.includes('(lec)') || lower.includes('lec)') || 
+        lower.includes('lecture') || lower.includes('(lec')) {
+        return 'lec';
+    }
+    return '';
+}
+
+function splitCourseWithSlash(courseName) {
+    if (!courseName) return [];
+    
+    const results = [];
+    const programCode = getProgramCode(courseName);
+    
+    if (courseName.includes('/')) {
+        const parts = courseName.split('/').map(p => p.trim());
+        
+        for (const part of parts) {
+            const cleanedPart = cleanCourseName(part);
+            if (programCode && cleanedPart) {
+                results.push(`${programCode}${cleanedPart}`);
+            } else if (cleanedPart) {
+                results.push(cleanedPart);
+            }
+        }
     }
     
-    // If no program code found, try to infer from the course name
-    // For "Internship II", we need to know which program it belongs to
-    return courseName;
-};
-
-// Special handling for courses with "/"
-const splitCourseWithSlash = (courseName) => {
-    if (!courseName) return [];
-
-    let normalized;
+    results.push(normalizeOfferingName(courseName));
     
-    // If contains "/", split it
-    if (courseName.includes('/')) {
-        const parts = courseName.split('/');
-        const results = [];
-        const programCode = getProgramCode(courseName);
-        console.log(`   Course "${courseName}" contains "/". Splitting into parts:`, parts, `Program code: "${programCode}"`);
-        for (const part of parts) {
-                const cleanedPart = cleanCourseName(part);
-                if (programCode && cleanedPart) {
-                    normalized = `${programCode}${cleanedPart}`;
-                
-                }
-            
-            results.push(normalized);
-       
-              }
-
-               return results;
-            }
-    
-    
-    return [normalizeOfferingName(courseName)];
-};
+    return results.length > 0 ? results : [normalizeOfferingName(courseName)];
+}
 
 const getColumnIndex = (headers, headerName) => {
     if (!headers || !headerName) return null;
