@@ -52,25 +52,6 @@ export default function relations() {
 
   User.hasMany(BatchAdvisor, { foreignKey: "userId" });
   BatchAdvisor.belongsTo(User, { foreignKey: "userId" });
-// ==================== User & Auth Relations ====================
-
-User.hasOne(Admin, {foreignKey: "userId",as: "admin",});
-Admin.belongsTo(User, {foreignKey: "userId",as: "user",});
-
-User.hasMany(Coordinator, {foreignKey: "userId",as: "coordinators",});
-Coordinator.belongsTo(User, {foreignKey: "userId",as: "user",});
-
-
-// ==================== STUDENT ↔ USER ====================
-
-User.hasMany(Student, {foreignKey: "userId",as: "students",});
-Student.belongsTo(User, {foreignKey: "userId",as: "user",});
-
-
-// ==================== ADVISOR ↔ USER ====================
-
-User.hasMany(BatchAdvisor, {foreignKey: "userId",as: "batchAdvisors",});
-BatchAdvisor.belongsTo(User, {foreignKey: "userId",as: "user"});
 
 
 // ==================== MESSAGE ↔ USER ====================

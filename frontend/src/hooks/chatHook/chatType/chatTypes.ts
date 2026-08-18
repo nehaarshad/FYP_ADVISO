@@ -73,7 +73,7 @@ export interface ChatNotification {
   chatId: number;
   senderId: number;
   senderName?: string;
-  message: string;
+  message: Message;
   fileAttachment?: string | null;
   timestamp: string;
 }

@@ -13,6 +13,6 @@ export interface User {
   deactivateAt: string | null;
   createdAt?: string;
   updatedAt?: string;
-  students?:[Student]; 
-  batchAdvisors?:[BatchAdvisor];
+  Students?:[Student]; 
+  BatchAdvisors?:[BatchAdvisor];
 }

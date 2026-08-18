@@ -22,12 +22,13 @@ import { Message } from "@/src/models/messagesModel";
 interface ChatAreaProps {
   chat: ChatListItem | null;
   messages: Message[];
-  currentUserId: number;
+  receiverId: number;
 
   loading: boolean;
   typingUserId: number | null;
 
   onSendMessage: (data: {
+    receiverId: number;
     text?: string;
     fileAttachment?: string | null;
   }) => void;
@@ -52,7 +53,7 @@ const ChatArea: React.FC<
 > = ({
 chat,
   messages,
-  currentUserId,
+  receiverId,
   loading,
   typingUserId,
   onSendMessage,
@@ -76,9 +77,7 @@ chat,
     typingUserId,
   ]);
 
-  /*
-   * MARK READ
-   */
+
   useEffect(() => {
     if (!chat) return;
 
@@ -93,10 +92,6 @@ chat,
 
     const canSend = true;
 
-
-  /*
-   * SEND
-   */
   const handleSend = () => {
     const cleanText =
       input.trim();
@@ -104,6 +99,7 @@ chat,
     if (!cleanText) return;
 
     onSendMessage({
+      receiverId,
       text: cleanText,
     });
 
@@ -111,9 +107,6 @@ chat,
     onTyping(false);
   };
 
-  /*
-   * TYPING
-   */
   const handleInputChange = (
     value: string
   ) => {
@@ -267,7 +260,12 @@ chat,
               const isMine = message.sender?.role == 'advisor'
                   const uniqueKey = chat.chatId ? `chat-${chat.chatId}` : `user-${chat.id}`;
         
-
+                 const senderName = typeof message.senderName === 'string' 
+    ? message.senderName 
+    : (message.sender?.sapid || 
+       message.sender?.Students?.[0]?.studentName || 
+       message.sender?.BatchAdvisors?.[0]?.advisorName || 
+       "SAP ID");
               return (
                 <div
                   key={
@@ -299,14 +297,8 @@ chat,
                      `}
 >
   {isMine
-    ? message.sender?.students?.[0]?.studentName ||
-      message.sender?.batchAdvisors?.[0]?.advisorName ||
-      message.sender?.sapid ||  
-      "SAP ID"
-    : message.sender?.students?.[0]?.studentName ||
-      message.sender?.batchAdvisors?.[0]?.advisorName ||
-      message.sender?.sapid ||  
-      "SAP ID"}
+    ? senderName
+    :senderName}
 </span>
                     {/* TEXT */}
                     {message.text && (

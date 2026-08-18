@@ -33,23 +33,15 @@ export const useChat = () => {
     const socket = chatSocketService.connect();
     chatSocketService.registerUser(userId);
 
-    // ==========================================
-    // ADVISOR CHATS LIST HANDLER (chatsList)
-    // ==========================================
     const handleChatsList = (data: ChatListItem[]) => {
-      console.log("📨 Received advisor chats list:", data);
-      console.log("📊 Chat count:", data.length);
-      
       setChats(data);
       setLoadingChats(false);
     };
 
     const handleStudentChatList = (data: StudentChatRoomResponse) => {
-      console.log("🎓 Student chat room received:", data);
-      console.log("📊 Total messages:", data.totalMessages);
-      console.log("👤 Current advisor:", data.currentAdvisor);
-      
+
       // Build chat list from student data
+      console.log(" Student chat list received:", data);
       const chatList: ChatListItem[] = [];
       
       if (data.currentAdvisor) {
@@ -101,62 +93,64 @@ export const useChat = () => {
       
       // Auto-select the first chat if available
       if (chatList.length > 0 && !selectedChat) {
-        console.log("📌 Auto-selecting first chat:", chatList[0]);
+        console.log(" Auto-selecting first chat:", chatList[0]);
         setSelectedChat(chatList[0]);
       }
     };
     const handleMessages = (data: ChatMessagesResponse) => {
-      console.log("💬 Received messages for chat:", data.chatId);
-      console.log("📊 Message count:", data.messages.length);
-      
+
+      console.log("📥 Messages received for chatId", data.chatId, ":", data.messages);
       setMessages(data.messages || []);
       setLoadingMessages(false);
     };
 
-    const handleReceiveMessage = (message: Message) => {
-      console.log("📩 New message received:", message);
-      
-      setMessages((prev) => {
-        if (prev.some((m) => m.id === message.id)) {
-          return prev;
-        }
-        return [...prev, message];
-      });
+const handleReceiveMessage = (data: { chatId: number; message: Message }) => {
+  if (!data?.message) {
+    console.warn("newMessage event missing message payload:", data);
+    return;
+  }
+  console.log("📩 New message received:", data.message);
 
-      // Update chat list
-      setChats((prev) =>
-        prev.map((chat) => {
-          if (chat.chatId !== message.chatId) {
-            return chat;
-          }
-          return {
+  setMessages((prev) => {
+    if (prev.some((m) => m.id === data.message.id)) {
+      return prev;
+    }
+    return [...prev, data.message];
+  });
+
+  setChats((prev) =>
+    prev.map((chat) =>
+      chat.chatId !== data.message.chatId
+        ? chat
+        : {
             ...chat,
-            lastMessageText: message.text || "File attachment...",
-            lastMessageAt: message.createdAt || new Date().toISOString(),
-          };
-        })
-      );
-    };
+            lastMessageText: data.message.text || "File attachment...",
+            lastMessageAt: data.message.createdAt || new Date().toISOString(),
+          }
+    )
+  );
+};
 
     const handleNotification = (notification: ChatNotification) => {
-      console.log("🔔 New notification:", notification);
-      
-      setChats((prev) =>
-        prev.map((chat) => {
-          if (chat.chatId !== notification.chatId) {
-            return chat;
-          }
-          return {
-            ...chat,
-            lastMessageText: notification.message || "File attachment...",
-            lastMessageAt: notification.timestamp,
-            unreadCount: selectedChat?.chatId === notification.chatId
-              ? 0
-              : (chat.unreadCount || 0) + 1,
-          };
-        })
-      );
-    };
+  console.log("🔔 New notification:", notification);
+
+  setChats((prev) =>
+    prev.map((chat) => {
+      if (chat.chatId !== notification.chatId) {
+        return chat;
+      }
+      return {
+        ...chat,
+        lastMessageText: notification.message?.text || "File attachment...",
+        lastMessageAt: notification.message?.createdAt || notification.timestamp,
+        unreadCount:
+          selectedChat?.chatId === notification.chatId
+            ? 0
+            : (chat.unreadCount || 0) + 1,
+      };
+    })
+  );
+};
 
     const handleTyping = (data: TypingResponse) => {
       setTypingUserId(data.isTyping ? data.userId : null);
@@ -170,15 +164,15 @@ export const useChat = () => {
     };
 
     const handleMessageSent = (data: { chatId: number; message: Message }) => {
-      console.log("✅ Message sent confirmation:", data);
+      console.log("Message sent confirmation:", data);
     };
 
     // Register event listeners
     chatSocketService.on("chatsList", handleChatsList);
-    chatSocketService.on("studentChatList", handleStudentChatList);  // ✅ Key fix!
+    chatSocketService.on("studentChatList", handleStudentChatList); 
     chatSocketService.on("chatMessages", handleMessages);
-    chatSocketService.on("receiveMessage", handleReceiveMessage);
-    chatSocketService.on("newMessageNotification", handleNotification);
+    chatSocketService.on("newMessage", handleReceiveMessage);
+    chatSocketService.on("chatNotification", handleNotification);
     chatSocketService.on("userTyping", handleTyping);
     chatSocketService.on("error", handleError);
     chatSocketService.on("messageSent", handleMessageSent);
@@ -199,8 +193,8 @@ export const useChat = () => {
       socket.off("chatsList", handleChatsList);
       socket.off("studentChatList", handleStudentChatList);
       socket.off("chatMessages", handleMessages);
-      socket.off("receiveMessage", handleReceiveMessage);
-      socket.off("newMessageNotification", handleNotification);
+      socket.off("newMessage", handleReceiveMessage);
+      socket.off("chatNotification", handleNotification);
       socket.off("userTyping", handleTyping);
       socket.off("error", handleError);
       socket.off("messageSent", handleMessageSent);
@@ -218,6 +212,7 @@ export const useChat = () => {
     } else {
       console.log("🔄 Reloading advisor chats...");
       chatSocketService.getAdvisorChats(userId);
+
     }
   }, [userId, isStudent]);
 
@@ -292,12 +287,16 @@ const openChat = useCallback(
     ({
       text,
       fileAttachment,
+      receiverId,
     }: {
       text?: string;
       fileAttachment?: string | null;
+      receiverId: number;
     }) => {
-      if (!userId || !selectedChat) {
-        console.warn("⚠️ Cannot send: No user or selected chat");
+    
+      console.log(" receiver Id to send message:", receiverId);
+      if (!userId || !receiverId ) {
+        console.warn("⚠️ Cannot send: No user or receiverId");
         return;
       }
 
@@ -309,59 +308,35 @@ const openChat = useCallback(
         return;
       }
 
-      const chatIdToSend = selectedChat.chatId || 0;
 
       console.log("📤 Sending message:", {
-        chatId: chatIdToSend,
         senderId: userId,
-        receiverId: selectedChat.id,
+        receiverId: receiverId,
         hasText: !!cleanText,
         hasFile: !!cleanFile
       });
 
-      // Optimistically add message to UI
-      if (chatIdToSend !== 0) {
-        const optimisticMessage: Message = {
-          id: Date.now(),
-          chatId: chatIdToSend,
-          senderId: userId,
-          receiverId: selectedChat.id,
-          text: cleanText || null,
-          fileAttachment: cleanFile || null,
-          isRead: false,
-          isSent: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          sender: {
-            id: userId,
-            role: isStudent ? 'student' : 'advisor',
-            students: isStudent ? [{ studentName: 'You' }] : [],
-            batchAdvisors: !isStudent ? [{ advisorName: 'You' }] : []
-          }
-        } as any;
 
-        setMessages((prev) => [...prev, optimisticMessage]);
-      }
 
       chatSocketService.sendMessage({
-        chatId: chatIdToSend,
-        receiverId: selectedChat.id,
+        receiverId: receiverId,
         text: cleanText || null,
         fileAttachment: cleanFile,
       });
     },
-    [userId, selectedChat, isStudent]
+    [userId, isStudent]
   );
 
   const sendTextMessage = useCallback(
-    (text: string) => {
-      return sendMessage({ text });
+    (text: string,receiverId: number) => {
+      return sendMessage({ text, receiverId });
     },
     [sendMessage]
   );
 
   const setTyping = useCallback(
     (isTyping: boolean) => {
+      console.log(`on typing ${selectedChat}`)
       if (!userId || !selectedChat || !selectedChat.chatId) {
         return;
       }
@@ -380,7 +355,7 @@ const openChat = useCallback(
   );
 
   const sendFile = useCallback(
-    async (file: File) => {
+    async (file: File,receiverId: number) => {
       if (!selectedChat) {
         throw new Error("No chat selected");
       }
@@ -393,6 +368,7 @@ const openChat = useCallback(
 
       sendMessage({
         fileAttachment: fileUrl.url,
+        receiverId: receiverId,
       });
 
       return fileUrl;
