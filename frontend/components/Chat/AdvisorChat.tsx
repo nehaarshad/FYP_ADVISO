@@ -145,11 +145,11 @@ const AdvisorChat: React.FC<
           <ChatArea
             chat={selectedChat}
             messages={messages}
-            currentUserId={userId}
+            receiverId={selectedChat?.id ?? 0}
             loading={loadingMessages}
             typingUserId={typingUserId}
             onSendMessage={sendMessage}
-            onSendFile={(file) => sendFile(file).then((result) => result?.url ?? null)}
+            onSendFile={(file) => sendFile(file, selectedChat?.id ?? 0).then((result) => result?.url ?? null)}
             onMarkAsRead={
               markChatAsRead
             }

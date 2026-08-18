@@ -91,12 +91,6 @@ const StudentChat: React.FC<
     markChatAsRead,
   ]);
 
-  /*
-   * OPEN STUDENT CHAT
-   *
-   * Backend normally returns one advisor
-   * chat for the student.
-   */
   useEffect(() => {
     if (!selectedChat) {
       if (chats.length > 0) {
@@ -144,8 +138,7 @@ const StudentChat: React.FC<
       inputText.trim();
 
     if (
-      !cleanText ||
-      !selectedChat
+      !cleanText 
     ) {
       return;
     }
@@ -153,6 +146,7 @@ const StudentChat: React.FC<
     try {
       sendMessage({
         text: cleanText,
+        receiverId: currentUser?.data?.id || currentUser?.id,
       });
 
       setInputText("");
@@ -182,7 +176,7 @@ const StudentChat: React.FC<
     try {
       setUploading(true);
 
-      await sendFile(file);
+      await sendFile(file, currentUser?.data?.id || currentUser?.id);
     } catch (error) {
       console.error(
         "File upload failed:",
@@ -219,9 +213,6 @@ const StudentChat: React.FC<
       }
     );
   };
-    const canSendMessages = selectedChat?.canSendMessages !== false;
-  const isReadOnly = selectedChat?.isReadOnly === true;
-
 
   if (!userId) {
     return (
@@ -234,8 +225,7 @@ const StudentChat: React.FC<
   }
 
   if (
-    loadingChats &&
-    !selectedChat
+    loadingChats 
   ) {
     return (
       <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-[2rem] items-center justify-center">
@@ -247,7 +237,7 @@ const StudentChat: React.FC<
     );
   }
 
-  if (error && !selectedChat) {
+  if (error) {
     return (
       <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-xl items-center justify-center p-6">
 
@@ -266,29 +256,6 @@ const StudentChat: React.FC<
     );
   }
 
-  if (!selectedChat) {
-    return (
-      <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-xl items-center justify-center">
-
-        <User
-          size={35}
-          className="text-slate-200 mb-3"
-        />
-
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          No advisor assigned
-        </p>
-
-        <button
-          onClick={onBack}
-          className="mt-5 px-4 py-2 bg-[#1e3a5f] text-white rounded-xl text-[10px] font-bold"
-        >
-          Go Back
-        </button>
-
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-t-[2rem] md:rounded-[2rem] border border-slate-100 shadow-xl overflow-hidden">
@@ -379,6 +346,13 @@ const StudentChat: React.FC<
               Number(msg.senderId) ===
               Number(userId);
 
+               const senderName = typeof msg.senderName === 'string' 
+    ? msg.senderName 
+    : (msg.sender?.sapid || 
+       msg.sender?.Students?.[0]?.studentName || 
+       msg.sender?.BatchAdvisors?.[0]?.advisorName || 
+       "SAP ID");
+
               
             return (
               <div
@@ -400,12 +374,13 @@ const StudentChat: React.FC<
                     }`}
                   >
 
+
 <span
   className={`text-[8px] font-black uppercase opacity-60 mt-2 self-start text-[#1e3a5f]`}
 >
   {isMine
     ? null
-    : msg.senderName || 
+    : senderName ||
       "SAP ID"}
 </span>
                     {/* TEXT */}
@@ -544,6 +519,7 @@ const StudentChat: React.FC<
           {/* SEND */}
           <button
             type="submit"
+            onClick={handleSendMessage}
             disabled={
               !inputText.trim()
             }

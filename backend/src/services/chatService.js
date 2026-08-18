@@ -31,8 +31,8 @@ const chatService = (io) => {
       try {
         const user = await User.findByPk(userId, {
           include: [
-            { model: Student, as: 'students' },
-            { model: BatchAdvisor, as: 'batchAdvisors' }
+            { model: Student,  },
+            { model: BatchAdvisor,  }
           ]
         });
 
@@ -77,7 +77,6 @@ const chatService = (io) => {
     include: [
       {
         model: User,
-        as: 'user',
         attributes: ['id', 'role']
       }
     ]
@@ -117,7 +116,6 @@ const chatService = (io) => {
         include: [
           {
             model: Student,
-            as: 'students',
             attributes: ['studentName', 'registrationNumber', 'batchId']
           }
         ]
@@ -128,7 +126,6 @@ const chatService = (io) => {
         include: [
           {
             model: Student,
-            as: 'students',
             attributes: ['studentName', 'registrationNumber', 'batchId']
           }
         ]
@@ -181,7 +178,6 @@ const chatService = (io) => {
       lastMessageText: latestMessage?.text || 'No messages yet',
       lastMessageSender: latestMessage?.senderId === userId ? 'You' : 'Student',
       unreadCount,
-      // Important: Allow advisor to send to all students
       canSendMessages: true,
       isReadOnly: false
     });
@@ -212,8 +208,8 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
       try {
         const user = await User.findByPk(userId, {
           include: [
-            { model: Student, as: 'students' },
-            { model: BatchAdvisor, as: 'batchAdvisors' }
+            { model: Student, },
+            { model: BatchAdvisor,  }
           ]
         });
 
@@ -296,7 +292,6 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
         include: [
           {
             model: BatchAdvisor,
-            as: 'batchAdvisors',
             attributes: [
               'id',
               'advisorName'
@@ -305,7 +300,6 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
 
           {
             model: Student,
-            as: 'students',
             attributes: [
               'id',
               'studentName'
@@ -325,7 +319,6 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
         include: [
           {
             model: BatchAdvisor,
-            as: 'batchAdvisors',
             attributes: [
               'id',
               'advisorName'
@@ -334,7 +327,6 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
 
           {
             model: Student,
-            as: 'students',
             attributes: [
               'id',
               'studentName'
@@ -370,7 +362,8 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
     console.log(
       `Student ${studentId} has no existing chats`
     );
-
+  
+    socket.emit('studentChatList', chats);
     return;
   }
 
@@ -404,7 +397,6 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
           // Student sender
           {
             model: Student,
-            as: 'students',
 
             attributes: [
               'id',
@@ -415,7 +407,6 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
           // Advisor sender
           {
             model: BatchAdvisor,
-            as: 'batchAdvisors',
 
             attributes: [
               'id',
@@ -431,6 +422,9 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
     ]
   });
 
+  console.log(
+    `Student ${studentId} has ${allMessages.length} messages across ${chatIds.length} chats \n ${JSON.stringify(allMessages)}`
+  );
   const studentMessages = allMessages.map(message => {
 
     const sender = message.sender;
@@ -443,7 +437,7 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
     if (sender?.role === 'student') {
 
       senderName =
-        sender.students?.[0]?.studentName ||
+        sender.Students?.[0]?.studentName ||
         'Student';
     }
 
@@ -451,7 +445,7 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
     else if (sender?.role === 'advisor') {
 
       senderName =
-        sender.batchAdvisors?.[0]?.advisorName ||
+        sender.BatchAdvisors?.[0]?.advisorName ||
         'Academic Advisor';
     }
 
@@ -632,18 +626,16 @@ socket.on('getChatMessages', async (data) => {
           include: [
             {
               model: Student,
-              as: 'students',
               attributes: ['studentName']
             },
             {
               model: BatchAdvisor,
-              as: 'batchAdvisors',
               attributes: ['advisorName']
             }
           ]
         }
       ],
-      order: [['createdAt', 'ASC']]  // ✅ All messages in chronological order
+      order: [['createdAt', 'ASC']]  // All messages in chronological order
     });
 
     //  Join all chat rooms
@@ -749,24 +741,7 @@ socket.on('sendMessage', async (data) => {
         return;
       }
 
-      // Get receiver
-      const receiver = await User.findByPk(numericReceiverId);
-
-      if (!receiver) {
-        socket.emit('error', {
-          message: 'Receiver not found'
-        });
-        return;
-      }
-
-      if (receiver.role !== 'advisor') {
-        socket.emit('error', {
-          message: 'Students can only message an advisor'
-        });
-        return;
-      }
-
-      // ✅ Get current advisor for the student
+      //  Get current advisor for the student
       const currentAssignment = await BatchAssignment.findOne({
         where: {
           batchId: student.batchId,
@@ -796,7 +771,7 @@ socket.on('sendMessage', async (data) => {
       const currentAdvisorUserId = Number(currentAdvisor.userId);
 
 
-      // ✅ FIND OR CREATE CHAT (no chatId from frontend)
+      //  FIND OR CREATE CHAT (no chatId from frontend)
       let chat = await Chat.findOne({
         where: {
           batchId: student.batchId,
@@ -808,7 +783,7 @@ socket.on('sendMessage', async (data) => {
       });
 
       if (chat) {
-        console.log(`✅ Using existing chat ${chat.id} between student ${senderId} and advisor ${currentAdvisorUserId}`);
+        console.log(` Using existing chat ${chat.id} between student ${senderId} and advisor ${currentAdvisorUserId}`);
       } else {
         chat = await Chat.create({
           senderId,
@@ -817,7 +792,7 @@ socket.on('sendMessage', async (data) => {
           lastMessageAt: null,
           lastMessageText: null
         });
-        console.log(`✅ Created new chat ${chat.id}: student ${senderId} → advisor ${currentAdvisorUserId}`);
+        console.log(`Created new chat ${chat.id}: student ${senderId} → advisor ${currentAdvisorUserId}`);
       }
 
       // Create message (student → advisor)
@@ -835,7 +810,7 @@ socket.on('sendMessage', async (data) => {
         return;
       }
 
-      const message = await Message.create({
+      let message = await Message.create({
         chatId: chat.id,
         senderId,
         receiverId: currentAdvisorUserId,
@@ -848,6 +823,29 @@ socket.on('sendMessage', async (data) => {
         lastMessageAt: message.createdAt,
         lastMessageText: message.text || 'File attachment...'
       });
+        message =  await Message.findOne({
+      where: {
+        id:message.id
+      },
+      include: [
+        {
+          model: User,
+          as: 'sender',
+          attributes: ['id', 'role'],
+          include: [
+            {
+              model: Student,
+              attributes: ['studentName']
+            },
+            {
+              model: BatchAdvisor,
+              attributes: ['advisorName']
+            }
+          ]
+        }
+      ],
+      order: [['createdAt', 'ASC']]  // All messages in chronological order
+    });
 
       socket.join(`chat_${chat.id}`);
 
@@ -874,7 +872,7 @@ socket.on('sendMessage', async (data) => {
       });
 
       console.log(
-        `✅ Student ${senderId} → Advisor ${currentAdvisorUserId}: Message ${message.id} sent in chat ${chat.id}`
+        `Student ${senderId} → Advisor ${currentAdvisorUserId}: Message ${message.id} sent in chat ${chat.id}`
       );
 
       return;
@@ -930,7 +928,7 @@ socket.on('sendMessage', async (data) => {
         return;
       }
 
-      // ✅ Check if this advisor is currently assigned to this student's batch
+      // Check if this advisor is currently assigned to this student's batch
       const assignment = await BatchAssignment.findOne({
         where: {
           advisorId: advisor.id,
@@ -949,7 +947,7 @@ socket.on('sendMessage', async (data) => {
 
       const studentUserId = Number(student.userId);
 
-      // ✅ FIND OR CREATE CHAT (no chatId from frontend)
+      // FIND OR CREATE CHAT (no chatId from frontend)
       let chat = await Chat.findOne({
         where: {
           batchId: student.batchId,
@@ -961,7 +959,7 @@ socket.on('sendMessage', async (data) => {
       });
 
       if (chat) {
-        console.log(`✅ Using existing chat ${chat.id} between advisor ${senderId} and student ${studentUserId}`);
+        console.log(` Using existing chat ${chat.id} between advisor ${senderId} and student ${studentUserId}`);
       } else {
         chat = await Chat.create({
           senderId,
@@ -970,7 +968,7 @@ socket.on('sendMessage', async (data) => {
           lastMessageAt: null,
           lastMessageText: null
         });
-        console.log(`✅ Created new chat ${chat.id}: advisor ${senderId} → student ${studentUserId}`);
+        console.log(`Created new chat ${chat.id}: advisor ${senderId} → student ${studentUserId}`);
       }
 
       // Create message (advisor → student)
@@ -988,7 +986,7 @@ socket.on('sendMessage', async (data) => {
         return;
       }
 
-      const message = await Message.create({
+      let message = await Message.create({
         chatId: chat.id,
         senderId,
         receiverId: studentUserId,
@@ -1001,6 +999,30 @@ socket.on('sendMessage', async (data) => {
         lastMessageAt: message.createdAt,
         lastMessageText: message.text || 'File attachment...'
       });
+
+      message =  await Message.findOne({
+      where: {
+        id:message.id
+      },
+      include: [
+        {
+          model: User,
+          as: 'sender',
+          attributes: ['id', 'role'],
+          include: [
+            {
+              model: Student,
+              attributes: ['studentName']
+            },
+            {
+              model: BatchAdvisor,
+              attributes: ['advisorName']
+            }
+          ]
+        }
+      ],
+      order: [['createdAt', 'ASC']]  // All messages in chronological order
+    });
 
       socket.join(`chat_${chat.id}`);
 
@@ -1027,7 +1049,7 @@ socket.on('sendMessage', async (data) => {
       });
 
       console.log(
-        `✅ Advisor ${senderId} → Student ${studentUserId}: Message ${message.id} sent in chat ${chat.id}`
+        ` Advisor ${senderId} → Student ${studentUserId}: Message ${message.id} sent in chat ${chat.id}`
       );
 
       return;

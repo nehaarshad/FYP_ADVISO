@@ -64,18 +64,13 @@ class ChatSocketService {
     this.getSocket().emit("getStudentChats", userId);
   }
 getChatMessages(studentId: number): void {
-  console.log("🚀 getChatMessages called:", studentId);
 
   const socket = this.getSocket();
 
-  console.log("🔌 socket connected:", socket.connected);
-
   socket.emit("getChatMessages", { studentId });
 
-  console.log("📤 getChatMessages emitted");
 }
   sendMessage(data: {
-    chatId: number;
     receiverId: number;
     text?: string | null;
     fileAttachment?: string | null;
