@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/dbConfig.js";
 
-const SupportingVideo = sequelize.define("SupportingVideo", {
+const DegreeGuidlinesModel = sequelize.define("DegreeGuidlinesModel", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -12,15 +12,15 @@ const SupportingVideo = sequelize.define("SupportingVideo", {
         allowNull: false,
     },
     description: {
-        type: DataTypes.STRING,
-        allowNull: false,        
+        type: DataTypes.TEXT('long'),
+        allowNull: false,  
     },
-    videoUrl: {
-        type: DataTypes.STRING,
-        allowNull: false,
+    programId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
 }, {
     timestamps: true,
 });
 
-export default SupportingVideo;
+export default DegreeGuidlinesModel;

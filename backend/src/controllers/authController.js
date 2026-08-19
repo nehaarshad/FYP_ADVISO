@@ -95,6 +95,12 @@ const loginUser = async (req, res) => {
 
             res.status(401).json( {message: "Incorrect Password",success:false} );
         }
+        if (!existingUser.isActive) {
+    return res.status(403).json({
+        success: false,
+        error: "Your account has been deactivated. Please contact the administrator."
+    });
+}
         else{
             const token = generateToken(existingUser.id);
             res.status(200).json({ 

@@ -5,6 +5,8 @@ import CourseOfferingModel from '../models/courseOfferingModel.js';
 import BatchModel from '../models/batchModel.js';
 import utils from '../utils/sheetProcessingHelperFunction.js';
 const { getCellText , parseTime, cleanCourseName,splitCourseWithSlash, normalizeOfferingName ,getProgramCode} = utils;
+import courseNormalizer from '../utils/courseMapping.js';
+const {findBestMatch } = courseNormalizer;
 import ProgramModel from '../models/programModel.js';
 import SessionModel from '../models/sessionModel.js';
 import { Op } from 'sequelize';
@@ -64,23 +66,6 @@ const uploadTimetable = async (req, res) => {
         
         console.log(`Found ${courseOfferings.length} course offerings`);
         
-        const offeringMap = new Map();
-
-        console.log("\nMapping course offerings:");
-         for (const offering of courseOfferings) {
-            // Split by "/" if exists
-            const normalizedNames = splitCourseWithSlash(offering.courseName);
-            
-            for (const normalizedName of normalizedNames) {
-                if (!offeringMap.has(normalizedName)) {
-                    offeringMap.set(normalizedName, offering);
-                    console.log(`   "${normalizedName}" -> "${offering.courseName}"`);
-                }
-            }
-        }
-        
-        console.log(`Total mappings: ${offeringMap.size}`);
-        
         const timetables = [];
         
         // Process each row of the timetable
@@ -94,23 +79,15 @@ const uploadTimetable = async (req, res) => {
             if (!title || !day || !time) continue;
             
             // Normalize the timetable course name
-            const normalizedTitle = normalizeOfferingName(title);
-            console.log(`\n📋 "${title}" -> "${normalizedTitle}"`);
+           const matchResult = findBestMatch(title, courseOfferings);
 
-                console.log(`   getProgramCode: "${getProgramCode(title)}"`);
-                console.log(`   cleanCourseName: "${cleanCourseName(title)}"`);
+                if (!matchResult) {
+                    console.log(`   No match found for "${title}"`);
+                    continue;
+                }
 
-const matchedOffering = offeringMap.get(normalizedTitle);
-            console.log("in mapping function ",offeringMap.get(normalizedTitle))
-            
-            
-            if (!matchedOffering) {
-                console.log(`   No match found`);
-                continue;
-            }
-            
-            console.log(`   Matched with: "${matchedOffering.courseName}"`);
-            
+                const matchedOffering = matchResult.offering;
+                console.log(`   Matched "${title}" -> "${matchedOffering.courseName}" (score: ${matchResult.score.toFixed(2)})`);
             // Parse time
             const timeInfo = parseTime(time);
             if (!timeInfo) {
