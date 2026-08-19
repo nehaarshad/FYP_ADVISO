@@ -7,19 +7,7 @@ import  sequelize  from "../backend/src/config/dbConfig.js";
 import modelsSyncs from "../backend/src/config/seqModelSync.js";
 import  http  from 'http';
 import dotenv from "dotenv";
-import roadmapRoute from "./src/routes/roadmapRoute.js";
-import courseDetailRoute from "./src/routes/courseDetailRouter.js";
-import registerUserRoute from "./src/routes/registerUserRoute.js";
-import courseOfferingRoute from "./src/routes/courseOfferingRoute.js";
-import timetableRoute from "./src/routes/timetableRoute.js";
-import manageUserRoute from "./src/routes/manageUserRoute.js";
-import authroute from "./src/routes/userRoute.js";
-import resultRoute from "./src/routes/resultRoute.js";
-import transcriptRoute from "./src/routes/transcriptRoute.js";
-import programRoute from "./src/routes/programRoute.js";
-import suggestCoursesRoute from "./src/routes/suggestCoursesRoute.js";
-import CourseManagementRouter from "./src/routes/courseManagementRoute.js";
-import chatRouter from "./src/routes/chatRoute.js";
+import router from "./src/routes/indexRoutes.js";
 import chatService from "./src/services/chatService.js";
 import { Server as SocketServer } from 'socket.io'; 
 import path from "path";
@@ -65,21 +53,7 @@ app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
 
 
 //app routes
-app.use('/auth', authroute);
-app.use('/auth', roadmapRoute);
-app.use('/auth', courseDetailRoute);
-app.use('/auth', registerUserRoute);
-app.use('/auth', courseOfferingRoute);
-app.use('/auth', timetableRoute);
-app.use('/auth', suggestCoursesRoute);
-app.use('/auth', manageUserRoute);
-app.use('/auth', resultRoute);
-app.use('/auth', transcriptRoute);
-app.use('/auth', programRoute);
-app.use('/auth', CourseManagementRouter);
-app.use('/auth', chatRouter);
-
-
+app.use(router);
 // Initialize chat service with Socket.IO
 const { userSockets } = chatService(io);
 

@@ -32,6 +32,7 @@ import StudentGuardian from "../models/studentGuardianModel.js";
 import Student from "../models/studentModel.js";
 import StudentStatus from "../models/studentStatusModel.js";
 import SupportingVideo from "../models/supportingVideoModel.js";
+import DegreeGuidlinesModel from "../models/degreeGuidlinesModel.js";
 import SubmittedRequestForm from "../models/SubmittedRequestForm.js";
 import TimetableModel from "../models/timetableModel.js";
 import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
@@ -57,6 +58,7 @@ const models={
     AdvisorFinalRecommendation,
     CourseModel,
     CoursePreReqModel,
+    DegreeGuidlinesModel,
     CourseOfferingModel,
     DegreeTranscript,
     FacultyRecommendation,

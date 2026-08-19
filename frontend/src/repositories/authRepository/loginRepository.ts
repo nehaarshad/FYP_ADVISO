@@ -12,7 +12,13 @@ export class LoginRepository extends BaseApiService {
     super();
   }
 
-   apiUrl: string = AppApis.LoginUrl;
+  apiUrl: string = AppApis.LoginUrl;
+  private static readonly MAX_LOGIN_ATTEMPTS = 5;
+  private static readonly LOCKOUT_DURATION = 10 * 1000; //10 sec wait
+
+  private static failedLoginAttempts = 0;
+  private static lockedUntil: number | null = null;
+
   static getInstance(): LoginRepository {
     if (!LoginRepository.instance) {
       LoginRepository.instance = new LoginRepository();
@@ -22,32 +28,75 @@ export class LoginRepository extends BaseApiService {
 
   async login(credentials: LoginCredentials): Promise<ApiResponse<User>> {
     try {
-  console.log('API Base URL:', AppApis.BASE_URL);
-    console.log('Full Login URL:', AppApis.LoginUrl);
-    console.log('Login credentials:', credentials);
+       //Check whether login is currently locked
+      if (LoginRepository.lockedUntil !== null) {
+        const remainingTime =
+          LoginRepository.lockedUntil - Date.now();
+
+        if (remainingTime > 0) {
+          const remainingSeconds = Math.ceil(
+            remainingTime / 1000
+          );
+          throw new Error(
+            `Too many unsuccessful login attempts. ` +
+            `Please wait ${remainingSeconds} seconds before trying again.`
+          );
+        }
+        LoginRepository.lockedUntil = null;
+        LoginRepository.failedLoginAttempts = 0;
+      }
+
       const response = await this.postApiWithJson<ApiResponse<User>>(
         AppApis.LoginUrl,
         credentials
       );
 
-      console.log('Login response:', response);
-
       if (response.success && response.data) {
+        LoginRepository.failedLoginAttempts = 0;
+        LoginRepository.lockedUntil = null;
 
-        if (response.data.data?.sessionToken && response.data.data?.id) {
-
-          sessionManager.createSession(response.data, response.data.data.sessionToken);
+        if (
+          response.data.data?.sessionToken &&
+          response.data.data?.id
+        ) {
+          sessionManager.createSession(
+            response.data,
+            response.data.data.sessionToken
+          );
         }
+
         return response.data;
       }
+      LoginRepository.failedLoginAttempts++;
 
-      throw new Error(response.error || 'Login failed');
+      if (
+        LoginRepository.failedLoginAttempts >=
+        LoginRepository.MAX_LOGIN_ATTEMPTS
+      ) {
+        LoginRepository.lockedUntil =
+          Date.now() +
+          LoginRepository.LOCKOUT_DURATION;
+
+        throw new Error(
+          'Too many unsuccessful login attempts. ' +
+          'Please wait 10 seconds before trying again.'
+        );
+      }
+
+      const remainingAttempts =
+        LoginRepository.MAX_LOGIN_ATTEMPTS -
+        LoginRepository.failedLoginAttempts;
+
+      throw new Error(
+        `${response.error || 'Invalid login credentials.'} ` +
+        `${remainingAttempts} attempt(s) remaining.`
+      );
+
     } catch (error) {
       console.error('Login error:', error);
       throw error;
     }
   }
-
 }
 
 export const loginRepository = LoginRepository.getInstance();

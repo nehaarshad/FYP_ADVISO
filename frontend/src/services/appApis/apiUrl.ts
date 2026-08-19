@@ -6,7 +6,6 @@ export default class APIs{
 
     //auth Module
 
-
           static SignUpUrl = `${APIs.BASE_URL}/registeruser`;
           static LoginUrl = `${APIs.BASE_URL}/login`;
           static LogOutUrl = `${APIs.BASE_URL}/logout/:id`;
@@ -62,25 +61,45 @@ export default class APIs{
     //process timetable
     
      static uploadTimeTableUrl = `${APIs.BASE_URL}/uploadTimetable`;
-    static getTimetableUrl = `${APIs.BASE_URL}/getTimetables`;
+     static getTimetableUrl = `${APIs.BASE_URL}/getTimetables`;
 
       // Chat APIs
       static chatUploadUrl = `${APIs.BASE_URL}/chat/upload`;
       static chatDeleteUrl = `${APIs.BASE_URL}/chat/delete/:filename`;
       
-    //process results
+       //process results
 
-        static uploadSessionalResultUrl = `${APIs.BASE_URL}/uploadSessionalResult`;
+      static uploadSessionalResultUrl = `${APIs.BASE_URL}/uploadSessionalResult`;
 
-    // transcript
+        // transcript
        static getStudentTranscriptSummaryUrl = `${APIs.BASE_URL}/getStudentTranscriptSummary/:id`;
 
-         // recommendCourses
+        // recommendCourses
        static recommendSessionalCoursesUrl = `${APIs.BASE_URL}/suggestCourses/:id`;
        static finalizeSessionalCourseRecommendationUrl = `${APIs.BASE_URL}/finalize`;
        static getAdvisoryLogsUrl = `${APIs.BASE_URL}/advisor/:advisorId`;
        static getRecommendationByIdUrl = `${APIs.BASE_URL}/getRecommendation/:id`;
        static getStudentRecommendationsUrl = `${APIs.BASE_URL}/student/:studentId`;
 
+        //advisor Notes Module
+
+        static createNotes = `${APIs.BASE_URL}/createNotes`;
+        static updateNotes = `${APIs.BASE_URL}/updateNotes`;
+        static deleteNotes = `${APIs.BASE_URL}/deleteNotes/:id`;
+        static getNotes = `${APIs.BASE_URL}/getNotes`;
+
+        //supporting videos Module
+
+        static createVideo = `${APIs.BASE_URL}/createVideo`;
+        static getAllVideos = `${APIs.BASE_URL}/getAllVideos`;
+        static updateVideo = `${APIs.BASE_URL}/updateVideo/:id`;
+        static deleteVideo = `${APIs.BASE_URL}/deleteVideo/:id`;
+
+        //degreeguidlines Module
+
+        static createGuideline = `${APIs.BASE_URL}/createGuideline`;
+        static getAllGuidelines = `${APIs.BASE_URL}/getAllGuidelines`;
+        static updateGuideline = `${APIs.BASE_URL}/updateGuideline/:id`;
+        static deleteGuideline = `${APIs.BASE_URL}/deleteGuideline/:id`;
 
 }

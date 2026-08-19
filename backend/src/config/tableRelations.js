@@ -12,6 +12,7 @@ import BatchMeeting from "../models/BatchMeetingModel.js";
 import AdvisorDecision from "../models/AdvisorDecisionModel.js";
 import AdvisorNotes from "../models/AdvisorNotes.js";
 import Coordinator from "../models/coordinatorModel.js";
+import DegreeGuidlinesModel from "../models/degreeGuidlinesModel.js";
 import DegreeTranscript from "../models/degreeTranscriptModel.js";
 import FacultyRecommendation from "../models/facultyRecommendationModel.js";
 import BatchAdvisor from "../models/FacultyAdvisorModel.js";
@@ -89,6 +90,9 @@ Chat.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
   BatchAdvisor.hasMany(AdvisorNotes, { foreignKey: "advisorId" });
   AdvisorNotes.belongsTo(BatchAdvisor, { foreignKey: "advisorId" });
 
+  BatchModel.hasMany(AdvisorNotes, { foreignKey: "batchId" });
+  AdvisorNotes.belongsTo(BatchModel, { foreignKey: "batchId" });
+
   Student.hasMany(StudentGuardian, { foreignKey: "studentId" });
   StudentGuardian.belongsTo(Student, { foreignKey: "studentId" });
 
@@ -105,6 +109,9 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   
   ProgramModel.hasMany(CourseOfferingModel, { foreignKey: "programId" });
   CourseOfferingModel.belongsTo(ProgramModel, { foreignKey: "programId" });
+
+  ProgramModel.hasMany(DegreeGuidlinesModel, { foreignKey: "programId" });
+  DegreeGuidlinesModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
   RoadmapModel.hasMany(BatchModel, { foreignKey: "roadmapId" });
   BatchModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });

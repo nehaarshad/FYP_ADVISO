@@ -39,6 +39,19 @@ const chatFileFilter = (req, file, cb) => {
         "image/gif",
         "image/webp",
 
+         // Videos
+        "video/mp4",
+        "video/mpeg",
+        "video/quicktime",
+        "video/x-msvideo",
+        "video/x-matroska",
+        "video/webm",
+        "video/ogg",
+        "video/3gpp",
+        "video/3gpp2",
+        "video/x-ms-wmv",
+        "video/x-flv",
+
         // PDF
         "application/pdf",
 
@@ -74,4 +87,18 @@ const uploadChatFile = multer({
     fileFilter: chatFileFilter
 });
 
-export { uploadChatFile };
+const uploadVideo = multer({
+    storage,
+    limits: {
+        fileSize: 200 * 1024 * 1024, // 200 MB for videos
+        files: 1
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('video/')) {
+            return cb(null, true);
+        }
+        cb(new Error("Only video files are allowed"));
+    }
+});
+
+export { uploadChatFile ,uploadVideo };

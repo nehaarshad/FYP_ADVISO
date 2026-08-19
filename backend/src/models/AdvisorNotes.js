@@ -11,13 +11,17 @@ const AdvisorNotes = sequelize.define("AdvisorNotes", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     noteContent: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    isPrivate: {
-        type: DataTypes.BOOLEAN,//shows to later advisors of the batch but not to student
-        allowNull: false,
+    batchId: {
+        type: DataTypes.INTEGER,//shows to later advisors of the batch but not to student
+        allowNull: true,
     },
 }, {
     timestamps: true,
