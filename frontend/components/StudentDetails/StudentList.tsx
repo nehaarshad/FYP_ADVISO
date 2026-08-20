@@ -275,7 +275,7 @@ const editStudent = (std: any) => {
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase ${
-                        student.studentStatus?.currentStatus === 'Regular' || student.studentStatus?.currentStatus === 'New Admission' || student.studentStatus?.currentStatus === 'Promoted' || student.User?.isActive === true
+                         student.User?.isActive === true
                           ? 'bg-green-100 text-green-700' 
                           : 'bg-red-100 text-red-700'
                       }`}>

@@ -1,8 +1,9 @@
-export interface AdvisorNotes {
+export interface AdvisorNote {
   id: number;
   advisorId: number;
+  batchId: number;
+  title: string;
   noteContent: string;
-  isPrivate: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -84,9 +84,9 @@ export default class APIs{
         //advisor Notes Module
 
         static createNotes = `${APIs.BASE_URL}/createNotes`;
-        static updateNotes = `${APIs.BASE_URL}/updateNotes`;
+        static updateNotes = `${APIs.BASE_URL}/updateNotes/:id`;
         static deleteNotes = `${APIs.BASE_URL}/deleteNotes/:id`;
-        static getNotes = `${APIs.BASE_URL}/getNotes`;
+        static getNotes = `${APIs.BASE_URL}/getNotes/:userId`;
 
         //supporting videos Module
 

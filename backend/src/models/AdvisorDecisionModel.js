@@ -8,15 +8,15 @@ const AdvisorDecision = sequelize.define("AdvisorDecision", {
         primaryKey: true,
     },
     issueDescription: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
         allowNull: false,
     },
     decisionTaken: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
         allowNull: false,     
     },
     specialNotes: {
-        type: DataTypes.STRING,
+       type: DataTypes.TEXT('long'),
         allowNull: true,
     },
     advisorId: {

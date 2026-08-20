@@ -166,7 +166,7 @@ export function AdvisorStudentList({
                           ? 'bg-green-100 text-green-700' 
                           : 'bg-red-100 text-red-700'
                       }`}>
-                        {student.StudentStatus?.currentStatus === 'Promoted' || student.StudentStatus?.currentStatus === 'Regular' ? (
+                        {student.StudentStatus?.currentStatus === 'Promoted' || student.StudentStatus?.currentStatus === 'Regular'|| student.StudentStatus?.currentStatus === 'New Admission' || student.StudentStatus === null || student.StudentStatus?.currentStatus === null  ? (
                           <CheckCircle size={10} />
                         ) : (
                           <XCircle size={10} />
