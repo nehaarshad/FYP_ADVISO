@@ -1,211 +1,223 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
-  Plus, Clock, FileText, Tag, X, Check, Edit2, ArrowLeft 
+  Plus, Clock, FileText, Tag, X, Check, Edit2, ArrowLeft, 
+  AlertCircle
 } from 'lucide-react';
+import { useAdvisorNotes } from '@/src/hooks/advisorNotesHook/useAdvisorNotes';
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
+import { AdvisorNote } from '@/src/models/AdvisorNotes';
+import { NoteFormData } from '@/src/hooks/advisorNotesHook/types/advisorNoteType';
+import { LoadingState } from '../states/loadingState';
+import { NoteCard } from './noteCard';
+import { EmptyState } from '../states/emptystate';
+import { NoteFormModal } from './noteFormModal';
+import { DeleteConfirmModal } from './deleteNote';
+import { NotesEmptyState } from './emptyState';
 
-export default function AdvisoryNotes({ onBack }: { onBack: () => void }) {
-  const [isCreating, setIsCreating] = useState(false);
-  const [editingNote, setEditingNote] = useState<any>(null);
-  
-  // State for form inputs
-  const [formData, setFormData] = useState({ title: '', content: '', category: 'ACADEMIC' });
 
-  // Restored all 3 initial notes
-  const [notes, setNotes] = useState([
-    {
-      id: '1',
-      category: 'ACADEMIC',
-      title: 'BATCH MEETING AGENDA',
-      content: 'Discuss internship fair and core course registration for Fall 2024.',
-      time: '2 HOURS AGO',
-      bgColor: 'bg-[#fffbeb]', 
-      borderColor: 'border-[#fef3c7]',
-      tagColor: 'text-[#d97706]'
-    },
-    {
-      id: '2',
-      category: 'URGENT',
-      title: 'IRREGULAR STUDENTS',
-      content: 'Call parents of students with CGPA below 2.0 after midterms.',
-      time: 'YESTERDAY',
-      bgColor: 'bg-[#fef2f2]', 
-      borderColor: 'border-[#fee2e2]',
-      tagColor: 'text-[#dc2626]'
-    },
-    {
-      id: '3',
-      category: 'OFFICE',
-      title: 'COURSE SUBSTITUTION',
-      content: 'Verify if "Discrete Structures" can be substituted for old curriculum.',
-      time: '3 DAYS AGO',
-      bgColor: 'bg-[#f0f9ff]', 
-      borderColor: 'border-[#e0f2fe]',
-      tagColor: 'text-[#0284c7]'
-    }
-  ]);
+interface AdvisoryNotesProps {
+  onBack: () => void;
+  batchId?: number;
+}
 
-  const handleEdit = (note: any) => {
-    setEditingNote(note);
-    setFormData({ title: note.title, content: note.content, category: note.category });
-    setIsCreating(true);
-  };
+export default function AdvisoryNotes({ onBack, batchId }: AdvisoryNotesProps) {
+  const [advisorId, setAdvisorId] = useState<number | undefined>(undefined);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingNote, setEditingNote] = useState<AdvisorNote | null>(null);
+  const [noteToDelete, setNoteToDelete] = useState<AdvisorNote | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const handleSave = () => {
-    if (!formData.title || !formData.content) return;
-
-    if (editingNote) {
-      // Update existing note
-      setNotes(notes.map(n => n.id === editingNote.id ? { ...n, ...formData } : n));
+  // Get advisor ID on component mount
+  useEffect(() => {
+    const currentUser = sessionManager.getCurrentUser<any>();
+    console.log("Current user in AdvisoryNotes: ", currentUser);
+    
+    const id = currentUser?.data?.id || 
+               currentUser?.id || 
+               currentUser?.userId || 
+               (typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user') || '{}')?.data?.id : undefined);
+    
+    if (id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAdvisorId(Number(id));
     } else {
-      // Add new note
-      const newNote = {
-        id: Date.now().toString(),
-        ...formData,
-        time: 'JUST NOW',
-        // Dynamic styling based on category
-        bgColor: formData.category === 'URGENT' ? 'bg-[#fef2f2]' : formData.category === 'OFFICE' ? 'bg-[#f0f9ff]' : 'bg-[#fffbeb]',
-        borderColor: formData.category === 'URGENT' ? 'border-[#fee2e2]' : formData.category === 'OFFICE' ? 'border-[#e0f2fe]' : 'border-[#fef3c7]',
-        tagColor: formData.category === 'URGENT' ? 'text-[#dc2626]' : formData.category === 'OFFICE' ? 'text-[#0284c7]' : 'text-[#d97706]'
-      };
-      setNotes([newNote, ...notes]);
+      console.error('Could not find advisor ID');
     }
-    closeForm();
+  }, []);
+
+  const {
+    notes,
+    isLoading,
+    isCreating,
+    isUpdating,
+    isDeleting,
+    error,
+    addNewNote,
+    modifyNote,
+    removeNote,
+    clearError
+  } = useAdvisorNotes(advisorId, batchId);
+
+  // Clear error on unmount
+  useEffect(() => {
+    return () => {
+      if (error) clearError();
+    };
+  }, [error, clearError]);
+
+  // --- Event Handlers ---
+  const handleAddNote = () => {
+    setEditingNote(null);
+    setIsFormOpen(true);
   };
 
-  const closeForm = () => {
-    setIsCreating(false);
-    setEditingNote(null);
-    setFormData({ title: '', content: '', category: 'ACADEMIC' });
+  const handleEditNote = (note: AdvisorNote) => {
+    setEditingNote(note);
+    setIsFormOpen(true);
   };
+
+  const handleDeleteNote = (note: AdvisorNote) => {
+    setNoteToDelete(note);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setIsFormOpen(false);
+    setEditingNote(null);
+    if (error) clearError();
+  };
+
+  const handleFormSave = async (formData: NoteFormData) => {
+    let response;
+    
+    if (editingNote) {
+      response = await modifyNote(
+        editingNote.id,
+        formData.title.trim(),
+        formData.content.trim()
+      );
+    } else {
+      response = await addNewNote(
+        formData.title.trim(),
+        formData.content.trim()
+      );
+    }
+
+    if (!response.success) {
+      console.error('Error saving note:', response.error);
+      throw new Error(response.error || 'Failed to save note');
+    }
+
+    handleFormClose();
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!noteToDelete) return;
+
+console.log(' deleting note:', noteToDelete.id);
+    const response = await removeNote(noteToDelete.id);
+    
+    if (!response.success) {
+      console.error('Error deleting note:', response.error);
+      throw new Error(response.error || 'Failed to delete note');
+    }
+
+    setIsDeleteModalOpen(false);
+    setNoteToDelete(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
+    setNoteToDelete(null);
+  };
+
+  // --- Render ---
+  if (isLoading && notes.length === 0) {
+    return <LoadingState message="Loading..." />;
+  }
 
   return (
     <div className="relative min-h-screen w-full max-w-[1200px] mx-auto p-4 md:p-6">
-      
-      {/* Dashboard View */}
-      <div className={`${isCreating ? 'pointer-events-none opacity-50' : ''} transition-opacity duration-300`}>
-        <div className="flex flex-col gap-4 mb-8">
-          <button 
-            onClick={onBack} 
-            className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors w-fit border border-slate-100"
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase">
-            ADVISOR NOTES
-          </h2>
-        </div>
-
-        {/* Notes Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {notes.map((note) => (
-            <div 
-              key={note.id} 
-              className={`${note.bgColor} ${note.borderColor} border-2 rounded-[1.5rem] p-5 md:p-6 flex flex-col justify-between min-h-[200px] shadow-sm relative cursor-pointer`}
-              onClick={() => handleEdit(note)}
-            >
-              <div className="absolute top-4 right-4">
-                <div className="bg-white/80 p-1.5 rounded-lg text-[#1e3a5f] border border-slate-100">
-                  <Edit2 size={12} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <Tag size={10} className={note.tagColor} />
-                  <span className={`text-[9px] font-black uppercase tracking-widest ${note.tagColor}`}>
-                    {note.category}
-                  </span>
-                </div>
-                <h3 className="text-base md:text-lg font-black text-[#1e3a5f] uppercase line-clamp-1">
-                  {note.title}
-                </h3>
-                <p className="text-[12px] md:text-[13px] font-bold text-slate-600/80 leading-snug line-clamp-2">
-                  "{note.content}"
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200/40">
-                <div className="flex items-center gap-1.5 text-slate-400">
-                  <Clock size={12} />
-                  <span className="text-[8px] font-black uppercase tracking-widest">{note.time}</span>
-                </div>
-                <FileText size={14} className="text-slate-300" />
-              </div>
-            </div>
-          ))}
-          
-          {/* Add New Note Trigger */}
-          <div 
-            onClick={() => setIsCreating(true)} 
-            className="border-2 border-dashed border-slate-200 rounded-[1.5rem] flex flex-col items-center justify-center min-h-[200px] cursor-pointer bg-white"
-          >
-            <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-50">
-              <Plus size={24} strokeWidth={3} className="text-amber-400" />
-            </div>
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">New Note</span>
+      {/* Header */}
+      <div className="flex flex-col gap-4 mb-8">
+        <button 
+          onClick={onBack} 
+          className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors w-fit border border-slate-100"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase">
+              ADVISOR NOTES
+            </h2>
+            {batchId && (
+              <p className="text-sm text-gray-500 mt-1">Filtering by batch: {batchId}</p>
+            )}
           </div>
+          
+          <button
+            onClick={handleAddNote}
+            className="bg-[#1e3a5f] text-white px-4 md:px-6 py-2.5 rounded-xl font-black text-[10px] md:text-[12px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#2a4a6f] transition-colors shadow-lg"
+          >
+            <Plus size={16} strokeWidth={3} />
+            New Note
+          </button>
         </div>
       </div>
 
-      {/* Form Modal */}
-      {isCreating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1e3a5f]/20 backdrop-blur-md">
-          <div className="animate-in zoom-in-95 fade-in duration-300 w-full max-w-md bg-white rounded-[2.5rem] p-6 md:p-8 shadow-2xl relative">
-            <button onClick={closeForm} className="absolute top-6 right-6 text-slate-300 hover:text-red-500">
-              <X size={20} />
-            </button>
-            <h3 className="text-lg md:text-xl font-black text-[#1e3a5f] uppercase tracking-tighter mb-6">
-              {editingNote ? 'Modify Note' : 'Create Record'}
-            </h3>
-
-            <div className="space-y-4">
-              <div className="flex gap-2 p-1 bg-slate-50 rounded-xl">
-                {['ACADEMIC', 'URGENT', 'OFFICE'].map(cat => (
-                  <button 
-                    key={cat} 
-                    onClick={() => setFormData({...formData, category: cat})}
-                    className={`flex-1 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all ${
-                      formData.category === cat ? 'bg-white text-[#1e3a5f] shadow-sm' : 'text-slate-400'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[9px] font-black text-[#1e3a5f] uppercase tracking-widest">Title</label>
-                <input 
-                  type="text" 
-                  value={formData.title} 
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  className="w-full bg-slate-50 border-2 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:border-amber-400 outline-none" 
-                  placeholder="Note title..."
-                />
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[9px] font-black text-[#1e3a5f] uppercase tracking-widest">Description</label>
-                <textarea 
-                  rows={3} 
-                  value={formData.content} 
-                  onChange={(e) => setFormData({...formData, content: e.target.value})}
-                  className="w-full bg-slate-50 border-2 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:border-amber-400 outline-none resize-none" 
-                  placeholder="Write details..."
-                />
-              </div>
-
-              <button 
-                onClick={handleSave} 
-                className="w-full bg-[#1e3a5f] text-white py-4 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg"
-              >
-                <Check size={14} strokeWidth={3} /> {editingNote ? 'Update' : 'Save Note'}
-              </button>
-            </div>
-          </div>
+      {/* Error Display */}
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 text-red-700">
+          <AlertCircle size={20} />
+          <span className="flex-1 text-sm font-medium">{error}</span>
+          <button onClick={clearError} className="text-red-500 hover:text-red-700">
+            <X size={16} />
+          </button>
         </div>
       )}
+
+      {/* Notes Grid or Empty State */}
+      {notes.length === 0 && !isLoading ? (
+        <NotesEmptyState onAddNote={handleAddNote} />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          {notes.map((note) => (
+            <NoteCard
+              key={note.id}
+              note={note}
+              onEdit={handleEditNote}
+              onDelete={handleDeleteNote}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Form Modal */}
+      <NoteFormModal
+        isOpen={isFormOpen}
+        onClose={handleFormClose}
+        onSave={handleFormSave}
+        initialData={editingNote ? {
+          id:editingNote.id,
+          title: editingNote.title,
+          content: editingNote.noteContent,
+        } : undefined}
+        isEditing={!!editingNote}
+        isSaving={isCreating || isUpdating}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        note={noteToDelete}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

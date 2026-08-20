@@ -22,7 +22,6 @@ const AdvisorChat: React.FC<
   AdvisorChatProps
 > = ({ onBack }) => {
       const currentUser = sessionManager.getCurrentUser<any>();
-      console.log("current user in student chat: ", currentUser)
       const userId = currentUser?.data?.id || currentUser?.id;
 
   const {

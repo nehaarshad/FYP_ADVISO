@@ -431,6 +431,9 @@ const addViaExcelSheet = async(req,res)=>{
                 });
                 console.log(`Created Student ID: ${newStudent.id} for ${studentName}`);
                 
+                   const studentStatus =  await StudentStatus.create({currentStatus:"New Admission",reason:"New Admission",studentId:newStudent.id})
+                
+
                 // Update batch total student count
                 batch.totalStudent = (batch.totalStudent || 0) + 1;
                 await batch.save();

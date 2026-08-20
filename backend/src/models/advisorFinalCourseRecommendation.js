@@ -34,7 +34,7 @@ const AdvisorFinalRecommendation = sequelize.define('AdvisorFinalRecommendation'
         allowNull: true,
     },
     notes: {
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT('long'),
         allowNull: true,
     },
 }, {

@@ -12,11 +12,11 @@ const AdvisorNotes = sequelize.define("AdvisorNotes", {
         allowNull: false,
     },
     title: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
         allowNull: false,
     },
     noteContent: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
         allowNull: false,
     },
     batchId: {
