@@ -11,29 +11,26 @@ const FacultyRecommendation = sequelize.define("FacultyRecommendation", {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    problem: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    solution: {
-        type: DataTypes.STRING,
+    issueDescription: {
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     status: {
-        type: DataTypes.ENUM("Pending", "Approved", "Rejected"),
+        type: DataTypes.ENUM("Open", "In Progress", "Resolved", "Closed"),
         allowNull: false,
+        defaultValue: "Open",
     },
-    recommendedById: {
+    postingAdvisorId: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    approvedById: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+    resolvedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
     },
-    recommendationCategoryId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+    isUrgent: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
 }, {
     timestamps: true,

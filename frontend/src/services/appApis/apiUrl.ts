@@ -102,4 +102,17 @@ export default class APIs{
         static updateGuideline = `${APIs.BASE_URL}/updateGuideline/:id`;
         static deleteGuideline = `${APIs.BASE_URL}/deleteGuideline/:id`;
 
+             // faculty recommendation
+       static createRecommendationRequest = `${APIs.BASE_URL}/createRecommendationRequest/:userId`;
+       static addCommentToRecommendation = `${APIs.BASE_URL}/addCommentToRecommendation/:userId`;
+       static getAllRecommendations = `${APIs.BASE_URL}/getAllRecommendations`;
+       static updateRecommendationStatus = `${APIs.BASE_URL}/updateRecommendationStatus/:userId`;
+       static voteComment = `${APIs.BASE_URL}/voteComment/:commentId`;
+       static acceptCommentAsSolution = `${APIs.BASE_URL}/acceptCommentAsSolution/:userId`;
+       static deleteRecommendation = `${APIs.BASE_URL}/deleteRecommendation/:id`;
+       static deleteRecommendationComment = `${APIs.BASE_URL}/deleteRecommendationComment/:id`;
+       static updateCommentToRecommendation = `${APIs.BASE_URL}/updateCommentToRecommendation`;
+       static updateRecommendationRequest = `${APIs.BASE_URL}/updateRecommendationRequest/:id`;
+
+
 }

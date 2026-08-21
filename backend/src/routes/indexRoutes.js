@@ -15,6 +15,7 @@ import suggestCoursesRoute from "./suggestCoursesRoute.js";
 import CourseManagementRouter from "./courseManagementRoute.js";
 import chatRouter from "./chatRoute.js";
 import advisorNotesRoutes from "./advisorNotesRoutes.js"
+import facultyRecommendationRoute from "./facultyRecommendationRoute.js";
 
 const router = express.Router();
 
@@ -24,6 +25,7 @@ router.use('/auth', roadmapRoute);
 router.use('/auth', courseDetailRoute);
 router.use('/auth', registerUserRoute);
 router.use('/auth', courseOfferingRoute);
+router.use('/auth', facultyRecommendationRoute);
 router.use('/auth', timetableRoute);
 router.use('/auth', suggestCoursesRoute);
 router.use('/auth', manageUserRoute);

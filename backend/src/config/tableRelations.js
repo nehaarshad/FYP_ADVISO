@@ -20,7 +20,6 @@ import MeetingReminder from "../models/meetingReminder.js";
 import Message from "../models/messagesModel.js";
 import AdvisorFinalRecommendation from "../models/advisorFinalCourseRecommendation.js";
 import ProgramModel from "../models/programModel.js";
-import RecommendationCategory from "../models/RecommendationModel.js";
 import RequestFormType from "../models/RequestFormTypeModel.js";
 import RoadmapModel from "../models/roadmapModel.js";
 import RoadmapCourseCategoryModel from "../models/RoadmapCourseCategoryModel.js";
@@ -38,7 +37,7 @@ import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
 import Chat from "../models/ChatsModel.js";
 import SessionalRecommendation from "../models/sessionalRecommdentationModel.js";
 import SuggestedCourses from "../models/suggestedCoursesModel.js";
-
+import RecommendationComment from "../models/recommendationComment.js"
 
 export default function relations() {
   // ==================== User & Auth Relations ====================
@@ -160,9 +159,12 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   BatchAdvisor.hasMany(MeetingReminder, { foreignKey: "advisorId" });
   MeetingReminder.belongsTo(BatchAdvisor, { foreignKey: "advisorId" });
 
-  // ==================== Recommendation ====================
-  RecommendationCategory.hasMany(FacultyRecommendation, { foreignKey: "recommendationCategoryId" });
-  FacultyRecommendation.belongsTo(RecommendationCategory, { foreignKey: "recommendationCategoryId" });
+  // ==================== Faculty Recommendation ====================
+FacultyRecommendation.belongsTo(BatchAdvisor, {foreignKey: 'postingAdvisorId',as: 'postingAdvisor'});
+FacultyRecommendation.hasMany(RecommendationComment, {foreignKey: 'recommendationId',as: 'comments',onDelete: 'CASCADE'});
+
+RecommendationComment.belongsTo(BatchAdvisor, {foreignKey: 'commentingAdvisorId',as: 'commentingAdvisor'});
+RecommendationComment.belongsTo(FacultyRecommendation, {foreignKey: 'recommendationId', as: 'recommendation'});
 
   // ==================== Request Forms ====================
   RequestFormType.hasMany(SubmittedRequestForm, { foreignKey: "formTypeId" });
