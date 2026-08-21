@@ -20,9 +20,8 @@ import BatchAdvisor from "../models/FacultyAdvisorModel.js";
 import MeetingReminder from "../models/meetingReminder.js";
 import Message from "../models/messagesModel.js";
 import ProgramModel from "../models/programModel.js";
-import RecommendationCategory from "../models/RecommendationModel.js";
 import RequestFormType from "../models/RequestFormTypeModel.js";
-import RoadmapModel from "../models/RoadmapModel.js";
+import RoadmapModel from "../models/roadmapModel.js";
 import RoadmapCourseCategoryModel from "../models/RoadmapCourseCategoryModel.js";
 import SemesterCourseModel from "../models/semesterCourseModel.js";
 import SemesterRoadmapModel from "../models/semesterRoadmapModel.js";
@@ -38,6 +37,7 @@ import TimetableModel from "../models/timetableModel.js";
 import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
 import AdvisorFinalRecommendation from "../models/advisorFinalCourseRecommendation.js";
 import Chat from "../models/ChatsModel.js";
+import RecommendationComment from "../models/recommendationComment.js"
 import relations from "./tableRelations.js";
     
 relations();
@@ -49,6 +49,7 @@ const models={
     AdvisorNotes,
     BatchAdvisor,
     BatchAssignment,
+    RecommendationComment,
     BatchMeeting,
     BatchModel,
     CategoryModel,
@@ -67,7 +68,6 @@ const models={
     MeetingReminder,
     Message,
     ProgramModel,
-    RecommendationCategory,
     RequestFormType,
     RoadmapCourseCategoryModel,
     RoadmapModel,

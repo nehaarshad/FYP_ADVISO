@@ -1,56 +1,91 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
-import React, { useState } from 'react';
-import { 
-  Search, Plus, ChevronRight, ChevronLeft,
-  Pin, AlertCircle, Lightbulb, Clock, X, ArrowLeft
-} from 'lucide-react';
 
-interface FacultyRecommendationProps {
-  onBack?: () => void;
-}
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { FacultyRecommendationProps } from './type/type';
+import { CreateRecommendationData, AddCommentData } from '@/src/hooks/facultyRecommendation/type/facultyRecommType';
+import { useFacultyRecommendations } from '@/src/hooks/facultyRecommendation/facultyRecommendationHook';
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
+import { CreateRecommendationModal } from './createRecommModal';
+import { RecommendationDetail } from './recommDetails';
+import { RecommendationCard } from './recommendationCard';
+import { EmptyState } from '../states/emptystate';
+import { FilterBar } from './filterBar';
+import { useUserProfile } from '@/src/hooks/profileHook/useProfile';
 
-export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({ onBack }) => {
+export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
+  onBack,
+  initialFilters,
+}) => {
+  // State
+  const currentUser = sessionManager.getCurrentUser<any>();
+  const userId = currentUser?.data?.id || currentUser?.id;
+  
+  const { userProfile } = useUserProfile();
   const [viewMode, setViewMode] = useState<'list' | 'detail'>('list');
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedRec, setSelectedRec] = useState<any>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [selectedPostingAdvisor, setSelectedPostingAdvisor] = useState<number | undefined>(
+    undefined
+  );
+  const [showMyIssues, setShowMyIssues] = useState(false);
+  const [editingRecommendation, setEditingRecommendation] = useState<any>(null);
 
-  const [recommendations, setRecommendations] = useState([
-    {
-      id: 101,
-      subject: 'Object Oriented Programming',
-      description: 'Credit hour deficiency for core enrollment.',
-      problem: 'Student has insufficient credit hours to register for this core subject as per the current semester load policy.',
-      solution: 'Advisor requested a special credit hour waiver from the Dean to allow the student to sit in the course as a special case.',
-      status: 'Approved',
-      recommendedBy: 'Dr Fatima', 
-      approvedBy: 'Aleena Ayub (Program Coordinator)',
-      recommendationCategory: 'Credit Hours',
-      createdAt: '12 APR 2026'
-    },
-    {
-      id: 102,
-      subject: 'Cloud Computing',
-      description: 'Course not offered in current spring session.',
-      problem: 'The student needs this specific course for graduation, but it is currently not offered in the Spring 2026 list.',
-      solution: 'Formal request sent to Coordinator to open a special section for this course due to student graduation requirements.',
-      status: 'Pending',
-      recommendedBy: 'DR. Fozia', 
-      approvedBy: 'Aleena Ayub (Program Coordinator)',
-      recommendationCategory: 'Course Offering',
-      createdAt: '11 APR 2026'
-    }
-  ]);
-
-  const [formData, setFormData] = useState({
-    subject: '',
-    category: '',
-    problem: '',
-    solution: '',
-    advisor: ''
+  // Hooks
+  const {
+    recommendations,
+    isLoading,
+    isCreating,
+    isCommenting,
+    error,
+    openCount,
+    totalCount,
+    createNewRecommendation,
+    addCommentToRecommendation,
+    updateRecommendationById,
+    updateRecommendationStatus,
+    voteOnComment,
+    acceptCommentAsSolution,
+    deleteRecommendationById,
+    deleteCommentById,
+    updateCommentById,
+    refreshRecommendations,
+    applyFilters,
+    resetFilters,
+    clearError,
+    getRecommendation,
+  } = useFacultyRecommendations(userId, {
+    autoFetch: true,
+    initialFilters,
   });
 
-  // --- SMART NAVIGATION LOGIC ---
+  // Apply filters and search
+  const filteredRecommendations = useMemo(() => {
+    
+    let filtered = [...recommendations];
+
+    // Apply status filter
+    if (selectedStatus) {
+      filtered = filtered.filter((rec) => rec.status === selectedStatus);
+    }
+     if (selectedPostingAdvisor) {
+      filtered = filtered.filter((rec) => rec.postingAdvisorId === selectedPostingAdvisor);
+    }
+
+    if (showMyIssues && userProfile?.profile?.id) {
+      filtered = filtered.filter((rec) => {
+        return rec.postingAdvisorId === userProfile.profile.id;
+      });
+    }
+    return filtered;
+  }, [recommendations, searchTerm, selectedStatus, showMyIssues, userProfile?.profile.id]);
+
+  // Handlers
   const handleBackAction = () => {
     if (viewMode === 'detail') {
       setViewMode('list');
@@ -60,204 +95,341 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({ on
     }
   };
 
-  const handleAddSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newEntry = {
-      id: recommendations.length + 101,
-      subject: formData.subject,
-      description: formData.problem.substring(0, 40) + "...",
-      problem: formData.problem,
-      solution: formData.solution,
-      status: 'Pending',
-      recommendedBy: formData.advisor,
-      approvedBy: 'TBD',
-      recommendationCategory: formData.category,
-      createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
-    };
-    setRecommendations([newEntry, ...recommendations]);
-    setShowAddModal(false);
-    setFormData({ subject: '', category: '', problem: '', solution: '', advisor: '' });
+  const handleCreateRecommendation = async (data: CreateRecommendationData) => {
+    const response = await createNewRecommendation(data);
+    if (response.success) {
+      setShowAddModal(false);
+      await refreshRecommendations(true);
+    }
   };
 
-  const filteredRecs = recommendations.filter(rec => 
-    rec.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    rec.recommendationCategory.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleEditRecommendation = async (data: any) => {
+    // Update the recommendation
+    const response = await updateRecommendationById(data.id, data);
+    if (response.success) {
+      await refreshRecommendations(true);
+      // Update selected recommendation
+      if (selectedRec) {
+        const updated = getRecommendation(selectedRec.id);
+        if (updated) setSelectedRec(updated);
+      }
+    }
+  };
+
+  const handleDeleteRecommendation = async (id: number) => {
+      await deleteRecommendationById(id);
+      setViewMode('list');
+      setSelectedRec(null);
+      await refreshRecommendations(true);
+    
+  };
+
+  const handleAddComment = async (recommendationId: number, text: string) => {
+    const data: AddCommentData = {
+      recommendationId,
+      suggestedSolution: text,
+    };
+    const response = await addCommentToRecommendation(data);
+    if (response.success) {
+      await refreshRecommendations(true);
+      if (selectedRec) {
+        const updated = getRecommendation(selectedRec.id);
+        if (updated) setSelectedRec(updated);
+      }
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    
+    const response = await deleteCommentById(commentId);
+    if (response.success) {
+      await refreshRecommendations(true);
+      // Update selected recommendation
+      if (selectedRec) {
+        const updated = getRecommendation(selectedRec.id);
+        if (updated) setSelectedRec(updated);
+      }
+    }
+  };
+
+  const handleEditComment = async (commentId: number, newText: string) => {
+    const response = await updateCommentById(commentId, { suggestedSolution: newText });
+    if (response.success) {
+      await refreshRecommendations(true);
+      // Update selected recommendation
+      if (selectedRec) {
+        const updated = getRecommendation(selectedRec.id);
+        if (updated) setSelectedRec(updated);
+      }
+    }
+  };
+
+  const handleVote = async (commentId: number, voteType: 'upvote' | 'downvote') => {
+    await voteOnComment(commentId, voteType);
+    if (selectedRec) {
+      const updated = getRecommendation(selectedRec.id);
+      if (updated) setSelectedRec(updated);
+    }
+  };
+
+  const handleAcceptSolution = async (commentId: number) => {
+    await acceptCommentAsSolution(commentId);
+    if (selectedRec) {
+      const updated = getRecommendation(selectedRec.id);
+      if (updated) setSelectedRec(updated);
+    }
+    await refreshRecommendations(true);
+  };
+
+  const handleStatusChange = async (
+    id: number,
+    status: 'Open' | 'In Progress' | 'Resolved' | 'Closed'
+  ) => {
+    await updateRecommendationStatus(id, status);
+    if (selectedRec && selectedRec.id === id) {
+      const updated = getRecommendation(id);
+      if (updated) setSelectedRec(updated);
+    }
+    await refreshRecommendations(true);
+  };
+
+  const handleApplyFilters = () => {
+    const filters: any = {};
+    if (selectedStatus) filters.status = selectedStatus;
+    if (showMyIssues) filters.postingAdvisorId = userProfile?.profile.id;
+    applyFilters(filters);
+    setShowFilterMenu(false);
+  };
+
+  const handleClearFilters = () => {
+    setSelectedStatus('');
+    setSelectedPostingAdvisor(undefined);
+    setShowMyIssues(false);
+    resetFilters();
+    setShowFilterMenu(false);
+  };
+
+  const handleSelectRecommendation = (rec: any) => {
+    setSelectedRec(rec);
+    setViewMode('detail');
+  };
+
+   const handleMyIssuesToggle = () => {
+    const newShowMyIssues = !showMyIssues;
+    setShowMyIssues(newShowMyIssues);
+    
+    if (newShowMyIssues && userProfile?.profile?.id) {
+      setSelectedPostingAdvisor(userProfile.profile.id);
+    } else {
+      setSelectedPostingAdvisor(undefined);
+    }
+    
+    const filters: any = {};
+    if (selectedStatus) filters.status = selectedStatus;
+    if (newShowMyIssues && userProfile?.profile?.id) {
+      filters.postingAdvisorId = userProfile.profile.id;
+    } else if (selectedPostingAdvisor) {
+      filters.postingAdvisorId = selectedPostingAdvisor;
+    }
+    applyFilters(filters);
+  };
+
+  // Loading State
+  if (isLoading && recommendations.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 size={40} className="animate-spin text-[#1e3a5f]" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-[1300px] mx-auto p-4 md:p-6 font-sans text-slate-900 relative">
-      
-      {/* --- UNIFIED NAVIGATION HEADER --- */}
+      {/* Navigation Header */}
       <div className="flex items-center gap-4 mb-6">
-        <button 
-          onClick={handleBackAction} 
+        <button
+          onClick={handleBackAction}
           className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-[#1e3a5f] transition-all border border-slate-100 active:scale-90"
         >
           <ArrowLeft size={20} />
         </button>
         {viewMode === 'detail' && (
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-in fade-in slide-in-from-left-2">
-            
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            Recommendation Detail
           </span>
         )}
       </div>
 
-      {/* --- ADD MODAL (Responsive) --- */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
-            <button onClick={() => setShowAddModal(false)} className="absolute top-6 right-6 text-slate-400 hover:text-rose-500 transition-colors">
-              <X size={20} />
-            </button>
-            <h3 className="text-xl font-black text-[#1e3a5f] uppercase tracking-tighter mb-6">New Recommendation</h3>
-            <form onSubmit={handleAddSubmit} className="space-y-4">
-              <input required placeholder="Subject Name" className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold outline-none focus:ring-2 ring-blue-500/50" 
-                onChange={e => setFormData({...formData, subject: e.target.value})} />
-              <input required placeholder="Category" className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold outline-none focus:ring-2 ring-blue-500/50"
-                onChange={e => setFormData({...formData, category: e.target.value})} />
-              <input required placeholder="Advisor Name" className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold outline-none focus:ring-2 ring-blue-500/50"
-                onChange={e => setFormData({...formData, advisor: e.target.value})} />
-              <textarea required placeholder="Problem Description" rows={3} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold outline-none resize-none focus:ring-2 ring-blue-500/50"
-                onChange={e => setFormData({...formData, problem: e.target.value})} />
-              <textarea required placeholder="Proposed Solution" rows={3} className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold outline-none resize-none focus:ring-2 ring-blue-500/50"
-                onChange={e => setFormData({...formData, solution: e.target.value})} />
-              <button type="submit" className="w-full bg-[#1e3a5f] text-white py-4 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg active:scale-95 transition-all hover:bg-[#2a5285]">
-                Submit Recommendation
-              </button>
-            </form>
-          </div>
+      {/* Create Modal */}
+      <CreateRecommendationModal
+        isOpen={showAddModal}
+        isSubmitting={isCreating}
+        onClose={() => setShowAddModal(false)}
+        onSubmit={handleCreateRecommendation}
+      />
+
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center mb-6">
+          <p className="text-red-600 font-semibold">{error}</p>
+          <button
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold uppercase"
+            onClick={() => {
+              clearError();
+              refreshRecommendations(true);
+            }}
+          >
+            Retry
+          </button>
         </div>
       )}
 
+      {/* List View */}
       {viewMode === 'list' ? (
         <div className="animate-in fade-in duration-500">
+          {/* Search Bar with Filter Toggle */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
             <div>
-              <h2 className="text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase leading-none">Faculty Recommendations</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">Case Management System</p>
+              <h2 className="text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase leading-none">
+                Faculty Recommendations
+              </h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">
+                {openCount} Open • {totalCount} Total
+                {showMyIssues && ' • Showing My Issues'}
+              </p>
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <div className="relative flex-1 sm:flex-initial">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                <input 
-                  type="text"
-                  placeholder="Search category or subject..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full sm:w-[280px] pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold outline-none focus:ring-2 ring-blue-500/50 transition-all shadow-sm"
-                />
-              </div>
-              <button 
+            
+              <button
+                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                  showFilterMenu || selectedStatus || selectedPostingAdvisor || showMyIssues
+                    ? 'bg-[#1e3a5f] text-white shadow-md'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                }`}
+                onClick={() => setShowFilterMenu(!showFilterMenu)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filter
+                {(selectedStatus || selectedPostingAdvisor || showMyIssues) && (
+                  <span className="ml-1 bg-blue-500 text-white rounded-full w-4 h-4 text-[8px] flex items-center justify-center">
+                    {[selectedStatus, selectedPostingAdvisor, showMyIssues].filter(Boolean).length}
+                  </span>
+                )}
+              </button>
+              <button
                 onClick={() => setShowAddModal(true)}
                 className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md active:scale-95 transition-all hover:shadow-lg"
               >
-                <Plus size={14} /> New Recommendation
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                New
               </button>
             </div>
           </div>
 
-          <div className="bg-white border border-slate-100 rounded-[2rem] shadow-sm overflow-hidden">
-            {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-50 bg-slate-50/50">
-                    <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">ID & Category</th>
-                    <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Subject</th>
-                    <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Description</th>
-                    <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
-                    <th className="px-4 py-4 w-10"></th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {filteredRecs.map((rec) => (
-                    <tr key={rec.id} className="group hover:bg-slate-50/50 transition-all cursor-pointer" onClick={() => { setSelectedRec(rec); setViewMode('detail'); }}>
-                      <td className="px-6 py-5 text-[11px] font-black text-[#1e3a5f] uppercase tracking-tighter">#{rec.id} - {rec.recommendationCategory}</td>
-                      <td className="px-6 py-5 text-xs font-bold text-slate-600 uppercase tracking-tighter">{rec.subject}</td>
-                      <td className="px-6 py-5 text-[10px] font-bold text-slate-400 uppercase">{rec.description}</td>
-                      <td className="px-6 py-5 text-center">
-                        <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase border ${
-                          rec.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'
-                        }`}>{rec.status}</span>
-                      </td>
-                      <td className="px-4 py-5 text-right"><ChevronRight size={18} className="text-[#1e3a5f]/20 group-hover:text-amber-500 transition-colors" /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          {/* Filter Bar */}
+          <FilterBar
+            showFilterMenu={showFilterMenu}
+            selectedStatus={selectedStatus}
+            selectedPostingAdvisor={selectedPostingAdvisor}
+            currentUserId={userProfile?.profile.id}
+            showMyIssues={showMyIssues}
+            onStatusChange={setSelectedStatus}
+            onAdvisorChange={setSelectedPostingAdvisor}
+            onMyIssuesToggle={handleMyIssuesToggle}
+            onApply={handleApplyFilters}
+            onClear={handleClearFilters}
+            onToggle={() => setShowFilterMenu(!showFilterMenu)}
+          />
 
-            {/* Mobile Card View */}
-            <div className="md:hidden divide-y divide-slate-100">
-              {filteredRecs.map((rec) => (
-                <div key={rec.id} className="p-5 flex flex-col gap-4 active:bg-slate-50 transition-colors" onClick={() => { setSelectedRec(rec); setViewMode('detail'); }}>
-                  <div className="flex justify-between items-start">
-                    <span className="text-[10px] font-black text-[#1e3a5f] bg-slate-100 px-2 py-1 rounded">#{rec.id}</span>
-                    <span className={`px-2 py-1 rounded text-[8px] font-black uppercase border ${
-                          rec.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-amber-50 text-amber-600 border-amber-100'
-                        }`}>{rec.status}</span>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-black text-[#1e3a5f] uppercase mb-1">{rec.subject}</h4>
-                    <p className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">{rec.recommendationCategory}</p>
-                    <p className="text-[11px] font-medium text-slate-400 mt-2 line-clamp-2">{rec.description}</p>
-                  </div>
-                  <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase pt-2 border-t border-slate-50">
-                    <span>{rec.createdAt}</span>
-                    <div className="flex items-center text-blue-600">View Detail <ChevronRight size={14} /></div>
-                  </div>
-                </div>
+          {/* Active Filters Display */}
+          {(selectedStatus || selectedPostingAdvisor || showMyIssues) && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {selectedStatus && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold uppercase">
+                  Status: {selectedStatus}
+                  <button
+                    onClick={() => {
+                      setSelectedStatus('');
+                      handleApplyFilters();
+                    }}
+                    className="hover:text-blue-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {showMyIssues && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-bold uppercase">
+                  My Issues
+                  <button
+                    onClick={() => {
+                      setShowMyIssues(false);
+                      handleApplyFilters();
+                    }}
+                    className="hover:text-green-800"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              <button
+                onClick={handleClearFilters}
+                className="text-[10px] font-bold text-slate-400 uppercase hover:text-slate-600"
+              >
+                Clear All
+              </button>
+            </div>
+          )}
+
+          {/* Recommendations Grid */}
+          {filteredRecommendations.length === 0 ? (
+            <EmptyState
+              message={
+                searchTerm ||
+                (showMyIssues
+                  ? "You haven't created any recommendations yet. Click 'New' to create one."
+                  : 'Try adjusting your filters or search terms.')
+              }
+              title="No Results"
+            />
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {filteredRecommendations.map((rec) => (
+                <RecommendationCard
+                  key={rec.id}
+                  recommendation={rec}
+                  userId={userProfile?.profile.id}
+                  onSelect={handleSelectRecommendation}
+                  onDelete={handleDeleteRecommendation}
+                  onEdit={setEditingRecommendation}
+                />
               ))}
             </div>
-          </div>
+          )}
         </div>
       ) : (
-        /* --- DETAIL PAGE (Sticky Note Style) --- */
-        <div className="py-4 animate-in slide-in-from-right-10 duration-300">
-          <div className="flex justify-center">
-            <div className="w-full max-w-xl bg-[#fffce8] border-2 border-yellow-200 rounded-[2.5rem] p-6 md:p-10 shadow-xl relative overflow-hidden">
-              <Pin className="absolute top-6 right-6 text-yellow-600 opacity-30 rotate-12 hidden sm:block" size={24} fill="currentColor" />
-              
-              <div className="space-y-6">
-                <div className="border-b border-black/5 pb-4">
-                  <div className="text-[9px] font-black text-yellow-700 uppercase mb-1 tracking-widest">{selectedRec.recommendationCategory} • ID #{selectedRec.id}</div>
-                  <h3 className="text-xl md:text-2xl font-black text-[#1e3a5f] uppercase leading-tight tracking-tight">{selectedRec.subject}</h3>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <span className="flex items-center gap-1.5 text-[10px] font-black text-rose-600 uppercase tracking-widest"><AlertCircle size={14} /> The Problem</span>
-                    <p className="text-[13px] md:text-[14px] font-medium leading-relaxed text-slate-700 uppercase">{selectedRec.problem}</p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <span className="flex items-center gap-1.5 text-[10px] font-black text-emerald-600 uppercase tracking-widest"><Lightbulb size={14} /> Proposed Solution</span>
-                    <p className="text-[13px] md:text-[14px] font-medium leading-relaxed text-slate-700 uppercase">{selectedRec.solution}</p>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-black/5">
-                    <div>
-                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Advisor</span>
-                      <p className="text-[12px] font-black text-[#1e3a5f] uppercase">{selectedRec.recommendedBy}</p>
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Coordinator</span>
-                      <p className="text-[12px] font-black text-[#1e3a5f] uppercase">{selectedRec.approvedBy}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-black/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-[9px]">
-                  <span className={`px-5 py-1.5 rounded-full font-black uppercase border-2 ${
-                    selectedRec.status === 'Approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
-                  }`}>{selectedRec.status}</span>
-                  <span className="font-bold text-slate-400 uppercase flex items-center gap-1"><Clock size={12} /> Filed on {selectedRec.createdAt}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        /* Detail View */
+        selectedRec && (
+          <RecommendationDetail
+            recommendation={selectedRec}
+            userId={userProfile?.profile.id}
+            isCommenting={isCommenting}
+            onBack={handleBackAction}
+            onComment={handleAddComment}
+            onVote={handleVote}
+            onAcceptSolution={handleAcceptSolution}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDeleteRecommendation}
+            onEditRecommendation={handleEditRecommendation}
+            onDeleteComment={handleDeleteComment}
+            onEditComment={handleEditComment}
+          />
+        )
       )}
     </div>
   );
