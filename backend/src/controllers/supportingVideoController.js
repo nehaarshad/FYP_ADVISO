@@ -28,6 +28,7 @@ const createVideo = async (req, res) => {
             });
         }
 
+        console.log(req.body,req.file)
         const videoUrl = `${process.env.BASE_URL}/src/uploads/${req.file.filename}`; 
 
         const video = await SupportingVideo.create({
@@ -65,7 +66,7 @@ const getAllVideos = async (req, res) => {
         
 
         const videos = await SupportingVideo.findAll({
-            order: [[sortBy, order]],
+            order: [["createdAt", "DESC"]],
         });
 
         return res.status(200).json({
@@ -88,8 +89,10 @@ const getAllVideos = async (req, res) => {
 const updateVideo = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description } = req.body;
+          console.log("updating video: ",req.body)
+        const { title, description,videoFile } = req.body || req.body.data;
 
+      
         const video = await SupportingVideo.findByPk(id);
 
         if (!video) {
@@ -99,8 +102,9 @@ const updateVideo = async (req, res) => {
             });
         }
 
+        console.log("updating video file: ",video)
         // If new video file is uploaded, delete old one
-        if (req.file) {
+        if (videoFile) {
             // Delete old video file
             const oldVideoPath = path.join(dirname, "..", "uploads", 
                 path.basename(video.videoUrl));
@@ -109,7 +113,7 @@ const updateVideo = async (req, res) => {
             }
             
             // Update video URL
-            video.videoUrl = `${process.env.BASE_URL}/src/uploads/${req.file.filename}`; ;
+            video.videoUrl = `${process.env.BASE_URL}/src/uploads/${videoFile.filename}`; ;
         }
 
         await video.update({

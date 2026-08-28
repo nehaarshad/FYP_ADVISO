@@ -39,7 +39,6 @@ class UserProfileRepository extends BaseApiService {
     try {
       const url = AppApis.getUserByIdUrl.replace(':id', id.toString());
       const response = await this.getApiResponse<any>(url);
-      console.log("gET USER BY ID ", id, " is ",response)
       return response;
     } catch (error) {
       console.error('Get user by ID error:', error);

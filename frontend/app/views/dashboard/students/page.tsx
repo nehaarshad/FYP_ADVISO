@@ -17,7 +17,6 @@ import { Sidebar } from "@/components/navbars/route";
 import { NotificationPanel } from "../../../../components/Notifications/NotificationPanel";
 import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
 import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
-import Guidelines from "../../../../components/Guidelines/Guidelines";
 import SubmitRequest from "../../../../components/RequestFoam/SubmitRequest";
 import StudentChat from "../../../../components/Chat/StudentChat"; 
 import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRemarks";
@@ -29,6 +28,7 @@ import { RoadmapDetailView } from "../../../../components/Roadmap/RoadmapView";
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useTranscript } from '@/src/hooks/transcriptHook/transcriptHokk';
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
+import Guidelines from "@/components/Guidelines/Guidelines";
 
 export default function StudentDashboard() {
   const [mounted, setMounted] = useState(false);

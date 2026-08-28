@@ -27,13 +27,11 @@ import courseFilteringService from "../services/courseFilteringService.js";
 import SessionalRecommendation from "../models/sessionalRecommdentationModel.js";
 import SuggestedCourses from "../models/suggestedCoursesModel.js";
 
-// recommendCourses controller (updated)
 const recommendCourses = async (req, res) => {
     try {
         const { id } = req.params;
         const { sessionType, sessionYear } = req.body;
-        
-        // Fetch student data (same as before)
+
         const student = await Student.findOne({
             where: { id },
             include: [
@@ -49,7 +47,6 @@ const recommendCourses = async (req, res) => {
         const session = await SessionModel.findOne({ where: { sessionType, sessionYear } });
         if (!session) return res.status(404).json({ success: false, message: 'Session not found' });
 
-        // Fetch transcripts and analyze (same as before)
         const degreeTranscript = await DegreeTranscript.findOne({ where: { studentId: student.id } });
         if (!degreeTranscript) {
             return res.status(404).json({ success: false, message: "Degree transcript not found" });
@@ -60,7 +57,6 @@ const recommendCourses = async (req, res) => {
             include: [{ model: TranscriptCoursesDetail }]
         });
 
-        // Analyze transcript for F, W, D grades
         let suggestedCourses = transcriptAnalyzer.analyzeTranscript(
             sessionalTranscript,
             {
@@ -69,22 +65,20 @@ const recommendCourses = async (req, res) => {
             }
         );
 
-        // Get offered courses with timetables
         let offeredCourses = await CourseOfferingModel.findAll({
             where: { sessionId: session.id },
             include: [{ model: BatchModel }, { model: ProgramModel }]
         });
 
-        // Attach timetables to offered courses
         const courseOfferingIds = offeredCourses.map(course => course.id);
         let timetablesMap = new Map();
-        
+
         if (courseOfferingIds.length > 0) {
             const timetables = await TimetableModel.findAll({
                 where: { courseOfferingId: courseOfferingIds },
                 raw: true
             });
-            
+
             timetables.forEach(timetable => {
                 const courseId = timetable.courseOfferingId;
                 if (!timetablesMap.has(courseId)) {
@@ -99,7 +93,6 @@ const recommendCourses = async (req, res) => {
             timetables: timetablesMap.get(course.id) || []
         }));
 
-        // Get roadmap and eligible courses
         const roadmapId = student.BatchModel.roadmapId;
         const roadmap = await RoadmapModel.findOne({
             where: { id: roadmapId },
@@ -133,56 +126,22 @@ const recommendCourses = async (req, res) => {
             roadmap.SemesterRoadmapModels
         );
 
-        const studentDataForFiltering = {
-            studentStatus: student.StudentStatus.currentStatus,
-            currentSemester: student.currentSemester
-        };
-
-        const roadmapCoursesForFiltering = roadmapCourses.filter(c => 
-            c.prerequisiteStatus === 'CLEAR' && 
-            c.status !== 'Completed' &&
-            c.actionRequired !== 'RETAKE'
-        ).map(c => ({
-            courseId: c.id,
-            courseName: c.courseName,
-            credits: c.credits,
-            category: c.categoryName,
-            semester: c.semester
-        }));
-
-        // ============ FIRST API CALL ============
-        console.log("Making first API call to filter courses...");
-        const filteredCourses = await courseFilteringService.filterAndMarkCourses(
-            studentDataForFiltering,
-            offeredCourses,
-            roadmapCoursesForFiltering,
-            student.BatchModel?.programName || 'SE',
-            student.currentSemester
-        );
-
-        console.log("filtered courses ",filteredCourses)
-        
-        const studentDataForRecommendation = {
-            currentSemester: student.currentSemester,
-            cgpa: degreeTranscript.currentCGPA,
-            failedCourses: suggestedCourses.failedCourses || [],
-            withdrawnCourses: suggestedCourses.withdrawnCourses || [],
-            dGradedCourses: suggestedCourses.dGradedCourses || []
-        };
-
-        // ============ SECOND API CALL ============
-        console.log("Making second API call to generate recommendations...");
+        // ============ DETERMINISTIC ENGINE CALL (replaces both LLM calls) ============
         const allowedCHR = getCreditHours(parseFloat(degreeTranscript.currentCGPA));
-        
-        const llmRecommendations = await llmRecommendationService.generateRecommendations(
-            studentDataForRecommendation,
-            filteredCourses,
-            allowedCHR,
-            student.BatchModel?.programName || 'SE',
-            student.StudentStatus.currentStatus
-        );
 
-        // Save recommendations to database
+        const llmRecommendations = courseRecommendationEngine.generateRecommendations({
+            student,
+            degreeTranscript,
+            studentStatus: student.StudentStatus.currentStatus,
+            suggestedCourses,
+            offeredCourses,
+            roadmapCourses,
+            allowedCredits: allowedCHR,
+            program: student.BatchModel?.ProgramModel?.programName || student.BatchModel?.programName || 'SE',
+        });
+        // kept the variable name `llmRecommendations` on purpose so every line
+        // below this point (DB writes, response shape) needs zero changes.
+
         const sessionalRecommendation = await SessionalRecommendation.create({
             recommendationText: llmRecommendations.detailedExplanation,
             recommendedCoursesSummary: llmRecommendations.summary,
@@ -192,7 +151,6 @@ const recommendCourses = async (req, res) => {
             studentId: student.id
         });
 
-        // Save suggested courses
         const allRecommendations = [
             ...(llmRecommendations.recommendations.critical || []).map(c => ({ ...c, priority: 'critical' })),
             ...(llmRecommendations.recommendations.high || []).map(c => ({ ...c, priority: 'high' })),
@@ -219,9 +177,12 @@ const recommendCourses = async (req, res) => {
             data: {
                 sessionId: session.id,
                 allowedCreditHours: allowedCHR,
-                filteredCourses: filteredCourses, // Include filtered courses for transparency
                 llmRecommendations: llmRecommendations,
-                savedRecommendationId: sessionalRecommendation.id
+                savedRecommendationId: sessionalRecommendation.id,
+                // NEW extras your frontend can optionally surface:
+                specialRequests: llmRecommendations.specialRequests,
+                extraSemesterWarning: llmRecommendations.extraSemesterWarning,
+                fypEligibilityWarning: llmRecommendations.fypEligibilityWarning,
             }
         });
 
