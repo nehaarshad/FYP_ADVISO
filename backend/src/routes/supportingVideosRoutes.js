@@ -6,7 +6,7 @@ const supportingVideoRouter = express.Router();
 
 supportingVideoRouter.post("/createVideo", uploadVideo.single('videoFile'), supportingVideoController.createVideo);
 supportingVideoRouter.get("/getAllVideos", supportingVideoController.getAllVideos);
-supportingVideoRouter.put("/updateVideo/:id", uploadVideo.single('videoFile'), supportingVideoController.updateVideo);
+supportingVideoRouter.put("/updateVideo/:id", supportingVideoController.updateVideo);
 supportingVideoRouter.delete("/deleteVideo/:id", supportingVideoController.deleteVideo);
 
 export default supportingVideoRouter;

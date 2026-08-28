@@ -22,7 +22,7 @@ import { CourseCatalog } from '@/components/courseComponents/CourseCatalog';
 import { Timetable } from '@/app/components/Timetable';
 import { ProfileView } from '@/components/ProfileView/route';
 import { RequestForms } from '@/app/components/RequestForms';
-import Guidelines from '@/components/Guidelines/Guidelines';
+import DegreeGuidelinesManagement from '@/components/Guidelines/degreeGuidlinesManagementComponent';
 import { AddFaculty } from '@/app/components/AddFaculty';
 import { AddStudent } from '@/app/components/AddStudents';
 import { AddProgram } from '@/components/program/addNewprogram/route';
@@ -167,9 +167,8 @@ export default function CoordinatorDashboard() {
                 {activeTab === "add-faculty" && <AddFaculty/>}
                 {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
                 {activeTab === "edit-advisor" && <AdvisorsList/>}
-                {activeTab === "guidelines" && <Guidelines onBack={goBack}/>}
+                {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
                 {activeTab === "requests" && <RequestForms />}
-                {/* NOW CALLING THE IMPORTED COMPONENT */}
                 {activeTab === "profile" && <ProfileView />}
               </div>
             )}

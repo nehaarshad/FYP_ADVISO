@@ -31,15 +31,13 @@ const storage = multer.diskStorage({
 });
 
 const chatFileFilter = (req, file, cb) => {
-
     const allowedMimeTypes = [
         // Images
         "image/jpeg",
         "image/png",
         "image/gif",
         "image/webp",
-
-         // Videos
+        // Videos
         "video/mp4",
         "video/mpeg",
         "video/quicktime",
@@ -51,21 +49,16 @@ const chatFileFilter = (req, file, cb) => {
         "video/3gpp2",
         "video/x-ms-wmv",
         "video/x-flv",
-
         // PDF
         "application/pdf",
-
         // Word
         "application/msword",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-
         // Excel
         "application/vnd.ms-excel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-
         // Text
         "text/plain",
-
         // PowerPoint
         "application/vnd.ms-powerpoint",
         "application/vnd.openxmlformats-officedocument.presentationml.presentation"
@@ -90,15 +83,20 @@ const uploadChatFile = multer({
 const uploadVideo = multer({
     storage,
     limits: {
-        fileSize: 200 * 1024 * 1024, // 200 MB for videos
+        fileSize: 500 * 1024 * 1024, // 500 MB for videos
         files: 1
     },
     fileFilter: (req, file, cb) => {
         if (file.mimetype.startsWith('video/')) {
             return cb(null, true);
         }
-        cb(new Error("Only video files are allowed"));
+        const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv', '.flv', '.wmv'];
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (videoExtensions.includes(ext)) {
+            return cb(null, true);
+        }
+        cb(new Error("Only video files are allowed (MP4, WebM, MOV, AVI, MKV, etc.)"));
     }
 });
 
-export { uploadChatFile ,uploadVideo };
+export { uploadChatFile, uploadVideo };

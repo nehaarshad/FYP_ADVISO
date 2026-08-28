@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { roadmapRepository, UploadRoadmapData } from '@/src/repositories/sessionContentManagement/roadmapRepositories';
+import { roadmapRepository } from '@/src/repositories/sessionContentManagement/roadmapRepositories';
 import { Roadmap } from '@/src/models/RoadmapModel';
+import { UploadRoadmapData } from '../../../repositories/sessionContentManagement/types/uploadRoadmap';
 
 export const useRoadmap = () => {
   const [programRoadmaps, setProgramRoadmaps] = useState<Roadmap[]>([]);
