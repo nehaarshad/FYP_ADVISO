@@ -308,96 +308,113 @@ export const Timetable = () => {
           </>
         )}
       </div>
+{/* Upload Modal */}
+{showUploadModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div className="bg-white rounded-2xl max-w-md w-full p-6">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Upload Timetable</h3>
+        <button title='btn' onClick={() => setShowUploadModal(false)} className="p-1 hover:bg-slate-100 rounded">
+          <X size={20} />
+        </button>
+      </div>
+      <form onSubmit={handleUpload} className="space-y-4">
+        <div>
+          <label className="text-[10px] font-black text-slate-400 uppercase">Session Type *</label>
+          <select
+            title='Session Type'
+            value={selectedSessionType}
+            onChange={(e) => setSelectedSessionType(e.target.value)}
+            className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+            required
+          >
+            <option value="">Select Session Type</option>
+            <option value="FALL">Fall</option>
+            <option value="SPRING">Spring</option>
+            <option value="SUMMER">Summer</option>
+          </select>
+        </div>
 
-      {/* Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Upload Timetable</h3>
-              <button title='btn' onClick={() => setShowUploadModal(false)} className="p-1 hover:bg-slate-100 rounded">
-                <X size={20} />
-              </button>
+        <div>
+          <label className="text-[10px] font-black text-slate-400 uppercase">Session Year *</label>
+          <input
+            type="text"
+            placeholder="e.g., 2024"
+            value={selectedSessionYear}
+            onChange={(e) => setSelectedSessionYear(e.target.value)}
+            className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="text-[10px] font-black text-slate-400 uppercase">Program Name *</label>
+          <select
+            title='Program'
+            value={selectedProgram}
+            onChange={(e) => setSelectedProgram(e.target.value)}
+            className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+            required
+          >
+            <option value="">Select Program</option>
+            {programs.map((p: any) => (
+              <option key={p.id} value={p.programName}>{p.programName}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="text-[10px] font-black text-slate-400 uppercase">Excel File *</label>
+          <div className="relative mt-1">
+            <input
+              title='upload file'
+              type="file"
+              accept=".xlsx,.xls"
+              onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              required
+            />
+            <div className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-slate-200 flex items-center justify-between">
+              <span className="text-slate-600 truncate mr-2">
+                {selectedFile ? selectedFile.name : 'No file chosen'}
+              </span>
+              <span className="px-4 py-1.5 bg-[#1e3a5f] text-white rounded-lg text-xs font-medium shrink-0">
+                Choose File
+              </span>
             </div>
-            <form onSubmit={handleUpload} className="space-y-4">
-              <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase">Session Type *</label>
-                <select
-                  title='Session Type'
-                  value={selectedSessionType}
-                  onChange={(e) => setSelectedSessionType(e.target.value)}
-                  className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
-                  required
-                >
-                  <option value="">Select Session Type</option>
-                  <option value="FALL">Fall</option>
-                  <option value="SPRING">Spring</option>
-                  <option value="SUMMER">Summer</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase">Session Year *</label>
-                <input
-                  type="text"
-                  placeholder="e.g., 2024"
-                  value={selectedSessionYear}
-                  onChange={(e) => setSelectedSessionYear(e.target.value)}
-                  className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase">Program Name *</label>
-                <select
-                  title='Program'
-                  value={selectedProgram}
-                  onChange={(e) => setSelectedProgram(e.target.value)}
-                  className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
-                  required
-                >
-                  <option value="">Select Program</option>
-                  {programs.map((p: any) => (
-                    <option key={p.id} value={p.programName}>{p.programName}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase">Excel File *</label>
-                <input
-                  title='File'
-                  type="file"
-                  accept=".xlsx,.xls"
-                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                  className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1"
-                  required
-                />
-              </div>
-
-              {uploadProgress > 0 && uploadProgress < 100 && (
-                <div className="space-y-1">
-                  <div className="w-full bg-gray-200 rounded-full h-1.5">
-                    <div className="bg-[#FDB813] h-1.5 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
-                  </div>
-                  <p className="text-xs text-center text-slate-500">{uploadProgress}%</p>
-                </div>
-              )}
-
-              {error && (
-                <div className="flex items-center gap-2 text-red-600 text-xs p-2 bg-red-50 rounded">
-                  <AlertCircle size={14} /> {error}
-                </div>
-              )}
-
-              <button type="submit" className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all">
-                Upload
-              </button>
-            </form>
           </div>
         </div>
-      )}
+
+        {uploadProgress > 0 && uploadProgress < 100 && (
+          <div className="space-y-1">
+            <div className="w-full bg-gray-200 rounded-full h-1.5">
+              <div className="bg-[#FDB813] h-1.5 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
+            </div>
+            <p className="text-xs text-center text-slate-500">{uploadProgress}%</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="flex items-center gap-2 text-red-600 text-xs p-2 bg-red-50 rounded">
+            <AlertCircle size={14} /> {error}
+          </div>
+        )}
+
+        <button type="submit" className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all">
+          Upload
+        </button>
+      </form>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
+
 
       {/* Schedule Detail Modal */}
       {showDetailModal && selectedTimetable && (
