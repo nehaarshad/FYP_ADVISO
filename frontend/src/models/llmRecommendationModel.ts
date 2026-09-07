@@ -1,7 +1,23 @@
-import { CreditAllocationScenario } from "../repositories/recommendationRepository/types/creditAllocation";
-import { SpecialRequest } from "../repositories/recommendationRepository/types/specialRequest";
-import { LLMRecommendationSummary } from "./llmRecommendationSummary";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { SuggestedCourse } from "./systemSuggestedCoursesModel";
+
+
+export interface PriorityBreakdown {
+  critical: number;
+  high: number;
+  medium: number;
+  low: number;
+}
+
+export interface LLMRecommendationSummary {
+  totalRequiredCredits: number;
+  totalCreditsAllowed: number;
+  priorityBreakdown: PriorityBreakdown;
+  hasWarnings: boolean;
+  totalCoursesRecommended: number;
+  hasSpecialRequests: boolean;
+}
 
 export interface LLMRecommendations {
   summary: LLMRecommendationSummary;
@@ -11,8 +27,7 @@ export interface LLMRecommendations {
     medium: SuggestedCourse[];
     low: SuggestedCourse[];
   };
-  creditAllocationScenarios: CreditAllocationScenario[];
-  specialRequests: SpecialRequest[];
+  creditAllocationScenarios: any[]; // Update with proper type if available
+  specialRequests: any[]; // Update with proper type if available
   detailedExplanation: string;
 }
- 

@@ -134,6 +134,30 @@ function convertTo24Hour(timeStr) {
         time = specialCases[time];
     }
     
+    const timeWithSeconds = time.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);
+    if (timeWithSeconds) {
+        let hours = parseInt(timeWithSeconds[1], 10);
+        const minutes = parseInt(timeWithSeconds[2], 10);
+        
+        if (hours >= 1 && hours <= 6) {
+            hours += 12; // 1-6 → PM (13-18)
+        }
+        
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+    }
+    
+    const timeWithoutSeconds = time.match(/^(\d{1,2}):(\d{2})$/);
+    if (timeWithoutSeconds) {
+        let hours = parseInt(timeWithoutSeconds[1], 10);
+        const minutes = parseInt(timeWithoutSeconds[2], 10);
+        
+        if (hours >= 1 && hours <= 6) {
+            hours += 12;
+        }
+        
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+    }
+    
     const timePattern = /^(\d{1,2})(?::(\d{2}))?\s*([ap]m?)?$/i;
     const match = time.match(timePattern);
     
@@ -142,11 +166,10 @@ function convertTo24Hour(timeStr) {
         return null;
     }
     
-    let hours = parseInt(match[1]);
-    let minutes = match[2] ? parseInt(match[2]) : 0;
+    let hours = parseInt(match[1], 10);
+    let minutes = match[2] ? parseInt(match[2], 10) : 0;
     let period = match[3] ? match[3].toLowerCase() : '';
     
-    // If no period specified, try to infer from context
     if (!period) {
         if (hours >= 0 && hours <= 11) {
             period = 'am';
@@ -159,12 +182,10 @@ function convertTo24Hour(timeStr) {
             hours = 0;
             period = 'am';
         } else {
-            // Default to AM for hours 1-11 if no period
             period = 'am';
         }
     }
     
-    // Convert to 24-hour
     if (period === 'pm' && hours !== 12) {
         hours += 12;
     } else if (period === 'am' && hours === 12) {
@@ -319,4 +340,17 @@ const getCellByHeader = (headerName,headers,worksheet,i) => {
                 }
             };
 
-export default { getCellColor,getCellByHeader,getColumnIndex,cleanCourseName, parseCourse, parseCredits, maxConsecutiveEmptyCells, getCellText, parseTime, getProgramCode, splitCourseWithSlash, normalizeOfferingName };
+
+const parseSemesterFromCourseName = (name) => {
+   if (!name) return  0 ;
+  //  Examples: SE2-1, CS 3-1, CA4-1, BSCS 5-1, AI-6-1
+    const m = name.match(/^([A-Z]{2,4})\s*-?\s*(\d+)/i); 
+       if (m) {
+        return  parseInt(m[2], 10)
+    }
+ // Also match pattern "Data Structures 3"
+    const generic = name.match(/\b(\d+)\b/);
+    return  generic ? parseInt(generic[1], 10) : 0
+    
+};
+export default { parseSemesterFromCourseName,getCellColor,getCellByHeader,getColumnIndex,cleanCourseName, parseCourse, parseCredits, maxConsecutiveEmptyCells, getCellText, parseTime, getProgramCode, splitCourseWithSlash, normalizeOfferingName };

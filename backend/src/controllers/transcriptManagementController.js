@@ -7,86 +7,117 @@ import CategoryModel from "../models/categoryModel.js"
 import CourseCategoryModel from "../models/courseCategoryModel.js"
 import CoursesModel from "../models/coursesModel.js"
 import Student from "../models/studentModel.js";
+import RoadmapModel from "../models/roadmapModel.js";
+import BatchModel from "../models/batchModel.js";
 
 // Function to process and save student transcript
-const processStudentTranscript = async (studentData, sessionId, batchId,res) => {
+const processStudentTranscript = async (studentData, sessionId, batchId) => {
     try {
         console.log(`\nProcessing transcript for: ${studentData.studentName} (${studentData.studentNo}),${studentData.progressionStatus},${studentData.cgpa}, Batch ID: ${batchId}, Session ID: ${sessionId})`);
         
         let user = await User.findOne({
             where: { sapid: studentData.studentNo }
         });
-        
-        if (!user) {
-            return res.status(404).json({ success: false, message: `User with SAP ID ${studentData.studentNo} not found` });
-            }
+        console.log(`  Found user in transcript: ${user ? user.id : 'None'}`);
+   if (!user) {
+    throw new Error(`User with SAP ID ${studentData.studentNo} not found`);
+}
         
         let student = await Student.findOne({
             where: { userId: user.id, batchId: batchId ,studentName: studentData.studentName},
         });
-        
+        console.log(`  Found student record: ${student ? student.id : 'None'}`);
         if (!student) {
-            return res.status(404).json({ success: false, message: `Student record for ${studentData.studentName} not found in batch ${batchId}` });
-        }
+    throw new Error(`Student record for ${studentData.studentName} not found in batch ${batchId}`);
+}
+
+const assignedRoadmap = await BatchModel.findOne({
+    where: { id: batchId },
+    include: [{ model: RoadmapModel }]
+});
 
 
         //UPDATE OR CREATE STUDENT STATUS
 
-         const studentStatus =  await StudentStatus.findOne({where:{studentId:student.id}})
-            if(studentStatus){
-                if(studentStatus.currentStatus !== studentData.progressionStatus && studentStatus.currentStatus === 'Promoted'){
-                    await studentStatus.update({currentStatus:studentData.progressionStatus,reason:`Status changed from ${studentStatus.currentStatus} to ${studentData.progressionStatus} based on semester results`})
-                }
-               }
-            else{
-                await StudentStatus.create({currentStatus:studentData.progressionStatus,reason:`Initial Status  is ${studentData.progressionStatus} based on semester results`,studentId:student.id})    
-            }
+        const studentStatus = await StudentStatus.findOne({ where: { studentId: student.id } });
+console.log(`  Found student status: ${studentStatus ? studentStatus.currentStatus : 'None'}`);
+
+if (studentStatus) {
+    console.log(`  Current DB status: "${studentStatus.currentStatus}"`);
+    console.log(`  New status from Excel: "${studentData.progressionStatus}"`);
+    console.log(`  Are they different? ${studentStatus.currentStatus !== studentData.progressionStatus}`);
+    
+    if (studentStatus.currentStatus !== studentData.progressionStatus) {
+        console.log(`  Updating status from "${studentStatus.currentStatus}" to "${studentData.progressionStatus}"`);
+        await studentStatus.update({
+            currentStatus: studentData.progressionStatus,
+            reason: `Status changed from ${studentStatus.currentStatus} to ${studentData.progressionStatus} based on semester results`
+        });
+        console.log(`  Status updated successfully`);
+    } else {
+        console.log(`   Status already matches, no update needed`);
+    }
+} else {
+    console.log(`  Creating new student status: "${studentData.progressionStatus}"`);
+    await StudentStatus.create({
+        currentStatus: studentData.progressionStatus,
+        reason: `Initial Status is ${studentData.progressionStatus} based on semester results`,
+        studentId: student.id
+    });
+}
         
         //Get or create degree transcript
-        let degreeTranscript = await DegreeTranscript.findOne({
-            where: { studentId: student.id },
-        });
-        
-        if (!degreeTranscript) {
-            degreeTranscript = await DegreeTranscript.create({
-                totalEarnedCreditHours: studentData.totalAttemptedCRH,
-                currentCGPA: studentData.cgpa,
-                studentId: student.id
+            let degreeTranscript = await DegreeTranscript.findOne({
+                where: { studentId: student.id },
             });
-            console.log(`  Created degree transcript`);
-        }
-        else{
-            degreeTranscript.totalEarnedCreditHours = degreeTranscript.totalEarnedCreditHours + studentData.totalAttemptedCRH;
-            degreeTranscript.currentCGPA = studentData.cgpa;
-            await degreeTranscript.save();
-            console.log(`  Updated degree transcript with new total credits and CGPA from sheet`);
-        }
+
+            if (!degreeTranscript) {
+                degreeTranscript = await DegreeTranscript.create({
+                    totalEarnedCreditHours: studentData.totalGradedCRH, // Use graded (earned) credits, not attempted
+                    currentCGPA: studentData.cgpa,
+                    studentId: student.id
+                });
+                console.log(`  Created degree transcript with ${studentData.totalGradedCRH} earned credits`);
+            } else {
+                const totalCHR=parseInt(degreeTranscript.totalEarnedCreditHours) + parseInt(studentData.totalGradedCRH)
+                console.log("sum of ", degreeTranscript.totalEarnedCreditHours , "+" ,studentData.totalGradedCRH,"=",totalCHR,typeof(totalCHR))
+                // Add new earned credits to existing total
+                degreeTranscript.totalEarnedCreditHours = totalCHR.toString();
+                degreeTranscript.currentCGPA = studentData.cgpa;
+                await degreeTranscript.save();
+                console.log(`  Updated degree transcript: added ${studentData.totalGradedCRH} earned credits, new total: ${degreeTranscript.totalEarnedCreditHours}`);
+            }
 
         //get or create a sessional transcript for this semester
-
-        let semesterTranscript = await SessionalTranscript.findOne({
-            where: {
-                degreeTranscriptId: degreeTranscript.id,
-                sessionId: sessionId
-            }
-        });
-
-        if(!semesterTranscript){
-            semesterTranscript = await SessionalTranscript.create({
-                semesterEarnedCreditHours: studentData.totalAttemptedCRH,
-                semesterGPA: studentData.gpa,
-                degreeTranscriptId: degreeTranscript.id,
-                sessionId: sessionId
+            let semesterTranscript = await SessionalTranscript.findOne({
+                where: {
+                    degreeTranscriptId: degreeTranscript.id,
+                    sessionId: sessionId
+                }
             });
-        }
 
-        else{
-            semesterTranscript.semesterEarnedCreditHours = studentData.totalAttemptedCRH;
-            semesterTranscript.semesterGPA = studentData.gpa;
-            await semesterTranscript.save();
-        }
+            if (!semesterTranscript) {
+                semesterTranscript = await SessionalTranscript.create({
+                    semesterEarnedCreditHours: studentData.totalGradedCRH, 
+                    semesterGPA: studentData.gpa,
+                    degreeTranscriptId: degreeTranscript.id,
+                    sessionId: sessionId
+                });
+                student.currentSemester=student.currentSemester+1;
+                console.log(`  Created semester transcript with ${studentData.totalGradedCRH} earned credits`);
+            } else {
+                semesterTranscript.semesterEarnedCreditHours = studentData.totalGradedCRH;
+                semesterTranscript.semesterGPA = studentData.gpa;
+                await semesterTranscript.save();
+                console.log(`  Updated semester transcript with ${studentData.totalGradedCRH} earned credits`);
+            }
         
         for (const module of studentData.modules) {
+
+             if (!module.code || module.code === '' || module.code === 'null') {
+                    console.log(`  Skipping module with null code`);
+                    continue;
+                }
             // Find course
             let course = await CoursesModel.findOne({
                 where: {
@@ -95,11 +126,9 @@ const processStudentTranscript = async (studentData, sessionId, batchId,res) => 
                 },
             });
             
-            if (!course) {
-
-               return res.status(404).json({ success: false, message: `Course with code ${module.code} and name ${module.name} not found in database` });
-                
-                    }
+                if (!course) {
+                    throw new Error(`Course with code ${module.code} and name ${module.name} not found in database`);
+                }
             
                     //find course category
                     let courseCategory = await CourseCategoryModel.findOne({
@@ -159,8 +188,25 @@ const processStudentTranscript = async (studentData, sessionId, batchId,res) => 
         ]
        }); 
         
-       student.currentSemester=student.currentSemester+1;
+       
        await student.save()
+       if(parseInt(student.totalGradedCRH)>=parseInt(assignedRoadmap.RoadmapModel.totalCreditHours)){
+        console.log(`Student ${studentData.studentName} has completed the required credit hours. Deactivating user account.`);
+        user.isActive=false;
+        await user.save();
+        studentStatus.currentStatus="Graduated";
+        studentStatus.reason="Student has completed the required credit hours and graduated.";
+        await studentStatus.save();
+       }
+        if(studentData.progressionStatus==="Graduated" || studentData.progressionStatus==="Dropped" || studentData.progressionStatus==="Discontinued" || studentData.progressionStatus==="Dismissed" || studentData.progressionStatus==="Expelled" || studentData.progressionStatus==="Relegated" || studentData.progressionStatus==="Suspended" || studentData.progressionStatus==="Terminated" || studentData.progressionStatus==="Inactive" || studentData.progressionStatus==="Alumni"){
+        console.log(`Student ${studentData.studentName} current status is ${studentData.progressionStatus}. Deactivating user account.`);
+        user.isActive=false;
+        await user.save();
+        studentStatus.currentStatus=studentData.progressionStatus;
+        studentStatus.reason="Student has been marked as " + studentData.progressionStatus + " in the system. ";
+        await studentStatus.save();
+       }
+        await student.save()
         return {studentTranscriptSummary };
         
     } catch (error) {

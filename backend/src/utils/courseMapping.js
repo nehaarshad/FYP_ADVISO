@@ -104,8 +104,6 @@ function normalizeCourseTokens(raw) {
     .replace(/^[a-z]{2,3}\d+[\s-]*\d*\s*/i, '')
     .replace(/^\d+[\s-]*\d*\s*/, '');
 
-  // BUG A fix: detect merge independently, don't let it steal the slot
-  // that lab/lec/prac needs.
   const isMerge = MERGE_PATTERN.test(text);
   text = text.replace(MERGE_PATTERN, ' ');
 

@@ -10,7 +10,6 @@ const User = sequelize.define("User", {
     sapid: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
     },
     password: {
         type: DataTypes.STRING,

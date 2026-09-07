@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-// app/views/dashboard/advisor/page.tsx (Main Dashboard)
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState, useEffect } from "react";
@@ -58,7 +57,8 @@ export default function AdvisorDashboard() {
       const total = filtered.length;
       const irregular = filtered.filter((s: any) => 
         s.StudentStatus?.currentStatus !== 'Regular' &&
-        s.StudentStatus?.currentStatus !== 'Promoted'
+        s.StudentStatus?.currentStatus !== 'Promoted'&&
+        s.StudentStatus?.currentStatus !== 'New Admission'
       ).length;
       const regular = total - irregular;
       setStats({ total, irregular, regular });

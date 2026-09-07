@@ -3,4 +3,5 @@ export interface UpdateCourseCredentialsData {
   courseName?: string;
   courseCredits?: string;
   prerequisiteIds?: number[];
+  categoryIds ?: number[];
 }

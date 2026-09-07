@@ -5,6 +5,7 @@ import {
   Clock, Loader2, AlertCircle, Zap, Info
 } from 'lucide-react';
 import { SuggestedCourse } from '../../src/models/systemSuggestedCoursesModel'
+import { ClashCourseCard } from './clashCourseCard';
 
 // Priority config — maps LLM priority string to visual treatment
 const PRIORITY_CONFIG = {
@@ -57,6 +58,20 @@ export default function SmartAdvisory({
 }: SmartAdvisoryProps) {
   
   const [localError, setLocalError] = useState<string | null>(null);
+
+  const [expandedCourses, setExpandedCourses] = useState<Set<number>>(new Set());
+  
+  const toggleCourseExpand = (index: number) => {
+    setExpandedCourses(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
   
   // ── Finalize & send with validation ────────────────────────────────────────
   const handleSendToStudent = async () => {
@@ -165,12 +180,29 @@ export default function SmartAdvisory({
  
       {/* ── Course List ── */}
       <div className="space-y-4">
-        {allRecommendedCourses.map((course: SuggestedCourse & { priority?: string }) => {
+        {allRecommendedCourses.map((course: SuggestedCourse & { priority?: string }, index: number) => {
           const isSelected = isCourseSelected(course.courseId, course.courseName);
           const isAvailable = course.isOffered === true && course.actionRequired !== 'REQUEST_SPECIAL_OFFERING';
           const priority = (course.priority || 'medium') as keyof typeof PRIORITY_CONFIG;
           const pConf = PRIORITY_CONFIG[priority] || PRIORITY_CONFIG.medium;
- 
+
+          const isClashCourse = course.isNotSuggested || course.notSuggestedReason === 'TIME_CLASH';
+
+          // ✅ FIX: this branch now actually returns the clash card instead of
+          // building it and throwing it away. Previously the JSX below was
+          // never returned/rendered, so clash courses silently fell through
+          // to the normal card below and never showed clash info in the UI.
+          if (isClashCourse && course.clashRecord) {
+            return (
+              <ClashCourseCard
+                key={`clash-${course.courseId ?? index}-${course.courseName}`}
+                course={course}
+                isExpanded={expandedCourses.has(index)}
+                onToggle={() => toggleCourseExpand(index)}
+              />
+            );
+          }
+
           return (
             <div
               key={`${course.courseId}-${course.courseName}`}

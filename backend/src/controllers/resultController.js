@@ -83,120 +83,146 @@ const uploadSessionalResult = async(req,res) =>{
         
         // Process students
         const students = [];
-        let processedCount = 0;
-        let skippedCount = 0;
-        
-        console.log("\n=== Processing Student Data ===");
-        
-        for (let rowNum = headerRowIndex + 1; rowNum <= worksheet.rowCount; rowNum++) {
-            const srNo = getCellText(worksheet.getCell(rowNum, 1));
-            
-            if (!srNo || srNo === '') {
-                skippedCount++;
-                continue;
-            }
-            
-            const student = {
-                srNo: parseInt(srNo),
-                studentNo: getCellText(worksheet.getCell(rowNum, 2)),
-                studentName: getCellText(worksheet.getCell(rowNum, 4)),
-                holdStatus: getCellText(worksheet.getCell(rowNum, 10)),
-                remarks: getCellText(worksheet.getCell(rowNum, 11)),
-                totalAttemptedCRH: 0,
-                totalGradedCRH: 0,
-                gpa: 0,
-                cgpa: 0,
-                progressionStatus: '',
-                modules: []
-            };
-            
-            // Get values using header mapping
-            const totalAttemptedCRH = getCellByHeader('Total Attemted CRH', rowNum);
-            student.totalAttemptedCRH = totalAttemptedCRH ? parseFloat(totalAttemptedCRH) : 0;
-            
-            const totalGradedCRH = getCellByHeader('Total Graded CRH', rowNum);
-            student.totalGradedCRH = totalGradedCRH ? parseFloat(totalGradedCRH) : 0;
-            
-            const gpa = getCellByHeader('GPA', rowNum);
-            student.gpa = gpa ? parseFloat(gpa) : 0;
-            
-            const cgpa = getCellByHeader('CGPA', rowNum);
-            student.cgpa = cgpa ? parseFloat(cgpa) : 0;
-            
-            student.progressionStatus = getCellByHeader('Progression Status', rowNum);
-            
-            console.log(`\nRow ${rowNum}: ${student.studentName} (${student.studentNo})`);
-            console.log(`  GPA: ${student.gpa}, CGPA: ${student.cgpa}, Status: ${student.progressionStatus}, Hold: ${student.holdStatus}, Remarks: ${student.remarks},Earned CRH: ${student.totalGradedCRH}, Attempted CRH: ${student.totalAttemptedCRH}`);
-            
-            // Parse modules - iterate through possible module numbers
-            let moduleNum = 1;
-            let hasMoreModules = true;
-            
-            while(hasMoreModules && moduleNum <= 20) {
-                // Build header names for this module
-                const moduleCodeHeader = `Module${moduleNum} Code`;
-                const moduleIdHeader = `Module${moduleNum} Id`;
-                const moduleNameHeader = `Module${moduleNum} Name`;
-                
-                // Get module code
-                const moduleCode = getCellByHeader(moduleCodeHeader, rowNum);
-                
-                if (!moduleCode || moduleCode === '') {
-                    if (moduleNum === 1) {
-                        console.log(`  No modules found for this student`);
-                    }
-                    break;
-                }
-                let grade = '';
-                let chrEarned = 0;
-                let chrAttempted = 0;
-                let marks = 0;
-                let gradePoint = 0;
-                let moduleProduct = '';
+let processedCount = 0;
+let skippedCount = 0;
+let errorCount = 0;
 
-                const moduleCodeCol = headerMap.get(moduleCodeHeader);
-                if (moduleCodeCol) {
-                    const gradeCol = moduleCodeCol + 3; // Grade is 3 columns after Module Code
-                    const chrEarnedCol = moduleCodeCol + 4; // CHR Earned is 4 columns after
-                    const chrAttemptedCol = moduleCodeCol + 5; // CHR Attempted is 5 columns after
-                    const marksCol = moduleCodeCol + 6; // Marks is 6 columns after
-                    const gradePointCol = moduleCodeCol + 7; // Grade Point is 7 columns after
-                    const moduleProductCol = moduleCodeCol + 8; // Module Product is 8 columns after
-                    
-                    grade = getCellText(worksheet.getCell(rowNum, gradeCol));
-                    chrEarned = parseFloat(getCellText(worksheet.getCell(rowNum, chrEarnedCol))) || 0;
-                    chrAttempted = parseFloat(getCellText(worksheet.getCell(rowNum, chrAttemptedCol))) || 0;
-                    marks = parseFloat(getCellText(worksheet.getCell(rowNum, marksCol))) || 0;
-                    gradePoint = parseFloat(getCellText(worksheet.getCell(rowNum, gradePointCol))) || 0;
-                    moduleProduct = getCellText(worksheet.getCell(rowNum, moduleProductCol));
-                }
-                
-                const module = {
-                    code: moduleCode,
-                    id: getCellByHeader(moduleIdHeader, rowNum),
-                    name: getCellByHeader(moduleNameHeader, rowNum),
-                    grade: grade,
-                    chrEarned: chrEarned,
-                    chrAttempted: chrAttempted,
-                    marks: marks,
-                    gradePoint: gradePoint,
-                    moduleProduct: moduleProduct
-                };
-                
-                console.log(`  Module ${moduleNum}: ${module.code} - ${module.name} (Grade: ${module.grade || 'N/A'}, Marks: ${module.marks}),gradePoint: ${module.gradePoint}, chrEarned: ${module.chrEarned}, chrAttempted: ${module.chrAttempted}, product: ${module.moduleProduct}`);
-                student.modules.push(module);
-                moduleNum++;
+console.log("\n=== Processing Student Data ===");
+
+for (let rowNum = headerRowIndex + 1; rowNum <= worksheet.rowCount; rowNum++) {
+    const srNo = getCellText(worksheet.getCell(rowNum, 1));
+    
+    // Skip empty rows
+    if (!srNo || srNo === '' || srNo === 'null') {
+        skippedCount++;
+        continue;
+    }
+    
+    const student = {
+        srNo: parseInt(srNo),
+        studentNo: getCellText(worksheet.getCell(rowNum, 2)),
+        studentName: getCellText(worksheet.getCell(rowNum, 4)),
+        holdStatus: getCellText(worksheet.getCell(rowNum, 10)),
+        remarks: getCellText(worksheet.getCell(rowNum, 11)),
+        totalAttemptedCRH: 0,
+        totalGradedCRH: 0, // This will store earned credits
+        gpa: 0,
+        cgpa: 0,
+        progressionStatus: '',
+        modules: []
+    };
+    
+    // Skip if student has no name or ID
+    if (!student.studentName || !student.studentNo || student.studentName === 'null' || student.studentNo === 'null') {
+        console.log(`\nRow ${rowNum}: Skipping - invalid student data (Name: ${student.studentName}, ID: ${student.studentNo})`);
+        skippedCount++;
+        continue;
+    }
+    
+    // Get values using header mapping
+    const totalAttemptedCRH = getCellByHeader('Total Attemted CRH', rowNum);
+    student.totalAttemptedCRH = totalAttemptedCRH ? parseFloat(totalAttemptedCRH) : 0;
+    
+    const totalGradedCRH = getCellByHeader('Total Graded CRH', rowNum);
+    student.totalGradedCRH = totalGradedCRH ? parseFloat(totalGradedCRH) : 0;
+    
+    const gpa = getCellByHeader('GPA', rowNum);
+    student.gpa = gpa ? parseFloat(gpa) : 0;
+    
+    const cgpa = getCellByHeader('CGPA', rowNum);
+    student.cgpa = cgpa ? parseFloat(cgpa) : 0;
+    
+    student.progressionStatus = getCellByHeader('Progression Status', rowNum);
+    
+    console.log(`\nRow ${rowNum}: ${student.studentName} (${student.studentNo})`);
+    console.log(`  GPA: ${student.gpa}, CGPA: ${student.cgpa}, Status: ${student.progressionStatus}, Earned CRH: ${student.totalGradedCRH}, Attempted CRH: ${student.totalAttemptedCRH}`);
+    
+    // Parse modules - iterate through possible module numbers
+    let moduleNum = 1;
+    let hasValidModules = false;
+    
+    while(moduleNum <= 20) {
+        const moduleCodeHeader = `Module${moduleNum} Code`;
+        const moduleIdHeader = `Module${moduleNum} Id`;
+        const moduleNameHeader = `Module${moduleNum} Name`;
+        
+        const moduleCode = getCellByHeader(moduleCodeHeader, rowNum);
+        
+        // Stop if no more modules
+        if (!moduleCode || moduleCode === '' || moduleCode === 'null') {
+            if (moduleNum === 1) {
+                console.log(`  No modules found for this student`);
             }
-            
-            if(student.modules.length > 0) {
-                await processStudentTranscript(student, session.id, batch.id,res);
-                students.push(student);
-                processedCount++;
-            } else {
-                console.log(` Warning: No modules found for ${student.studentName}`);
-                skippedCount++;
-            }
+            break;
         }
+        
+        let grade = '';
+        let chrEarned = 0;
+        let chrAttempted = 0;
+        let marks = 0;
+        let gradePoint = 0;
+        let moduleProduct = '';
+
+        const moduleCodeCol = headerMap.get(moduleCodeHeader);
+        if (moduleCodeCol) {
+            const gradeCol = moduleCodeCol + 3;
+            const chrEarnedCol = moduleCodeCol + 4;
+            const chrAttemptedCol = moduleCodeCol + 5;
+            const marksCol = moduleCodeCol + 6;
+            const gradePointCol = moduleCodeCol + 7;
+            const moduleProductCol = moduleCodeCol + 8;
+            
+            grade = getCellText(worksheet.getCell(rowNum, gradeCol));
+            chrEarned = parseFloat(getCellText(worksheet.getCell(rowNum, chrEarnedCol))) || 0;
+            chrAttempted = parseFloat(getCellText(worksheet.getCell(rowNum, chrAttemptedCol))) || 0;
+            marks = parseFloat(getCellText(worksheet.getCell(rowNum, marksCol))) || 0;
+            gradePoint = parseFloat(getCellText(worksheet.getCell(rowNum, gradePointCol))) || 0;
+            moduleProduct = getCellText(worksheet.getCell(rowNum, moduleProductCol));
+        }
+        
+        const module = {
+            code: moduleCode,
+            id: getCellByHeader(moduleIdHeader, rowNum),
+            name: getCellByHeader(moduleNameHeader, rowNum),
+            grade: grade,
+            chrEarned: chrEarned,
+            chrAttempted: chrAttempted,
+            marks: marks,
+            gradePoint: gradePoint,
+            moduleProduct: moduleProduct
+        };
+        
+        // Only add if module has valid code and name
+        if (module.code && module.code !== '' && module.code !== 'null') {
+            console.log(`  Module ${moduleNum}: ${module.code} - ${module.name || 'N/A'} (Grade: ${module.grade || 'N/A'}, Marks: ${module.marks})`);
+            student.modules.push(module);
+            hasValidModules = true;
+        }
+        moduleNum++;
+    }
+    
+    if (hasValidModules && student.modules.length > 0) {
+        try {
+            const result = await processStudentTranscript(student, session.id, batch.id);
+            students.push(student);
+            processedCount++;
+            console.log(`Successfully processed ${student.studentName}`);
+        } catch (error) {
+            console.error(` Error processing student ${student.studentName}:`, error.message);
+            errorCount++;
+            // Continue with next student
+            continue;
+        }
+    } else {
+        console.log(` Warning: No valid modules found for ${student.studentName}`);
+        skippedCount++;
+    }
+}
+
+        console.log(`\n=== Summary ===`);
+        console.log(`Processed: ${processedCount} students`);
+        console.log(`Skipped: ${skippedCount} students`);
+        console.log(`Errors: ${errorCount} students`);
         
         if(processedCount === 0) {
              fs.unlinkSync(resultFile.path); // Delete the uploaded file after processing
