@@ -43,10 +43,10 @@ const uploadCourseDetail = async (req, res) => {
             let existingCourse = await CoursesModel.findOne({
                 where: {
                     [Op.or]: [
-                        { courseCode: courseCode },
+                        { courseCode: courseCode },//se321
                         { 
-                            courseName: courseName,
-                            courseCredits: creditHours
+                            courseName: courseName, //cn 
+                            courseCredits: creditHours //3
                         }
                     ]
                 }

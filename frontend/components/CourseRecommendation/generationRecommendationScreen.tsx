@@ -26,7 +26,7 @@ export const GeneratingRecommendationsScreen: React.FC<GeneratingScreenProps> = 
   React.useEffect(() => {
     const interval = setInterval(() => {
       setStepIndex(i => (i < STEPS.length - 1 ? i + 1 : i));
-    }, 2000);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
  

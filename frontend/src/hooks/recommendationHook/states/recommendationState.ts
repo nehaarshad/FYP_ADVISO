@@ -7,13 +7,13 @@ export interface RecommendationState {
   llmRecommendations: LLMRecommendations | null;
   savedRecommendationId: number | null;
   allowedCreditHours: number | null;
-  sessionId:number | null;
+  sessionId: number | null;
   selectedCourses: SuggestedCourse[];
   pagination: PaginationMeta | null;
   advisoryLogs: AdvisoryLogEntry[];
-  isGenerating: boolean;  
-  isFinalizing: boolean;  
-  isLoadingLogs: boolean; 
+  isGenerating: boolean;
+  isFinalizing: boolean;
+  isLoadingLogs: boolean;
   generateError: string | null;
   finalizeError: string | null;
   logsError: string | null;

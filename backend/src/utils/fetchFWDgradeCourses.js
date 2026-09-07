@@ -1,4 +1,3 @@
-// utils/fetchFWDgradeCourses.js
 
 class TranscriptAnalyzer {
 
@@ -13,12 +12,9 @@ class TranscriptAnalyzer {
         
         this.courseCategories = config.courseCategories || {};
         this.courseGradeMap = new Map();
-        this.categoryCompletionMap = new Map(); // FIX: Added this missing initialization
+        this.categoryCompletionMap = new Map(); 
     }
 
-    /**
-     * Normalize course name for consistent matching
-     */
     normalizeCourseName(courseName) {
         if (!courseName) return '';
         return courseName.toLowerCase()
@@ -43,11 +39,11 @@ class TranscriptAnalyzer {
         const transcripts = Array.isArray(sessionalTranscripts) ? sessionalTranscripts : [sessionalTranscripts];
         
         transcripts.forEach(transcript => {
-            // FIX: Check if TranscriptCoursesDetails exists and is an array
+            //  Check if TranscriptCoursesDetails exists and is an array
             const coursesDetails = transcript.TranscriptCoursesDetails || [];
             
             coursesDetails.forEach(courseDetail => {
-                // FIX: Handle different property naming conventions
+                //  Handle different property naming conventions
                 const courseName = courseDetail.courseName || courseDetail.CourseName;
                 const courseCode = courseDetail.courseCode || courseDetail.CourseCode;
                 const courseCategory = courseDetail.courseCategory || courseDetail.CourseCategory;
@@ -108,7 +104,7 @@ class TranscriptAnalyzer {
         
         const analysis = {
             courseName,
-            creditHours: latestAttempt.creditHours,
+            creditHours: latestAttempt.courseCredits || latestAttempt.creditHours || 3.0,
             attempts: attempts.length,
             latestGrade,
             failCount,
@@ -129,7 +125,6 @@ class TranscriptAnalyzer {
             analysis.improvementNeeded = true;
             analysis.actionRequired = 'RETAKE';
             const canSubstitute = analysis.category && 
-                                 analysis.category !== "University Elective" &&
                                  analysis.category.endsWith("Elective");
             analysis.recommendation = canSubstitute 
                 ? `MUST RETAKE - Can Substitute with other course from ${analysis.category} Category` 
@@ -140,7 +135,6 @@ class TranscriptAnalyzer {
             analysis.actionRequired = 'RETAKE';
             analysis.improvementNeeded = true;
             const canSubstitute = analysis.category && 
-                                 analysis.category !== "University Elective" &&
                                  analysis.category.endsWith("Elective");
             analysis.recommendation = canSubstitute 
                 ? `MUST RETAKE - Can Substitute with other course from ${analysis.category} Category` 
@@ -151,7 +145,6 @@ class TranscriptAnalyzer {
             analysis.actionRequired = 'IMPROVEMENT_RECOMMENDED';
             analysis.improvementNeeded = true;
             const canSubstitute = analysis.category && 
-                                 analysis.category !== "University Elective" &&
                                  analysis.category.endsWith("Elective");
             analysis.recommendation = canSubstitute 
                 ? `Can Substitute with other course from ${analysis.category} Category` 
@@ -181,11 +174,11 @@ class TranscriptAnalyzer {
             switch (course.actionRequired) {
                 case 'RETAKE':
                     recommendations.mandatoryRetakes.push(course);
-                    recommendations.totalRequiredCredits += course.creditHours || 0;
+                    recommendations.totalRequiredCredits += course.courseCredits || 0;
                     break;
                 case 'IMPROVEMENT_RECOMMENDED':
                     recommendations.improvementSuggestions.push(course);
-                    recommendations.totalSuggestedCredits += course.creditHours || 0;
+                    recommendations.totalSuggestedCredits += course.courseCredits || 0;
                     break;
                 case 'NONE':
                     recommendations.completedCourses.push(course);
@@ -223,7 +216,7 @@ class TranscriptAnalyzer {
             
             // Analyze each course
             const analysisResults = [];
-            for (const [_, courseData] of this.courseGradeMap) { // FIX: Added _ to get the value
+            for (const [_, courseData] of this.courseGradeMap) {
                 const analysis = this.analyzeCourse(
                     Array.from(courseData.originalNames)[0], 
                     courseData
@@ -233,7 +226,7 @@ class TranscriptAnalyzer {
             
             // Generate recommendations
             const recommendations = this.generateRecommendations(
-                analysisResults, // FIX: Changed from remainingCourses to analysisResults
+                analysisResults, // Changed from remainingCourses to analysisResults
                 options.currentCGPA || 0,
                 options.studentStatus || "Promoted"
             );

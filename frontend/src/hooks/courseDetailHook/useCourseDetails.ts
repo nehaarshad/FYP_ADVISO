@@ -1,23 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { DropdownCourse } from '@/components/courseComponents/types/courseoption';
-import { CourseCategory } from '@/src/models/courseCategoryModel';
+// src/hooks/courseDetailHook/useCourseDetails.ts
+import { DropdownCategory } from '@/components/courseComponents/types/courseoption';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { courseCatalogRepository } from '@/src/repositories/sessionContentManagement/courseDetailsRepositories';
 import { UpdateCourseCredentialsData } from '@/src/repositories/sessionContentManagement/types/updateCourseDetailData';
 import { UploadCourseDetailData } from '@/src/repositories/sessionContentManagement/types/uploadCourseDetail';
-import { useState, useCallback, useRef } from 'react';
+import { CourseCategory } from '@/src/models/courseCategoryModel';
+import { DropdownCourse } from '@/components/courseComponents/types/courseoption';
 
 export const useCourseCatalog = () => {
   const [courses, setCourses] = useState<CourseCategory[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<CourseCategory[]>([]);
   const [categoriesMap, setCategoriesMap] = useState<Map<string, any>>(new Map());
   const [dropdownCourses, setDropdownCourses] = useState<DropdownCourse[]>([]);
+  const [dropdownCategories, setDropdownCategories] = useState<DropdownCategory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const hasFetched = useRef(false);
+
+  const loadDropdownCourses = useCallback(async (searchTerm?: string) => {
+    try {
+      const response = await courseCatalogRepository.getCoursesForDropdown(searchTerm);
+      if (response.success && response.data) {
+        setDropdownCourses(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading dropdown courses:', error);
+    }
+  }, []);
+
+   const loadDropdownCategories = useCallback(async (searchTerm?: string) => {
+    try {
+      console.log('Loading categories for dropdown...');
+      const response = await courseCatalogRepository.getCategoriesForDropdown(searchTerm);
+      console.log('Categories response:', response);
+      
+      if (response.success && response.data) {
+        console.log('Categories loaded:', response.data.length);
+        setDropdownCategories(response.data);
+      } else {
+        console.warn('No categories found or error loading:', response.message);
+        setDropdownCategories([]);
+      }
+    } catch (error) {
+      console.error('Error loading dropdown categories:', error);
+      setDropdownCategories([]);
+    }
+  }, []);
 
   /**
    * Fetch all courses
@@ -33,7 +65,7 @@ export const useCourseCatalog = () => {
         setCourses(response.data);
         setFilteredCourses(response.data);
 
-        // Build categories map
+        // Build categories map from the data
         const newMap = new Map<string, any>();
         response.data.forEach((course: CourseCategory) => {
           const categoryModels = (course as any).CourseCategoryModels;
@@ -54,8 +86,9 @@ export const useCourseCatalog = () => {
         });
         setCategoriesMap(newMap);
 
-        // Load dropdown courses
+        // Load dropdown courses and categories
         await loadDropdownCourses();
+        await loadDropdownCategories();
 
         hasFetched.current = true;
       } else {
@@ -66,21 +99,7 @@ export const useCourseCatalog = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
-
-  /**
-   * Load courses for dropdown
-   */
-  const loadDropdownCourses = useCallback(async (searchTerm?: string) => {
-    try {
-      const response = await courseCatalogRepository.getCoursesForDropdown(searchTerm);
-      if (response.success && response.data) {
-        setDropdownCourses(response.data);
-      }
-    } catch (error) {
-      console.error('Error loading dropdown courses:', error);
-    }
-  }, []);
+  }, [loadDropdownCourses, loadDropdownCategories]); // Empty dependency array is fine here
 
   /**
    * Upload course detail
@@ -157,7 +176,7 @@ export const useCourseCatalog = () => {
   }, [courses]);
 
   /**
-   * Update course credentials
+   * Update course credentials (Add-Only mode for categories)
    */
   const updateCourse = useCallback(async (
     courseId: number,
@@ -172,7 +191,13 @@ export const useCourseCatalog = () => {
       if (response.success) {
         // Refresh courses after update
         await fetchCourses(true);
-        return { success: true, data: response.data };
+        // Also refresh dropdown categories
+        await loadDropdownCategories();
+        return { 
+          success: true, 
+          data: response.data,
+          message: response.message || 'Course updated successfully'
+        };
       } else {
         setError(response.message || 'Failed to update course');
         return { success: false, error: response.message };
@@ -183,23 +208,58 @@ export const useCourseCatalog = () => {
     } finally {
       setIsUpdating(false);
     }
-  }, [fetchCourses]);
+  }, [fetchCourses]); // Removed loadDropdownCategories from deps
 
   /**
-   * Clear filters and show all courses
+   * Add categories to a course (convenience method)
    */
+  const addCategoriesToCourse = useCallback(async (
+    courseId: number,
+    categoryIds: number[]
+  ) => {
+    if (!categoryIds || categoryIds.length === 0) {
+      return { success: false, error: 'No categories to add' };
+    }
+
+    return await updateCourse(courseId, { categoryIds });
+  }, [updateCourse]);
+
+
+  const getCourseCategories = useCallback((course: any): DropdownCategory[] => {
+    if (!course) return [];
+    
+    const categories: DropdownCategory[] = [];
+    if (course.CourseCategoryModels && Array.isArray(course.CourseCategoryModels)) {
+      course.CourseCategoryModels.forEach((cc: any) => {
+        if (cc.CategoryModel) {
+          categories.push({
+            id: cc.CategoryModel.id,
+            categoryName: cc.CategoryModel.categoryName,
+            colorScheme: cc.CategoryModel.colorScheme
+          });
+        }
+      });
+    }
+    return categories;
+  }, []);
+
+
+  const getAvailableCategories = useCallback((course: any): DropdownCategory[] => {
+    if (!course || !dropdownCategories.length) return dropdownCategories;
+    
+    const existingCategoryIds = getCourseCategories(course).map(cat => cat.id);
+    return dropdownCategories.filter(cat => !existingCategoryIds.includes(cat.id));
+  }, [dropdownCategories, getCourseCategories]);
+
+
   const clearFilters = useCallback(() => {
     setFilteredCourses(courses);
   }, [courses]);
 
-  /**
-   * Clear upload success state
-   */
+
   const clearUploadSuccess = useCallback(() => setUploadSuccess(false), []);
 
-  /**
-   * Convert ARGB to hex color
-   */
+
   const convertARGBToHex = useCallback((argb: string): string => {
     if (!argb) return '#64748b';
     if (argb.startsWith('#')) return argb;
@@ -207,9 +267,7 @@ export const useCourseCatalog = () => {
     return `#${stripped}`;
   }, []);
 
-  /**
-   * Get color with opacity
-   */
+
   const getColorWithOpacity = useCallback((colorScheme: string, opacity: number = 0.15): string => {
     const hex = convertARGBToHex(colorScheme);
     const r = parseInt(hex.slice(1, 3), 16);
@@ -218,18 +276,13 @@ export const useCourseCatalog = () => {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   }, [convertARGBToHex]);
 
-  /**
-   * Get category color by name
-   */
+
   const getCategoryColor = useCallback((categoryName: string): string => {
     if (!categoryName) return '#64748b';
     const found = categoriesMap.get(categoryName);
     return found?.colorScheme ?? '#64748b';
   }, [categoriesMap]);
 
-  /**
-   * Get category style object
-   */
   const getCategoryStyle = useCallback((categoryName: string) => {
     const colorScheme = getCategoryColor(categoryName);
     const textColor = convertARGBToHex(colorScheme);
@@ -241,18 +294,25 @@ export const useCourseCatalog = () => {
     };
   }, [getCategoryColor, convertARGBToHex, getColorWithOpacity]);
 
-  const categories = Array.from(categoriesMap.keys());
 
-  const categoriesWithColors = Array.from(categoriesMap.values()).map(cat => ({
-    name: cat.categoryName,
-    colorScheme: cat.colorScheme,
-    hexColor: convertARGBToHex(cat.colorScheme),
-  }));
+  const categories = useMemo(() => Array.from(categoriesMap.keys()), [categoriesMap]);
+
+
+  const categoriesWithColors = useMemo(() => 
+    Array.from(categoriesMap.values()).map(cat => ({
+      name: cat.categoryName,
+      colorScheme: cat.colorScheme,
+      hexColor: convertARGBToHex(cat.colorScheme),
+    })),
+    [categoriesMap, convertARGBToHex]
+  );
 
   return {
+    // State
     courses: filteredCourses,
     allCourses: courses,
     dropdownCourses,
+    dropdownCategories,
     isLoading,
     isUpdating,
     error,
@@ -261,17 +321,29 @@ export const useCourseCatalog = () => {
     categories,
     categoriesMap,
     categoriesWithColors,
+
+    // Core functions
     fetchCourses,
     uploadCourseDetail,
+    updateCourse,
+    addCategoriesToCourse,
+    
+    // Search and filter
     searchCourses,
     filterByCategory,
     clearFilters,
-    clearUploadSuccess,
-    updateCourse,
+    
+    // Dropdown loading
     loadDropdownCourses,
+    loadDropdownCategories,
+    
+    // Utility functions
+    clearUploadSuccess,
     getCategoryColor,
     convertARGBToHex,
     getColorWithOpacity,
     getCategoryStyle,
+    getCourseCategories,
+    getAvailableCategories,
   };
 };

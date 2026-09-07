@@ -19,6 +19,8 @@ export const CourseCatalog = () => {
     courses, 
     isLoading, 
     error, 
+    dropdownCategories,
+    loadDropdownCategories ,
     uploadProgress, 
     uploadSuccess,
     categories,
@@ -80,6 +82,7 @@ export const CourseCatalog = () => {
   const handleEditCourse = async (course: any) => {
     setSelectedCourse(course);
     await loadDropdownCourses();
+      await loadDropdownCategories(); 
     setShowEditModal(true);
   };
 
@@ -104,10 +107,6 @@ export const CourseCatalog = () => {
       return [course.CategoryModel];
     }
     return [];
-  };
-
-  const hasNoCategory = (course: any) => {
-    return getAllCategories(course).length === 0;
   };
 
   const renderCategoryBadges = (course: any) => {
@@ -401,6 +400,8 @@ export const CourseCatalog = () => {
         course={selectedCourse}
         onSave={handleSaveCourse}
         allCourses={dropdownCourses}
+        allCategories={dropdownCategories} 
+        onLoadCategories={loadDropdownCategories} 
       />
     </>
   );

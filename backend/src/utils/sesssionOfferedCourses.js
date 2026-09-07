@@ -1,9 +1,9 @@
 const mapCourseOfferingsWithUnClearRoadmap = async (suggestedCourses, SemesterRoadmapModels) => {
   
-       const completedNames = new Set(suggestedCourses.completedCourses?.map(c => c.courseName.toLowerCase()) || []);
-    const failedNames = new Set(suggestedCourses.failedCourses?.map(c => c.courseName.toLowerCase()) || []);
-    const dGradeNames = new Set(suggestedCourses.dGradedCourses?.map(c => c.courseName.toLowerCase()) || []);
-    const withdrawNames = new Set(suggestedCourses.withdrawnCourses?.map(c => c.courseName.toLowerCase()) || []);
+    const completedNames = new Set(suggestedCourses.completedCourses?.map(c => c.courseName.toLowerCase().trim()) || []);
+    const failedNames = new Set(suggestedCourses.failedCourses?.map(c => c.courseName.toLowerCase().trim()) || []);
+    const dGradeNames = new Set(suggestedCourses.dGradedCourses?.map(c => c.courseName.toLowerCase().trim()) || []);
+    const withdrawNames = new Set(suggestedCourses.withdrawnCourses?.map(c => c.courseName.toLowerCase().trim()) || []);
 
     let roadmapCourses = [];
     let coursePrerequisiteMap = new Map();
@@ -21,23 +21,22 @@ const mapCourseOfferingsWithUnClearRoadmap = async (suggestedCourses, SemesterRo
             if (!course?.courseName) continue;
 
             const courseName = course.courseName;
-            const isCompleted = completedNames.has(courseName.toLowerCase());
+            const isCompleted = completedNames.has(courseName.toLowerCase().trim());
             
             // Skip completed courses
             if (isCompleted) {
                 console.log(`\n SKIPPING (Completed): ${courseName}`);
-                continue;
             }
 
-            const isFailed = failedNames.has(courseName.toLowerCase());
-            const hasDGraded = dGradeNames.has(courseName.toLowerCase());
-            const isWithdrawn = withdrawNames.has(courseName.toLowerCase());
+            const isFailed = failedNames.has(courseName.toLowerCase().trim());
+            const hasDGraded = dGradeNames.has(courseName.toLowerCase().trim());
+            const isWithdrawn = withdrawNames.has(courseName.toLowerCase().trim());
 
             // Get valid prerequisites and dependencies
             const prerequisites = (course.prerequisites || [])
-                .filter(p => p.preReqCourseId && p.prerequisiteCourse)
+                .filter(p => p.preReqCourseId && p.prerequisiteCourse) 
                 .map(p => formatPrerequisite(p, completedNames, failedNames, dGradeNames))
-                .filter(Boolean);
+                .filter(Boolean); 
 
             const dependentCourses = (course.usedAsPrerequisiteFor || [])
                 .filter(d => d.preReqCourseId && d.mainCourse)
@@ -52,37 +51,42 @@ const mapCourseOfferingsWithUnClearRoadmap = async (suggestedCourses, SemesterRo
             const finalAction = prereqCheck.action === 'ELIGIBLE_WITH_WARNING' ? statusAction : (prereqCheck.action || statusAction);
             const finalRecommendation = prereqCheck.status !== 'CLEAR' ? prereqCheck.msg : statusMsg;
 
-            // Log output
-            console.log(`\n${courseName} (Semester ${semester.semesterNo}):`);
-            if (prerequisites.length) {
-                console.log(`    PREREQUISITES:`);
-                prerequisites.forEach((p, i) => {
-                    const icon = p.isCompleted ? 'DONE' : (p.isFailed ? 'Failed' : (p.hasDGraded ? 'Warning' : 'pendind'));
-                    console.log(`      ${i+1}. ${icon} ${p.name} - ${p.status}`);
-                });
-            } else {
-                console.log(`   No prerequisites required`);
+            // Only log non-completed courses with details
+            if (!isCompleted) {
+                console.log(`\n${courseName} (Semester ${semester.semesterNo}):`);
+                if (prerequisites.length) {
+                    console.log(`    PREREQUISITES:`);
+                    prerequisites.forEach((p, i) => {
+                        const icon = p.isCompleted ? 'DONE' : (p.isFailed ? 'Failed' : (p.hasDGraded ? 'Warning' : 'pending'));
+                        console.log(`      ${i+1}. ${icon} ${p.name} - ${p.status}`);
+                    });
+                } else {
+                    console.log(`   No prerequisites required`);
+                }
+                
+                if (dependentCourses.length) {
+                    console.log(`   DEPENDENTS:`);
+                    dependentCourses.forEach((d, i) => {
+                        const icon = d.isCompleted ? 'done' : (d.isFailed ? 'failed' : 'pending');
+                        console.log(`      ${i+1}. ${icon} ${d.name} (Sem ${d.semester}) - ${d.status}`);
+                    });
+                }
+                console.log(`    ${prereqCheck.status}: ${prereqCheck.msg}`);
             }
-            
-            if (dependentCourses.length) {
-                console.log(`   DEPENDENTS:`);
-                dependentCourses.forEach((d, i) => {
-                    const icon = d.isCompleted ? 'done' : (d.isFailed ? 'failed' : 'pending');
-                    console.log(`      ${i+1}. ${icon} ${d.name} (Sem ${d.semester}) - ${d.status}`);
-                });
-            }
-            console.log(`    ${prereqCheck.status}: ${prereqCheck.msg}`);
 
-            // Build course data object
+            // Build course data for ALL courses (including completed)
             const courseData = {
                 id: course.id,
-                courseName,
+                courseName: course.courseName.trim(),
                 courseCode: course.courseCode,
                 credits: course.courseCredits,
                 categoryId: category?.id,
                 categoryName: category?.categoryName,
                 semester: semester.semesterNo,
-                isCompleted, isFailed, hasDGraded, isWithdrawn,
+                isCompleted, 
+                isFailed, 
+                hasDGraded, 
+                isWithdrawn,
                 prerequisites,
                 dependentCourses,
                 status,
@@ -92,6 +96,7 @@ const mapCourseOfferingsWithUnClearRoadmap = async (suggestedCourses, SemesterRo
                 prerequisiteMessage: prereqCheck.msg
             };
 
+            //  ALWAYS add to roadmapCourses (including completed)
             roadmapCourses.push(courseData);
             coursePrerequisiteMap.set(courseName.toLowerCase(), courseData);
 
@@ -109,6 +114,12 @@ const mapCourseOfferingsWithUnClearRoadmap = async (suggestedCourses, SemesterRo
             });
         }
     }
+    
+    //  Log summary
+    console.log(`\n📊 ROADMAP SUMMARY:`);
+    console.log(`   Total courses: ${roadmapCourses.length}`);
+    console.log(`   Completed: ${roadmapCourses.filter(c => c.isCompleted).length}`);
+    console.log(`   Pending: ${roadmapCourses.filter(c => !c.isCompleted).length}`);
     
     return { 
         roadmapCourses, 
@@ -146,35 +157,41 @@ const checkPrerequisites = (prerequisites) => {
 const formatPrerequisite = (prereqRelation, completedNames, failedNames, dGradeNames) => {
     const prereq = prereqRelation.prerequisiteCourse;
     if (!prereq) return null;
-    const name = prereq.courseName;
+    const name = prereq.courseName.trim();
     return {
         id: prereq.id,
-        name,
+        name: name,
         code: prereq.courseCode,
         credits: prereq.courseCredits,
-        isCompleted: completedNames.has(name?.toLowerCase()),
-        isFailed: failedNames.has(name?.toLowerCase()),
-        hasDGraded: dGradeNames.has(name?.toLowerCase()),
-        status: completedNames.has(name?.toLowerCase()) ? 'Completed' 
-              : (failedNames.has(name?.toLowerCase()) ? 'Failed' 
-              : (dGradeNames.has(name?.toLowerCase()) ? 'D Grade' : 'Pending'))
+        isCompleted: completedNames.has(name?.toLowerCase().trim()),
+        isFailed: failedNames.has(name?.toLowerCase().trim()),
+        hasDGraded: dGradeNames.has(name?.toLowerCase().trim()),
+        status: completedNames.has(name?.toLowerCase().trim()) ? 'Completed' 
+              : (failedNames.has(name?.toLowerCase().trim()) ? 'Failed' 
+              : (dGradeNames.has(name?.toLowerCase().trim()) ? 'D Grade' : 'Pending'))
     };
 };
 
 // Helper to format dependent courses
+// Update the formatDependent function
 const formatDependent = (depRelation, completedNames, failedNames, semesterRoadmaps) => {
     const dep = depRelation.mainCourse;
     if (!dep) return null;
-    const name = dep.courseName;
+    const name = dep.courseName.trim();
+    
+    // Define isFailed properly
+    const isCompleted = completedNames.has(name?.toLowerCase().trim());
+    const isFailed = failedNames.has(name?.toLowerCase().trim());  
+    
     return {
         id: dep.id,
         name,
         code: dep.courseCode,
         credits: dep.courseCredits,
         semester: getSemesterNumberForCourse(semesterRoadmaps, dep.id),
-        isCompleted: completedNames.has(name?.toLowerCase()),
-        isFailed: failedNames.has(name?.toLowerCase()),
-        status: completedNames.has(name?.toLowerCase()) ? 'Completed' : (failedNames.has(name?.toLowerCase()) ? 'Failed' : 'Pending')
+        isCompleted: isCompleted,
+        isFailed: isFailed,  
+        status: isCompleted ? 'Completed' : (isFailed ? 'Failed' : 'Pending')
     };
 };
 

@@ -34,12 +34,14 @@ export function AdvisorStudentList({
   if (activeTab === 'Regular') {
     filteredStudents = filteredStudents.filter(s => 
       s.StudentStatus?.currentStatus === 'Promoted' || 
-      s.StudentStatus?.currentStatus === 'Regular'
+      s.StudentStatus?.currentStatus === 'Regular' ||
+      s.StudentStatus?.currentStatus === 'New Admission'
     );
   } else if (activeTab === 'Irregular') {
     filteredStudents = filteredStudents.filter(s => 
       s.StudentStatus?.currentStatus !== 'Promoted' && 
-      s.StudentStatus?.currentStatus !== 'Regular'     
+      s.StudentStatus?.currentStatus !== 'Regular'   &&
+        s.StudentStatus?.currentStatus !== 'New Admission'  
     );
   }
 
@@ -162,7 +164,7 @@ export function AdvisorStudentList({
                     </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase ${
-                        student.StudentStatus?.currentStatus === 'Promoted' || student.StudentStatus?.currentStatus === 'Regular'
+                        student.StudentStatus?.currentStatus === 'Promoted' || student.StudentStatus?.currentStatus === 'Regular'|| student.StudentStatus?.currentStatus === 'New Admission'
                           ? 'bg-green-100 text-green-700' 
                           : 'bg-red-100 text-red-700'
                       }`}>

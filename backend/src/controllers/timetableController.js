@@ -60,14 +60,22 @@ const uploadTimetable = async (req, res) => {
         console.log("Processing timetable sheet:", worksheet.name);
         
         const courseOfferings = await CourseOfferingModel.findAll({
-            where: { programId: program.id,sessionId: session.id },
-        
-        });
-        
-        console.log(`Found ${courseOfferings.length} course offerings`);
-        
+                where: { programId: program.id, sessionId: session.id },
+            });
+
+            // Get all course offering IDs
+            const courseOfferingIds = courseOfferings.map(c => c.id);
+
+            // Delete all timetables for these course offerings
+            await TimetableModel.destroy({
+                where: {
+                    courseOfferingId: {
+                        [Op.in]: courseOfferingIds
+                    }
+                }
+            });
+
         const timetables = [];
-        
         // Process each row of the timetable
         for (let i = 3; i <= worksheet.rowCount; i++) {
             const title = getCellText(worksheet.getCell(i, 1));

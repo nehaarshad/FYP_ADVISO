@@ -23,13 +23,9 @@ export const AdvisoryParentScreen: React.FC<AdvisoryParentScreenProps> = ({
   isAdvisor,
   onViewTranscript,
 }) => {
-  // ── Navigation ─────────────────────────────────────────────────────────────
   const [screen, setScreen] = useState<Screen>('profile');
  
-  // ── Session picker modal state ──────────────────────────────────────────────
   const [showSessionPicker, setShowSessionPicker] = useState(false);
- 
-  // ── Resolved session (set when advisor confirms session picker) ─────────────
   const [resolvedSession, setResolvedSession] = useState<{
     type: string;
     year: number;
@@ -48,13 +44,11 @@ export const AdvisoryParentScreen: React.FC<AdvisoryParentScreenProps> = ({
     fetchAdvisoryLogs,
   } = hook;
  
-  // ── Step 1: Advisor clicks "Recommend Courses" on StudentProfile ────────────
   const handleOpenRecommendCourses = () => {
     resetRecommendations();     // clear any previous session's data
     setShowSessionPicker(true);
   };
  
-  // ── Step 2: Advisor confirms session in modal → trigger LLM ────────────────
   const handleSessionConfirm = async (sessionType: string, sessionYear: number) => {
     setShowSessionPicker(false);
     setScreen('generating');

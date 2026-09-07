@@ -104,7 +104,7 @@ export const AdvisorRemarks = ({ onBack }: AdvisorRemarksProps) => {
                 {item.title}
               </h3>
               <p className="text-xs md:text-[13px] font-bold text-slate-600/90 leading-snug">
-                "{item.content}"
+                {item.content}
               </p>
             </div>
 

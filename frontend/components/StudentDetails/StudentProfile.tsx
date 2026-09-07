@@ -109,7 +109,6 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
             className="flex items-center gap-2 bg-amber-400 text-[#1e3a5f] opacity-80 px-4 md:px-5 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase hover:bg-amber-300 transition-all "
           >
             <Sparkles size={14} />
-            <span className="hidden xs:inline">Recommend Courses</span>
             <span className="xs:hidden">Recommend Courses</span>
           </button>
         )}

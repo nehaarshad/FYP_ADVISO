@@ -1,4 +1,3 @@
-
 import { DataTypes } from "sequelize";
 import sequelize from "../config/dbConfig.js";
 
@@ -17,8 +16,9 @@ const SuggestedCourses = sequelize.define("SuggestedCourses", {
         allowNull: true,
     },
     credits: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,  
         allowNull: false,
+        defaultValue: 0,
     },
     category: {
         type: DataTypes.STRING,
@@ -48,6 +48,11 @@ const SuggestedCourses = sequelize.define("SuggestedCourses", {
         type: DataTypes.JSON,
         allowNull: true,
     },
+    metadata: {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: {},
+          }
 }, {
     timestamps: true,
 });
