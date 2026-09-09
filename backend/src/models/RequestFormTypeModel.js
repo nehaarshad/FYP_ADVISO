@@ -8,12 +8,32 @@ const RequestFormType = sequelize.define("RequestFormType", {
         primaryKey: true,
     },
     RequestType: {
-        type: DataTypes.ENUM("Semester Freezing","Semester Unfreezing", "Course Offering Request","Courses Registeration Request", "Extra Credit Enrollment Request"),
+        type: DataTypes.STRING,
         allowNull: false,
     },
     formData: {
         type: DataTypes.JSON,
-        allowNull: false,     
+        allowNull: true,     
+    },
+    finalDecision: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    studentId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    approvedById: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    preReviewedById: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
 }, {
     timestamps: true,

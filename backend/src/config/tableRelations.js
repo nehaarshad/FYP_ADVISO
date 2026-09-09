@@ -30,8 +30,6 @@ import SessionalTranscript from "../models/sessionalTranscriptModel.js";
 import StudentGuardian from "../models/studentGuardianModel.js";
 import Student from "../models/studentModel.js";
 import StudentStatus from "../models/studentStatusModel.js";
-import SupportingVideo from "../models/supportingVideoModel.js";
-import SubmittedRequestForm from "../models/SubmittedRequestForm.js";
 import TimetableModel from "../models/timetableModel.js";
 import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
 import Chat from "../models/ChatsModel.js";
@@ -53,6 +51,11 @@ export default function relations() {
   User.hasMany(BatchAdvisor, { foreignKey: "userId" });
   BatchAdvisor.belongsTo(User, { foreignKey: "userId" });
 
+  Coordinator.hasMany(RequestFormType, { foreignKey: "approvedById" });
+  RequestFormType.belongsTo(Coordinator, { foreignKey: "approvedById" });
+
+  BatchAdvisor.hasMany(RequestFormType, { foreignKey: "preReviewedById" });
+  RequestFormType.belongsTo(BatchAdvisor, { foreignKey: "preReviewedById" });
 
 // ==================== MESSAGE ↔ USER ====================
 
@@ -80,8 +83,8 @@ Chat.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
   Student.hasMany(SessionalTranscript, { foreignKey: "studentId" });
   SessionalTranscript.belongsTo(Student, { foreignKey: "studentId" });
 
-  Student.hasMany(SubmittedRequestForm, { foreignKey: "studentId" });
-  SubmittedRequestForm.belongsTo(Student, { foreignKey: "studentId" });
+  Student.hasMany(RequestFormType, { foreignKey: "studentId" });
+  RequestFormType.belongsTo(Student, { foreignKey: "studentId" });
 
   Student.hasMany(AdvisorDecision, { foreignKey: "studentId" });
   AdvisorDecision.belongsTo(Student, { foreignKey: "studentId" });
@@ -165,16 +168,6 @@ FacultyRecommendation.hasMany(RecommendationComment, {foreignKey: 'recommendatio
 
 RecommendationComment.belongsTo(BatchAdvisor, {foreignKey: 'commentingAdvisorId',as: 'commentingAdvisor'});
 RecommendationComment.belongsTo(FacultyRecommendation, {foreignKey: 'recommendationId', as: 'recommendation'});
-
-  // ==================== Request Forms ====================
-  RequestFormType.hasMany(SubmittedRequestForm, { foreignKey: "formTypeId" });
-  SubmittedRequestForm.belongsTo(RequestFormType, { foreignKey: "formTypeId" });
-
-  SubmittedRequestForm.hasMany(SupportingVideo, { foreignKey: "formId" });
-  SupportingVideo.belongsTo(SubmittedRequestForm, { foreignKey: "formId" });
-
-  SubmittedRequestForm.hasOne(AdvisorDecision, { foreignKey: "formId" });
-  AdvisorDecision.belongsTo(SubmittedRequestForm, { foreignKey: "formId" });
 
   // ==================== Course & Offerings ====================
   CourseOfferingModel.hasMany(CourseModel, { foreignKey: "courseId" });

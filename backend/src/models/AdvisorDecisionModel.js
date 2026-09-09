@@ -15,10 +15,6 @@ const AdvisorDecision = sequelize.define("AdvisorDecision", {
         type: DataTypes.TEXT('long'),
         allowNull: false,     
     },
-    specialNotes: {
-       type: DataTypes.TEXT('long'),
-        allowNull: true,
-    },
     advisorId: {
         type: DataTypes.INTEGER,
         allowNull: false,

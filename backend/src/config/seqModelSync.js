@@ -32,7 +32,6 @@ import Student from "../models/studentModel.js";
 import StudentStatus from "../models/studentStatusModel.js";
 import SupportingVideo from "../models/supportingVideoModel.js";
 import DegreeGuidlinesModel from "../models/degreeGuidlinesModel.js";
-import SubmittedRequestForm from "../models/SubmittedRequestForm.js";
 import TimetableModel from "../models/timetableModel.js";
 import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
 import AdvisorFinalRecommendation from "../models/advisorFinalCourseRecommendation.js";
@@ -78,7 +77,6 @@ const models={
     Student,
     StudentGuardian,
     StudentStatus,
-    SubmittedRequestForm,
     SupportingVideo,
     TimetableModel,
     TranscriptCoursesDetail,

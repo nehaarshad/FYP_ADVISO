@@ -1,14 +1,14 @@
- type RequestType = 
-  | 'Semester Freezing'
-  | 'Semester Unfreezing'
-  | 'Course Offering Request'
-  | 'Courses Registeration Request'
-  | 'Extra Credit Enrollment Request';
 
-export interface RequestFormType {
+
+export interface RequestForm {
   id: number;
-  RequestType: RequestType;
-  formData: JSON; 
+  RequestType: string;
+  formData: JSON,
+  finalDecision: string,
+  studentId:number,
+  approvedById: number,
+  preReviewedById: number,
+  status: string,
   createdAt?: string;
   updatedAt?: string;
 }
