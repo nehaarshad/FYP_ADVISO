@@ -95,6 +95,12 @@ export default class APIs{
         static updateVideo = `${APIs.BASE_URL}/updateVideo/:id`;
         static deleteVideo = `${APIs.BASE_URL}/deleteVideo/:id`;
 
+            //requestForm Module
+
+          static createRequestFormUrl = `${APIs.BASE_URL}/createRequestForm`;
+          static getAllRequestFormUrl = `${APIs.BASE_URL}/getAllRequestForm`;
+          static updateRequestFormUrl = `${APIs.BASE_URL}/updateRequestForm/:id`;
+
         //degreeguidlines Module
 
         static createGuideline = `${APIs.BASE_URL}/createGuideline`;
