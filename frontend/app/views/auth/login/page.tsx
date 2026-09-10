@@ -114,7 +114,7 @@ export default function LoginPage() {
             >
               <Image 
                  width={154} 
-                 height={184}  
+                 height={183}  
                 src="/Lightlogo.png" 
                 alt="Riphah Logo" 
                 className="w-32 h-32 object-contain drop-shadow-2xl" 
