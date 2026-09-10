@@ -28,7 +28,12 @@ export default function LandingPage() {
   }, [router]);
   
   const handleClick = () => {
+<<<<<<< HEAD
     router.push('/views/dashboard/coordinator'); 
+=======
+    router.push('/views/auth/login'); 
+    
+>>>>>>> b5f266e35f3e75a070b78d09de9800fe83622a7b
   };
 
   return (
