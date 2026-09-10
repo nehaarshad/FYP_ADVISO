@@ -28,19 +28,14 @@ export default function LandingPage() {
   }, [router]);
   
   const handleClick = () => {
-<<<<<<< HEAD
     router.push('/views/dashboard/coordinator'); 
-=======
-    router.push('/views/auth/login'); 
-    
->>>>>>> b5f266e35f3e75a070b78d09de9800fe83622a7b
   };
 
   return (
     <>
        <div className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden">
       
-      {/* --- HERO SECTION --- */}
+      {/* ---- HERO SECTION ----*/}
       <section className="relative h-screen flex items-center justify-center text-center px-6">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -69,7 +64,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- WHY CHOOSE US --- */}
+      {/* ---- WHY CHOOSE US ---- */}
       <section className="py-32 px-6 md:px-12 text-center max-w-7xl mx-auto">
             <OutlinedTextHeading text="Why Choose Us" hasDot={true} />
         <div className="grid md:grid-cols-3 gap-12">
@@ -79,7 +74,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- ABOUT US SECTION --- */}
+      {/* ---- ABOUT US SECTION --- */}
       <section id="about" className="bg-[#1e3a5f] text-white py-32 px-6 md:px-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div className="text-left">
