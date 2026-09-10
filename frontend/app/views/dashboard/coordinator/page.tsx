@@ -2,7 +2,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
+import {
+
   Search, Bell, Settings, Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
   FileSearch, ChevronLeft, 
@@ -29,8 +30,6 @@ import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
-
-
 export default function CoordinatorDashboard() {
   //resolve conflict
   const [isClient] = useState(() => typeof window !== 'undefined');
@@ -39,10 +38,8 @@ export default function CoordinatorDashboard() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
-  
   const {  statistics: studentStats, fetchStudents } = useStudents();
   const { statistics: advisorStats, fetchAdvisors } = useAdvisors();
-
   // Real-time statistics that update automatically when stores change
   const activeStudentsCount = studentStats?.activeStudents || 0;
   const activeAdvisorCount = advisorStats?.activeAdvisors || 0;
@@ -76,10 +73,11 @@ export default function CoordinatorDashboard() {
 
   if (!isClient) {
     return (
+
       <div className="flex items-center justify-center min-h-screen bg-white">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          <p className="mt-4 text-gray-600">Loading Dashboard...</p>
         </div>
       </div>
     );
@@ -92,7 +90,6 @@ export default function CoordinatorDashboard() {
         activeTab={activeTab} 
         setActiveTab={navigateTo} 
       />
-      
       <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
         {/* Header */}
         <header className="h-20 bg-white border-b border-slate-200 px-10 flex items-center justify-between sticky top-0 z-40 shrink-0">
@@ -100,7 +97,6 @@ export default function CoordinatorDashboard() {
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
             <input type="text" placeholder="Quick Search..." className="w-full pl-14 pr-6 py-3 bg-slate-100/50 border-none rounded-[1.2rem] font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/20 transition-all" />
           </div>
-          
           <div className="flex items-center gap-4">
             <div onClick={() => setShowNotifications(true)} className="h-12 w-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-500 hover:bg-[#1e3a5f] hover:text-white cursor-pointer transition-all relative">
               <Bell size={20}/> <div className="absolute top-3 right-3 h-2 w-2 bg-[#FDB813] border-2 border-white rounded-full"></div>
@@ -131,7 +127,7 @@ export default function CoordinatorDashboard() {
                   label="Requests" 
 				  value="--" 
 				  icon={<Clock/>} 
-				  trend="Coming Soon" 
+				  trend="Coming Soon...." 
 				  color="text-slate-300" 
 				/>
               </div>
@@ -147,7 +143,7 @@ export default function CoordinatorDashboard() {
             </div>
           )}
 
-            {/* DYNAMIC COMPONENT SCREENS */}
+            {/* -DYNAMIC COMPONENT SCREENS- */}
             {activeTab !== "overview" && (
               <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
                 <button 
