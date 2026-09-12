@@ -51,10 +51,15 @@ export default function LoginPage() {
     setError(null);
     
     // Validate inputs
-    if (!sapId.trim()) {
-      setError("SAP ID is required");
-      return;
-    }
+   if (!sapId.trim()) {
+  setError("SAP ID is required");
+  return;
+}
+
+if (!/^\d+$/.test(sapId.trim())) {
+  setError("SAP ID must contain numbers only");
+  return;
+}
     
     if (!password.trim()) {
       setError("Password is required");
