@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-
   Search, Bell, Settings, Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
   FileSearch, ChevronLeft, 
@@ -30,28 +29,28 @@ import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
+
 export default function CoordinatorDashboard() {
-  //resolve conflict
-  const [isClient] = useState(() => typeof window !== 'undefined');
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
-  const {  statistics: studentStats, fetchStudents } = useStudents();
+  const { statistics: studentStats, fetchStudents } = useStudents();
   const { statistics: advisorStats, fetchAdvisors } = useAdvisors();
-  // Real-time statistics that update automatically when stores change
+
   const activeStudentsCount = studentStats?.activeStudents || 0;
   const activeAdvisorCount = advisorStats?.activeAdvisors || 0;
   const totalStudentsCount = studentStats?.totalStudents || 0;
   const totalAdvisorsCount = advisorStats?.totalAdvisors || 0;
 
-  useEffect (() => {
+  useEffect(() => {
+    setMounted(true);
     if (!sessionManager.hasActiveSession()) {
       router.push('/login');
       return;
     }
-    // Initial data fetch
     fetchStudents();
     fetchAdvisors();
   }, [router]);
@@ -71,16 +70,8 @@ export default function CoordinatorDashboard() {
     }
   };
 
-  if (!isClient) {
-    return (
-
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading Dashboard...</p>
-        </div>
-      </div>
-    );
+  if (!mounted) {
+    return null;
   }
 
   return (
@@ -125,15 +116,15 @@ export default function CoordinatorDashboard() {
                 />
                 <StatCard 
                   label="Requests" 
-				  value="--" 
-				  icon={<Clock/>} 
-				  trend="Coming Soon...." 
-				  color="text-slate-300" 
-				/>
+                  value="--" 
+                  icon={<Clock/>} 
+                  trend="Coming Soon...." 
+                  color="text-slate-300" 
+                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                 <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
+                <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
                 <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
                 <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
                 <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
@@ -143,31 +134,31 @@ export default function CoordinatorDashboard() {
             </div>
           )}
 
-            {/* -DYNAMIC COMPONENT SCREENS- */}
-            {activeTab !== "overview" && (
-              <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
-                <button 
-                  onClick={goBack}
-                  className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
-                >
-                  <ChevronLeft size={16} /> Back
-                </button>
-                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
-                {activeTab === "roadmaps" && <RoadmapSection />}
-                {activeTab === "course-offering" && <CourseOffering />}
-                {activeTab === "timetable" && <Timetable />}
-                {activeTab === "results" && <BatchResults />}
-                {activeTab === "course-details" && <CourseCatalog />}
-                {activeTab === "bulk-student-upload" && <StudentRecords/>}
-                {activeTab === "add-student" && <AddStudent/>}
-                {activeTab === "add-faculty" && <AddFaculty/>}
-                {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
-                {activeTab === "edit-advisor" && <AdvisorsList/>}
-                {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
-                {activeTab === "requests" && <RequestForms />}
-                {activeTab === "profile" && <ProfileView />}
-              </div>
-            )}
+          {/* -DYNAMIC COMPONENT SCREENS- */}
+          {activeTab !== "overview" && (
+            <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+              <button 
+                onClick={goBack}
+                className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
+              >
+                <ChevronLeft size={16} /> Back
+              </button>
+              {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
+              {activeTab === "roadmaps" && <RoadmapSection />}
+              {activeTab === "course-offering" && <CourseOffering />}
+              {activeTab === "timetable" && <Timetable />}
+              {activeTab === "results" && <BatchResults />}
+              {activeTab === "course-details" && <CourseCatalog />}
+              {activeTab === "bulk-student-upload" && <StudentRecords/>}
+              {activeTab === "add-student" && <AddStudent/>}
+              {activeTab === "add-faculty" && <AddFaculty/>}
+              {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
+              {activeTab === "edit-advisor" && <AdvisorsList/>}
+              {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
+              {activeTab === "requests" && <RequestForms />}
+              {activeTab === "profile" && <ProfileView />}
+            </div>
+          )}
         </div>
       </main>
 
