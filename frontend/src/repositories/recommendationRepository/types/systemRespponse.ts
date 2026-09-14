@@ -63,6 +63,8 @@ export interface RecommendationData {
     critical: SuggestedCourse[];
   }; 
   totalCreditsAllowed: number;
+  creditAllocationScenarios:[];
+  specialRequests:[];
   sessionId: number; 
   studentId: number; 
   createdAt: string; 

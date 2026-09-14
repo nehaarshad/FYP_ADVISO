@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// hooks/recommendations/useRecommendations.ts
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { recommendationRepository } from '../../repositories/recommendationRepository/systemRecommendation';
 import { SuggestedCourse } from '@/src/models/systemSuggestedCoursesModel';
 import { FinalizeRecommendationPayload } from '@/src/repositories/recommendationRepository/types/finalizedRecommendation';
@@ -11,9 +10,11 @@ const initialState: RecommendationState = {
   llmRecommendations: null,
   savedRecommendationId: null,
   allowedCreditHours: null,
+  requiredCreditHours: null,
+  totalCreditsAllowed: null,
+  Session: null,
   sessionId: null,
   selectedCourses: [],
-  pagination: null,
   advisoryLogs: [],
   isGenerating: false,
   isFinalizing: false,
@@ -23,19 +24,58 @@ const initialState: RecommendationState = {
   logsError: null,
 };
 
+/**
+ * Canonical key for a card.
+ * - Elective cards key by their SLOT name (`originalCourseName`), so
+ *   re-picking a different option on the same card REPLACES rather than
+ *   duplicates. Three elective cards on the same screen therefore have
+ *   three distinct keys, even though they may currently show the same
+ *   option name.
+ * - Regular courses key by their real `courseId` (or fall back to name).
+ */
+const selectionKey = (card: {
+  courseId?: number | null;
+  courseName: string;
+  originalCourseName?: string | null;
+  isElective?: boolean;
+}) => {
+  if (card.isElective && card.originalCourseName) {
+    return `elective:${card.originalCourseName}`;
+  }
+  return card.courseId != null
+    ? `id:${card.courseId}::${card.courseName}`
+    : `name:${card.courseName}`;
+};
+
+/** Same key but derived from a stored entry (which uses `_selectionSource`). */
+const entryKey = (c: SuggestedCourse) =>
+  selectionKey({
+    courseId: c.courseId,
+    courseName: c.originalCourseName ?? c.courseName,
+    originalCourseName: c.originalCourseName,
+    isElective: c._selectionSource === 'ELECTIVE_OPTION',
+  });
+
 export const useRecommendations = () => {
   const [state, setState] = useState<RecommendationState>(initialState);
   const { userProfile } = useUserProfile();
 
-  const patch = (partial: Partial<RecommendationState>) =>
-    setState(prev => ({ ...prev, ...partial }));
+  const patch = useCallback(
+    (partial: Partial<RecommendationState>) =>
+      setState(prev => ({ ...prev, ...partial })),
+    []
+  );
 
+  // ─────────────────────────────────────────────────────────────
+  // GENERATE
+  // ─────────────────────────────────────────────────────────────
   const generateRecommendations = useCallback(
     async (studentId: number, sessionType: string, sessionYear: number) => {
       patch({
         isGenerating: true,
         generateError: null,
         llmRecommendations: null,
+        selectedCourses: [],
       });
 
       try {
@@ -44,174 +84,172 @@ export const useRecommendations = () => {
           sessionYear,
         });
 
-        console.log('Recommendation API Response:', response);
-
-        // Handle the actual response structure
-        if (response.success && response.data) {
-          const responseData = response.data.data;
-          console.log('Recommendation Data:', responseData);
-
-          // Map the API response to LLMRecommendations format
-          const llmRecommendations = {
-            summary: {
-              hasWarnings: responseData.recommendedCoursesSummary?.hasWarnings || false,
-              priorityBreakdown: responseData.recommendedCoursesSummary?.priorityBreakdown || {
-                critical: 0,
-                high: 0,
-                medium: 0,
-                low: 0,
-              },
-              totalRequiredCredits: responseData.recommendedCoursesSummary?.totalRequiredCredits || 0,
-              totalCreditsAllowed: responseData.recommendedCoursesSummary?.totalCreditsAllowed || 
-                                 responseData.totalCreditsAllowed || 18,
-              totalCoursesRecommended: responseData.recommendedCoursesSummary?.totalCoursesRecommended || 0,
-              hasSpecialRequests: responseData.recommendedCoursesSummary?.hasSpecialRequests || false,
-            },
-            recommendations: {
-              critical: responseData.priorityWiseCourses?.critical || [],
-              high: responseData.priorityWiseCourses?.high || [],
-              medium: responseData.priorityWiseCourses?.medium || [],
-              low: responseData.priorityWiseCourses?.low || [],
-            },
-            priorityWiseCourses: {
-              critical: responseData.priorityWiseCourses?.critical || [],
-              high: responseData.priorityWiseCourses?.high || [],
-              medium: responseData.priorityWiseCourses?.medium || [],
-              low: responseData.priorityWiseCourses?.low || [],
-            },
-            creditAllocationScenarios: [],
-            specialRequests: [],
-            detailedExplanation: responseData.recommendationText || 
-                               'Recommendations generated successfully.',
-          };
-
-          console.log('Mapped recommendation state:', llmRecommendations);
-
-          patch({
-            llmRecommendations,
-            savedRecommendationId: responseData.id || null,
-            allowedCreditHours: responseData.totalCreditsAllowed || 
-                              responseData.recommendedCoursesSummary?.totalCreditsAllowed || 18,
-            sessionId: responseData.sessionId || null,
-            selectedCourses: [],
-          });
-
-          console.log('Recommendation state updated successfully');
-        } else {
-          patch({
-            generateError: response.error || 'Failed to generate recommendations',
-          });
+        if (!response.success || !response.data) {
+          patch({ generateError: response.error || 'Failed to generate recommendations' });
+          return;
         }
-      } catch (err: any) {
-        console.error('Generation error:', err);
+
+        const responseData = response.data.data ?? response.data;
+
+        const critical = responseData.priorityWiseCourses?.critical ?? [];
+        const high     = responseData.priorityWiseCourses?.high     ?? [];
+        const medium   = responseData.priorityWiseCourses?.medium   ?? [];
+        const low      = responseData.priorityWiseCourses?.low      ?? [];
+
+        const summary = {
+          hasWarnings:            responseData.recommendedCoursesSummary?.hasWarnings ?? false,
+          hasSpecialRequests:     responseData.recommendedCoursesSummary?.hasSpecialRequests ?? false,
+          priorityBreakdown:      responseData.recommendedCoursesSummary?.priorityBreakdown ?? {
+            critical: critical.length, high: high.length, medium: medium.length, low: low.length,
+          },
+          totalCreditsAllowed:    responseData.totalCreditsAllowed
+                                    ?? responseData.recommendedCoursesSummary?.totalCreditsAllowed
+                                    ?? 18,
+          totalRequiredCredits:   responseData.recommendedCoursesSummary?.totalRequiredCredits ?? null,
+          totalCoursesRecommended:
+            responseData.recommendedCoursesSummary?.totalCoursesRecommended
+            ?? critical.length + high.length + medium.length + low.length,
+        };
+
+        const llmRecommendations = {
+          summary,
+          recommendationText: responseData.recommendationText ?? '',
+          detailedExplanation: responseData.recommendationText ?? 'Recommendations generated.',
+          recommendations: { critical, high, medium, low },
+          priorityWiseCourses: { critical, high, medium, low },
+          creditAllocationScenarios: responseData.creditAllocationScenarios ?? [],
+          specialRequests: responseData.specialRequests ?? [],
+          raw: responseData,
+        };
+
         patch({
-          generateError: err.message || 'Unexpected error generating recommendations',
+          llmRecommendations,
+          savedRecommendationId: responseData.id || null,
+          allowedCreditHours: responseData.totalCreditsAllowed ||
+                            responseData.recommendedCoursesSummary?.totalCreditsAllowed || 18,
+          requiredCreditHours: responseData.recommendedCoursesSummary?.totalRequiredCredits ?? null,
+          sessionId: responseData.sessionId || null,
+          selectedCourses: [],
         });
+      } catch (err: any) {
+        patch({ generateError: err?.message ?? 'Unexpected error generating recommendations' });
       } finally {
         patch({ isGenerating: false });
       }
     },
+    [patch]
+  );
+
+  // ─────────────────────────────────────────────────────────────
+  // SELECTION
+  // ─────────────────────────────────────────────────────────────
+  const toggleCourseSelection = useCallback(
+    (course: SuggestedCourse, override?: Partial<SuggestedCourse>) => {
+      const candidate: SuggestedCourse = override ? { ...course, ...override } : { ...course };
+      const key = selectionKey(course);   // keyed on the PARENT, not the candidate
+
+      setState(prev => {
+        const already = prev.selectedCourses.some(c => entryKey(c) === key);
+
+        const selectedCourses = already
+          ? prev.selectedCourses.filter(c => entryKey(c) !== key)
+          : [...prev.selectedCourses, candidate];
+
+        return { ...prev, selectedCourses };
+      });
+    },
     []
   );
 
-  const toggleCourseSelection = useCallback((course: SuggestedCourse) => {
-    console.log("Toggling course:", course.courseId, course.courseName);
+  const upsertCourseSelection = useCallback(
+    (course: SuggestedCourse, override?: Partial<SuggestedCourse>) => {
+      const candidate: SuggestedCourse = override ? { ...course, ...override } : { ...course };
+      const key = selectionKey(course);   // keyed on the PARENT
 
-    setState(prev => {
-      const alreadySelected = prev.selectedCourses.some(
-        c => c.courseId === course.courseId && c.courseName === course.courseName
-      );
+      setState(prev => {
+        const idx = prev.selectedCourses.findIndex(c => entryKey(c) === key);
 
-      console.log("Already selected:", alreadySelected);
+        if (idx === -1) {
+          return { ...prev, selectedCourses: [...prev.selectedCourses, candidate] };
+        }
+        const next = [...prev.selectedCourses];
+        next[idx] = candidate;   // replace in place
+        return { ...prev, selectedCourses: next };
+      });
+    },
+    []
+  );
 
-      const newSelectedCourses = alreadySelected
-        ? prev.selectedCourses.filter(
-            c => !(c.courseId === course.courseId && c.courseName === course.courseName)
-          )
-        : [...prev.selectedCourses, course];
-
-      console.log("New selected courses count:", newSelectedCourses.length);
-
-      return {
+  const updateSelectedCourse = useCallback(
+    (original: SuggestedCourse, override: Partial<SuggestedCourse>) => {
+      const key = entryKey(original);
+      setState(prev => ({
         ...prev,
-        selectedCourses: newSelectedCourses,
-      };
-    });
-  }, []);
+        selectedCourses: prev.selectedCourses.map(c =>
+          entryKey(c) === key ? { ...c, ...override } : c
+        ),
+      }));
+    },
+    []
+  );
 
   const isCourseSelected = useCallback(
     (courseId: number | null, courseName: string) => {
-      if (courseId === null) {
-        // For courses without ID (like Applied Physics), use courseName only
-        return state.selectedCourses.some(c => c.courseName === courseName);
-      }
-      return state.selectedCourses.some(
-        c => c.courseId === courseId && c.courseName === courseName
-      );
+      return state.selectedCourses.some(c => {
+        // Elective entry: match on the parent slot name
+        if (c._selectionSource === 'ELECTIVE_OPTION') {
+          return c.originalCourseName === courseName;
+        }
+        if (courseId == null) return c.courseName === courseName;
+        return c.courseId === courseId && c.courseName === courseName;
+      });
     },
     [state.selectedCourses]
   );
 
-  const totalSelectedCredits = state.selectedCourses.reduce(
-    (sum, c) => sum + (c.credits || 0),
-    0
+  const clearSelection = useCallback(() => patch({ selectedCourses: [] }), [patch]);
+
+  const totalSelectedCredits = useMemo(
+    () => state.selectedCourses.reduce((sum, c) => sum + (c.credits ?? 0), 0),
+    [state.selectedCourses]
   );
 
-  // Get all recommended courses with priority labels
-  const allRecommendedCourses: SuggestedCourse[] = state.llmRecommendations
-    ? [
-        ...(state.llmRecommendations.recommendations.critical || []).map((c: SuggestedCourse) => ({
-          ...c,
-          priority: 'critical' as const,
-        })),
-        ...(state.llmRecommendations.recommendations.high || []).map((c: SuggestedCourse) => ({
-          ...c,
-          priority: 'high' as const,
-        })),
-        ...(state.llmRecommendations.recommendations.medium || []).map((c: SuggestedCourse) => ({
-          ...c,
-          priority: 'medium' as const,
-        })),
-        ...(state.llmRecommendations.recommendations.low || []).map((c: SuggestedCourse) => ({
-          ...c,
-          priority: 'low' as const,
-        })),
-      ]
-    : [];
-
-  // Get courses by priority
-  const getCoursesByPriority = useCallback((priority: string) => {
+  const allRecommendedCourses: SuggestedCourse[] = useMemo(() => {
     if (!state.llmRecommendations) return [];
-    const priorityMap: Record<string, SuggestedCourse[]> = {
-      critical: state.llmRecommendations.recommendations.critical || [],
-      high: state.llmRecommendations.recommendations.high || [],
-      medium: state.llmRecommendations.recommendations.medium || [],
-      low: state.llmRecommendations.recommendations.low || [],
-    };
-    return priorityMap[priority] || [];
+    const { recommendations } = state.llmRecommendations;
+    return [
+      ...(recommendations.critical ?? []).map((c: SuggestedCourse) => ({ ...c, priority: 'critical' as const })),
+      ...(recommendations.high     ?? []).map((c: SuggestedCourse) => ({ ...c, priority: 'high'     as const })),
+      ...(recommendations.medium   ?? []).map((c: SuggestedCourse) => ({ ...c, priority: 'medium'   as const })),
+      ...(recommendations.low      ?? []).map((c: SuggestedCourse) => ({ ...c, priority: 'low'      as const })),
+    ];
   }, [state.llmRecommendations]);
 
-  // Get priority breakdown with counts
-  const getPriorityBreakdown = useCallback(() => {
-    if (!state.llmRecommendations) return null;
-    return state.llmRecommendations.summary.priorityBreakdown;
-  }, [state.llmRecommendations]);
+  const getCoursesByPriority = useCallback(
+    (priority: string) =>
+      state.llmRecommendations?.recommendations?.[priority as keyof typeof state.llmRecommendations.recommendations] ?? [],
+    [state.llmRecommendations]
+  );
 
+  const getPriorityBreakdown = useCallback(
+    () => state.llmRecommendations?.summary.priorityBreakdown ?? null,
+    [state.llmRecommendations]
+  );
+
+  // ─────────────────────────────────────────────────────────────
+  // FINALIZE
+  // ─────────────────────────────────────────────────────────────
   const finalizeRecommendations = useCallback(
     async (studentId: number, sessionId: number): Promise<boolean> => {
-      if (state.selectedCourses.length === 0) {
+      if (!state.selectedCourses.length) {
         patch({ finalizeError: 'Please select at least one course' });
         return false;
       }
-      
       if (!state.savedRecommendationId) {
         patch({ finalizeError: 'No recommendation found to finalize' });
         return false;
       }
-
       const advisorId = userProfile?.profile?.id;
-      console.log("advisor id ", advisorId);
-
       if (!advisorId) {
         patch({ finalizeError: 'Advisor session not found. Please log in again.' });
         return false;
@@ -226,102 +264,81 @@ export const useRecommendations = () => {
           sessionId,
           sessionalRecommendationId: state.savedRecommendationId,
           selectedCourses: state.selectedCourses,
+          Session: state.Session,
         };
-
         const response = await recommendationRepository.finalizeRecommendation(payload);
 
         if (response.success) {
           patch({ selectedCourses: [] });
           return true;
-        } else {
-          patch({ finalizeError: response.error || 'Failed to finalize recommendations' });
-          return false;
         }
+        patch({ finalizeError: response.error || 'Failed to finalize recommendations' });
+        return false;
       } catch (err: any) {
-        patch({ finalizeError: err.message || 'Unexpected error finalizing recommendations' });
+        patch({ finalizeError: err?.message ?? 'Unexpected error finalizing recommendations' });
         return false;
       } finally {
         patch({ isFinalizing: false });
       }
     },
-    [state.selectedCourses, state.savedRecommendationId, userProfile]
+    [state.selectedCourses, state.savedRecommendationId, state.Session, userProfile, patch]
   );
 
   const fetchAdvisoryLogs = useCallback(async () => {
     const advisorId = userProfile?.profile?.id;
-
-    if (!advisorId) {
-      patch({ logsError: 'Advisor profile not found. Please log in again.' });
-      return;
-    }
-
+    if (!advisorId) { patch({ logsError: 'Advisor profile not found. Please log in again.' }); return; }
     patch({ isLoadingLogs: true, logsError: null });
-
     try {
       const response = await recommendationRepository.getAdvisoryLogs(advisorId);
-
       if (response.success && response.data) {
-        const { logs, pagination } = response.data;
-
-        patch({
-          advisoryLogs: logs,
-          pagination,
-          logsError: null,
-        });
+        patch({ advisoryLogs: response.data, logsError: null });
       } else {
-        patch({
-          advisoryLogs: [],
-          logsError: response.error || 'Failed to load advisory logs',
-        });
+        patch({ advisoryLogs: [], logsError: response.error || 'Failed to load advisory logs' });
       }
     } catch (err: any) {
-      console.error('Fetch logs error:', err);
-      patch({
-        advisoryLogs: [],
-        logsError: err.message || 'Unexpected error loading logs',
-      });
+      patch({ advisoryLogs: [], logsError: err?.message ?? 'Unexpected error loading logs' });
     } finally {
       patch({ isLoadingLogs: false });
     }
-  }, [userProfile]);
+  }, [userProfile, patch]);
 
-  const resetRecommendations = useCallback(() => {
-    setState(initialState);
-  }, []);
+  const resetRecommendations = useCallback(() => setState(initialState), []);
 
-  // Helper to get warning message
-  const getWarningMessage = useCallback(() => {
-    if (state.llmRecommendations?.summary?.hasWarnings) {
-      return state.llmRecommendations.detailedExplanation || 'Some courses have warnings. Please review them carefully.';
-    }
-    return null;
-  }, [state.llmRecommendations]);
+  const getWarningMessage = useCallback(
+    () => state.llmRecommendations?.summary?.hasWarnings
+      ? state.llmRecommendations.detailedExplanation
+      : null,
+    [state.llmRecommendations]
+  );
 
   return {
-    // State
+    // state
     llmRecommendations: state.llmRecommendations,
     savedRecommendationId: state.savedRecommendationId,
     allowedCreditHours: state.allowedCreditHours,
+    requiredCreditHours: state.requiredCreditHours,
     sessionId: state.sessionId,
     selectedCourses: state.selectedCourses,
     advisoryLogs: state.advisoryLogs,
-    pagination: state.pagination,
     allRecommendedCourses,
     totalSelectedCredits,
 
-    // Loading
+    // flags
     isGenerating: state.isGenerating,
     isFinalizing: state.isFinalizing,
     isLoadingLogs: state.isLoadingLogs,
 
-    // Errors
+    // errors
     generateError: state.generateError,
     finalizeError: state.finalizeError,
     logsError: state.logsError,
 
-    // Actions
+    // actions
     generateRecommendations,
     toggleCourseSelection,
+    upsertCourseSelection,
+    updateSelectedCourse,
+    clearSelection,
     isCourseSelected,
     finalizeRecommendations,
     fetchAdvisoryLogs,

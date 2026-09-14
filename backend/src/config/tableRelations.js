@@ -203,7 +203,7 @@ RecommendationComment.belongsTo(FacultyRecommendation, {foreignKey: 'recommendat
 
   AdvisorFinalRecommendation.belongsTo(Student, { foreignKey: 'studentId',  as: 'Student' });
   AdvisorFinalRecommendation.belongsTo(SessionModel,{ foreignKey: 'sessionId',   as: 'Session' });
-  AdvisorFinalRecommendation.belongsTo(SessionalRecommendation, { foreignKey: 'sessionalRecommendationId', as: 'LLMRecommendation' });
+  AdvisorFinalRecommendation.belongsTo(SessionalRecommendation, { foreignKey: 'sessionalRecommendationId', });
   AdvisorFinalRecommendation.belongsTo(BatchAdvisor, { foreignKey: 'advisorId',  as: 'Advisor' });
  
   Student.hasMany(AdvisorFinalRecommendation,    { foreignKey: 'studentId' });

@@ -30,4 +30,5 @@ export interface LLMRecommendations {
   creditAllocationScenarios: any[]; // Update with proper type if available
   specialRequests: any[]; // Update with proper type if available
   detailedExplanation: string;
+  raw?:any
 }

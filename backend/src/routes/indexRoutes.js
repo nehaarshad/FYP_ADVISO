@@ -16,7 +16,6 @@ import CourseManagementRouter from "./courseManagementRoute.js";
 import chatRouter from "./chatRoute.js";
 import advisorNotesRoutes from "./advisorNotesRoutes.js"
 import facultyRecommendationRoute from "./facultyRecommendationRoute.js";
-import requestFormRoute from "./requestFormRoute.js";
 
 const router = express.Router();
 
@@ -38,6 +37,5 @@ router.use('/auth', chatRouter);
 router.use('/auth', advisorNotesRoutes)
 router.use('/auth', degreeGuidelinesRoutes);
 router.use('/auth', supportingVideoRoutes);
-router.use('/auth', requestFormRoute);
 
 export default router
