@@ -158,7 +158,19 @@ allAlternatives?: {
   timeClashes: unknown[]; 
   notOffered: unknown[]; 
   summary: unknown; }; 
-  totalAvailable: number; 
+    courseId?: number;
+  category?: string;
+  offeredProgram?: string;
+  offeredProgramId?: number;
+  semester?: number;
+  batch?: string;
+  hasLab?: boolean;
+  isElective?: boolean;
+  labDetails?: LabDetails | null;
+  timetableDetails?: NormalTimetableDetails | CombinedTimetableDetails;
+  timeSlots: string | null;
+  totalAvailable?: number;
+  originalCourseName?: string;
 } 
 
 export interface SuggestedCourse { 
@@ -201,4 +213,33 @@ export interface SuggestedCourse {
   totalAvailable?: number; 
   totalAlternatives?: number; 
   totalElectiveOptions?: number; 
+    semester?: number;
+  Program?: string;
+  score?: number;
+  bestMatchDetails?: {
+    score: number;
+    sameSemester: boolean;
+    semester: number;
+    creditMatch: boolean;
+    isCore: boolean;
+    hasDependents: boolean;
+  };
+  allAlternatives?: {
+    summary?: {
+      available: number;
+      notOffered: number;
+      timeClashes: number;
+      alreadyPlaced: number;
+      totalEligible: number;
+    };
+    available?: any[];
+    timeClashes?: any[];
+    notOffered?: any[];
+    alreadyPlaced?: any[];
+  };
+
+  _selectionReason?: string;
+  _selectionSource?: 'RECOMMENDED' | 'ALTERNATIVE_FOR_CLASH' | 'ELECTIVE_OPTION' | 'MANUAL_ADD';
+  _substituteFor?: string | null;
+  _electiveOption?: Partial<SuggestedCourse>;
 }

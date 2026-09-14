@@ -29,34 +29,6 @@ function buildFinalResponse(
     let used = totalUsedCredits;
     let deferred = [];
 
-    if (totalUsedCredits > allowedCredits) {
-        console.log(`\n WARNING: Credits (${totalUsedCredits}) exceed limit (${allowedCredits})`);
-        console.log('Trimming excess courses...');
-
-        // Flatten all recommendations into priority order
-        const allCourses = [
-            ...recommendations.critical.map(c => ({ ...c, __priority: 'critical' })),
-            ...recommendations.high.map(c => ({ ...c, __priority: 'high' })),
-            ...recommendations.medium.map(c => ({ ...c, __priority: 'medium' })),
-            ...recommendations.low.map(c => ({ ...c, __priority: 'low' })),
-        ];
-
-        // Allocate within credit limit
-        const { included, deferred: deferredItems } = allocateByCredits(allCourses, allowedCredits);
-        deferred = deferredItems;
-
-        // Rebuild recommendations with only included courses
-        finalRecommendations = { critical: [], high: [], medium: [], low: [] };
-        for (const item of included) {
-            const { __priority, ...rest } = item;
-            finalRecommendations[__priority].push(rest);
-        }
-
-        used = included.reduce((sum, c) => sum + (c.credits || 0), 0);
-        console.log(`Final credits after trimming: ${used}/${allowedCredits}`);
-        console.log(`Deferred courses: ${deferred.length}`);
-    }
-
     console.log('\n--- FINAL RECOMMENDATIONS ---');
     console.log(`Critical: ${finalRecommendations.critical.length}`);
     console.log(`High: ${finalRecommendations.high.length}`);

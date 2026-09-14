@@ -5,9 +5,7 @@ import { ApiResponse } from '../../services/baseApiServices/ApiResponseType/apiR
 import { RecommendCoursesPayload } from "./types/coursespayload"
 import { RecommendCoursesResponse } from './types/systemRespponse';
 import { FinalizeRecommendationPayload } from './types/finalizedRecommendation';
-import { AdvisoryLogEntry } from './types/advisoryLog';
 import { FinalizedRecommendation } from './types/finalizedRecommedation';
-import { AdvisoryLogsResponseData } from '@/src/hooks/recommendationHook/states/advisorylogdata';
 
 class RecommendationRepository extends BaseApiService {
   private static instance: RecommendationRepository;

@@ -49,7 +49,7 @@ function buildElectiveResult(data) {
     // Get options from data
     const options = data.options || [];
     const clashingOptions = data.clashingOptions || [];
-    
+    console.log(`Building elective result with ${JSON.stringify(data)}`);
     return {
         found: data.found || false,
         offering: data.offering || null,
@@ -72,8 +72,6 @@ function buildElectiveResult(data) {
         creditMismatch: data.creditMismatch || false,
         requiredCredits: data.requiredCredits || 0,
         availableCredits: data.availableCredits || 0,
-        
-        // ✅ Use data.options (not scoredOptions directly)
         options: options.map(opt => ({
             courseName: opt.courseName,
             credits: opt.credits,
@@ -89,8 +87,6 @@ function buildElectiveResult(data) {
             hasClash: false,
             actionRequired: 'ELECTIVE_OPTION'
         })),
-        
-        // ✅ Use data.clashingOptions
         clashingOptions: clashingOptions.map(opt => ({
             courseName: opt.courseName,
             credits: opt.credits,
@@ -366,7 +362,6 @@ return buildElectiveResult({
     console.log(`    Total options found: ${scoredOptions.length}`);
 
     // STEP 7: Return ALL options
-// In findElectiveOffering, when returning:
 return buildElectiveResult({
     found: true,
     offering: bestMatch?.offering || null,

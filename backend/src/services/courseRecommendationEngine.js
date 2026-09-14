@@ -81,7 +81,7 @@ function generateRecommendations(ctx) {
     };
 
     const mandatoryRetakes = fwdCourses.filter(c => c.__grade === 'F' || c.__grade === 'W');
-  console.log(`\nMandatory retakes (F/W): ${JSON.stringify(mandatoryRetakes)}`);
+
     for (const course of mandatoryRetakes) {
         console.log(`\n  Processing retake: ${course.courseName} ${course.creditHours} (${course.__grade})`);
         const resolved = resolveRetakeCourse({
@@ -190,9 +190,9 @@ function generateRecommendations(ctx) {
                 console.log(`    Best: ${bestMatch.courseName} (Score: ${bestMatch.totalScore})`);
                 console.log(`    Credits: ${bestMatch.credits}`);
                 console.log(`    Match: ${bestMatch.matchReason}`);
-
-                if (bestMatch.offering) {
-                    addToSchedule(bestMatch.offering, placedTimetables, placedNames, placedOfferingIds, bestMatch.courseName);
+               
+                if (result.offering) {
+                    addToSchedule(result.offering, placedTimetables, placedNames, placedOfferingIds, result.courseName);
                 }
 
                 const priority = getPriority(rc);
@@ -329,6 +329,7 @@ function generateRecommendations(ctx) {
                 offeredCourses,
                 currentSemester,
                 currentProgramId,
+                allowedCredits,
                 placedTimetables,
                 placedNames,
                 placedOfferingIds,
@@ -528,6 +529,7 @@ if (timeConflict.hasClash(offering.timetables, placedTimetables)) {
                 offeredCourses,
                 currentSemester,
                 currentProgramId,
+                allowedCredits,
                 placedTimetables,
                 placedNames,
                 placedOfferingIds,

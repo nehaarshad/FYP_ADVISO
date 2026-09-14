@@ -140,6 +140,7 @@ function resolveRetakeCourse({ course, offeredCourses, roadmapCourses, currentSe
     const clashNamesAtOffering = describeClash(offering.timetables, placedTimetables) || 'other required courses';
 
     const altMatch = findOfferingInOtherProgram(course.courseName, offeredCourses, currentProgramId);
+    console.log(`  Alternate match in other program: ${altMatch ? altMatch.offering.courseName : 'None'}`);
     if (altMatch && !timeConflict.hasClash(altMatch.offering.timetables, placedTimetables)) {
         addToSchedule(altMatch.offering, placedTimetables, placedNames, placedOfferingIds, course.courseName);
         return createResolution('RETAKE_OTHER_PROGRAM', course, altMatch.offering, `"${course.courseName}" clashed with ${clashNamesAtOffering} in your program's section — registered "${altMatch.offering.courseName}" under ${offeringProgramName(altMatch.offering)} program instead.`);
@@ -295,10 +296,11 @@ function resolveCombinedCourse({ course, match, offeredCourses, currentProgramId
     );
 }
 
-function resolveCombinedCourseForNew({ rc, match, offeredCourses, currentSemester, currentProgramId, placedTimetables, placedNames, placedOfferingIds, program, roadmapCourses }) {
+function resolveCombinedCourseForNew({ rc, match, offeredCourses, currentSemester, currentProgramId,allowedCredits, placedTimetables, placedNames, placedOfferingIds, program, roadmapCourses }) {
     const lectureOffering = match.offering;
     const labOffering = match.labOffering;
     const credits = cleanCredits(rc.creditHours);
+    const requiredCredits = parseInt(allowedCredits,)
 
     console.log(`\nPROCESSING COMBINED COURSE: ${rc.courseName}`);
     console.log(`   Lecture: ${lectureOffering.courseName} (${offeringProgramName(lectureOffering)})`);

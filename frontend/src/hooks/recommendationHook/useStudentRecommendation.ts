@@ -4,7 +4,6 @@ import { recommendationRepository } from '@/src/repositories/recommendationRepos
 import { useUserProfile } from '../profileHook/useProfile';
 import { RawRecommendationApiResponse } from '@/src/models/rawRecommendationApiResponse';
 
-// ✅ Updated interface matching the actual API response
 interface StudentRecommendationData {
   id: number;
   courses: any[];
@@ -68,16 +67,8 @@ export const useStudentRecommendations = () => {
       console.log("Student recommendations response:", response);
 
       if (response.success && response.data) {
-        // ✅ Explicitly typed as the RAW shape (see rawRecommendationApiResponse.ts).
-        // This is the same fix applied in useCourseRecommendationHook.ts:
-        // `recommendationData` was previously implicit `any`, which is how
-        // `.recommendedCoursesSummary` (raw field name) and `.summary`
-        // (mapped field name, used below and in components consuming this
-        // hook) got confused. Type it here, and let TS flag it immediately
-        // if that ever happens again.
         let recommendationData: RawRecommendationApiResponse | null = null;
         
-        // ✅ Extract the recommendation object
         if (response.data.data && Array.isArray(response.data.data) && response.data.data.length > 0) {
           recommendationData = response.data.data[0];
         } else if (response.data.data && !Array.isArray(response.data.data)) {

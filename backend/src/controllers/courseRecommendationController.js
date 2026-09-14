@@ -5,6 +5,7 @@ import SessionalTranscript from "../models/sessionalTranscriptModel.js"
 import DegreeTranscript from "../models/degreeTranscriptModel.js"
 import CategoryModel from "../models/categoryModel.js"
 import User from "../models/userModel.js";
+import BatchAdvisor from "../models/FacultyAdvisorModel.js";
 import CourseCategoryModel from "../models/courseCategoryModel.js"
 import CoursesModel from "../models/coursesModel.js"
 import RoadmapModel from "../models/roadmapModel.js";
@@ -26,6 +27,7 @@ import SuggestedCourses from "../models/suggestedCoursesModel.js";
 import generateRecommendations from "../services/courseRecommendationEngine.js";
 import helpingFunctions from '../utils/courseHelpingChecks.js';
 const {cleanCredits} =helpingFunctions
+import { Op } from "sequelize";
 
 
 const recommendCourses = async (req, res) => {
@@ -509,16 +511,7 @@ console.log('='.repeat(80) + '\n');
             message: existing
                 ? 'Recommendation updated and sent to student'
                 : 'Recommendation finalized and sent to student',
-            data: {
-                id: finalRec.id,
-                advisorId: finalRec.advisorId,
-                studentId: finalRec.studentId,
-                sessionId: finalRec.sessionId,
-                totalCredits: finalRec.totalCredits,
-                coursesCount: selectedCourses.length,
-                createdAt: finalRec.createdAt,
-                updatedAt: finalRec.updatedAt,
-            },
+            data: finalRec,
         });
  
     } catch (error) {
@@ -534,25 +527,24 @@ console.log('='.repeat(80) + '\n');
  const getAdvisoryLogs = async (req, res) => {
     try {
         const { advisorId } = req.params;
-        const {
-            sessionId,
-            studentId,
-            page = 1,
-            limit = 20,
-        } = req.query;
  
         if (!advisorId) {
             return res.status(400).json({ success: false, message: 'advisorId is required' });
         }
+
+            const id = parseInt(advisorId, 10);
+            if (Number.isNaN(id)) {
+                 return res.status(400).json({ success: false, message: 'Invalid advisorId provided' });
+            }
+
+            const where = {
+            [Op.or]: [
+                { advisorId: id },
+                { studentId: id },
+            ],
+            }; 
  
-        // ── Build dynamic where clause ───────────────────────────────────────
-        const where = { advisorId: parseInt(advisorId) };
-        if (sessionId) where.sessionId = parseInt(sessionId);
-        if (studentId) where.studentId = parseInt(studentId);
- 
-        const offset = (parseInt(page) - 1) * parseInt(limit);
- 
-        const { count, rows: logs } = await AdvisorFinalRecommendation.findAndCountAll({
+        const data = await AdvisorFinalRecommendation.findAll({
             where,
             include: [
                 {
@@ -576,87 +568,24 @@ console.log('='.repeat(80) + '\n');
                 {
                     model: SessionModel,
                     as: 'Session',
-                    attributes: ['id', 'sessionType', 'sessionYear'],
                 },
+                {
+                    model: BatchAdvisor,
+                    as: 'Advisor',
+                }
             ],
             order: [['createdAt', 'DESC']],
-            limit: parseInt(limit),
-            offset,
         });
+
+        console.log(`Fetched ${data.length} advisory logs for advisorId: ${advisorId}: \n ${JSON.stringify(data)}`);
  
         return res.status(200).json({
             success: true,
-            data: {
-                logs,
-                pagination: {
-                    total: count,
-                    page: parseInt(page),
-                    limit: parseInt(limit),
-                    totalPages: Math.ceil(count / parseInt(limit)),
-                },
-            },
+            data: data
         });
  
     } catch (error) {
         console.error('Get advisory logs error:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error: error.message,
-        });
-    }
-};
- 
- const getRecommendationById = async (req, res) => {
-    try {
-        const { id } = req.params;
- 
-        const recommendation = await SessionalRecommendation.findOne({
-            where: { id },
-            include: [
-                {
-                    model: SuggestedCourses,
-                    as: 'SuggestedCourses',
-                },
-                {
-                    model: Student,
-                    attributes: ['id', 'studentName', 'currentSemester'],
-                },
-                {
-                    model: SessionModel,
-                    attributes: ['id', 'sessionType', 'sessionYear'],
-                },
-            ],
-        });
- 
-        if (!recommendation) {
-            return res.status(404).json({ success: false, message: 'Recommendation not found' });
-        }
- 
-        // Reconstruct the priority-bucketed shape the frontend expects
-        const courses = recommendation.SuggestedCourses || [];
-        const llmRecommendations = {
-            summary: recommendation.recommendedCoursesSummary,
-            recommendations: {
-                critical: courses.filter(c => c.priority === 'critical'),
-                high:     courses.filter(c => c.priority === 'high'),
-                medium:   courses.filter(c => c.priority === 'medium'),
-                low:      courses.filter(c => c.priority === 'low'),
-            },
-            detailedExplanation: recommendation.recommendationText,
-        };
- 
-        return res.status(200).json({
-            success: true,
-            data: {
-                allowedCreditHours: recommendation.totalCreditsAllowed,
-                llmRecommendations,
-                savedRecommendationId: recommendation.id,
-            },
-        });
- 
-    } catch (error) {
-        console.error('Get recommendation by ID error:', error);
         return res.status(500).json({
             success: false,
             message: 'Internal server error',
@@ -676,9 +605,10 @@ console.log('='.repeat(80) + '\n');
             include: [
                 {
                     model: SessionModel,
-                    as: 'Session',
-                    attributes: ['id', 'sessionType', 'sessionYear'],
                 },
+                {
+                    model:BatchAdvisor,
+                }
             ],
             order: [['createdAt', 'DESC']],
         });
@@ -691,18 +621,8 @@ console.log('='.repeat(80) + '\n');
             });
         }
  
-        // Shape response to match ViewRecommedCourse component props
-        const shaped = recommendations.map(rec => ({
-            id: rec.id,
-            sessionType: rec.Session?.sessionType,
-            sessionYear: rec.Session?.sessionYear,
-            totalCredits: rec.totalCredits,
-            notes: rec.notes,
-            courses: rec.recommendedCourses,   // the JSON array
-            sentAt: rec.createdAt,
-        }));
- 
-        return res.status(200).json({ success: true, data: shaped });
+        console.log(`Fetched ${recommendations.length} recommendations for studentId: ${studentId}: \n ${JSON.stringify(recommendations)}`);
+        return res.status(200).json({ success: true, data: recommendations });
  
     } catch (error) {
         console.error('Get student recommendations error:', error);
@@ -715,4 +635,4 @@ console.log('='.repeat(80) + '\n');
 };
 
 
-export default { recommendCourses ,finalizeRecommendation, getAdvisoryLogs,getRecommendationById,getStudentRecommendations};
+export default { recommendCourses ,finalizeRecommendation, getAdvisoryLogs,getStudentRecommendations};

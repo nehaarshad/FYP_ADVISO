@@ -2,7 +2,10 @@ import helpingFunctions from './courseHelpingChecks.js';
 const { isCoreCategory } = helpingFunctions;
 
 function buildExtraSemesterWarning(suggestedCourses) {
-    const failedCore = (suggestedCourses.failedCourses || []).filter(c => isCoreCategory(c.category));
+    console.log(`\n suggestedCourses in extra semester warning: ${JSON.stringify(suggestedCourses)}`);
+    const failedCourses = suggestedCourses.failedCourses || [];
+    console.log(`Failed courses: ${failedCourses.map(c => c.courseName).join(', ')}`);
+    const failedCore = failedCourses.filter(c => isCoreCategory(c.category));
     if (!failedCore.length) return null;
 
     return {

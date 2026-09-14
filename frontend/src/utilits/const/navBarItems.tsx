@@ -31,8 +31,7 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
       ]
     },
     { key: "edit-student", label: "Student", icon: <GraduationCap size={20}/>, group: "Users Management" },
-    { key: "edit-advisor", label: "Batch Advisor", icon: <ShieldCheck size={20}/>, group: "Users Management" },
-    { key: "requests", label: "Requests", icon: <FileText size={20}/>, group: "Communication" }, 
+    { key: "edit-advisor", label: "Batch Advisor", icon: <ShieldCheck size={20}/>, group: "Users Management" }, 
     { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Communication" },
   ],
 
@@ -49,9 +48,9 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
   student: [
     { key: "Overview",        label: "Overview",        icon: <LayoutDashboard size={20}/> },
     { key: "StudentChat",     label: "StudentChat",    icon: <MessageSquare size={20}/> },
-    { key: "RequestsFoam",     label: "Submit Request",    icon: <FileText size={20}/> },
     { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
-   // { key: "AdvisorRemarks",      label: "Advisory logs",      icon: <FileText size={20}/>},
+    { key: "Remarks",         label: "Advisor Recommendation",      icon: <FileText size={20}/>},
+    { key: "Remarks",         label: "System Recommendation",      icon: <Map size={20}/>},
     
   ],
 };
