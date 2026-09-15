@@ -37,6 +37,8 @@ import TranscriptCoursesDetail from "../models/TranscriptCoursesDetailModel.js";
 import AdvisorFinalRecommendation from "../models/advisorFinalCourseRecommendation.js";
 import Chat from "../models/ChatsModel.js";
 import RecommendationComment from "../models/recommendationComment.js"
+import AdvisorTimetableModel from '../models/advisorTimetable.js';
+import BatchTimetableModel from '../models/batchTimetable.js';
 import relations from "./tableRelations.js";
     
 relations();
@@ -45,8 +47,10 @@ const models={
     User,
     Admin,
     AdvisorDecision,
+    AdvisorTimetableModel,
     AdvisorNotes,
     BatchAdvisor,
+    BatchTimetableModel,
     BatchAssignment,
     RecommendationComment,
     BatchMeeting,

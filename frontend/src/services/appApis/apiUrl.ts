@@ -95,6 +95,20 @@ export default class APIs{
         static updateVideo = `${APIs.BASE_URL}/updateVideo/:id`;
         static deleteVideo = `${APIs.BASE_URL}/deleteVideo/:id`;
 
+                //advisor timetable apis
+
+        static addBatchTimetable = `${APIs.BASE_URL}/addBatchTimetable`;
+        static updateBatchTimetable = `${APIs.BASE_URL}/updateBatchTimetable`;
+        static deleteBatchTimetable = `${APIs.BASE_URL}/deleteBatchTimetable/:id/:userId`;
+        static getBatchTimetable = `${APIs.BASE_URL}/getBatchTimetable/:userId`;
+
+        //batch timetable apis
+
+        static addAdvisorTimetable = `${APIs.BASE_URL}/addAdvisorTimetable`;
+        static updateAdvisorTimetable = `${APIs.BASE_URL}/updateAdvisorTimetable`;
+        static deleteAdvisorTimetable = `${APIs.BASE_URL}/deleteAdvisorTimetable/:id/:userId`;
+        static getAdvisorTimetable = `${APIs.BASE_URL}/getAdvisorTimetable/:userId`;
+
             //requestForm Module
 
           static createRequestFormUrl = `${APIs.BASE_URL}/createRequestForm`;
