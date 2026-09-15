@@ -93,7 +93,7 @@ const loginUser = async (req, res) => {
 
         if(!checkpassword){
 
-            res.status(401).json( {message: "Incorrect Password",success:false} );
+           return res.status(401).json( {message: "Incorrect Password",success:false} );
         }
         if (!existingUser.isActive) {
     return res.status(403).json({
@@ -103,7 +103,15 @@ const loginUser = async (req, res) => {
 }
         else{
             const token = generateToken(existingUser.id);
-            res.status(200).json({ 
+            console.log({
+                id: existingUser.id, 
+                sapid: existingUser.sapid, 
+                role: existingUser.role,
+                contactnumber:existingUser.contactnumber, 
+                role: existingUser.role, 
+                sessionToken: token
+            })
+           return res.status(200).json({ 
                 message: "Login successful",
                 success:true,
                 data:{
@@ -114,14 +122,7 @@ const loginUser = async (req, res) => {
                 sessionToken: token
                 }
             });
-            console.log({
-                id: existingUser.id, 
-                sapid: existingUser.sapid, 
-                role: existingUser.role,
-                contactnumber:existingUser.contactnumber, 
-                role: existingUser.role, 
-                sessionToken: token
-            })
+        
         }
        
     } 

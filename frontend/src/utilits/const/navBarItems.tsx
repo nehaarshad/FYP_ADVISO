@@ -37,20 +37,20 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
 
   advisor: [
     { key: "overview", label: "Overview", icon: <LayoutDashboard size={20}/>, },
-    { key: "meetings", label: "Meetings", icon: <ClipboardList size={20}/>, group: "Advisory" },
+    { key: "timetable", label: "Timetable", icon: <ClipboardList size={20}/>, group: "Advisory" },
     { key: "notes", label: "Advisor Notes", icon: <StickyNote size={20}/>, group: "Advisory" },
     { key: "advisor-chat", label: "Advisor Chat", icon: <MessageSquare size={20}/>, group: "Advisory" },
     { key: "advisory-logs", label: "Advisory Logs", icon: <FileText size={20}/>, group: "Advisory" },
-    { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Resources" },
     { key: "faculty-recommendation", label: "Faculty Recommendation", icon: <Lightbulb size={20}/>, group: "Resources" },
+    { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Resources" },
   ],
 
   student: [
     { key: "Overview",        label: "Overview",        icon: <LayoutDashboard size={20}/> },
     { key: "StudentChat",     label: "StudentChat",    icon: <MessageSquare size={20}/> },
     { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
-    { key: "Remarks",         label: "Advisor Recommendation",      icon: <FileText size={20}/>},
-    { key: "Remarks",         label: "System Recommendation",      icon: <Map size={20}/>},
+    { key: "advRec",         label: "Advisor Recommendation",      icon: <FileText size={20}/>},
+    { key: "sysRec",         label: "System Recommendation",      icon: <Map size={20}/>},
     
   ],
 };

@@ -13,6 +13,8 @@ import AdvisorDecision from "../models/AdvisorDecisionModel.js";
 import AdvisorNotes from "../models/AdvisorNotes.js";
 import Coordinator from "../models/coordinatorModel.js";
 import DegreeGuidlinesModel from "../models/degreeGuidlinesModel.js";
+import AdvisorTimetableModel from '../models/advisorTimetable.js';
+import BatchTimetableModel from '../models/batchTimetable.js';
 import DegreeTranscript from "../models/degreeTranscriptModel.js";
 import FacultyRecommendation from "../models/facultyRecommendationModel.js";
 import BatchAdvisor from "../models/FacultyAdvisorModel.js";
@@ -269,4 +271,12 @@ CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId
   DegreeTranscript.hasMany(Student, { foreignKey: "studentId" });
   Student.belongsTo(DegreeTranscript, { foreignKey: "studentId" });
 
+Student.hasMany(BatchTimetableModel, { foreignKey: 'userId', sourceKey: 'userId'});
+BatchTimetableModel.belongsTo(Student, { foreignKey: 'userId', targetKey: 'userId' });
+
+  BatchModel.hasMany(BatchTimetableModel, { foreignKey: "batchId" });
+  BatchTimetableModel.belongsTo(BatchModel, { foreignKey: "batchId" });
+
+  BatchAdvisor.hasMany(AdvisorTimetableModel, { foreignKey: "advisorId" });
+  AdvisorTimetableModel.belongsTo(BatchAdvisor, { foreignKey: "advisorId" });
 }

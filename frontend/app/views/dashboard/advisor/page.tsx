@@ -22,6 +22,7 @@ import Guidelines from "../../../../components/Guidelines/Guidelines";
 import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation";
 import { AdvisorProfile } from "../../../../components/AdvisorView/AdvisorProfile";
 import { ProfileView } from "@/components/ProfileView/route";
+import { AdvisorTimetablePage } from "@/components/Timetable/AdvisorTimetablePage";
 
 export default function AdvisorDashboard() {
   const [view, setView] = useState<string>("overview");
@@ -224,8 +225,8 @@ export default function AdvisorDashboard() {
                     {view === "faculty-recommendation" && (
                       <FacultyRecommendation onBack={() => setView("overview")} />
                     )}
-                    {view === "meetings" && (
-                    <MeetingList onBack={() => setView("overview")} />
+                    {view === "timetable" && (
+                    <AdvisorTimetablePage onBack={() => setView("overview")} />
                   )}
 
                   {/* Advisory Notes View */}
