@@ -18,7 +18,6 @@ import BatchTimetableModel from '../models/batchTimetable.js';
 import DegreeTranscript from "../models/degreeTranscriptModel.js";
 import FacultyRecommendation from "../models/facultyRecommendationModel.js";
 import BatchAdvisor from "../models/FacultyAdvisorModel.js";
-import MeetingReminder from "../models/meetingReminder.js";
 import Message from "../models/messagesModel.js";
 import AdvisorFinalRecommendation from "../models/advisorFinalCourseRecommendation.js";
 import ProgramModel from "../models/programModel.js";
@@ -134,9 +133,6 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   BatchModel.hasMany(CourseOfferingModel, { foreignKey: "batchId" });
   CourseOfferingModel.belongsTo(BatchModel, { foreignKey: "batchId" });
 
-  BatchMeeting.hasMany(MeetingReminder, { foreignKey: "meetingId" });
-  MeetingReminder.belongsTo(BatchMeeting, { foreignKey: "meetingId" });
-
   // ==================== Sessional Recommendation Courses ====================
 
   Student.hasMany(SessionalRecommendation, { foreignKey: "studentId" });
@@ -160,9 +156,6 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
 
   BatchAdvisor.hasMany(AdvisorNotes, { foreignKey: "advisorId" });
   AdvisorNotes.belongsTo(BatchAdvisor, { foreignKey: "advisorId" });
-
-  BatchAdvisor.hasMany(MeetingReminder, { foreignKey: "advisorId" });
-  MeetingReminder.belongsTo(BatchAdvisor, { foreignKey: "advisorId" });
 
   // ==================== Faculty Recommendation ====================
 FacultyRecommendation.belongsTo(BatchAdvisor, {foreignKey: 'postingAdvisorId',as: 'postingAdvisor'});

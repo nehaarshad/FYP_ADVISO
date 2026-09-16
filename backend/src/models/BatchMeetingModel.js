@@ -15,10 +15,6 @@ const BatchMeeting = sequelize.define("BatchMeeting", {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
-    sessionId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
     startTime: {
         type: DataTypes.TIME,
         allowNull: false,
@@ -27,14 +23,10 @@ const BatchMeeting = sequelize.define("BatchMeeting", {
         type: DataTypes.TIME,
         allowNull: false,
     },
-    endDate: {
-        type: DataTypes.DATE,
-        allowNull: true,
-    },
     status: {
-        type: DataTypes.ENUM("Scheduled", "Completed", "Cancelled"),
+        type: DataTypes.ENUM('pending', 'scheduled', 'cancelled', 'completed'),
         allowNull: false,
-        defaultValue: "Scheduled",
+        defaultValue: 'pending',
     },
     day: {
         type: DataTypes.STRING,
@@ -42,10 +34,10 @@ const BatchMeeting = sequelize.define("BatchMeeting", {
     },
     date: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
+        allowNull: true,
     },
     meetingSummary: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
     },
 

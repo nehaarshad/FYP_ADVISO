@@ -17,7 +17,6 @@ import Coordinator from "../models/coordinatorModel.js";
 import DegreeTranscript from "../models/degreeTranscriptModel.js";
 import FacultyRecommendation from "../models/facultyRecommendationModel.js";
 import BatchAdvisor from "../models/FacultyAdvisorModel.js";
-import MeetingReminder from "../models/meetingReminder.js";
 import Message from "../models/messagesModel.js";
 import ProgramModel from "../models/programModel.js";
 import RequestFormType from "../models/RequestFormTypeModel.js";
@@ -68,7 +67,6 @@ const models={
     FacultyRecommendation,
     SessionalRecommendation,
     SuggestedCourses,
-    MeetingReminder,
     Message,
     ProgramModel,
     RequestFormType,

@@ -13,7 +13,7 @@ import { StudentProfile } from "@/components/StudentDetails/StudentProfile";
 import { StudentTranscript } from "@/components/StudentDetails/StudentTranscript";
 import { Sidebar } from "@/components/navbars/route";
 import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
-import { MeetingList } from "../../../../components/MeetingSchedule/MeetingList";
+import { AdvisorMeetingsPage } from "../../../../components/Meetings/AdvisorMeetingsPage";
 import AdvisoryNotes from "../../../../components/AdvisorView/AdvisoryNotes";
 import { AdvisoryParentScreen } from '@/components/AdvisorView/advisoryNavPtterrn';
 import AdvisorChat from "../../../../components/Chat/AdvisorChat";
@@ -200,6 +200,9 @@ export default function AdvisorDashboard() {
           )}
                     {view === "advisor-chat" && (
                       <AdvisorChat onBack={() => setView("overview")} />
+                    )}
+                    {view === "meeting" && (
+                      <AdvisorMeetingsPage onBack={() => setView("overview")} />
                     )}
                     {/* Recommendation Flow View */}
                     {view === "recommendations" && selectedStudent && (
