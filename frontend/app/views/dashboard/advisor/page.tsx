@@ -1,28 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-import React, { useState, useEffect } from "react";
-import { 
-  Users, UserMinus, Clock, Bell, Search, Filter, ChevronDown, Menu, Loader2 
-} from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useAdvisorAssignedBatches } from '@/src/hooks/assignBatches/useAdvisorAssignedBatches';
-import { useStudents } from '@/src/hooks/studentsHook/useStudents';
-import { AdvisorStudentList } from "@/components/StudentDetails/advisorStudentList";
-import { StudentProfile } from "@/components/StudentDetails/StudentProfile";
-import { StudentTranscript } from "@/components/StudentDetails/StudentTranscript";
-import { Sidebar } from "@/components/navbars/route";
-import { NotificationPanel } from "@/components/Notifications/NotificationPanel";
-import { AdvisorMeetingsPage } from "../../../../components/Meetings/AdvisorMeetingsPage";
-import AdvisoryNotes from "../../../../components/AdvisorView/AdvisoryNotes";
-import { AdvisoryParentScreen } from '@/components/AdvisorView/advisoryNavPtterrn';
-import AdvisorChat from "../../../../components/Chat/AdvisorChat";
-import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs';
-import Guidelines from "../../../../components/Guidelines/Guidelines";
-import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation";
-import { AdvisorProfile } from "../../../../components/AdvisorView/AdvisorProfile";
-import { ProfileView } from "@/components/ProfileView/route";
-import { AdvisorTimetablePage } from "@/components/Timetable/AdvisorTimetablePage";
 
 /* eslint-disable react-hooks/set-state-in-effect */ 
 /* eslint-disable @typescript-eslint/no-explicit-any */ 
@@ -46,6 +21,7 @@ import Guidelines from "../../../../components/Guidelines/Guidelines";
 import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation"; 
 import { ProfileView } from "@/components/ProfileView/route"; 
 import { AdvisorTimetablePage } from "@/components/Timetable/AdvisorTimetablePage"; 
+import { Timetable } from "@/components/coordinatorComponents/titmetable/route";
  
 export default function AdvisorDashboard() { 
   const [view, setView] = useState<string>("overview"); 
