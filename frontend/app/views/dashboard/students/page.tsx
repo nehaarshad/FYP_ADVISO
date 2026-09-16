@@ -19,10 +19,10 @@ import { StudentTranscript } from "../../../../components/StudentDetails/Student
 import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
 import StudentChat from "../../../../components/Chat/StudentChat"; 
 import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRemarks";
-import { Timetable } from "../../../../components/Timetable/Timetable";
-import { CompleteCourseDashboard } from "../../../../components/CourseRecommendation/CompleteCourseDashboard";
+import { BatchTimetablePage } from "../../../../components/Timetable/Timetable";
+//import { ViewRecommedCourse } from "../../../../components/CourseRecommendation/CompleteCourseDashboard";
 import { RoadmapDetailView } from "../../../../components/Roadmap/RoadmapView";
-
+import { CompleteCourseDashboard } from "../../../../components/CourseRecommendation/CompleteCourseDashboard";
 // ===== IMPORT YOUR HOOKS =====
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useTranscript } from '@/src/hooks/transcriptHook/transcriptHokk';
@@ -155,9 +155,11 @@ useEffect(() => {
       normalizedView = "Studentprofile";
     } else if (target === "chat" || target === "advisorchat" || target === "advisor chat") {
       normalizedView = "StudentChat";
-    } else if (target === "remarks" || target === "advisor remarks" || target === "advisorremarks") {
-      normalizedView = "Remarks";
-    } else if (target === "transcript" || target === "my transcript") {
+    } else if (target === "advRec" ) {
+      normalizedView = "advRec";
+    } else if (target === "sysRec" ) {
+      normalizedView = "sysRec";
+    }else if (target === "transcript" || target === "my transcript") {
       normalizedView = "Transcript";
     } else if (target === "recommendations" || target === "courses") {
       normalizedView = "CourseRecommendation";
@@ -388,6 +390,12 @@ useEffect(() => {
     sessionYear={Number(studentData.batchYear)}
   />
 )}
+              {/* Course Recommendations View */}
+              {/* {view === "CourseRecommendation" && (
+                <ViewRecommedCourse 
+                  onBack={goBack} 
+                />
+              )} */}
               
               {/* Student Chat View */}
               {view === "StudentChat" && (
@@ -395,16 +403,14 @@ useEffect(() => {
               )}
               
               {/* Advisor Remarks View */}
-              {view === "Remarks" && (
+              {view === "advRec" && (
                 <AdvisorRemarks onBack={goBack} />
               )}
               
               {/* Timetable View */}
               {view === "Timetable" && (
-                <Timetable onBack={goBack} />
+                <BatchTimetablePage onBack={goBack} />
               )}
-              
-              
               {/* Guidelines View */}
               {view === "Guidelines" && (
                 <Guidelines onBack={goBack} />
