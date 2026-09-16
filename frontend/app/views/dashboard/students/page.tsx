@@ -22,7 +22,7 @@ import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRem
 import { BatchTimetablePage } from "../../../../components/Timetable/Timetable";
 //import { ViewRecommedCourse } from "../../../../components/CourseRecommendation/CompleteCourseDashboard";
 import { RoadmapDetailView } from "../../../../components/Roadmap/RoadmapView";
-
+import { CompleteCourseDashboard } from "../../../../components/CourseRecommendation/CompleteCourseDashboard";
 // ===== IMPORT YOUR HOOKS =====
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useTranscript } from '@/src/hooks/transcriptHook/transcriptHokk';
@@ -380,6 +380,16 @@ useEffect(() => {
                 />
               )}
               
+             {view === "CourseRecommendation" && studentData && (
+  <CompleteCourseDashboard
+    onBack={goBack}
+    studentId={studentData.id}
+    studentName={studentData.studentName}
+    selectedBatch={`${studentData.batch} ${studentData.batchYear}`}
+    sessionType="Regular"
+    sessionYear={Number(studentData.batchYear)}
+  />
+)}
               {/* Course Recommendations View */}
               {/* {view === "CourseRecommendation" && (
                 <ViewRecommedCourse 
