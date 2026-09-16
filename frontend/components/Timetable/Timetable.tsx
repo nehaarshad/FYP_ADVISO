@@ -292,7 +292,9 @@ export const Header: React.FC<{
       </div>
     </div>
 
-    <div className="flex items-center gap-3 shrink-0">
+   {
+    title !=="Batch Meetings" ?
+     <div className="flex items-center gap-3 shrink-0">
       <div className="inline-flex p-1 bg-gray-100 rounded-lg">
         {(['list', 'grid'] as const).map((v) => (
           <button
@@ -314,5 +316,10 @@ export const Header: React.FC<{
         + Add
       </button>
     </div>
+
+    :
+
+    null
+   }
   </div>
 );

@@ -5,7 +5,8 @@ import {
   BookOpen, Bell, UserPlus, UserCog, ShieldCheck,
   Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch,
   User,
-  Lightbulb
+  Lightbulb,
+  CombineIcon
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";
@@ -40,6 +41,7 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     { key: "timetable", label: "Timetable", icon: <ClipboardList size={20}/>, group: "Advisory" },
     { key: "notes", label: "Advisor Notes", icon: <StickyNote size={20}/>, group: "Advisory" },
     { key: "advisor-chat", label: "Advisor Chat", icon: <MessageSquare size={20}/>, group: "Advisory" },
+    { key: "meeting", label: "Batch Meeting", icon: <CombineIcon size={20}/>, group: "Advisory" },
     { key: "advisory-logs", label: "Advisory Logs", icon: <FileText size={20}/>, group: "Advisory" },
     { key: "faculty-recommendation", label: "Faculty Recommendation", icon: <Lightbulb size={20}/>, group: "Resources" },
     { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Resources" },

@@ -109,11 +109,11 @@ export default class APIs{
         static deleteAdvisorTimetable = `${APIs.BASE_URL}/deleteAdvisorTimetable/:id/:userId`;
         static getAdvisorTimetable = `${APIs.BASE_URL}/getAdvisorTimetable/:userId`;
 
-            //requestForm Module
-
-          static createRequestFormUrl = `${APIs.BASE_URL}/createRequestForm`;
-          static getAllRequestFormUrl = `${APIs.BASE_URL}/getAllRequestForm`;
-          static updateRequestFormUrl = `${APIs.BASE_URL}/updateRequestForm/:id`;
+            // services/appApis/apiUrl.ts (add these)
+            static createMeeting          = `${APIs.BASE_URL}/createMeeting`;
+            static getMeetingSuggestions  = `${APIs.BASE_URL}/getMeetingSuggestions/:userId`;
+            static getMeetingsForAdvisor  = `${APIs.BASE_URL}/getMeetingsForAdvisor/:userId`;
+            static updateMeeting          = `${APIs.BASE_URL}/updateMeeting/:id`;
 
         //degreeguidlines Module
 
