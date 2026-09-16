@@ -28,7 +28,7 @@ export default function LandingPage() {
   }, [router]);
   
   const handleClick = () => {
-    router.push('/views/dashboard/coordinator'); 
+    router.push('/views/auth/login'); 
   };
 
   return (
@@ -96,7 +96,7 @@ export default function LandingPage() {
                 <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
                 <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
                 <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
-                <SmallFeature Icon={Send} title="Digital Requests Form Submissions" desc="Submit academic requests quickly and digitally." />
+                
               </div>
       </section>
     </div>

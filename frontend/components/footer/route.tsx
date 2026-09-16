@@ -9,14 +9,13 @@ const LandingFooter = () => {
         <div className="flex flex-col md:flex-row items-start">
           
           <div className="md:w-1/8 mt-10">
-              <Image 
-              src="/lightLogo.png" 
-              alt="Adviso" 
-              width={120}
-              height={120}
-              //className="h-12 w-auto"
-            />
-          </div>
+  <Image
+    src="/lightlogo.png"
+    alt="Adviso"
+    width={120}
+    height={120}
+  />
+</div>
 
           <div className="md:w-2/3 text-left">
             
