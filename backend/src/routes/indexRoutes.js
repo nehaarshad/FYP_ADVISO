@@ -18,6 +18,7 @@ import advisorNotesRoutes from "./advisorNotesRoutes.js"
 import facultyRecommendationRoute from "./facultyRecommendationRoute.js";
 import batchTimetableRoutes from "./batchTimetableRoute.js";
 import advisorTimetableRoutes from "./advisorTimetableRoute.js";
+import batchMeetingRoutes from './batchMeetingRoute.js'
 
 const router = express.Router();
 
@@ -41,5 +42,6 @@ router.use('/auth', degreeGuidelinesRoutes);
 router.use('/auth', supportingVideoRoutes);
 router.use('/auth', batchTimetableRoutes);
 router.use('/auth', advisorTimetableRoutes);
+router.use('/auth', batchMeetingRoutes);
 
 export default router
