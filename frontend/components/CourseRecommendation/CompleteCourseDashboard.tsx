@@ -17,6 +17,7 @@ import type {
   NormalTimetableDetails,
 } from "@/src/models/systemSuggestedCoursesModel";
 
+
 export interface DashboardSummary {
   recommendationText: string;
   creditLimits: { allowed: number; required: number | null; difference: number | null };
@@ -930,6 +931,7 @@ export interface CompleteCourseDashboardProps {
   sessionType: string;
   sessionYear: number;
   onFinalized?: () => void;
+   onBack?: () => void;
 }
 
 export function CompleteCourseDashboard({

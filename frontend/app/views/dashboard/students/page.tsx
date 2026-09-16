@@ -17,11 +17,10 @@ import { Sidebar } from "@/components/navbars/route";
 import { NotificationPanel } from "../../../../components/Notifications/NotificationPanel";
 import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
 import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
-import SubmitRequest from "../../../../components/RequestFoam/SubmitRequest";
 import StudentChat from "../../../../components/Chat/StudentChat"; 
 import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRemarks";
 import { Timetable } from "../../../../components/Timetable/Timetable";
-import { ViewRecommedCourse } from "../../../../components/CourseRecommendation/ViewRecommedCourse";
+import { CompleteCourseDashboard } from "../../../../components/CourseRecommendation/CompleteCourseDashboard";
 import { RoadmapDetailView } from "../../../../components/Roadmap/RoadmapView";
 
 // ===== IMPORT YOUR HOOKS =====
@@ -379,12 +378,16 @@ useEffect(() => {
                 />
               )}
               
-              {/* Course Recommendations View */}
-              {view === "CourseRecommendation" && (
-                <ViewRecommedCourse 
-                  onBack={goBack} 
-                />
-              )}
+             {view === "CourseRecommendation" && studentData && (
+  <CompleteCourseDashboard
+    onBack={goBack}
+    studentId={studentData.id}
+    studentName={studentData.studentName}
+    selectedBatch={`${studentData.batch} ${studentData.batchYear}`}
+    sessionType="Regular"
+    sessionYear={Number(studentData.batchYear)}
+  />
+)}
               
               {/* Student Chat View */}
               {view === "StudentChat" && (
@@ -401,10 +404,6 @@ useEffect(() => {
                 <Timetable onBack={goBack} />
               )}
               
-              {/* Submit Request View */}
-              {view === "RequestsFoam" && (
-                <SubmitRequest onBack={goBack} />
-              )}
               
               {/* Guidelines View */}
               {view === "Guidelines" && (
