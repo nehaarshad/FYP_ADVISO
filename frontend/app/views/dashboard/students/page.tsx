@@ -14,7 +14,6 @@ import { AnimatePresence, motion } from "framer-motion";
 
 // Components Imports
 import { Sidebar } from "@/components/navbars/route";
-import { NotificationPanel } from "../../../../components/Notifications/NotificationPanel";
 import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
 import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
 import StudentChat from "../../../../components/Chat/StudentChat"; 
@@ -426,11 +425,6 @@ useEffect(() => {
         roadmap={studentData?.BatchModel?.RoadmapModel}
         onClose={() => setShowRoadmapModal(false)}
       />
-
-      {/* Notifications Panel */}
-      <AnimatePresence>
-        {showNotifications && <NotificationPanel onClose={() => setShowNotifications(false)} />}
-      </AnimatePresence>
     </div>
   );
 }
