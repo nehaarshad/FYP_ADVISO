@@ -46,10 +46,11 @@ export function StudentList({ selectedBatch, activeTab }: { selectedBatch: strin
     searchStudents(searchInput);
   };
 
-  const handleViewDetails = (student: any) => {
-    setShowDetailsModal(true);
- //   onViewProfile(student);
-  };
+ // ✔️ Sahi Code
+const handleViewDetails = (student: any) => {
+  setSelectedStudent(student); // Yeh line missing thi!
+  setShowDetailsModal(true);
+};
 
     const handleToggleStatus = async (student: any) => {
       try {

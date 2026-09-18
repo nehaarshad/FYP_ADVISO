@@ -1,7 +1,8 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/StudentDetails/StudentProfile.tsx
 "use client";
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   ArrowLeft, 
   User, 
@@ -26,90 +27,91 @@ interface StudentProfileProps {
   onNavigateToCourseRec?: () => void;
 }
 
-export const StudentProfile = ({ student,  onBack,  onViewTranscript,isAdvisor,onNavigateToCourseRec}: StudentProfileProps) => {
-const [showRoadmapModal, setShowRoadmapModal] = useState(false);
-    const { 
-      transcript, 
-      getCGPA,
-      getTotalEarnedCredits,
-      fetchStudentTranscript,
-    } = useTranscript();
-  
-   // Calculate earned credits per category from transcript
-        const calculateEarnedCredits = () => {
-          const earnedMap = new Map<string, number>();
-          
-          // Get all sessional transcripts
-          const sessionalTranscripts = transcript?.SessionalTranscripts || [];
-          
-          sessionalTranscripts.forEach((sessional: any) => {
-            const courses = sessional.TranscriptCoursesDetails || [];
-            
-            courses.forEach((course: any) => {
-              const category = course.courseCategory;
-              const earnedCredits = parseFloat(course.earnedCreditHours) || 0;
-              
-              if (category) {
-                const current = earnedMap.get(category) || 0;
-                earnedMap.set(category, current + earnedCredits);
-              }
-            });
-          });
-          
-          return earnedMap;
-        };
+export const StudentProfile = ({ 
+  student, 
+  onBack, 
+  onViewTranscript, 
+  isAdvisor, 
+  onNavigateToCourseRec 
+}: StudentProfileProps) => {
+  const [showRoadmapModal, setShowRoadmapModal] = useState(false);
+  const { 
+    transcript, 
+    getCGPA,
+    getTotalEarnedCredits,
+    fetchStudentTranscript,
+  } = useTranscript();
+ 
+  // Calculate earned credits per category from transcript
+  const calculateEarnedCredits = () => {
+    const earnedMap = new Map<string, number>();
+    const sessionalTranscripts = transcript?.SessionalTranscripts || [];
+    
+    sessionalTranscripts.forEach((sessional: any) => {
+      const courses = sessional.TranscriptCoursesDetails || [];
+      
+      courses.forEach((course: any) => {
+        const category = course.courseCategory;
+        const earnedCredits = parseFloat(course.earnedCreditHours) || 0;
+        
+        if (category) {
+          const current = earnedMap.get(category) || 0;
+          earnedMap.set(category, current + earnedCredits);
+        }
+      });
+    });
+    
+    return earnedMap;
+  };
 
   const roadmapCategories = student?.BatchModel?.RoadmapModel?.RoadmapCourseCategoryModels || [];
   const earnedCreditsMap = calculateEarnedCredits();
   
   const convertARGBToHex = (colorScheme: string): string => {
-  if (!colorScheme) return '#e5e7eb';
-  if (colorScheme.startsWith('#')) return colorScheme;
-  let hex = colorScheme;
-  if (hex.startsWith('FF')) {
-    hex = hex.substring(2);
-  }
-  return `#${hex}`;
-};
+    if (!colorScheme) return '#e5e7eb';
+    if (colorScheme.startsWith('#')) return colorScheme;
+    let hex = colorScheme;
+    if (hex.startsWith('FF')) {
+      hex = hex.substring(2);
+    }
+    return `#${hex}`;
+  };
 
-
-
-      useEffect(() => {
-        if (student?.id) {
-          fetchStudentTranscript(student.id);
-          
-        }
-      }, [student?.id, fetchStudentTranscript]);
+  useEffect(() => {
+    if (student?.id) {
+      fetchStudentTranscript(student.id);
+    }
+  }, [student?.id, fetchStudentTranscript]);
     
-      
   if (!student) return null;
 
-  // Determine student status
+  // Determine student status & safe class mapping for Tailwind
   const isRegular = student.StudentStatus?.currentStatus === 'Promoted' || 
                     student.StudentStatus?.currentStatus === 'Regular';
-  const statusColor = isRegular ? 'green' : 'red';
+  const statusBadgeClasses = isRegular 
+    ? 'bg-green-100 text-green-700' 
+    : 'bg-red-100 text-red-700';
 
-   
   return (
     <div className="animate-in fade-in duration-500 min-h-full flex flex-col px-2 sm:px-4 md:px-0 max-w-6xl mx-auto">
       
       {/* Top Navigation */}
-        {/* Top Navigation */}
       <div className="flex items-center justify-between mb-6 pt-2 shrink-0">
-        <button  title='btn'
-                  onClick={onBack} 
-                  className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors"
-                >
-                  <ArrowLeft size={20} />
-                </button>
+        <button 
+          title="Go Back"
+          onClick={onBack} 
+          className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors"
+        >
+          <ArrowLeft size={20} />
+        </button>
 
         {isAdvisor && student.StudentStatus?.currentStatus !== 'Relegated' && (
           <button 
             onClick={onNavigateToCourseRec}
-            className="flex items-center gap-2 bg-amber-400 text-[#1e3a5f] opacity-80 px-4 md:px-5 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase hover:bg-amber-300 transition-all "
+            className="flex items-center gap-2 bg-amber-400 text-[#1e3a5f] opacity-90 px-4 md:px-5 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase hover:bg-amber-300 transition-all shadow-sm"
           >
             <Sparkles size={14} />
-            <span className="xs:hidden">Recommend Courses</span>
+            <span>Recommend Courses</span>
           </button>
         )}
       </div>
@@ -131,26 +133,26 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
               SAP ID: {student.User?.sapid}
             </p>
             
-            <div className={`mt-4 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-${statusColor}-100 text-${statusColor}-700`}>
+            <div className={`mt-4 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider ${statusBadgeClasses}`}>
               {student.StudentStatus?.currentStatus || 'Active'} Student
             </div>
 
             <div className="w-full space-y-3 mt-6 pt-4 border-t border-slate-100">
               <div className="flex items-center gap-3 text-sm">
                 <Mail size={16} className="text-slate-400" />
-                <span className="text-slate-600">{student.email}</span>
+                <span className="text-slate-600 text-xs sm:text-sm truncate">{student.email}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Phone size={16} className="text-slate-400" />
-                <span className="text-slate-600">{student.contactNumber || 'N/A'}</span>
+                <span className="text-slate-600 text-xs sm:text-sm">{student.contactNumber || 'N/A'}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <GraduationCap size={16} className="text-slate-400" />
-                <span className="text-slate-600">Semester {student.currentSemester}</span>
+                <span className="text-slate-600 text-xs sm:text-sm">Semester {student.currentSemester}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
                 <Calendar size={16} className="text-slate-400" />
-                  <span className="text-slate-600">Batch {student.BatchModel.batchName}-{student.BatchModel.batchYear}</span>
+                <span className="text-slate-600 text-xs sm:text-sm">Batch {student.BatchModel?.batchName}-{student.BatchModel?.batchYear}</span>
               </div>
             </div>
           </div>
@@ -174,27 +176,28 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
             </div>
             <ChevronRight size={18} className="text-slate-200 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
           </button>
-         {student && student?.BatchModel?.RoadmapModel && (
-           <button 
-                onClick={() => setShowRoadmapModal(true)}
-                className="w-full flex items-center justify-between p-4 md:p-5 rounded-[1.8rem] bg-white text-[#1e3a5f] border-2 border-slate-100 hover:border-blue-400 transition-all group shadow-sm"
-              >
-                <div className="flex items-center gap-3 md:gap-4">
-                  <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <BookOpen size={18} className="text-blue-500" />
-                  </div>
-                  <div className="text-left">
-                    <span className="block text-xs md:text-[13px] font-black uppercase tracking-tight">
-                      View Roadmap
-                    </span>
-                    <span className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase">
-                      Program Structure & Courses
-                    </span>
-                  </div>
+
+          {student && student?.BatchModel?.RoadmapModel && (
+            <button 
+              onClick={() => setShowRoadmapModal(true)}
+              className="w-full flex items-center justify-between p-4 md:p-5 rounded-[1.8rem] bg-white text-[#1e3a5f] border-2 border-slate-100 hover:border-blue-400 transition-all group shadow-sm"
+            >
+              <div className="flex items-center gap-3 md:gap-4">
+                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <BookOpen size={18} className="text-blue-500" />
                 </div>
-                <ChevronRight size={18} className="text-slate-200 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
-              </button>
-         )}
+                <div className="text-left">
+                  <span className="block text-xs md:text-[13px] font-black uppercase tracking-tight">
+                    View Roadmap
+                  </span>
+                  <span className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase">
+                    Program Structure & Courses
+                  </span>
+                </div>
+              </div>
+              <ChevronRight size={18} className="text-slate-200 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+            </button>
+          )}
         </div>
 
         {/* RIGHT COLUMN - Academic Info */}
@@ -209,7 +212,7 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
                 </p>
                 <div className="flex items-baseline justify-center md:justify-start gap-1">
                   <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white leading-none">
-                  {getCGPA()}
+                    {getCGPA()}
                   </h2>
                   <span className="text-[10px] md:text-xs font-black text-slate-300 uppercase tracking-widest">
                     CGPA
@@ -223,50 +226,46 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
                 </p>
                 <p className="text-lg md:text-xl font-black text-amber-400"> 
                   {getTotalEarnedCredits()} <span className="text-white">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span> 
-              
                   <span className="text-[9px] md:text-[10px] text-slate-400 uppercase ml-1">Hrs</span>
                 </p>
               </div>
             </div>
             <BookOpen size={120} className="absolute -right-10 -bottom-10 opacity-10 group-hover:rotate-12 transition-transform duration-700 hidden sm:block" />
           </div>
-                      {/* Roadmap Grid */}
-            
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 md:gap-x-12 gap-y-6 md:gap-y-8">
-                {roadmapCategories.map((cat: any, i: number) => {
-                  const categoryName = cat.CategoryModel?.categoryName || 'Unknown';
-                  const required = cat.requiredCredits || 0;
-                  const earned = earnedCreditsMap.get(categoryName) || 0;
-                  const percentage = required > 0 ? (earned / required) * 100 : 0;
-                  const colorScheme = cat.CategoryModel?.colorScheme || '#64748b';
-                  const hexColor = convertARGBToHex(colorScheme);
-                  
-                  return (
-                    <div key={i} className="group">
-                      <div className="flex justify-between mb-2 px-1">
-                        <span 
-                            className="text-xs font-semibold uppercase pr-2"
-                          >
-                            {categoryName}
-                          </span>
 
-                        <span className="text-[9px] md:text-[10px] font-black text-slate-400 whitespace-nowrap">
-                          {earned}/{required}
-                        </span>
-                      </div>
-                      <div className="w-full h-2 md:h-2.5 bg-slate-50 rounded-full overflow-hidden border border-slate-100 shadow-inner p-[2px]">
-                        <div 
-                          className="h-full rounded-full transition-all duration-1000 ease-out"
-                          style={{ 
-                            width: `${percentage}%`,
-                            backgroundColor: hexColor
-                          }} 
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+          {/* Roadmap Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 md:gap-x-12 gap-y-6 md:gap-y-8 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+            {roadmapCategories.map((cat: any, i: number) => {
+              const categoryName = cat.CategoryModel?.categoryName || 'Unknown';
+              const required = cat.requiredCredits || 0;
+              const earned = earnedCreditsMap.get(categoryName) || 0;
+              const percentage = required > 0 ? Math.min((earned / required) * 100, 100) : 0;
+              const colorScheme = cat.CategoryModel?.colorScheme || '#64748b';
+              const hexColor = convertARGBToHex(colorScheme);
+              
+              return (
+                <div key={i} className="group">
+                  <div className="flex justify-between mb-2 px-1">
+                    <span className="text-xs font-semibold uppercase pr-2 text-slate-700">
+                      {categoryName}
+                    </span>
+                    <span className="text-[9px] md:text-[10px] font-black text-slate-400 whitespace-nowrap">
+                      {earned}/{required}
+                    </span>
+                  </div>
+                  <div className="w-full h-2 md:h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-100 shadow-inner p-[2px]">
+                    <div 
+                      className="h-full rounded-full transition-all duration-1000 ease-out"
+                      style={{ 
+                        width: `${percentage}%`,
+                        backgroundColor: hexColor
+                      }} 
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
           {/* Status Reason */}
           {student.StudentStatus?.reason && (
@@ -276,8 +275,8 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
             </div>
           )}
 
-  {/* Guardian */}
-           {student.StudentGuardians && student.StudentGuardians.length > 0 && (
+          {/* Guardian Information */}
+          {student.StudentGuardians && student.StudentGuardians.length > 0 && (
             <div className="bg-white rounded-[1.8rem] p-6 shadow-sm border border-slate-100">
               <h3 className="text-sm font-black text-[#1e3a5f] uppercase tracking-wider mb-4">Guardian Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -297,20 +296,13 @@ const [showRoadmapModal, setShowRoadmapModal] = useState(false);
             </div>
           )}
         </div>
-        
       </div>
 
-      
-                      <RoadmapDetailView
-            isOpen={showRoadmapModal}
-            roadmap={student?.BatchModel?.RoadmapModel}
-            onClose={() => setShowRoadmapModal(false)}
-          />
-      
- 
+      <RoadmapDetailView
+        isOpen={showRoadmapModal}
+        roadmap={student?.BatchModel?.RoadmapModel}
+        onClose={() => setShowRoadmapModal(false)}
+      />
     </div>
-
   );
 };
-
-
