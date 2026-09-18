@@ -1,10 +1,11 @@
+
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { ShieldCheck, Layers, Mail, User, CheckCircle2, XCircle, Search, Save, Loader2, AlertCircle, Phone, X } from "lucide-react";
+import { ShieldCheck, Layers, Mail, User, CheckCircle2, XCircle, Save, Loader2, AlertCircle, Phone, X, History } from "lucide-react";
 import { useUpdateAdvisor } from '@/src/hooks/advisorHooks/updateAdvisor';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
 import { usePrograms } from '@/src/hooks/programHook/useProgram';
@@ -27,33 +28,33 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
   const { updateAdvisor, isLoading, error } = useUpdateAdvisor();
   const { fetchAdvisors } = useAdvisors();
 
- useEffect(() => {
-  if (advisor) {
-    const currentAssignment = advisor.BatchAssignments?.find(
-      (assignment: any) => assignment.isCurrentlyAdvised === true
-    );
-    
-    const activeAssignment = currentAssignment || advisor.BatchAssignments?.[0];
-    
-    setFormData({
-      id: advisor.id,
-      advisorName: advisor.advisorName || '',
-      sapid: advisor.User?.sapid || '',
-      email: advisor.email || '',
-      gender: advisor.gender || 'Male',
-      contactNumber: advisor.contactNumber || '',
-      batchName: activeAssignment?.BatchModel?.batchName || '',
-      batchYear: activeAssignment?.BatchModel?.batchYear || '',
-      programName: activeAssignment?.BatchModel?.ProgramModel?.programName || '',
-      isCurrentlyAdvised: activeAssignment?.isCurrentlyAdvised || false
-    });
-    
-    const initialStatus = advisor.User?.isActive ? "Active" : "Inactive";
-    setStatus(initialStatus);
-    setUpdateSuccess(false);
-    setUpdateError(null);
-  }
-}, [advisor]);
+  useEffect(() => {
+    if (advisor && isOpen) {
+      const currentAssignment = advisor.BatchAssignments?.find(
+        (assignment: any) => assignment.isCurrentlyAdvised === true
+      );
+      
+      const activeAssignment = currentAssignment || advisor.BatchAssignments?.[0];
+      
+      setFormData({
+        id: advisor.id,
+        advisorName: advisor.advisorName || '',
+        sapid: advisor.User?.sapid || '',
+        email: advisor.email || '',
+        gender: advisor.gender || 'Male',
+        contactNumber: advisor.contactNumber || '',
+        batchName: activeAssignment?.BatchModel?.batchName || '',
+        batchYear: activeAssignment?.BatchModel?.batchYear || '',
+        programName: activeAssignment?.BatchModel?.ProgramModel?.programName || '',
+        isCurrentlyAdvised: activeAssignment?.isCurrentlyAdvised || false
+      });
+      
+      const initialStatus = activeAssignment?.isCurrentlyAdvised ? "Active" : "Inactive";
+      setStatus(initialStatus);
+      setUpdateSuccess(false);
+      setUpdateError(null);
+    }
+  }, [advisor?.id, isOpen]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -76,13 +77,14 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
     });
     
     if (result.success) {
-        setUpdateSuccess(true);
-    advisorProfileRepository.clearCache();
-    await fetchAdvisors(true);    
-    setTimeout(() => {
-      setUpdateSuccess(false);
+      setUpdateSuccess(true);
+      advisorProfileRepository.clearCache();
+      
+      // Close modal immediately to prevent any visual flicker or lag
       onClose(); 
-    }, 2000);
+
+      // Refresh list quietly in the background
+      fetchAdvisors(true);    
     } else {
       setUpdateError(result.error || "Failed to update advisor");
     }
@@ -106,18 +108,18 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header with Close Button */}
-        <div className="sticky top-0 bg-white border-b border-slate-100 p-6 flex justify-between items-center">
+        <div className="sticky top-0 bg-white border-b border-slate-100 p-6 flex justify-between items-center z-10">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 bg-[#1e3a5f] rounded-xl flex items-center justify-center">
               <ShieldCheck size={24} className="text-[#FDB813]" />
             </div>
             <div>
               <h2 className="text-xl font-black text-[#1e3a5f] uppercase italic">Edit Advisor Profile</h2>
-              <p className="text-[10px] text-slate-400">Update advisor information</p>
+              <p className="text-[10px] text-slate-400">Update advisor information & view history</p>
             </div>
           </div>
           <button
-          title='butn'
+            title='btn'
             onClick={onClose}
             className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
           >
@@ -128,14 +130,12 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
         {/* Content */}
         <div className="p-8">
           {/* Status Badge */}
-          {advisor && (
-            <div className={`mb-6 inline-flex px-4 py-2 rounded-xl font-black text-[9px] uppercase items-center gap-2 ${
-              status === "Active" ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'
-            }`}>
-              <div className={`h-2 w-2 rounded-full ${status === "Active" ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
-              Current Status: {status}
-            </div>
-          )}
+          <div className={`mb-6 inline-flex px-4 py-2 rounded-xl font-black text-[9px] uppercase items-center gap-2 ${
+            status === "Active" ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'
+          }`}>
+            <div className={`h-2 w-2 rounded-full ${status === "Active" ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+            Current Status: {status}
+          </div>
 
           {/* Error Messages */}
           {updateError && (
@@ -230,7 +230,7 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
                       name="batchName"
                       value={formData.batchName}
                       onChange={handleChange}
-                      className="w-full p-4 pl-12 bg-slate-50 border-none rounded-xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
+                      className="w-full p-4 pl-12 bg-slate-50 border-none rounded-xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1e3a5f]"
                     >
                       <option value="">Select Batch</option>
                       <option value="FALL">FALL</option>
@@ -268,7 +268,7 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
                       name="programName"
                       value={formData.programName}
                       onChange={handleChange}
-                      className="w-full p-4 pl-12 bg-slate-50 border-none rounded-xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer"
+                      className="w-full p-4 pl-12 bg-slate-50 border-none rounded-xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1e3a5f]"
                     >
                       <option value="">Select Program</option>
                       {programs.map((program: any) => (
@@ -278,6 +278,45 @@ export function EditAdvisor({ isOpen, advisor, onClose }: EditAdvisorProp) {
                       ))}
                     </select>
                   </div>
+                </div>
+              </div>
+
+              {/* Previous Batch Assignments History Section */}
+              <div className="space-y-3 pt-2">
+                <label className="text-[10px] font-black uppercase text-slate-400 ml-5 tracking-widest flex items-center gap-1.5">
+                  <History size={14} /> Previous Assessment
+                </label>
+                <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 max-h-40 overflow-y-auto space-y-2">
+                  {advisor.BatchAssignments && advisor.BatchAssignments.length > 0 ? (
+                    advisor.BatchAssignments.map((assignment: any, index: number) => {
+                      const batchModel = assignment.BatchModel;
+                      const programName = batchModel?.ProgramModel?.programName || 'N/A';
+                      const batchName = batchModel?.batchName || 'Unknown Batch';
+                      const batchYear = batchModel?.batchYear || '';
+                      const isCurrent = assignment.isCurrentlyAdvised;
+
+                      return (
+                        <div 
+                          key={index} 
+                          className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm text-xs font-bold text-[#1e3a5f]"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`h-2.5 w-2.5 rounded-full ${isCurrent ? 'bg-green-500' : 'bg-slate-300'}`} />
+                            <div>
+                              <p>{programName} - <span className="text-slate-500">{batchName} {batchYear}</span></p>
+                            </div>
+                          </div>
+                          <span className={`px-2.5 py-1 rounded-lg text-[9px] uppercase font-black ${
+                            isCurrent ? 'bg-green-50 text-green-600 border border-green-200' : 'bg-slate-100 text-slate-400'
+                          }`}>
+                            {isCurrent ? 'Current Active' : 'Previous'}
+                          </span>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-xs text-slate-400 text-center py-3 font-medium">No previous batch history found.</p>
+                  )}
                 </div>
               </div>
 

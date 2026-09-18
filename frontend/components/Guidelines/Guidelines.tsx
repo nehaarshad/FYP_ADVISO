@@ -392,5 +392,11 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
         </div>
       </div>
     </div>
-  );
+  );  
 }
+
+
+
+
+
+
