@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from 'react';
 import { SuggestionCard } from './SuggestionCard';
 import { MeetingSuggestion } from '@/src/repositories/batchMeetingRepository/types/batchMeetingTypes';
@@ -38,13 +39,13 @@ export const SuggestionList: React.FC<Props> = ({ suggestions, onSchedule }) => 
     <div className="space-y-6">
       {DAY_ORDER.filter((d) => grouped[d]?.length).map((day) => (
         <div key={day}>
-          <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">{day}</h3>
-            <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+          <div className="flex items-center gap-2 mb-2.5">
+            <h3 className="text-[10.5px] text-[#1e3a5f] uppercase tracking-wider">{day}</h3>
+            <span className="text-[10px] text-[#1e3a5f] bg-slate-100 px-2 py-0.5 rounded-md">
               {grouped[day].length}
             </span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {grouped[day].map((s) => {
               const key = `${s.day}-${s.startTime}-${s.endTime}`;
               return (

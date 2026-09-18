@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -39,8 +40,8 @@ export const MeetingDatePicker: React.FC<Props> = ({
 
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-600 mb-1">
-        Meeting date (<span className="text-gray-500">{meetingDay}</span> only)
+      <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">
+        Meeting date (<span className="text-[#1e3a5f] font-black">{meetingDay}</span> only)
       </label>
       <input
         type="date"
@@ -48,7 +49,7 @@ export const MeetingDatePicker: React.FC<Props> = ({
         min={min}
         disabled={disabled}
         onChange={handleChange}
-        className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none disabled:bg-gray-50"
+        className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs font-bold text-[#1e3a5f] bg-white focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f] outline-none disabled:bg-slate-50 transition"
       />
     </div>
   );
