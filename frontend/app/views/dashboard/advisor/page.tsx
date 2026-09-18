@@ -373,6 +373,7 @@ import { Sidebar } from "@/components/navbars/route";
 import { ProfileView } from "@/components/ProfileView/route"; 
 import { AdvisoryParentScreen } from '@/components/AdvisorView/advisoryNavPtterrn'; 
 import { AdvisorTimetablePage } from "@/components/Timetable/AdvisorTimetablePage";
+import { AdvisorMeetingsPage } from "@/components/Meetings/AdvisorMeetingsPage";
 
 // Local component fallbacks or direct imports
 import AdvisoryNotes from "../../../../components/AdvisorView/AdvisoryNotes"; 
@@ -563,12 +564,14 @@ export default function AdvisorDashboard() {
           {view === "guidelines" && <Guidelines onBack={() => setView("overview")} />} 
           {view === "faculty-recommendation" && <FacultyRecommendation onBack={() => setView("overview")} />} 
           {view === "timetable" && <AdvisorTimetablePage onBack={() => setView("overview")} />} 
+            {view === "meeting" && <AdvisorMeetingsPage onBack={() => setView("overview")} />}
           {view === "notes" && <AdvisoryNotes onBack={() => setView("overview")} />} 
           {view === "student-profile" && selectedStudent && ( 
             <AdvisoryParentScreen student={selectedStudent} onBack={handleBackToOverview} isAdvisor={true} onViewTranscript={handleViewTranscript} /> 
           )} 
           {view === "transcript" && selectedStudent && <StudentTranscript student={selectedStudent} onBack={handleBackToProfile} />} 
           {view === "profile" && <ProfileView />} 
+         
         </div> 
       </main> 
     </div> 
