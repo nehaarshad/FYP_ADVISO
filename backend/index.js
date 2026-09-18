@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 import router from "./src/routes/indexRoutes.js";
 import chatService from "./src/services/chatService.js";
 import { Server as SocketServer } from 'socket.io'; 
+import startReminderJob from './src/services/meetingReminderService.js'
 import path from "path";
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
 
 //app routes
 app.use(router);
+startReminderJob();
 // Initialize chat service with Socket.IO
 const { userSockets } = chatService(io);
 
