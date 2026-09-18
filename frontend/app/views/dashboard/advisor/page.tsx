@@ -12,7 +12,6 @@ import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { AdvisorStudentList } from "@/components/StudentDetails/advisorStudentList"; 
 import { StudentTranscript } from "@/components/StudentDetails/StudentTranscript"; 
 import { Sidebar } from "@/components/navbars/route"; 
-import { NotificationPanel } from "@/components/Notifications/NotificationPanel"; 
 import AdvisoryNotes from "../../../../components/AdvisorView/AdvisoryNotes"; 
 import { AdvisoryParentScreen } from '@/components/AdvisorView/advisoryNavPtterrn'; 
 import AdvisorChat from "../../../../components/Chat/AdvisorChat"; 
@@ -332,12 +331,7 @@ export default function AdvisorDashboard() {
         </div> 
       </main> 
  
-      {/* Notifications Modal */} 
-      <AnimatePresence> 
-        {showNotifications && (
-          <NotificationPanel onClose={() => setShowNotifications(false)} />
-        )} 
-      </AnimatePresence> 
+      
     </div> 
   ); 
 } 

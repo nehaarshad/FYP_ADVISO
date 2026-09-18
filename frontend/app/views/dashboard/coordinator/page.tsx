@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-
-  Search, Bell, Settings, Users, ShieldCheck, Clock, 
+  Users, ShieldCheck, Clock, 
   Map, BookOpen, Calendar, GraduationCap, 
   FileSearch, ChevronLeft, 
   SearchCheck
@@ -13,8 +12,6 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 import { Sidebar } from "@/components/navbars/route";
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
-import { NotificationPanel } from '@/components/Notifications/NotificationPanel';
-import { SettingsModal } from '@/app/components/SettingsModel';
 import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
 import { BatchResults } from '@/app/components/BatchResults';
@@ -22,7 +19,6 @@ import { StudentRecords } from '@/app/components/StudentRecords';
 import { CourseCatalog } from '@/components/courseComponents/CourseCatalog';
 import { Timetable } from '@/app/components/Timetable';
 import { ProfileView } from '@/components/ProfileView/route';
-import { RequestForms } from '@/app/components/RequestForms';
 import DegreeGuidelinesManagement from '@/components/Guidelines/degreeGuidlinesManagementComponent';
 import { AddFaculty } from '@/app/components/AddFaculty';
 import { AddStudent } from '@/app/components/AddStudents';
@@ -30,28 +26,24 @@ import { AddProgram } from '@/components/program/addNewprogram/route';
 import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
+
 export default function CoordinatorDashboard() {
-  //resolve conflict
-  const [isClient] = useState(() => typeof window !== 'undefined');
   const [activeTab, setActiveTab] = useState("overview");
   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
   const router = useRouter();
-  const {  statistics: studentStats, fetchStudents } = useStudents();
+  const { statistics: studentStats, fetchStudents } = useStudents();
   const { statistics: advisorStats, fetchAdvisors } = useAdvisors();
-  // Real-time statistics that update automatically when stores change
+  
   const activeStudentsCount = studentStats?.activeStudents || 0;
   const activeAdvisorCount = advisorStats?.activeAdvisors || 0;
   const totalStudentsCount = studentStats?.totalStudents || 0;
   const totalAdvisorsCount = advisorStats?.totalAdvisors || 0;
 
-  useEffect (() => {
+  useEffect(() => {
     if (!sessionManager.hasActiveSession()) {
       router.push('/login');
       return;
     }
-    // Initial data fetch
     fetchStudents();
     fetchAdvisors();
   }, [router]);
@@ -71,18 +63,6 @@ export default function CoordinatorDashboard() {
     }
   };
 
-  if (!isClient) {
-    return (
-
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading Dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">
       <Sidebar 
@@ -91,20 +71,10 @@ export default function CoordinatorDashboard() {
         setActiveTab={navigateTo} 
       />
       <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
-        {/* Header */}
+        {/* Empty Top Header Bar */}
         <header className="h-20 bg-white border-b border-slate-200 px-10 flex items-center justify-between sticky top-0 z-40 shrink-0">
-          <div className="relative w-full max-w-xl">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <input type="text" placeholder="Quick Search..." className="w-full pl-14 pr-6 py-3 bg-slate-100/50 border-none rounded-[1.2rem] font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/20 transition-all" />
-          </div>
-          <div className="flex items-center gap-4">
-            <div onClick={() => setShowNotifications(true)} className="h-12 w-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-500 hover:bg-[#1e3a5f] hover:text-white cursor-pointer transition-all relative">
-              <Bell size={20}/> <div className="absolute top-3 right-3 h-2 w-2 bg-[#FDB813] border-2 border-white rounded-full"></div>
-            </div>
-            <div onClick={() => setShowSettings(true)} className="h-12 w-12 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-500 hover:bg-[#1e3a5f] hover:text-white cursor-pointer transition-all">
-              <Settings size={20}/>
-            </div>
-          </div>
+          <div></div>
+          <div></div>
         </header>
 
         <div className="p-8 max-w-7xl mx-auto w-full flex-1">
@@ -123,17 +93,11 @@ export default function CoordinatorDashboard() {
                   icon={<ShieldCheck/>} 
                   trend={`${activeAdvisorCount} Active`} 
                 />
-                <StatCard 
-                  label="Requests" 
-				  value="--" 
-				  icon={<Clock/>} 
-				  trend="Coming Soon...." 
-				  color="text-slate-300" 
-				/>
+                
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                 <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
+                <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
                 <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
                 <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
                 <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
@@ -143,36 +107,32 @@ export default function CoordinatorDashboard() {
             </div>
           )}
 
-            {/* -DYNAMIC COMPONENT SCREENS- */}
-            {activeTab !== "overview" && (
-              <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
-                <button 
-                  onClick={goBack}
-                  className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
-                >
-                  <ChevronLeft size={16} /> Back
-                </button>
-                {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
-                {activeTab === "roadmaps" && <RoadmapSection />}
-                {activeTab === "course-offering" && <CourseOffering />}
-                {activeTab === "timetable" && <Timetable />}
-                {activeTab === "results" && <BatchResults />}
-                {activeTab === "course-details" && <CourseCatalog />}
-                {activeTab === "bulk-student-upload" && <StudentRecords/>}
-                {activeTab === "add-student" && <AddStudent/>}
-                {activeTab === "add-faculty" && <AddFaculty/>}
-                {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
-                {activeTab === "edit-advisor" && <AdvisorsList/>}
-                {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
-                {activeTab === "requests" && <RequestForms />}
-                {activeTab === "profile" && <ProfileView />}
-              </div>
-            )}
+          {/* -DYNAMIC COMPONENT SCREENS- */}
+          {activeTab !== "overview" && (
+            <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+              <button 
+                onClick={goBack}
+                className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
+              >
+                <ChevronLeft size={16} /> Back
+              </button>
+              {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
+              {activeTab === "roadmaps" && <RoadmapSection />}
+              {activeTab === "course-offering" && <CourseOffering />}
+              {activeTab === "timetable" && <Timetable />}
+              {activeTab === "results" && <BatchResults />}
+              {activeTab === "course-details" && <CourseCatalog />}
+              {activeTab === "bulk-student-upload" && <StudentRecords/>}
+              {activeTab === "add-student" && <AddStudent/>}
+              {activeTab === "add-faculty" && <AddFaculty/>}
+              {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
+              {activeTab === "edit-advisor" && <AdvisorsList/>}
+              {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
+              {activeTab === "profile" && <ProfileView />}
+            </div>
+          )}
         </div>
       </main>
-
-      {showNotifications && <NotificationPanel onClose={() => setShowNotifications(false)} />}
-      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </div>
   );
 }
@@ -200,3 +160,18 @@ function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) 
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
