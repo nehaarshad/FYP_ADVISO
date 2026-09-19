@@ -8,7 +8,7 @@ import { X, ShieldCheck,  } from 'lucide-react';
 interface AdvisorDetailsModalProps {
   isOpen: boolean;
   advisor: any;
-  onClose: () => void;
+  onClose: () => void ;
 }
 
 export function AdvisorDetailsModal({ isOpen, advisor, onClose, }: AdvisorDetailsModalProps) {
