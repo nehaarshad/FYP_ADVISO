@@ -48,7 +48,7 @@ export default function LandingPage() {
             className="text-4xl text-[#FDB813] md:text-6xl font-bold tracking-tight mb-10 mt-20"
           >
             Adviso - <br />
-            <span className="text-[#FDB813]">An Academic Batch Advisor System</span>
+            <span className="text-[#FDB813]">Academic Batch Advisor System</span>
           </motion.h1>
           <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ export default function LandingPage() {
           </motion.h2>
           <div className="mt-8">
                {/* Button triggers the handleClick function */}
-               <YellowFilledButtonProps text="Get Started" onClick={handleClick}/>
+               <YellowFilledButtonProps text="Get Started NOW " onClick={handleClick}/>
           </div>
         </div>
       </section>
