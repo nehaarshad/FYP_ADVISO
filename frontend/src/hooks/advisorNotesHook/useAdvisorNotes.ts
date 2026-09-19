@@ -6,7 +6,7 @@ import {
 
 import {
   CreateAdvisorNoteData,
-  UpdateAdvisorNoteData,
+  UpdateAdvisorNoteData ,
 } from './types/advisorNoteType';
 
 import { useAdvisorNotesStore } from '@/src/storage/advisorNotesStore/advisorNotesStore';
@@ -73,7 +73,7 @@ export const useAdvisorNotes = (
       if (!noteContent.trim()) {
         return {
           success: false,
-          error: 'Note content is required',
+          error: 'Note content is really required',
         };
       }
 
@@ -113,14 +113,14 @@ export const useAdvisorNotes = (
       if (!advisorId) {
         return {
           success: false,
-          error: 'Advisor ID is required',
+          error: 'Advisor Id is required',
         };
       }
 
       if (!id) {
         return {
           success: false,
-          error: 'Note ID is required',
+          error: 'Note Id is required',
         };
       }
 
@@ -134,7 +134,7 @@ export const useAdvisorNotes = (
       if (!noteContent.trim()) {
         return {
           success: false,
-          error: 'Note content is required',
+          error: 'Note content is really required',
         };
       }
 
