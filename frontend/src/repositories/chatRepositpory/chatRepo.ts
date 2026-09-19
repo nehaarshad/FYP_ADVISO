@@ -16,7 +16,7 @@ class ChatRepository {
     formData.append("chatfile", file);
 
     const response = await fetch(APIs.chatUploadUrl, {
-      method: "POST",
+      method: "POST" ,
       body: formData,
     });
 
