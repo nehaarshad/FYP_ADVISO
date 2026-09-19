@@ -73,6 +73,7 @@ class RecommendationRepository extends BaseApiService {
     try {
       const url = AppApis.getStudentRecommendationsUrl.replace(':studentId', recommendationId.toString());
       const response = await this.getApiResponse<any>(url);
+      console.log("System rec log ",url,"\n",response)
       return response;
     } catch (error) {
       console.error('Get recommendation by ID error:', error);

@@ -8,9 +8,12 @@ import {
   Users, Calendar, Clock, Sparkles, Split, Target, GraduationCap,
 } from 'lucide-react';
 import { useRecommendations } from '../../src/hooks/recommendationHook/useCourseRecommendationHook';
+import { useUserProfile } from '@/src/hooks/profileHook/useProfile';
+
 
 interface AdvisoryLogsProps {
   onBack?: () => void;
+   onOpenStudentRecommendations?: () => void;
 }
 
 /* ─────────────────────────── types ─────────────────────────── */
@@ -334,9 +337,11 @@ function StudentBlock({ log }: { log: any }) {
 
 /* ─────────────────────────── main component ─────────────────────────── */
 
-export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
+export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack ,onOpenStudentRecommendations}) => {
   const { advisoryLogs, isLoadingLogs, logsError, fetchAdvisoryLogs } = useRecommendations();
   const [searchTerm, setSearchTerm] = useState('');
+  const { userProfile } = useUserProfile();
+  const role = userProfile?.role;
 
   useEffect(() => {
     fetchAdvisoryLogs();
@@ -488,6 +493,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
             </p>
           </div>
 
+          {role=="advisor" ?
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
             <input
@@ -498,6 +504,19 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
               className="w-full sm:w-[240px] pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold focus:ring-2 ring-amber-400 outline-none"
             />
           </div>
+          :
+                <div className="flex items-center gap-3 shrink-0">
+            <div className="inline-flex p-1 bg-[#1e3a5f] text-white shadow-sm rounded-xl border border-slate-200">
+              
+                <button
+                 onClick={onOpenStudentRecommendations}
+                  className={`px-3.5 py-1.5 text-xs font-black uppercase tracking-wider rounded-lg transition-all`}
+                >
+                  System Generated Recommendations
+                </button>
+            </div>
+          </div>
+}
         </div>
       </div>
 

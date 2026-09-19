@@ -181,16 +181,6 @@ if (!/^\d+$/.test(sapId.trim())) {
          
             </form>
 
-            {/* Forgot Password Link */}
-            <div className="mt-4 text-right">
-              <Link 
-                href="/forgot-password" 
-                className="text-sm text-[#1e3a5f] hover:text-[#FDB813] transition-colors font-medium"
-              >
-                Forgot Password?
-              </Link>
-            </div>
-
             <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50/50 rounded-[1.2rem] border border-blue-100/50">
               <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
                 <AlertCircle size={15} className="text-blue-600" />

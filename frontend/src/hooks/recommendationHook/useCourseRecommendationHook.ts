@@ -24,15 +24,6 @@ const initialState: RecommendationState = {
   logsError: null,
 };
 
-/**
- * Canonical key for a card.
- * - Elective cards key by their SLOT name (`originalCourseName`), so
- *   re-picking a different option on the same card REPLACES rather than
- *   duplicates. Three elective cards on the same screen therefore have
- *   three distinct keys, even though they may currently show the same
- *   option name.
- * - Regular courses key by their real `courseId` (or fall back to name).
- */
 const selectionKey = (card: {
   courseId?: number | null;
   courseName: string;
@@ -47,7 +38,6 @@ const selectionKey = (card: {
     : `name:${card.courseName}`;
 };
 
-/** Same key but derived from a stored entry (which uses `_selectionSource`). */
 const entryKey = (c: SuggestedCourse) =>
   selectionKey({
     courseId: c.courseId,
