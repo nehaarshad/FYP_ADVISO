@@ -28,7 +28,7 @@ export default function LandingPage() {
   }, [router]);
   
   const handleClick = () => {
-    router.push('/views/auth/login'); 
+    router.push('/views/auth/registeration/signup'); 
   };
 
   return (
@@ -59,7 +59,7 @@ export default function LandingPage() {
           </motion.h2>
           <div className="mt-8">
                {/* Button triggers the handleClick function */}
-               <YellowFilledButtonProps text="Get Started NOW " onClick={handleClick}/>
+               <YellowFilledButtonProps text="Get Started Now " onClick={handleClick}/>
           </div>
         </div>
       </section>
