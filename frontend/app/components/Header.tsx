@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ searchQuery, setSearchQuery }) =
           <Bell size={20}/>
           <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-amber-400 rounded-full border-2 border-white"></span>
         </div>
-        <div className="w-10 h-10 bg-[#1e3a5f] rounded-xl border-2 border-amber-400 flex items-center justify-center text-white font-black italic uppercase">JF</div>
+        <div className="w-10 h-10 bg-[#1e3a5f] rounded-xl border-2 border-amber-400 flex items-center justify-center text-white font-bold  uppercase">JF</div>
       </div>
     </header>
   );

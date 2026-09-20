@@ -118,12 +118,12 @@ export const CourseOffering = () => {
       <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic">Course Offerings</h2>
+            <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase ">Course Offerings</h2>
             <p className="text-xs text-slate-400 mt-1">Manage and view course offerings by session</p>
           </div>
           <button 
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FDB813] transition-all"
+            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#FDB813] transition-all"
           >
             Upload New List
           </button>
@@ -133,7 +133,7 @@ export const CourseOffering = () => {
         <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
           <div className="flex items-center gap-2 mb-3">
             <Filter size={16} className="text-[#1e3a5f]" />
-            <h3 className="text-xs font-black text-[#1e3a5f] uppercase tracking-wider">Filter Offerings</h3>
+            <h3 className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">Filter Offerings</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
             <select
@@ -261,20 +261,20 @@ export const CourseOffering = () => {
               <table className="w-full">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Course Name</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Credits</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Category</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Batch</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Program</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Session</th>
-                    <th className="px-4 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-wider">Actions</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Course Name</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Credits</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Category</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Batch</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Program</th>
+                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Session</th>
+                    <th className="px-4 py-3 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
                   {filteredOfferings.map((offering) => (
                     <tr key={offering.id} className="hover:bg-slate-50/50 transition-colors">
                       <td className="px-4 py-4">
-                        <p className="font-black text-[#1e3a5f] text-sm">{offering.courseName}</p>
+                        <p className="font-bold text-[#1e3a5f] text-sm">{offering.courseName}</p>
                       </td>
                       <td className="px-4 py-4">
                         <span className="text-xs font-bold text-slate-600">{offering.credits}</span>
@@ -318,14 +318,14 @@ export const CourseOffering = () => {
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
     <div className="bg-white rounded-2xl max-w-md w-full p-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Upload Course Offerings</h3>
+        <h3 className="text-lg font-bold text-[#1e3a5f] uppercase">Upload Course Offerings</h3>
         <button title='btn' onClick={() => setShowUploadModal(false)} className="p-1 hover:bg-slate-100 rounded">
           <X size={20} />
         </button>
       </div>
       <form onSubmit={handleUpload} className="space-y-4">
         <div>
-          <label className="text-[10px] font-black text-slate-400 uppercase">Program Name *</label>
+          <label className="text-[10px] font-bold text-slate-400 uppercase">Program Name *</label>
           <select
             title='Program'
             value={selectedProgram}
@@ -341,7 +341,7 @@ export const CourseOffering = () => {
         </div>
 
         <div>
-          <label className="text-[10px] font-black text-slate-400 uppercase">Session Type *</label>
+          <label className="text-[10px] font-bold text-slate-400 uppercase">Session Type *</label>
           <select
             title='Session Type'
             value={selectedSessionType}
@@ -357,7 +357,7 @@ export const CourseOffering = () => {
         </div>
 
         <div>
-          <label className="text-[10px] font-black text-slate-400 uppercase">Session Year *</label>
+          <label className="text-[10px] font-bold text-slate-400 uppercase">Session Year *</label>
           <input
             type="text"
             title='Session Year'
@@ -369,7 +369,7 @@ export const CourseOffering = () => {
         </div>
 
         <div>
-          <label className="text-[10px] font-black text-slate-400 uppercase">Excel File *</label>
+          <label className="text-[10px] font-bold text-slate-400 uppercase">Excel File *</label>
           <div className="relative mt-1">
             <input
               title='upload file'
@@ -407,7 +407,7 @@ export const CourseOffering = () => {
 
         <button 
           type="submit" 
-          className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all"
+          className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all"
         >
           Upload
         </button>
@@ -420,7 +420,7 @@ export const CourseOffering = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-              <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Course Details</h3>
+              <h3 className="text-lg font-bold text-[#1e3a5f] uppercase">Course Details</h3>
               <button title='btn' onClick={() => setShowDetailModal(false)} className="p-1 hover:bg-slate-100 rounded">
                 <X size={20} />
               </button>
@@ -446,7 +446,7 @@ export const CourseOffering = () => {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[9px] font-black text-slate-400 uppercase">{label}</p>
+      <p className="text-[9px] font-bold text-slate-400 uppercase">{label}</p>
       <p className="text-sm font-bold text-[#1e3a5f]">{value || 'N/A'}</p>
     </div>
   );

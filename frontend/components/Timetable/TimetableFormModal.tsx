@@ -67,7 +67,7 @@ export const TimetableFormModal: React.FC<Props> = ({
         onSubmit={handleSubmit}
         className="bg-white rounded-3xl shadow-xl w-full max-w-md p-6 border border-slate-100"
       >
-        <h3 className="text-base font-black text-[#1e3a5f] uppercase tracking-tight mb-5">
+        <h3 className="text-base font-bold text-[#1e3a5f] uppercase tracking-tight mb-5">
           {mode === 'add' ? 'Add Timetable Entry' : 'Edit Timetable Entry'}
         </h3>
 
@@ -129,14 +129,14 @@ export const TimetableFormModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="px-5 py-2.5 text-xs font-black uppercase tracking-wider text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 transition"
+            className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 transition"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-2.5 text-xs font-black uppercase tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl shadow-md shadow-[#FDB813]/20 disabled:opacity-50 transition flex items-center gap-2"
+            className="px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl shadow-md shadow-[#FDB813]/20 disabled:opacity-50 transition flex items-center gap-2"
           >
             {submitting && (
               <span className="w-3.5 h-3.5 border-2 border-[#1e3a5f]/40 border-t-[#1e3a5f] rounded-full animate-spin" />

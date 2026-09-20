@@ -41,7 +41,7 @@ export function AddProgram() {
               <BookOpen size={24} className="text-[#FDB813]" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-white uppercase italic">Program Management</h2>
+              <h2 className="text-xl font-bold text-white uppercase ">Program Management</h2>
               <p className="text-white/70 text-xs mt-1">Add and manage academic programs</p>
             </div>
           </div>
@@ -51,7 +51,7 @@ export function AddProgram() {
           {!showForm ? (
             <button
               onClick={() => setShowForm(true)}
-              className="w-full py-4 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2"
             >
               <Plus size={18} />
               Add New Program
@@ -79,7 +79,7 @@ export function AddProgram() {
               )}
               
               <div>
-                <label className="text-[10px] font-black uppercase text-slate-400 ml-2">
+                <label className="text-[10px] font-bold uppercase text-slate-400 ml-2">
                   Program Name
                 </label>
                 <input
@@ -97,7 +97,7 @@ export function AddProgram() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
                   {isLoading ? 'Adding...' : 'Add Program'}
@@ -110,7 +110,7 @@ export function AddProgram() {
                     clearError();
                     setSuccessMessage(null);
                   }}
-                  className="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-black text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
+                  className="px-6 py-3 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
                 >
                   Cancel
                 </button>

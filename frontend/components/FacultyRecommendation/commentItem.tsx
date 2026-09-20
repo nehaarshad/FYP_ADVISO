@@ -53,7 +53,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               })}
             </span>
             {comment.isAccepted && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-black uppercase bg-emerald-100 text-emerald-700">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase bg-emerald-100 text-emerald-700">
                 <CheckCircle size={10} /> Accepted
               </span>
             )}

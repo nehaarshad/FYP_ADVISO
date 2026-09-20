@@ -108,7 +108,7 @@ export const StudentProfile = ({
         {isAdvisor && student.StudentStatus?.currentStatus !== 'Relegated' && (
           <button 
             onClick={onNavigateToCourseRec}
-            className="flex items-center gap-2 bg-amber-400 text-[#1e3a5f] opacity-90 px-4 md:px-5 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase hover:bg-amber-300 transition-all shadow-sm"
+            className="flex items-center gap-2 bg-amber-400 text-[#1e3a5f] opacity-90 px-4 md:px-5 py-2.5 rounded-xl text-[9px] md:text-[10px] font-bold uppercase hover:bg-amber-300 transition-all shadow-sm"
           >
             <Sparkles size={14} />
             <span>Recommend Courses</span>
@@ -126,14 +126,14 @@ export const StudentProfile = ({
               <User size={40} className="text-[#1e3a5f] opacity-60" />
             </div>
             
-            <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] uppercase text-center tracking-tighter">
+            <h2 className="text-xl md:text-2xl font-bold text-[#1e3a5f] uppercase text-center tracking-tighter">
               {student.studentName}
             </h2>
-            <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-wider mt-1">
+            <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
               SAP ID: {student.User?.sapid}
             </p>
             
-            <div className={`mt-4 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider ${statusBadgeClasses}`}>
+            <div className={`mt-4 px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${statusBadgeClasses}`}>
               {student.StudentStatus?.currentStatus || 'Active'} Student
             </div>
 
@@ -166,7 +166,7 @@ export const StudentProfile = ({
                 <FileText size={18} className="text-amber-400" />
               </div>
               <div className="text-left">
-                <span className="block text-xs md:text-[13px] font-black uppercase tracking-tight">
+                <span className="block text-xs md:text-[13px] font-bold uppercase tracking-tight">
                   View Transcript
                 </span>
                 <span className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase">
@@ -187,7 +187,7 @@ export const StudentProfile = ({
                   <BookOpen size={18} className="text-blue-500" />
                 </div>
                 <div className="text-left">
-                  <span className="block text-xs md:text-[13px] font-black uppercase tracking-tight">
+                  <span className="block text-xs md:text-[13px] font-bold uppercase tracking-tight">
                     View Roadmap
                   </span>
                   <span className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase">
@@ -207,24 +207,24 @@ export const StudentProfile = ({
           <div className="bg-[#1e3a5f] rounded-[1.8rem] md:rounded-[2.1rem] p-4 md:p-2 text-white border-b-[6px] border-amber-400 shadow-xl relative overflow-hidden group">
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
               <div className="pl-0 md:pl-6 py-4 text-center md:text-left">
-                <p className="text-[9px] md:text-[10px] text-amber-400 font-black uppercase tracking-[0.1em] mb-2">
+                <p className="text-[9px] md:text-[10px] text-amber-400 font-bold uppercase tracking-[0.1em] mb-2">
                   Current Academic Standing
                 </p>
                 <div className="flex items-baseline justify-center md:justify-start gap-1">
-                  <h2 className="text-3xl md:text-4xl font-black tracking-tight text-white leading-none">
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white leading-none">
                     {getCGPA()}
                   </h2>
-                  <span className="text-[10px] md:text-xs font-black text-slate-300 uppercase tracking-widest">
+                  <span className="text-[10px] md:text-xs font-bold text-slate-300 uppercase tracking-widest">
                     CGPA
                   </span>
                 </div>
               </div>
 
               <div className="bg-white/10 backdrop-blur-md px-6 md:px-8 py-5 md:py-6 rounded-[1.5rem] md:rounded-[2.1rem] border border-white/10 text-center md:text-left">
-                <p className="text-[8px] md:text-[9px] font-black text-amber-400 uppercase mb-2 tracking-[0.1em]">
+                <p className="text-[8px] md:text-[9px] font-bold text-amber-400 uppercase mb-2 tracking-[0.1em]">
                   Completed Credits
                 </p>
-                <p className="text-lg md:text-xl font-black text-amber-400"> 
+                <p className="text-lg md:text-xl font-bold text-amber-400"> 
                   {getTotalEarnedCredits()} <span className="text-white">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span> 
                   <span className="text-[9px] md:text-[10px] text-slate-400 uppercase ml-1">Hrs</span>
                 </p>
@@ -249,7 +249,7 @@ export const StudentProfile = ({
                     <span className="text-xs font-semibold uppercase pr-2 text-slate-700">
                       {categoryName}
                     </span>
-                    <span className="text-[9px] md:text-[10px] font-black text-slate-400 whitespace-nowrap">
+                    <span className="text-[9px] md:text-[10px] font-bold text-slate-400 whitespace-nowrap">
                       {earned}/{required}
                     </span>
                   </div>
@@ -270,7 +270,7 @@ export const StudentProfile = ({
           {/* Status Reason */}
           {student.StudentStatus?.reason && (
             <div className="bg-amber-50 rounded-[1.8rem] p-6 border border-amber-100">
-              <p className="text-[9px] text-amber-600 font-black uppercase tracking-wider mb-1">Status Remark</p>
+              <p className="text-[9px] text-amber-600 font-bold uppercase tracking-wider mb-1">Status Remark</p>
               <p className="text-sm text-amber-800">{student.StudentStatus.reason}</p>
             </div>
           )}
@@ -278,7 +278,7 @@ export const StudentProfile = ({
           {/* Guardian Information */}
           {student.StudentGuardians && student.StudentGuardians.length > 0 && (
             <div className="bg-white rounded-[1.8rem] p-6 shadow-sm border border-slate-100">
-              <h3 className="text-sm font-black text-[#1e3a5f] uppercase tracking-wider mb-4">Guardian Information</h3>
+              <h3 className="text-sm font-bold text-[#1e3a5f] uppercase tracking-wider mb-4">Guardian Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="text-[9px] text-slate-400 uppercase">Full Name</p>

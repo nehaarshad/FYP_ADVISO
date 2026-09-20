@@ -599,8 +599,8 @@
 //         </button>
 //       )}
 //       <div className="min-w-0">
-//         <h1 className="text-xl font-black text-[#1e3a5f] uppercase tracking-tight truncate">{title}</h1>
-//         {subtitle && <p className="text-[11px] font-extrabold text-[#FDB813] uppercase tracking-wider mt-0.5">{subtitle}</p>}
+//         <h1 className="text-xl font-bold text-[#1e3a5f] uppercase tracking-tight truncate">{title}</h1>
+//         {subtitle && <p className="text-[11px] font-bold text-[#FDB813] uppercase tracking-wider mt-0.5">{subtitle}</p>}
 //       </div>
 //     </div>
 
@@ -611,7 +611,7 @@
 //             <button
 //               key={v}
 //               onClick={() => onViewChange(v)}
-//               className={`px-3.5 py-1.5 text-xs font-black uppercase tracking-wider rounded-lg transition ${
+//               className={`px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg transition ${
 //                 view === v ? 'bg-white text-[#1e3a5f] shadow-sm' : 'text-slate-400 hover:text-slate-600'
 //               }`}
 //             >
@@ -622,9 +622,9 @@
 
 //         <button
 //           onClick={onAdd}
-//           className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 flex items-center gap-1.5"
+//           className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 flex items-center gap-1.5"
 //         >
-//           <span className="text-sm font-black">+</span> Add
+//           <span className="text-sm font-bold">+</span> Add
 //         </button>
 //       </div>
 //     ) : null}
@@ -905,8 +905,8 @@ export const Header: React.FC<{
         </button>
       )}
       <div className="min-w-0">
-        <h1 className="text-xl font-black text-[#1e3a5f] uppercase tracking-tight truncate">{title}</h1>
-        {subtitle && <p className="text-[11px] font-extrabold text-[#FDB813] uppercase tracking-wider mt-0.5">{subtitle}</p>}
+        <h1 className="text-xl font-bold text-[#1e3a5f] uppercase tracking-tight truncate">{title}</h1>
+        {subtitle && <p className="text-[11px] font-bold text-[#FDB813] uppercase tracking-wider mt-0.5">{subtitle}</p>}
       </div>
     </div>
 
@@ -916,7 +916,7 @@ export const Header: React.FC<{
           <button
             key={v}
             onClick={() => onViewChange(v)}
-            className={`px-3.5 py-1.5 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${
+            className={`px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
               view === v 
                 ? 'bg-[#1e3a5f] text-white shadow-sm' 
                 : 'text-slate-500 hover:text-[#1e3a5f]'
@@ -929,9 +929,9 @@ export const Header: React.FC<{
 
       <button
         onClick={onAdd}
-        className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 flex items-center gap-1.5"
+        className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 flex items-center gap-1.5"
       >
-        <span className="text-sm font-black">+</span> Add
+        <span className="text-sm font-bold">+</span> Add
       </button>
     </div>
   </div>

@@ -42,13 +42,13 @@ export const TimetableGrid: React.FC<Props> = ({ entries, onEntryClick }) => {
       <div className="min-w-[900px]">
         {/* Header row */}
         <div className="grid grid-cols-[80px_repeat(6,1fr)] border-b border-slate-100 bg-slate-50/60">
-          <div className="p-3 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">
+          <div className="p-3 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center">
             Time
           </div>
           {WORK_DAYS.map((day) => (
             <div
               key={day}
-              className="p-3 text-[11px] font-black text-[#1e3a5f] uppercase tracking-widest text-center border-l border-slate-100"
+              className="p-3 text-[11px] font-bold text-[#1e3a5f] uppercase tracking-widest text-center border-l border-slate-100"
             >
               {day}
             </div>
@@ -98,7 +98,7 @@ export const TimetableGrid: React.FC<Props> = ({ entries, onEntryClick }) => {
                     style={{ top, height }}
                     title={`${e.course}\n${formatTime(e.startTime)} — ${formatTime(e.endTime)}`}
                   >
-                    <div className="text-xs font-black uppercase tracking-tight truncate text-white group-hover:text-[#FDB813] transition-colors">
+                    <div className="text-xs font-bold uppercase tracking-tight truncate text-white group-hover:text-[#FDB813] transition-colors">
                       {e.course}
                     </div>
                     <div className="text-[10px] font-bold text-white/80 uppercase tracking-wider mt-0.5 truncate">

@@ -61,15 +61,15 @@
 //         <div className="min-w-0">
 //           <div className="flex items-center gap-2.5 mb-1.5">
 //             <MeetingStatusBadge status={meeting.status} />
-//             <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-md">
+//             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-md">
 //               Batch #{meeting.batchId}
 //             </span>
 //           </div>
-//           <h3 className="text-base font-black text-[#1e3a5f] uppercase tracking-tight">
+//           <h3 className="text-base font-bold text-[#1e3a5f] uppercase tracking-tight">
 //             {meeting.day} · {formatTime12(meeting.startTime)} — {formatTime12(meeting.endTime)}
 //           </h3>
 //           <p className="text-xs font-bold text-slate-500 mt-1">
-//             Scheduled for: <span className="text-[#1e3a5f] font-black">{formatDate(meeting.date)}</span>
+//             Scheduled for: <span className="text-[#1e3a5f] font-bold">{formatDate(meeting.date)}</span>
 //           </p>
 //         </div>
 //       </div>
@@ -83,7 +83,7 @@
 //         />
 
 //         <div>
-//           <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">Status</label>
+//           <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Status</label>
 //           <select
 //             value={status}
 //             disabled={saving}
@@ -100,7 +100,7 @@
 //       </div>
 
 //       <div>
-//         <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">
+//         <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
 //           Meeting summary / notes
 //         </label>
 //         <textarea
@@ -117,7 +117,7 @@
 //         <button
 //           disabled={!dirty || saving}
 //           onClick={handleSave}
-//           className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2"
+//           className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2"
 //         >
 //           {saving && (
 //             <span className="w-3.5 h-3.5 border-2 border-[#1e3a5f]/30 border-t-[#1e3a5f] rounded-full animate-spin" />
@@ -197,9 +197,6 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
         <div className="min-w-0">
           <div className="flex items-center gap-2.5 mb-1.5">
             <MeetingStatusBadge status={meeting.status} />
-            <span className="text-[10px] uppercase tracking-wider text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-md">
-              Batch #{meeting.batchId}
-            </span>
           </div>
           <h3 className="text-sm text-[#1e3a5f] uppercase tracking-tight">
             {meeting.day} · {formatTime12(meeting.startTime)} — {formatTime12(meeting.endTime)}

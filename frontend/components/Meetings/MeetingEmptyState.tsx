@@ -21,7 +21,7 @@ export const MeetingEmptyState: React.FC<Props> = ({
         />
       </svg>
     </div>
-    <h3 className="text-base font-black text-[#1e3a5f] uppercase tracking-tight mb-1">{title}</h3>
+    <h3 className="text-base font-bold text-[#1e3a5f] uppercase tracking-tight mb-1">{title}</h3>
     <p className="text-xs font-bold text-slate-500 max-w-sm">{description}</p>
   </div>
 );

@@ -151,7 +151,7 @@ console.log(' deleting note:', noteToDelete.id);
         
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase">
+            <h2 className="text-xl md:text-2xl font-bold text-[#1e3a5f] tracking-tighter uppercase">
               ADVISOR NOTES
             </h2>
             {batchId && (
@@ -161,7 +161,7 @@ console.log(' deleting note:', noteToDelete.id);
           
           <button
             onClick={handleAddNote}
-            className="bg-[#1e3a5f] text-white px-4 md:px-6 py-2.5 rounded-xl font-black text-[10px] md:text-[12px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#2a4a6f] transition-colors shadow-lg"
+            className="bg-[#1e3a5f] text-white px-4 md:px-6 py-2.5 rounded-xl font-bold text-[10px] md:text-[12px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#2a4a6f] transition-colors shadow-lg"
           >
             <Plus size={16} strokeWidth={3} />
             New Note

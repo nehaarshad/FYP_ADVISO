@@ -14,7 +14,7 @@ interface InputParams {
 const UniversalInput: React.FC<InputParams> = ({ Icon, label, type="text", placeholder, value, disabled, onChange }) => {
   return ( // ✅ added return
     <div className="space-y-2 text-left">
-      <label className="text-[11px] font-black uppercase text-slate-400 tracking-[0.15em] ml-1">
+      <label className="text-[11px] font-bold uppercase text-slate-400 tracking-[0.15em] ml-1">
         {label}
       </label>
       <div className="relative group">

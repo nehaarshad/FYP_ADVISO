@@ -54,7 +54,7 @@ export const NoteFormModal: React.FC<NoteFormProps> = ({
           <X size={20} />
         </button>
         
-        <h3 className="text-lg md:text-xl font-black text-[#1e3a5f] uppercase tracking-tighter mb-6">
+        <h3 className="text-lg md:text-xl font-bold text-[#1e3a5f] uppercase tracking-tighter mb-6">
           {isEditing ? 'Edit Note' : 'Create New Note'}
         </h3>
 
@@ -62,7 +62,7 @@ export const NoteFormModal: React.FC<NoteFormProps> = ({
 
           {/* Title Input */}
           <div className="space-y-1">
-            <label className="text-[9px] font-black text-[#1e3a5f] uppercase tracking-widest">
+            <label className="text-[9px] font-bold text-[#1e3a5f] uppercase tracking-widest">
               Title <span className="text-red-500">*</span>
             </label>
             <input 
@@ -82,7 +82,7 @@ export const NoteFormModal: React.FC<NoteFormProps> = ({
 
           {/* Content Textarea */}
           <div className="space-y-1">
-            <label className="text-[9px] font-black text-[#1e3a5f] uppercase tracking-widest">
+            <label className="text-[9px] font-bold text-[#1e3a5f] uppercase tracking-widest">
               Content <span className="text-red-500">*</span>
             </label>
             <textarea 
@@ -99,14 +99,14 @@ export const NoteFormModal: React.FC<NoteFormProps> = ({
           <div className="flex gap-3 pt-2">
             <button 
               onClick={handleClose}
-              className="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-colors"
+              className="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-colors"
               disabled={isSaving}
             >
               Cancel
             </button>
             <button 
               onClick={handleSubmit} 
-              className="flex-1 bg-[#1e3a5f] text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg hover:bg-[#2a4a6f] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#1e3a5f] text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg hover:bg-[#2a4a6f] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSaving || !isFormValid}
             >
               {isSaving ? (

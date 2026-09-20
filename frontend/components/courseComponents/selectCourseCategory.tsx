@@ -105,7 +105,7 @@ export const SearchableMultiSelectCategories: React.FC<SearchableMultiSelectCate
   return (
     <div className="relative" ref={wrapperRef}>
       {label && (
-        <label className="text-[10px] font-black text-slate-400 uppercase block mb-1">
+        <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
           {label}
         </label>
       )}

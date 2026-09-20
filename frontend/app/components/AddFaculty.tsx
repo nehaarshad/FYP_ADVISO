@@ -54,7 +54,7 @@ export function AddFaculty() {
               <UserPlus size={28} />
             </div>
             <div>
-              <h2 className="text-xl font-black text-[#1e3a5f] uppercase italic leading-none">Faculty Registration</h2>
+              <h2 className="text-xl font-bold text-[#1e3a5f] uppercase  leading-none">Faculty Registration</h2>
             </div>
           </div>
           {success && (
@@ -74,7 +74,7 @@ export function AddFaculty() {
           {/* Row 1: Name & SAP ID */}
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Full Name</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">Full Name</label>
               <div className="relative">
                 <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                 <input 
@@ -90,7 +90,7 @@ export function AddFaculty() {
             </div>
 
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Employee / SAP ID</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">Employee / SAP ID</label>
               <div className="relative">
                 <Fingerprint className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                 <input 
@@ -109,7 +109,7 @@ export function AddFaculty() {
           {/* Row 2: Email & Gender */}
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Official Email</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">Official Email</label>
               <div className="relative">
                 <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                 <input 
@@ -125,7 +125,7 @@ export function AddFaculty() {
             </div>
 
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Gender</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">Gender</label>
               <select
                 title='gender' 
                 name="gender"
@@ -142,7 +142,7 @@ export function AddFaculty() {
           {/* Row 3: Contact Number & Designation */}
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Contact Number</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">Contact Number</label>
               <div className="relative">
                 <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                 <input 
@@ -158,7 +158,7 @@ export function AddFaculty() {
             </div>
 
             <div className="space-y-2 group opacity-80">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">Set Password</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">Set Password</label>
               <div className="relative">
                 <ShieldCheck className="absolute left-5 top-1/2 -translate-y-1/2 text-[#FDB813]" size={16} />
                 <input 
@@ -177,7 +177,7 @@ export function AddFaculty() {
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full py-6 bg-[#1e3a5f] text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-3 active:scale-[0.98] mt-4 disabled:opacity-50"
+            className="w-full py-6 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-3 active:scale-[0.98] mt-4 disabled:opacity-50"
           >
             {isLoading ? 'Creating...' : 'Create Advisor Profile'} <UserPlus size={18} />
           </button>

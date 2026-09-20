@@ -163,7 +163,7 @@ const handleAssign = async (data: AssignData) => {
         {selectedProgram && (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-slate-100">
-              <h3 className="font-black uppercase italic text-sm text-[#1e3a5f]">
+              <h3 className="font-bold uppercase  text-sm text-[#1e3a5f]">
                 {selectedProgram} Roadmaps ({uniqueRoadmaps.length})
               </h3>
             </div>

@@ -1,164 +1,143 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { recommendationRepository } from '@/src/repositories/recommendationRepository/systemRecommendation';
 import { useUserProfile } from '../profileHook/useProfile';
-import { RawRecommendationApiResponse } from '@/src/models/rawRecommendationApiResponse';
-
-interface StudentRecommendationData {
-  id: number;
-  courses: any[];
-  notes: string | null;
-  sentAt: string;
-  sessionType: string;
-  sessionYear: number;
-  totalCredits: number;
-  priorityWiseCourses: {
-    critical: any[];
-    high: any[];
-    medium: any[];
-    low: any[];
-  };
-  summary: {
-    hasWarnings: boolean;
-    priorityBreakdown: {
-      critical: number;
-      high: number;
-      medium: number;
-      low: number;
-    };
-    totalRequiredCredits: number;
-    totalCreditsAllowed: number;
-    totalCoursesRecommended: number;
-  };
-}
+import {
+  buildAllRecommendedCourses,
+  NormalizedRecommendation,
+  normalizeRecommendation,
+} from './states/recommendationMapper';
 
 interface StudentRecommendationState {
-  recommendations: StudentRecommendationData | null;
+  recommendations: NormalizedRecommendation[];
   isLoading: boolean;
   error: string | null;
 }
 
+const pickPayloads = (response: any): any[] => {
+  if (!response?.success || !response?.data) return [];
+  const d = response.data;
+  if (Array.isArray(d.data)) return d.data;
+  if (Array.isArray(d)) return d;
+  if (d.data) return [d.data];
+  return [d];
+};
+
 export const useStudentRecommendations = () => {
   const [state, setState] = useState<StudentRecommendationState>({
-    recommendations: null,
+    recommendations: [],
     isLoading: false,
     error: null,
   });
   const { userProfile } = useUserProfile();
 
   const fetchStudentRecommendations = useCallback(async () => {
-    const studentId = userProfile?.profile?.id;   
-    console.log("student id ", studentId);
-    
+    const studentId = userProfile?.profile?.id;
     if (!studentId) {
-      setState(prev => ({ 
-        ...prev, 
+      setState(prev => ({
+        ...prev,
         error: 'Student profile not found. Please log in again.',
-        isLoading: false 
+        isLoading: false,
       }));
       return;
     }
-    
+
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
       const response = await recommendationRepository.getStudentRecommendations(studentId);
-      
-      console.log("Student recommendations response:", response);
+      console.log('Student recommendations response:', response);
 
-      if (response.success && response.data) {
-        let recommendationData: RawRecommendationApiResponse | null = null;
-        
-        if (response.data.data && Array.isArray(response.data.data) && response.data.data.length > 0) {
-          recommendationData = response.data.data[0];
-        } else if (response.data.data && !Array.isArray(response.data.data)) {
-          recommendationData = response.data.data;
-        } else if (response.data.courses) {
-          recommendationData = response.data;
-        } else if (Array.isArray(response.data) && response.data.length > 0) {
-          recommendationData = response.data[0];
+      const payloads = pickPayloads(response);
+      console.log(' Raw payloads:', payloads.length);
+
+      const normalized = payloads
+        .map(normalizeRecommendation)
+        .filter((r): r is NormalizedRecommendation => !!r);
+      const latestBySession = new Map<string, NormalizedRecommendation>();
+
+      for (const rec of normalized) {
+        const type = rec.sessionType ?? rec.Session?.sessionType ?? 'UNKNOWN';
+        const year = rec.sessionYear ?? rec.Session?.sessionYear ?? 0;
+        const key = `${type}-${year}`;
+
+        const existing = latestBySession.get(key);
+        const recTime = rec.sentAt ? new Date(rec.sentAt).getTime() : 0;
+        const existingTime = existing?.sentAt
+          ? new Date(existing.sentAt).getTime()
+          : 0;
+
+        // Keep the newest one
+        if (!existing || recTime > existingTime) {
+          latestBySession.set(key, rec);
         }
-        
-        console.log("Extracted recommendation data:", recommendationData);
-
-        if (recommendationData) {
-          // ✅ Map the data to the expected structure
-          const mappedData: StudentRecommendationData = {
-            id: recommendationData.id || 0,
-            // ✅ Create a courses array from priorityWiseCourses
-            courses: [
-              ...(recommendationData.priorityWiseCourses?.critical || []),
-              ...(recommendationData.priorityWiseCourses?.high || []),
-              ...(recommendationData.priorityWiseCourses?.medium || []),
-              ...(recommendationData.priorityWiseCourses?.low || []),
-            ],
-            notes: recommendationData.notes || null,
-            sentAt: recommendationData.createdAt || new Date().toISOString(),
-            sessionType: recommendationData.Session?.sessionType || 'N/A',
-            sessionYear: recommendationData.Session?.sessionYear || new Date().getFullYear(),
-            totalCredits: recommendationData.totalCredits || recommendationData.recommendedCoursesSummary?.totalRequiredCredits || 0,
-            // ✅ Store the raw data for detailed display
-            priorityWiseCourses: recommendationData.priorityWiseCourses || {
-              critical: [],
-              high: [],
-              medium: [],
-              low: []
-            },
-            summary: {
-              hasWarnings: recommendationData.recommendedCoursesSummary?.hasWarnings || false,
-              priorityBreakdown: recommendationData.recommendedCoursesSummary?.priorityBreakdown || {
-                critical: 0,
-                high: 0,
-                medium: 0,
-                low: 0
-              },
-              totalRequiredCredits: recommendationData.recommendedCoursesSummary?.totalRequiredCredits || 0,
-              totalCreditsAllowed: recommendationData.recommendedCoursesSummary?.totalCreditsAllowed || 0,
-              totalCoursesRecommended: recommendationData.recommendedCoursesSummary?.totalCoursesRecommended || 0,
-            }
-          };
-
-          console.log("Mapped recommendations:", mappedData);
-
-          setState({
-            recommendations: mappedData,
-            isLoading: false,
-            error: null,
-          });
-        } else {
-          setState({
-            recommendations: null,
-            isLoading: false,
-            error: 'No recommendations found for this student',
-          });
-        }
-      } else {
-        setState({
-          recommendations: null,
-          isLoading: false,
-          error: response.error || 'Failed to load recommendations',
-        });
       }
-    } catch (err: any) {
-      console.error('Fetch student recommendations error:', err);
+
+      const deduped = Array.from(latestBySession.values());
+      console.log('✅ Deduped sessions:', deduped.length);
+
       setState({
-        recommendations: null,
+        recommendations: deduped,
         isLoading: false,
-        error: err.message || 'Unexpected error loading recommendations',
+        error: deduped.length
+          ? null
+          : response?.message || 'No recommendations found for this student',
+      });
+    } catch (err: any) {
+      console.error('💥 fetch error:', err);
+      setState({
+        recommendations: [],
+        isLoading: false,
+        error: err?.message || 'Unexpected error loading recommendations',
       });
     }
   }, [userProfile]);
 
   const clearRecommendations = useCallback(() => {
-    setState({
-      recommendations: null,
-      isLoading: false,
-      error: null,
-    });
+    setState({ recommendations: [], isLoading: false, error: null });
   }, []);
 
+  // Group by session for the UI
+  const groupedBySession = useMemo(() => {
+    const map = new Map<
+      string,
+      {
+        key: string;
+        label: string;
+        sessionType: string | null;
+        sessionYear: number | null;
+        records: NormalizedRecommendation[];
+      }
+    >();
+
+    for (const rec of state.recommendations) {
+      const type = rec.sessionType ?? rec.Session?.sessionType ?? 'UNKNOWN';
+      const year = rec.sessionYear ?? rec.Session?.sessionYear ?? null;
+      const key = `${type}-${year ?? 'NA'}`;
+      const label = `${type} ${year ?? ''}`.trim();
+
+      if (!map.has(key)) {
+        map.set(key, { key, label, sessionType: type, sessionYear: year, records: [] });
+      }
+      map.get(key)!.records.push(rec);
+    }
+
+    return Array.from(map.values()).sort(
+      (a, b) => (b.sessionYear ?? 0) - (a.sessionYear ?? 0)
+    );
+  }, [state.recommendations]);
+
+  const allRecommendedCourses = useMemo(
+    () => state.recommendations.flatMap(r => buildAllRecommendedCourses(r)),
+    [state.recommendations]
+  );
+
   return {
-    ...state,
+    recommendations: state.recommendations,
+    groupedBySession,
+    allRecommendedCourses,
+    isLoading: state.isLoading,
+    error: state.error,
     fetchStudentRecommendations,
     clearRecommendations,
   };

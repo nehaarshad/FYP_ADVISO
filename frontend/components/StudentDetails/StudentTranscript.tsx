@@ -120,7 +120,7 @@ const getGradeStyle = (grade: string) => {
           {/* Header Card */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.2rem] border border-slate-100 shadow-sm items-center">
             <div className="flex flex-col justify-center text-center sm:text-left">
-              <p className="text-xl md:text-2xl font-black text-[#1e3a5f] uppercase leading-tight">
+              <p className="text-xl md:text-2xl font-bold text-[#1e3a5f] uppercase leading-tight">
                 {student?.studentName || "N/A"}
               </p>
               <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-widest">
@@ -129,15 +129,15 @@ const getGradeStyle = (grade: string) => {
             </div>
 
             <div className="flex flex-col justify-center items-center sm:items-start md:border-l md:border-slate-100 md:pl-8">
-              <p className="text-[10px] font-black text-slate-400 uppercase mb-1 tracking-widest">Cumulative GPA</p>
-              <p className="text-3xl font-black text-amber-500 leading-none">
+              <p className="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-widest">Cumulative GPA</p>
+              <p className="text-3xl font-bold text-amber-500 leading-none">
                 {getCGPA()}
               </p>
             </div>
 
             <div className="text-center md:text-right flex flex-col justify-center sm:col-span-2 md:col-span-1">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Degree Progress</p>
-              <p className="text-xl font-black text-[#1e3a5f]">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Degree Progress</p>
+              <p className="text-xl font-bold text-[#1e3a5f]">
                 {getTotalEarnedCredits()} <span className="text-slate-300">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span> 
                 <span className="text-[10px] text-slate-400 uppercase ml-1">Credits</span>
               </p>
@@ -149,12 +149,12 @@ const getGradeStyle = (grade: string) => {
              <div key={idx} className="bg-white rounded-[1.2rem] md:rounded-[1.5rem] overflow-hidden border border-slate-100 shadow-sm">
               <div className="bg-slate-50/50 px-6 md:px-8 py-4 md:py-5 border-b border-slate-100 flex flex-row justify-between items-center flex-wrap gap-2">
                 <div className="flex flex-col">
-                  <h3 className="text-s md:text-sm font-black text-[#1e3a5f] uppercase tracking-widest">{sem.semester}</h3>
+                  <h3 className="text-s md:text-sm font-bold text-[#1e3a5f] uppercase tracking-widest">{sem.semester}</h3>
                   <span className="text-[10px] text-slate-700 mt-0.5">
                     Earned: {sem.earnedCredits} / {sem.totalCredits} Credits
                   </span>
                 </div>
-                <span className="px-3 py-1 md:px-4 md:py-1.5 bg-white rounded-xl border border-slate-200 text-[10px] md:text-xs font-black text-amber-600 whitespace-nowrap">
+                <span className="px-3 py-1 md:px-4 md:py-1.5 bg-white rounded-xl border border-slate-200 text-[10px] md:text-xs font-bold text-amber-600 whitespace-nowrap">
                   SGPA: {sem.sgpa}
                 </span>
               </div>
@@ -163,7 +163,7 @@ const getGradeStyle = (grade: string) => {
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left">
                   <thead>
-                    <tr className="text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-50">
+                    <tr className="text-[10px] font-bold text-slate-600 uppercase tracking-widest border-b border-slate-50">
                       <th className="px-8 py-4 w-[40%]">Course Title</th>
                       <th className="px-4 py-4 w-[30%]">Category</th>
                       <th className="px-4 py-4 text-center">Credits</th>
@@ -182,7 +182,7 @@ const getGradeStyle = (grade: string) => {
                               <p  className="font-bold text-[#1e3a5f] text-xs uppercase tracking-tight">
                                 {course.courseName}
                               </p>
-                              <p className="text-[9px] text-slate-400 font-mono mt-0.5">
+                              <p className="text-[9px] text-slate-400 mt-0.5">
                                 {course.courseCode}
                               </p>
                             </div>
@@ -200,12 +200,12 @@ const getGradeStyle = (grade: string) => {
                             </ul>
 
                           </td>
-                          <td className="px-4 py-4 text-center font-black text-slate-500 text-xs">
+                          <td className="px-4 py-4 text-center font-bold text-slate-500 text-xs">
                             {course.earnedCreditHours}/{course.totalCreditHours}
                           </td>
                           <td className="px-8 py-4 text-center">
                             <span 
-                              className="text-xs font-black px-3 py-1 rounded-lg"
+                              className="text-xs font-bold px-3 py-1 rounded-lg"
                               style={{
                                 backgroundColor: gradeStyle.bg,
                                 color: gradeStyle.text
@@ -231,15 +231,15 @@ const getGradeStyle = (grade: string) => {
                     <div key={cIdx} className="p-5 flex flex-col gap-2">
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex-1">
-                          <p className="font-black text-[#1e3a5f] text-xs uppercase leading-tight">
+                          <p className="font-bold text-[#1e3a5f] text-xs uppercase leading-tight">
                             {course.courseName}
                           </p>
-                          <p className="text-[9px] text-slate-400 font-mono mt-0.5">
+                          <p className="text-[9px] text-slate-400 mt-0.5">
                             {course.courseCode}
                           </p>
                         </div>
                         <span 
-                          className="text-xs font-black px-2 py-1 rounded-lg shrink-0"
+                          className="text-xs font-bold px-2 py-1 rounded-lg shrink-0"
                           style={{
                             backgroundColor: gradeStyle.bg,
                             color: gradeStyle.text
@@ -250,7 +250,7 @@ const getGradeStyle = (grade: string) => {
                       </div>
                       <div className="flex justify-between items-end">
                         <span 
-                          className="text-[8px] font-black uppercase px-2 py-0.5 rounded-full"
+                          className="text-[8px] font-bold uppercase px-2 py-0.5 rounded-full"
                           style={{
                             backgroundColor: categoryStyle.backgroundColor,
                             color: categoryStyle.color

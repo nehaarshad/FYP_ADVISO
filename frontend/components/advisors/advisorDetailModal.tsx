@@ -43,7 +43,7 @@ const activeAssignment = currentBatch || advisor?.BatchAssignments?.[0];
                   <ShieldCheck size={24} className="text-[#FDB813]" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-[#1e3a5f] uppercase italic">
+                  <h3 className="text-xl font-bold text-[#1e3a5f] uppercase ">
                     {advisor.advisorName}
                   </h3>
                   <p className="text-[10px] text-slate-400">Advisor Profile</p>
@@ -62,7 +62,7 @@ const activeAssignment = currentBatch || advisor?.BatchAssignments?.[0];
             <div className="p-6 space-y-6">
               {/* Personal Information */}
               <div>
-                <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-4">
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
                   Personal Information
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
@@ -82,7 +82,7 @@ const activeAssignment = currentBatch || advisor?.BatchAssignments?.[0];
               {/* Batch Assignment */}
               {activeAssignment && (
                 <div>
-                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-4">
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
                     Batch Assignment
                   </h4>
                   <div className="bg-slate-50 rounded-xl p-4">
@@ -110,7 +110,7 @@ const activeAssignment = currentBatch || advisor?.BatchAssignments?.[0];
 
               {/* System Information */}
               <div>
-                <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider mb-4">
+                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">
                   System Information
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
@@ -131,7 +131,7 @@ const activeAssignment = currentBatch || advisor?.BatchAssignments?.[0];
             <div className="sticky bottom-0 bg-white border-t border-slate-100 p-6 flex justify-end gap-3">
               <button
                 onClick={onClose}
-                className="px-6 py-2 bg-slate-100 text-slate-600 rounded-xl font-black text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
+                className="px-6 py-2 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
               >
                 Close
               </button>
@@ -147,7 +147,7 @@ const activeAssignment = currentBatch || advisor?.BatchAssignments?.[0];
 function InfoRow({ label, value, valueClassName = "text-slate-900" }: { label: string; value: any; valueClassName?: string }) {
   return (
     <div>
-      <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">{label}</p>
+      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{label}</p>
       <p className={`text-sm font-bold ${valueClassName}`}>{value || 'N/A'}</p>
     </div>
   );
