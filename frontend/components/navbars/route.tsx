@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/navbars/route.tsx
 "use client";
@@ -81,12 +82,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 min-h-0 px-1 overflow-hidden">
+     <nav className="flex-1 min-h-0 px-1 overflow-hidden max-lg:overflow-y-auto max-lg:overflow-x-hidden">
         {grouped.map(({ group, items }) => (
           <div key={group} className="py-2.5">
 
             {/* Group Heading */}
-            <p className="px-5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/30 mb-2.5">
+            <p className="px-5 text-[10px] font-black uppercase tracking-[0.18em] text-white/30 mb-2.5">
               {group}
             </p>
 
@@ -116,7 +117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </nav>
 
       {/* User Profile Section */}
-      <div className="px-1 pt-2 pb-1 mt-auto flex-shrink-0">
+    <div className="px-1 pt-2 pb-2 lg:pt-2 lg:pb-1 flex-shrink-0">
         <div
           className={`p-4 rounded-[1.5rem] border transition-all group ${
             activeTab === "profile"
@@ -129,12 +130,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => setActiveTab("profile")}
             className="flex items-center gap-3 mb-3 cursor-pointer"
           >
-            <div className="h-10 w-10 rounded-full bg-[#FDB813] border-2 border-[#1e3a5f] flex items-center justify-center font-bold text-[#1e3a5f] text-sm uppercase shrink-0">
+            <div className="h-10 w-10 rounded-full bg-[#FDB813] border-2 border-[#1e3a5f] flex items-center justify-center font-black text-[#1e3a5f] text-sm uppercase shrink-0">
               {userInitial}
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold  truncate">
+              <p className="text-sm font-black italic truncate">
                 {getDisplayName()}
               </p>
 
@@ -147,7 +148,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Sign Out */}
           <button
             onClick={handleLogout}
-            className="w-full py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
           >
             <LogOut size={14} />
             Sign Out
@@ -211,7 +212,7 @@ function ExpandableItem({
               <div
                 key={sub.key}
                 onClick={() => setActiveTab(sub.key)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-[10px] font-bold  ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-[10px] font-bold italic ${
                   activeTab === sub.key
                     ? "text-[#FDB813] bg-white/10 opacity-100"
                     : "opacity-60 hover:opacity-100 hover:bg-white/10"
@@ -242,7 +243,7 @@ function SidebarItem({
       onClick={onClick}
       className={`flex items-center gap-4 px-5 py-[13.2px] rounded-xl cursor-pointer transition-all ${
         active
-          ? "bg-[#FDB813] text-[#1e3a5f] font-bold shadow-xl scale-[1.01]"
+          ? "bg-[#FDB813] text-[#1e3a5f] font-black shadow-xl scale-[1.01]"
           : "opacity-60 hover:opacity-100 hover:bg-white/5 font-bold"
       }`}
     >

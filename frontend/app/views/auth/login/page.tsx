@@ -106,7 +106,7 @@ export default function LoginPage() {
         className="max-w-5xl w-full grid md:grid-cols-2 bg-white/95 backdrop-blur-md rounded-[2.5rem] shadow-[0_40px_100px_-15px_rgba(0,0,0,0.4)] overflow-hidden border border-white/20 relative z-10"
       >
         {/* LEFT SIDE: BRANDING */}
-        <div className="bg-[#1e3a5f] p-12 text-white flex flex-col justify-between relative overflow-hidden">
+        <div className="bg-[#1e3a5f] p-6 sm:p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-400/10 to-transparent pointer-events-none" />
 
           <div className="relative z-10">
@@ -165,7 +165,7 @@ export default function LoginPage() {
             transition={{ delay: 0.4 }}
           >
             <div className="mb-10 text-left">
-              <h2 className="text-4xl font-bold text-[#1e3a5f] mb-2 tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#1e3a5f] mb-2 tracking-tight">
                 Login
               </h2>
 
