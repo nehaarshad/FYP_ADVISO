@@ -457,7 +457,14 @@ export default function AdvisorDashboard() {
   return ( 
     <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans text-slate-900 relative"> 
       <div className={`fixed inset-y-0 left-0 z-50 transform lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}> 
-        <Sidebar userRole="advisor" activeTab={view} setActiveTab={setView} /> 
+        <Sidebar
+  userRole="advisor"
+  activeTab={view}
+  setActiveTab={(tab) => {
+    setView(tab);
+    setIsSidebarOpen(false);
+  }}
+/>
       </div> 
  
       {isSidebarOpen && ( 
