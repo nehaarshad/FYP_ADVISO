@@ -71,7 +71,7 @@ export const BulkTimetableModal: React.FC<Props> = ({
         className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden"
       >
         <div className="p-6 border-b border-slate-100 bg-white">
-          <h3 className="text-lg font-black text-[#1e3a5f] uppercase tracking-tight">
+          <h3 className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tight">
             {mode === 'add' ? 'Add Timetable Entries' : 'Update Timetable Entries'}
           </h3>
           <p className="text-xs font-medium text-slate-400 mt-1 uppercase tracking-wider">
@@ -86,7 +86,7 @@ export const BulkTimetableModal: React.FC<Props> = ({
               className="grid grid-cols-12 gap-3 items-end bg-white p-4 rounded-2xl border border-slate-100 shadow-sm"
             >
               <div className="col-span-3">
-                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1 tracking-wider">Day</label>
+                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 ml-1 tracking-wider">Day</label>
                 <select
                   value={row.day}
                   onChange={(e) => updateRow(idx, { day: e.target.value })}
@@ -99,7 +99,7 @@ export const BulkTimetableModal: React.FC<Props> = ({
               </div>
 
               <div className="col-span-4">
-                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1 tracking-wider">Course</label>
+                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 ml-1 tracking-wider">Course</label>
                 <input
                   type="text"
                   value={row.course}
@@ -110,7 +110,7 @@ export const BulkTimetableModal: React.FC<Props> = ({
               </div>
 
               <div className="col-span-2">
-                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1 tracking-wider">Start</label>
+                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 ml-1 tracking-wider">Start</label>
                 <input
                   type="time"
                   value={row.startTime}
@@ -120,7 +120,7 @@ export const BulkTimetableModal: React.FC<Props> = ({
               </div>
 
               <div className="col-span-2">
-                <label className="block text-[10px] font-black uppercase text-slate-400 mb-1 ml-1 tracking-wider">End</label>
+                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1 ml-1 tracking-wider">End</label>
                 <input
                   type="time"
                   value={row.endTime}
@@ -147,7 +147,7 @@ export const BulkTimetableModal: React.FC<Props> = ({
           <button
             type="button"
             onClick={addRow}
-            className="w-full py-3 border-2 border-dashed border-slate-200 text-xs font-black uppercase tracking-wider text-[#1e3a5f] bg-white rounded-2xl hover:border-[#1e3a5f]/40 hover:bg-slate-50 transition-all"
+            className="w-full py-3 border-2 border-dashed border-slate-200 text-xs font-bold uppercase tracking-wider text-[#1e3a5f] bg-white rounded-2xl hover:border-[#1e3a5f]/40 hover:bg-slate-50 transition-all"
           >
             + Add another entry
           </button>
@@ -164,14 +164,14 @@ export const BulkTimetableModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="px-6 py-3 text-xs font-black uppercase tracking-wider text-slate-600 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors disabled:opacity-50"
+            className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-600 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-3 text-xs font-black uppercase tracking-wider text-white bg-[#1e3a5f] rounded-xl hover:bg-[#15304a] transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-[#1e3a5f]/15"
+            className="px-6 py-3 text-xs font-bold uppercase tracking-wider text-white bg-[#1e3a5f] rounded-xl hover:bg-[#15304a] transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-[#1e3a5f]/15"
           >
             {submitting && (
               <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />

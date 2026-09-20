@@ -31,7 +31,7 @@ export function ProgramList() {
               <BookOpen size={24} className="text-[#FDB813]" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-white uppercase italic">Programs</h2>
+              <h2 className="text-xl font-bold text-white uppercase ">Programs</h2>
               <p className="text-white/70 text-xs mt-1">{totalCount} program(s) available</p>
             </div>
           </div>
@@ -86,7 +86,7 @@ export function ProgramList() {
                         <BookOpen size={18} className="text-[#1e3a5f] group-hover:text-white" />
                       </div>
                       <div>
-                        <h3 className="font-black text-[#1e3a5f] text-sm uppercase tracking-tight">
+                        <h3 className="font-bold text-[#1e3a5f] text-sm uppercase tracking-tight">
                           {program.programName}
                         </h3>
                         <p className="text-[9px] text-slate-400 uppercase tracking-wider">

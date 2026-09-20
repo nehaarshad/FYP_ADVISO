@@ -30,11 +30,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
             <ArrowLeft size={20} />
           </button>
           <div>
-            <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] uppercase tracking-tighter flex items-center gap-2">
+            <h2 className="text-xl md:text-2xl font-bold text-[#1e3a5f] uppercase tracking-tighter flex items-center gap-2">
               <FileText className="text-amber-500" size={24} />
               Degree Guidelines
             </h2>
-            <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">
               Manage academic guidelines and requirements
             </p>
           </div>
@@ -42,14 +42,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
         <div className="flex gap-2">
           <button
             onClick={onCreate}
-            className="flex items-center gap-2 bg-[#1e3a5f] text-white px-4 py-2.5 rounded-xl text-xs font-black uppercase hover:bg-[#15304a] transition-all shadow-lg hover:shadow-xl active:scale-95"
+            className="flex items-center gap-2 bg-[#1e3a5f] text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase hover:bg-[#15304a] transition-all shadow-lg hover:shadow-xl active:scale-95"
           >
             <Plus size={16} />
             Add Guideline
           </button>
           <button
             onClick={onUploadVideo}
-            className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2.5 rounded-xl text-xs font-black uppercase hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
+            className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold uppercase hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl active:scale-95"
           >
             <Upload size={16} />
             Upload Video

@@ -13,7 +13,7 @@ export const NotesEmptyState: React.FC<EmptyStateProps> = ({ onAddNote }) => {
       <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
         <FileText size={32} className="text-slate-300" />
       </div>
-      <h3 className="text-lg font-black text-[#1e3a5f] uppercase tracking-tighter mb-2">
+      <h3 className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tighter mb-2">
         No Notes Yet
       </h3>
       <p className="text-sm text-slate-400 font-medium mb-6">
@@ -21,7 +21,7 @@ export const NotesEmptyState: React.FC<EmptyStateProps> = ({ onAddNote }) => {
       </p>
       <button
         onClick={onAddNote}
-        className="bg-[#1e3a5f] text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-[#2a4a6f] transition-colors shadow-lg"
+        className="bg-[#1e3a5f] text-white px-6 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#2a4a6f] transition-colors shadow-lg"
       >
         Create Your First Note
       </button>

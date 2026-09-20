@@ -154,7 +154,7 @@ function DashboardHeader({
           <Layers size={14} />
           <span>Academic Advising Portal</span>
         </div>
-        <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
           Semester Recommendation &amp; Clash Resolution
         </h1>
         <p className="text-sm text-gray-500 max-w-2xl">
@@ -177,7 +177,7 @@ function DashboardHeader({
           </div>
           <div>
             <p className="text-[10px] uppercase font-bold text-gray-400">Credit Hours</p>
-            <p className="text-lg font-black text-gray-900">
+            <p className="text-lg font-bold text-gray-900">
               {summary.creditLimits.allowed} Allowed
               {summary.creditLimits.required != null && (
                 <span className="text-xs font-bold text-gray-500 ml-1">
@@ -441,7 +441,6 @@ export function CourseSection({
 }
 
 /* ─────────────────────────────────────────────── ClashCourseCard ─────────────────────────────────────────────── */
-
 function ClashCourseCard({
   course,
   isExpanded,
@@ -570,11 +569,11 @@ function ClashCourseCard({
       >
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 text-amber-800 font-bold text-xs">
+            <div className="flex items-center gap-1.5 text-amber-900 font-bold text-xs">
               <Target size={13} className="text-amber-600" />
               <span>Select Anyway (Advisor Override)</span>
             </div>
-            <p className="text-[10px] text-amber-800/80 mt-1 leading-snug">
+            <p className="text-xs text-gray-900 font-medium mt-1.5 leading-snug">
               Adds {course.originalCourseName ?? course.courseName} to the final
               recommendation despite the clash. Advisor takes responsibility for the
               {course.clashRecord ? ` ${course.clashRecord.clashesWith}` : ""} conflict.
@@ -662,7 +661,8 @@ function ClashCourseCard({
                 )}
 
                 {subReason && (
-                  <p className="text-[10px] text-gray-500 mt-2 italic leading-snug">
+                  /* Yahan se  () hata kar non-italic aur dark font kar diya hai */
+                  <p className="text-xs text-gray-900 font-medium mt-2 leading-relaxed">
                     {subReason}
                   </p>
                 )}
@@ -712,7 +712,8 @@ function ClashCourseCard({
   );
 }
 
-/* ─────────────────────────────────────────────── RegularCourseCard ─────────────────────────────────────────────── */
+
+// /* ─────────────────────────────────────────────── RegularCourseCard ─────────────────────────────────────────────── */
 
 function RegularCourseCard({
   course,
@@ -785,31 +786,31 @@ function RegularCourseCard({
             {courseName}
           </h3>
           {course.originalCourseName && course.originalCourseName !== course.courseName && (
-            <p className="text-[10px] text-slate-400 font-bold uppercase">
+            <p className="text-[10px] text-gray-600 font-bold uppercase">
               replaces: {course.originalCourseName}
             </p>
           )}
         </div>
-        <span className="text-xs font-bold px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg shrink-0">
+        <span className="text-xs font-bold px-2.5 py-1 bg-gray-100 text-gray-900 rounded-lg shrink-0">
           {credits} Credits
         </span>
       </div>
 
       {course.reason && (
-        <div className="text-xs bg-gray-50 p-3 rounded-xl border border-gray-100 text-gray-600 flex items-start gap-2">
-          <Info className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+        <div className="text-xs bg-gray-50 p-3 rounded-xl border border-gray-200 text-gray-900 flex items-start gap-2">
+          <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
           <p className="font-medium">{course.reason}</p>
         </div>
       )}
 
       {lectureSlots.length > 0 && (
-        <div className="text-xs text-gray-600 space-y-1">
-          <p className="font-semibold text-gray-700">Schedule:</p>
+        <div className="text-xs text-gray-900 space-y-1">
+          <p className="font-bold text-gray-900">Schedule:</p>
           {lectureSlots.map((l, i) => (
-            <div key={i} className="flex items-center gap-1 text-gray-500 font-medium">
-              <Clock className="w-3.5 h-3.5 text-emerald-600" />
+            <div key={i} className="flex items-center gap-1 text-gray-900 font-medium">
+              <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               <span className="truncate">
-                {l.day}: {l.startTime}–{l.endTime} ({l.room ?? l.venue ?? "—"})
+                {l.day}: {l.startTime}–{l.endTime} {l.room || l.venue ? `(${l.room ?? l.venue})` : "—"}
                 {l.instructor ? ` · ${l.instructor}` : ""}
               </span>
             </div>
@@ -818,13 +819,13 @@ function RegularCourseCard({
       )}
 
       {labSlots.length > 0 && (
-        <div className="text-xs bg-purple-50 border border-purple-100 p-2.5 rounded-xl text-purple-900 font-medium space-y-1">
-          <span className="font-bold block">Lab</span>
+        <div className="text-xs bg-purple-50 border border-purple-200 p-2.5 rounded-xl text-gray-900 font-medium space-y-1">
+          <span className="font-bold block text-purple-900">Lab</span>
           {labSlots.map((l, i) => (
             <div key={i} className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" />
+              <Clock className="w-3.5 h-3.5 text-purple-700 shrink-0" />
               <span className="truncate">
-                {l.day}: {l.startTime}–{l.endTime} ({l.room ?? l.venue})
+                {l.day}: {l.startTime}–{l.endTime} {l.room || l.venue ? `(${l.room ?? l.venue})` : "—"}
               </span>
             </div>
           ))}
@@ -833,42 +834,42 @@ function RegularCourseCard({
 
       {electives.length > 0 && (
         <div
-          className="relative pt-2 border-t border-gray-100"
+          className="relative pt-2 border-t border-gray-200"
           onClick={e => e.stopPropagation()}
         >
-          <p className="text-xs font-semibold text-gray-700 mb-1">Selected Elective Option:</p>
+          <p className="text-xs font-bold text-gray-900 mb-1">Selected Elective Option:</p>
           <button
             type="button"
             onClick={onToggleDropdown}
-            className="w-full flex items-center justify-between text-xs bg-blue-50 border border-blue-200 text-blue-900 px-3 py-2 rounded-xl font-medium hover:bg-blue-100 transition-colors"
+            className="w-full flex items-center justify-between text-xs bg-blue-50 border border-blue-200 text-gray-900 px-3 py-2 rounded-xl font-medium hover:bg-blue-100 transition-colors"
           >
-            <span className="truncate">
+            <span className="truncate font-bold">
               {chosenElective?.courseName ?? "Select an elective option"}
             </span>
             {dropdownOpen ? (
-              <ChevronUp className="w-4 h-4 shrink-0" />
+              <ChevronUp className="w-4 h-4 shrink-0 text-gray-900" />
             ) : (
-              <ChevronDown className="w-4 h-4 shrink-0" />
+              <ChevronDown className="w-4 h-4 shrink-0 text-gray-900" />
             )}
           </button>
 
           {dropdownOpen && (
-            <div className="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto">
+            <div className="absolute left-0 right-0 mt-1 bg-white border border-gray-300 rounded-xl shadow-xl z-20 max-h-64 overflow-y-auto">
               {electives.map((opt, i) => (
                 <div
                   key={i}
                   onClick={() => onSelectElective(opt)}
-                  className="p-3 text-xs hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-none"
+                  className="p-3 text-xs hover:bg-gray-50 cursor-pointer border-b border-gray-200 last:border-none"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <p className="font-bold text-gray-800">{opt.courseName}</p>
-                    <span className="text-[10px] font-bold bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
+                    <p className="font-bold text-gray-900">{opt.courseName}</p>
+                    <span className="text-[10px] font-bold bg-gray-100 text-gray-900 px-1.5 py-0.5 rounded">
                       {opt.credits}cr
                     </span>
                   </div>
-                  <p className="text-gray-500 text-[11px] mt-0.5">{opt.matchReason}</p>
+                  <p className="text-gray-900 text-[11px] font-medium mt-0.5">{opt.matchReason}</p>
                   {opt.timeSlot && (
-                    <p className="text-gray-400 text-[10px] mt-0.5 flex items-center gap-1">
+                    <p className="text-gray-900 text-[10px] font-semibold mt-0.5 flex items-center gap-1">
                       <Clock size={10} /> {opt.timeSlot}
                     </p>
                   )}
@@ -880,14 +881,13 @@ function RegularCourseCard({
       )}
 
       <div className="pt-2 flex justify-end">
-        <div className="text-green-700 font-bold text-[10px] uppercase bg-green-50 px-3 py-1.5 rounded-lg border border-green-200">
+        <div className="text-green-800 font-bold text-[10px] uppercase bg-green-50 px-3 py-1.5 rounded-lg border border-green-300">
           Eligible
         </div>
       </div>
     </div>
   );
 }
-
 /* ─────────────────────────────────────────────── DeferredPanel ─────────────────────────────────────────────── */
 
 function DeferredPanel({ raw }: { raw: any }) {
@@ -904,7 +904,7 @@ function DeferredPanel({ raw }: { raw: any }) {
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-3">
         <ListChecks size={16} className="text-slate-500" />
-        <h3 className="text-sm font-black uppercase tracking-tight text-slate-700">
+        <h3 className="text-sm font-bold uppercase tracking-tight text-slate-700">
           Deferred / All-Eligible (advisor reference)
         </h3>
       </div>
@@ -921,6 +921,26 @@ function DeferredPanel({ raw }: { raw: any }) {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ─────────────────────────────────────────────── CompleteCourseDashboard ─────────────────────────────────────────────── */
 
@@ -968,13 +988,13 @@ export function CompleteCourseDashboard({
           <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto">
             <AlertCircle size={28} className="text-red-400" />
           </div>
-          <p className="text-sm font-black text-gray-800 uppercase tracking-tight">
+          <p className="text-sm font-bold text-gray-800 uppercase tracking-tight">
             Generation Failed
           </p>
           <p className="text-xs text-gray-500">{data.generateError}</p>
           <button
             onClick={data.resetRecommendations}
-            className="px-6 py-3 bg-indigo-600 text-white text-xs font-black uppercase rounded-xl hover:bg-indigo-500"
+            className="px-6 py-3 bg-indigo-600 text-white text-xs font-bold uppercase rounded-xl hover:bg-indigo-500"
           >
             Try Again
           </button>
@@ -1053,7 +1073,7 @@ export function CompleteCourseDashboard({
 
         <div className="bg-[#1e3a5f] p-6 md:p-8 rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border-b-4 border-amber-400">
           <div className="text-center md:text-left">
-            <h3 className="text-lg md:text-xl uppercase tracking-tighter font-black">
+            <h3 className="text-lg md:text-xl uppercase tracking-tighter font-bold">
               Finalize Recommendation
             </h3>
             <p className="text-slate-300 text-xs font-bold uppercase tracking-widest mt-1">
@@ -1074,7 +1094,7 @@ export function CompleteCourseDashboard({
               if (ok) onFinalized?.();
             }}
             disabled={data.selectedCourses.length === 0}
-            className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-black uppercase rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95"
+            className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-bold uppercase rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95"
           >
             {data.isFinalizing ? (
               <>
@@ -1096,3 +1116,6 @@ export function CompleteCourseDashboard({
     </div>
   );
 }
+
+
+

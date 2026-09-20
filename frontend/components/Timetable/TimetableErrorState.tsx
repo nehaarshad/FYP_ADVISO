@@ -27,7 +27,7 @@ export const TimetableErrorState: React.FC<Props> = ({ message, onRetry }) => (
     {onRetry && (
       <button
         onClick={onRetry}
-        className="px-5 py-2.5 text-xs font-black uppercase tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl transition-all shadow-md shadow-[#FDB813]/20"
+        className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl transition-all shadow-md shadow-[#FDB813]/20"
       >
         Try again
       </button>

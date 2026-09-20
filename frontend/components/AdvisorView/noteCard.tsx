@@ -107,7 +107,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
 
       {/* Content */}
       <div className="mt-8 relative z-10 flex-1">
-        <h3 className={`text-base md:text-lg font-black ${color.text} uppercase mb-3`}>
+        <h3 className={`text-base md:text-lg font-bold ${color.text} uppercase mb-3`}>
           {note.title}
         </h3>
         
@@ -129,7 +129,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
         {needsExpand && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-2 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-slate-900 flex items-center gap-1 transition-colors"
+            className="mt-2 text-[10px] font-bold uppercase tracking-widest text-slate-600 hover:text-slate-900 flex items-center gap-1 transition-colors"
           >
             {isExpanded ? (
               <>
@@ -148,13 +148,13 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
       <div className={`flex items-center justify-between mt-4 pt-4 border-t ${color.border} relative z-10`}>
         <div className="flex items-center gap-1.5 text-slate-600">
           <Clock size={12} />
-          <span className="text-[10px] font-black uppercase tracking-widest opacity-70">
+          <span className="text-[10px] font-bold uppercase tracking-widest opacity-70">
             {formatDate(note.updatedAt || note.createdAt)}
           </span>
         </div>
         <div className="flex items-center gap-2 text-slate-500/30">
           <FileText size={14} />
-          <span className="text-[8px] font-black">
+          <span className="text-[8px] font-bold">
             {note.noteContent?.length || 0} chars
           </span>
         </div>

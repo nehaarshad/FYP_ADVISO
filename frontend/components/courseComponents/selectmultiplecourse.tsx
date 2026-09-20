@@ -90,7 +90,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
     <div className="relative" ref={wrapperRef}>
       {/* Label */}
       {label && (
-        <label className="text-[10px] font-black text-slate-400 uppercase block mb-1">
+        <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
           {label}
         </label>
       )}

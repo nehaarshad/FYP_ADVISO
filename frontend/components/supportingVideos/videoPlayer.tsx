@@ -313,7 +313,7 @@ export default function VideoPlayer({
           <div className="space-y-2">
             {/* Progress Bar */}
             <div className="flex items-center gap-3 px-1">
-              <span className="text-white text-xs font-mono min-w-[40px]">
+              <span className="text-white text-xs min-w-[40px]">
                 {formatTime(currentTime)}
               </span>
               <input
@@ -331,7 +331,7 @@ export default function VideoPlayer({
                   background: `linear-gradient(to right, white 0%, white ${(currentTime / duration) * 100}%, rgba(255,255,255,0.3) ${(currentTime / duration) * 100}%, rgba(255,255,255,0.3) 100%)`,
                 }}
               />
-              <span className="text-white text-xs font-mono min-w-[40px]">
+              <span className="text-white text-xs min-w-[40px]">
                 {formatTime(duration)}
               </span>
             </div>
@@ -391,7 +391,7 @@ export default function VideoPlayer({
                 </div>
 
                 {/* Duration */}
-                <span className="text-white/70 text-xs font-mono ml-2">
+                <span className="text-white/70 text-xs ml-2">
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </span>
               </div>

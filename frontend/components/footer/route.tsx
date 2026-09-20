@@ -8,9 +8,9 @@ const LandingFooter = () => {
         {/* Flex container for left and right columns */}
         <div className="flex flex-col md:flex-row items-start">
           
-          <div className="md:w-1/8 mt-10">
+          <div className="md:w-1/8 mt-0">
   <Image
-    src="/lightlogo.png"
+    src="/lightLogo.png"
     alt="Adviso"
     width={120}
     height={120}

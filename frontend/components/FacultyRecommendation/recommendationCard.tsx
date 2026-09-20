@@ -37,7 +37,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
             isUrgent={recommendation.isUrgent} 
             id={recommendation.id}
           />
-          <h3 className="text-base md:text-lg font-black text-[#1e3a5f] mt-2 leading-tight line-clamp-2">
+          <h3 className="text-base md:text-lg font-bold text-[#1e3a5f] mt-2 leading-tight line-clamp-2">
             {recommendation.subject}
           </h3>
           <p className="text-xs md:text-sm font-medium text-slate-500 mt-1 line-clamp-2">

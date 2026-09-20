@@ -193,7 +193,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-          <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Edit Course</h3>
+          <h3 className="text-lg font-bold text-[#1e3a5f] uppercase">Edit Course</h3>
           <button 
             onClick={onClose} 
             className="p-1 hover:bg-slate-100 rounded transition-colors"
@@ -206,7 +206,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Course Code */}
           <div>
-            <label className="text-[10px] font-black text-slate-400 uppercase block mb-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
               Course Code
             </label>
             <input
@@ -221,7 +221,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
           {/* Course Name */}
           <div>
-            <label className="text-[10px] font-black text-slate-400 uppercase block mb-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
               Course Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -237,7 +237,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
           {/* Credits */}
           <div>
-            <label className="text-[10px] font-black text-slate-400 uppercase block mb-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">
               Credit Hours
             </label>
             <input
@@ -256,7 +256,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
           {/* Categories - Add-Only Mode */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[10px] font-black text-slate-400 uppercase">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">
                 Categories
               </label>
               <span className="text-[9px] text-blue-600 font-medium">
