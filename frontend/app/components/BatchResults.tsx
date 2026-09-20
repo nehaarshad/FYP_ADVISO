@@ -110,7 +110,7 @@ export const BatchResults = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic leading-none">
+            <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase  leading-none">
               Batch Results
             </h2>
 
@@ -121,7 +121,7 @@ export const BatchResults = () => {
 
           <button
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#FDB813] transition-all"
+            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#FDB813] transition-all"
           >
             Upload Results
           </button>
@@ -145,7 +145,7 @@ export const BatchResults = () => {
                   </div>
 
                   <div>
-                    <p className="font-black text-[#1e3a5f] text-sm uppercase">
+                    <p className="font-bold text-[#1e3a5f] text-sm uppercase">
                       {result.programName} - {result.batchName}{" "}
                       {result.batchYear}
                     </p>
@@ -173,7 +173,7 @@ export const BatchResults = () => {
           <div className="bg-white rounded-2xl max-w-md w-full p-6">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-black text-[#1e3a5f] uppercase">
+              <h3 className="text-lg font-bold text-[#1e3a5f] uppercase">
                 Upload Batch Results
               </h3>
 
@@ -190,7 +190,7 @@ export const BatchResults = () => {
               {/* Session Type + Session Year */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">
                     Session Type
                   </label>
 
@@ -212,7 +212,7 @@ export const BatchResults = () => {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">
                     Session Year
                   </label>
 
@@ -233,7 +233,7 @@ export const BatchResults = () => {
 
               {/* Program Name */}
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">
                   Program Name
                 </label>
 
@@ -265,7 +265,7 @@ export const BatchResults = () => {
               {/* Batch Name + Batch Year */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">
                     Batch Name
                   </label>
 
@@ -289,7 +289,7 @@ export const BatchResults = () => {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">
                     Batch Year
                   </label>
 
@@ -311,7 +311,7 @@ export const BatchResults = () => {
 
               {/* Excel File - Custom UI */}
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">
                   Excel File *
                 </label>
 
@@ -382,7 +382,7 @@ export const BatchResults = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <Loader2

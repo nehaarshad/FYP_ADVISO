@@ -15,7 +15,7 @@ const SmallFeature: React.FC<FeatureProps> = ({ Icon, title, desc }) => (
     </div>
 
     {/* Title */}
-    <h4 className="text-base md:text-lg font-black uppercase tracking-wide text-[#1e3a5f] mb-3 leading-tight">
+    <h4 className="text-base md:text-lg font-bold uppercase tracking-wide text-[#1e3a5f] mb-3 leading-tight">
       {title}
     </h4>
 

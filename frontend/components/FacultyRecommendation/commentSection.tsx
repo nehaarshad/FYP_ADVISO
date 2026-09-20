@@ -41,7 +41,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
   return (
     <div className="mt-6 pt-4 border-t border-slate-100">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-xs font-black text-slate-600 uppercase tracking-wider flex items-center gap-2">
+        <span className="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-2">
           <MessageCircle size={16} /> Comments ({comments.length})
         </span>
       </div>
@@ -60,7 +60,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
             disabled={isCommenting}
           />
           <button
-            className="px-4 py-2 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider disabled:opacity-50 hover:bg-[#2a5285] transition-colors active:scale-95"
+            className="px-4 py-2 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider disabled:opacity-50 hover:bg-[#2a5285] transition-colors active:scale-95"
             onClick={handleSubmit}
             disabled={!commentText.trim() || isCommenting}
           >

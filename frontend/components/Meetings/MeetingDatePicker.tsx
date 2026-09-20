@@ -40,8 +40,8 @@ export const MeetingDatePicker: React.FC<Props> = ({
 
   return (
     <div>
-      <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">
-        Meeting date (<span className="text-[#1e3a5f] font-black">{meetingDay}</span> only)
+      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+        Meeting date (<span className="text-[#1e3a5f] font-bold">{meetingDay}</span> only)
       </label>
       <input
         type="date"

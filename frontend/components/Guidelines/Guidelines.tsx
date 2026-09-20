@@ -159,8 +159,8 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
           {guideline.tableData.map((row: any, i: number) => (
             <div key={i} className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-              <p className="text-[9px] font-black text-slate-400 uppercase">{row.category}</p>
-              <p className="text-base md:text-lg font-black text-[#1e3a5f]">{row.credits} Credits</p>
+              <p className="text-[9px] font-bold text-slate-400 uppercase">{row.category}</p>
+              <p className="text-base md:text-lg font-bold text-[#1e3a5f]">{row.credits} Credits</p>
             </div>
           ))}
         </div>
@@ -184,14 +184,14 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
         <div className="space-y-6 text-slate-600 border-t border-slate-100 pt-6">
           {guideline.enrollmentLimits && (
             <div>
-              <h4 className="text-[10px] font-black text-amber-600 uppercase mb-3 tracking-widest">
+              <h4 className="text-[10px] font-bold text-amber-600 uppercase mb-3 tracking-widest">
                 Enrollment Limits:
               </h4>
               <div className="text-[11px] md:text-xs leading-relaxed space-y-2">
                 {guideline.enrollmentLimits.map((row: any, i: number) => (
                   <div key={i} className="flex justify-between p-2 border-b border-slate-50">
                     <span>{row.label}</span>
-                    <span className="font-black">{row.credits}</span>
+                    <span className="font-bold">{row.credits}</span>
                   </div>
                 ))}
               </div>
@@ -199,7 +199,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
           )}
           {guideline.requiredProcessText && (
             <div className="bg-amber-50 p-4 md:p-5 rounded-[1.2rem] md:rounded-[1.5rem] border border-amber-100">
-              <h4 className="text-[10px] font-black text-[#1e3a5f] uppercase mb-2 tracking-widest flex items-center gap-2">
+              <h4 className="text-[10px] font-bold text-[#1e3a5f] uppercase mb-2 tracking-widest flex items-center gap-2">
                 <FileStack size={14} /> Required Process:
               </h4>
               <p className="text-[11px] leading-relaxed">{guideline.requiredProcessText}</p>
@@ -236,11 +236,11 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
 
           {/* Header */}
           <div className="mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-black text-[#1e3a5f] uppercase tracking-tighter flex items-center gap-3">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1e3a5f] uppercase tracking-tighter flex items-center gap-3">
               <Info className="text-amber-500 shrink-0" size={28} />
               {isStudent ? 'Academic Guidelines' : 'Program Guidelines'}
             </h2>
-            <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mt-2">
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-2">
               {isStudent ? `For ${programName}` : isAdvisor ? `Advisor View - ${programName}` : 'All Programs View'}
             </p>
             {isAdmin && (
@@ -359,7 +359,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
                     <div className="flex items-center gap-4 md:gap-5">
                      
                       <div>
-                        <h3 className="font-black uppercase tracking-tight text-[#1e3a5f] text-xs md:text-sm">
+                        <h3 className="font-bold uppercase tracking-tight text-[#1e3a5f] text-xs md:text-sm">
                           {guideline.title}
                         </h3>
                         {isAdmin && guideline.Program && (
