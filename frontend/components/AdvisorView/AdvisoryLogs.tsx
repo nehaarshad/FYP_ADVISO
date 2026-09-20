@@ -107,7 +107,7 @@ function SourceBadge({ source }: { source: NormalizedCourse['selectionSource'] }
   };
   return (
     <span
-      className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase border ${styles[source]}`}
+      className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[8px] font-bold uppercase border ${styles[source]}`}
     >
       {icons[source]}
       {source.replace(/_/g, ' ')}
@@ -125,7 +125,7 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
       {/* Header row */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <p className="font-black text-xs text-[#1e3a5f] uppercase leading-tight truncate">
+          <p className="font-bold text-xs text-[#1e3a5f] uppercase leading-tight truncate">
             {course.courseName}
           </p>
           {(course.substituteFor || course.originalCourseName) &&
@@ -135,7 +135,7 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
               </p>
             )}
         </div>
-        <span className="text-[10px] font-black text-[#1e3a5f] bg-slate-100 px-2 py-0.5 rounded-md shrink-0">
+        <span className="text-[10px] font-bold text-[#1e3a5f] bg-slate-100 px-2 py-0.5 rounded-md shrink-0">
           {course.credits} cr
         </span>
       </div>
@@ -144,22 +144,22 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
       <div className="flex flex-wrap gap-1">
         <SourceBadge source={course.selectionSource} />
         {course.category && (
-          <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[8px] font-black uppercase">
+          <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded-md text-[8px] font-bold uppercase">
             {course.category}
           </span>
         )}
         {course.program && (
-          <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded-md text-[8px] font-black uppercase truncate max-w-[140px]">
+          <span className="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded-md text-[8px] font-bold uppercase truncate max-w-[140px]">
             {course.program}
           </span>
         )}
         {course.semester != null && (
-          <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded-md text-[8px] font-black uppercase">
+          <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded-md text-[8px] font-bold uppercase">
             Sem {course.semester}
           </span>
         )}
         {course.hasLab && (
-          <span className="px-1.5 py-0.5 bg-fuchsia-50 text-fuchsia-700 rounded-md text-[8px] font-black uppercase">
+          <span className="px-1.5 py-0.5 bg-fuchsia-50 text-fuchsia-700 rounded-md text-[8px] font-bold uppercase">
             + Lab
           </span>
         )}
@@ -168,7 +168,7 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
       {/* Schedules — lecture / lab */}
       {course.lectureSlots.length > 0 && (
         <div className="space-y-0.5">
-          <p className="text-[8px] font-black text-slate-400 uppercase tracking-wider">
+          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">
             Lecture
           </p>
           {course.lectureSlots.map((s: any, i: number) => (
@@ -186,7 +186,7 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
 
       {course.labSlots.length > 0 && (
         <div className="space-y-0.5 pt-1 border-t border-slate-100">
-          <p className="text-[8px] font-black text-fuchsia-600 uppercase tracking-wider">
+          <p className="text-[8px] font-bold text-fuchsia-600 uppercase tracking-wider">
             Lab
           </p>
           {course.labSlots.map((s: any, i: number) => (
@@ -203,7 +203,7 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
       )}
 
       {course.lectureSlots.length === 0 && course.labSlots.length === 0 && (
-        <p className="text-[9px] text-slate-400 italic">
+        <p className="text-[9px] text-slate-400 ">
           No timetable slots published for this offering.
         </p>
       )}
@@ -223,7 +223,7 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
             onClick={() => setExpanded(v => !v)}
             className="w-full flex items-center justify-between text-left"
           >
-            <span className="text-[8px] font-black text-amber-800 uppercase tracking-wider">
+            <span className="text-[8px] font-bold text-amber-800 uppercase tracking-wider">
               Why this was selected
             </span>
             {expanded ? (
@@ -242,7 +242,7 @@ function CourseDetailCard({ course }: { course: NormalizedCourse }) {
           {course.systemReason &&
             course.systemReason !== course.selectionReason &&
             course.selectionSource === 'RECOMMENDED' && (
-              <p className="text-[9px] text-slate-500 italic mt-1.5 pt-1.5 border-t border-amber-100">
+              <p className="text-[9px] text-slate-500  mt-1.5 pt-1.5 border-t border-amber-100">
                 System: {course.systemReason}
               </p>
             )}
@@ -275,11 +275,11 @@ function StudentBlock({ log }: { log: any }) {
         className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-50/70 transition-colors text-left"
       >
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <div className="w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center text-[#1e3a5f] font-black text-xs shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center text-[#1e3a5f] font-bold text-xs shrink-0">
             {student?.studentName?.charAt(0) ?? '?'}
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-black text-[#1e3a5f] uppercase truncate">
+            <p className="text-xs font-bold text-[#1e3a5f] uppercase truncate">
               {student?.studentName ?? '—'}
             </p>
             <p className="text-[9px] font-bold text-slate-400 uppercase truncate">
@@ -290,10 +290,10 @@ function StudentBlock({ log }: { log: any }) {
 
         <div className="flex items-center gap-3 shrink-0">
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-[9px] font-black text-[#1e3a5f] uppercase">
+            <span className="text-[9px] font-bold text-[#1e3a5f] uppercase">
               {courses.length} course{courses.length !== 1 ? 's' : ''}
             </span>
-            <span className="text-[9px] font-black text-amber-600 uppercase">
+            <span className="text-[9px] font-bold text-amber-600 uppercase">
               {log.totalCredits ?? 0} cr
             </span>
           </div>
@@ -321,7 +321,7 @@ function StudentBlock({ log }: { log: any }) {
               })}
             </p>
             {log.notes && (
-              <p className="text-[9px] text-slate-500 italic">
+              <p className="text-[9px] text-slate-500 ">
                 Note: {log.notes}
               </p>
             )}
@@ -423,7 +423,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
           <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mb-4">
             <AlertCircle size={28} className="text-red-400" />
           </div>
-          <p className="text-sm font-black text-[#1e3a5f] uppercase tracking-tight mb-1">
+          <p className="text-sm font-bold text-[#1e3a5f] uppercase tracking-tight mb-1">
             Failed to Load Logs
           </p>
           <p className="text-[10px] text-slate-400 font-bold text-center max-w-xs mb-6">
@@ -431,7 +431,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
           </p>
           <button
             onClick={fetchAdvisoryLogs}
-            className="px-6 py-2.5 bg-[#1e3a5f] text-white text-[10px] font-black uppercase rounded-xl hover:bg-amber-500 transition-all"
+            className="px-6 py-2.5 bg-[#1e3a5f] text-white text-[10px] font-bold uppercase rounded-xl hover:bg-amber-500 transition-all"
           >
             Retry
           </button>
@@ -455,7 +455,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
           <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
             <BookOpen size={22} className="text-slate-300" />
           </div>
-          <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest">
+          <p className="text-slate-400 font-bold uppercase text-[10px] tracking-widest">
             {searchTerm ? 'No matching records found' : 'No advisory logs yet'}
           </p>
         </div>
@@ -478,7 +478,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase">
+            <h2 className="text-xl md:text-2xl font-bold text-[#1e3a5f] tracking-tighter uppercase">
               Advisory Logs
             </h2>
             <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
@@ -509,11 +509,11 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({ onBack }) => {
             <div className="flex items-center gap-3 sticky top-0 z-10 bg-gray-50/95 backdrop-blur-sm py-2 -mx-4 px-4 md:-mx-6 md:px-6">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-[#1e3a5f] text-white rounded-xl shadow-sm">
                 <Calendar size={12} />
-                <span className="text-[10px] font-black uppercase tracking-widest">
+                <span className="text-[10px] font-bold uppercase tracking-widest">
                   {session.sessionLabel}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase">
+              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase">
                 <Users size={10} />
                 {session.students.length} student{session.students.length !== 1 ? 's' : ''}
               </div>

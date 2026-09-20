@@ -53,7 +53,7 @@ export function RoadmapUploadForm({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="text-[10px] font-black uppercase text-slate-400 ml-2">
+            <label className="text-[10px] font-bold uppercase text-slate-400 ml-2">
               Program Name *
             </label>
             <select
@@ -71,7 +71,7 @@ export function RoadmapUploadForm({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-2">
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-2">
                 Batch Name
               </label>
               <select
@@ -87,7 +87,7 @@ export function RoadmapUploadForm({
               </select>
             </div>
             <div>
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-2">
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-2">
                 Batch Year
               </label>
               <input
@@ -102,7 +102,7 @@ export function RoadmapUploadForm({
         </div>
         
         <div>
-          <label className="text-[10px] font-black uppercase text-slate-400 ml-2">
+          <label className="text-[10px] font-bold uppercase text-slate-400 ml-2">
             Excel File *
           </label>
           <input
@@ -131,14 +131,14 @@ export function RoadmapUploadForm({
           <button
             type="submit"
             disabled={isLoading}
-            className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50"
+            className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50"
           >
             {isLoading ? 'Uploading...' : 'Upload Roadmap'}
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="px-6 py-4 bg-slate-100 text-slate-600 rounded-xl font-black text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
+            className="px-6 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
           >
             Cancel
           </button>

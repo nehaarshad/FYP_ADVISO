@@ -197,7 +197,7 @@
 //               {/* Batch Buttons */} 
 //               {assignedBatches.length > 0 && ( 
 //                 <div> 
-//                   <h3 className="text-sm font-black text-slate-400 uppercase tracking-wider mb-3">
+//                   <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
 //                     Your Assigned Batches
 //                   </h3> 
                   
@@ -209,7 +209,7 @@
 //                           setSelectedBatch(batch); 
 //                           setActiveTab("Total"); 
 //                         }} 
-//                         className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border font-black text-[10px] md:text-[12px] uppercase transition-all ${
+//                         className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border font-bold text-[10px] md:text-[12px] uppercase transition-all ${
 //                           selectedBatch?.batchName === batch.batchName 
 //                             ? 'bg-[#1e3a5f] text-white' 
 //                             : 'bg-white text-slate-400'
@@ -226,7 +226,7 @@
 //               {selectedBatch && ( 
 //                 <div> 
 //                   <div className="flex justify-between items-center mb-6"> 
-//                     <h3 className="text-lg md:text-xl font-black text-[#1e3a5f] uppercase tracking-tighter">
+//                     <h3 className="text-lg md:text-xl font-bold text-[#1e3a5f] uppercase tracking-tighter">
 //                       {selectedBatch.programName}: 
 //                       <span className="text-amber-500">
 //                         {selectedBatch.batchName} {selectedBatch.batchYear}
@@ -236,7 +236,7 @@
 //                     <div className="relative"> 
 //                       <button 
 //                         onClick={() => setIsFilterOpen(!isFilterOpen)} 
-//                         className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase text-[#1e3a5f]"
+//                         className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-[#1e3a5f]"
 //                       > 
 //                         <Filter size={14} className="text-amber-500" /> 
 //                         Filter: <span className="text-slate-400">{activeTab}</span> 
@@ -257,7 +257,7 @@
 //                                 setActiveTab(type); 
 //                                 setIsFilterOpen(false); 
 //                               }} 
-//                               className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-black uppercase ${
+//                               className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-bold uppercase ${
 //                                 activeTab === type 
 //                                   ? 'bg-amber-50 text-amber-600' 
 //                                   : 'text-slate-500'
@@ -348,10 +348,10 @@
 //       <div className={`w-12 h-12 ${color} rounded-2xl flex items-center justify-center mb-4`}>
 //         {icon}
 //       </div> 
-//       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+//       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
 //         {label}
 //       </p> 
-//       <p className={`text-2xl font-black ${textColor}`}>{value}</p> 
+//       <p className={`text-2xl font-bold ${textColor}`}>{value}</p> 
 //     </div> 
 //   ); 
 // }
@@ -491,7 +491,7 @@ export default function AdvisorDashboard() {
  
               {assignedBatches.length > 0 && ( 
                 <div> 
-                  <h3 className="text-sm font-black text-slate-400 uppercase tracking-wider mb-3">Your Assigned Batches</h3> 
+                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Your Assigned Batches</h3> 
                   <div className="flex flex-wrap gap-2 md:gap-3"> 
                     {assignedBatches.map((batch: any) => ( 
                       <button 
@@ -500,7 +500,7 @@ export default function AdvisorDashboard() {
                           setSelectedBatch(batch); 
                           setActiveTab("Total"); 
                         }} 
-                        className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border font-black text-[10px] md:text-[12px] uppercase transition-all ${
+                        className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border font-bold text-[10px] md:text-[12px] uppercase transition-all ${
                           selectedBatch?.batchName === batch.batchName ? 'bg-[#1e3a5f] text-white' : 'bg-white text-slate-400'
                         }`}
                       > 
@@ -514,14 +514,14 @@ export default function AdvisorDashboard() {
               {selectedBatch && ( 
                 <div> 
                   <div className="flex justify-between items-center mb-6"> 
-                    <h3 className="text-lg md:text-xl font-black text-[#1e3a5f] uppercase tracking-tighter">
+                    <h3 className="text-lg md:text-xl font-bold text-[#1e3a5f] uppercase tracking-tighter">
                       {selectedBatch.programName}: <span className="text-amber-500">{selectedBatch.batchName} {selectedBatch.batchYear}</span>
                     </h3> 
                     
                     <div className="relative"> 
                       <button 
                         onClick={() => setIsFilterOpen(!isFilterOpen)} 
-                        className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase text-[#1e3a5f]"
+                        className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-[#1e3a5f]"
                       > 
                         <Filter size={14} className="text-amber-500" /> 
                         Filter: <span className="text-slate-400">{activeTab}</span> 
@@ -537,7 +537,7 @@ export default function AdvisorDashboard() {
                                 setActiveTab(type); 
                                 setIsFilterOpen(false); 
                               }} 
-                              className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-black uppercase ${activeTab === type ? 'bg-amber-50 text-amber-600' : 'text-slate-500'}`}
+                              className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-bold uppercase ${activeTab === type ? 'bg-amber-50 text-amber-600' : 'text-slate-500'}`}
                             > 
                               {type} Students 
                             </button> 
@@ -582,8 +582,8 @@ function StatCard({ icon, label, value, color, textColor = "text-[#1e3a5f]" }: a
   return ( 
     <div className="bg-white rounded-[1.5rem] p-6 shadow-sm"> 
       <div className={`w-12 h-12 ${color} rounded-2xl flex items-center justify-center mb-4`}>{icon}</div> 
-      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{label}</p> 
-      <p className={`text-2xl font-black ${textColor}`}>{value}</p> 
+      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{label}</p> 
+      <p className={`text-2xl font-bold ${textColor}`}>{value}</p> 
     </div> 
   ); 
 }

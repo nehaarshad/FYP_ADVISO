@@ -131,7 +131,7 @@ export function AdvisorsList() {
           <div className="flex gap-3">
             <button
               onClick={handleSearch}
-              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all"
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all"
             >
               Search
             </button>
@@ -159,11 +159,11 @@ export function AdvisorsList() {
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Advisor</th>
-                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Contact</th>
-                <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-wider">Batch Assignment</th>
-                <th className="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Advisor</th>
+                <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-4 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Batch Assignment</th>
+                <th className="px-6 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -190,7 +190,7 @@ export function AdvisorsList() {
                           <User size={18} className="text-[#1e3a5f] group-hover:text-white" />
                         </div>
                         <div>
-                          <p className="font-black text-[#1e3a5f] text-sm uppercase tracking-tight">
+                          <p className="font-bold text-[#1e3a5f] text-sm uppercase tracking-tight">
                             {advisor.advisorName}
                           </p>
                           <p className="text-[10px] text-slate-400 uppercase tracking-wider">
@@ -231,7 +231,7 @@ export function AdvisorsList() {
                                   {displayAssignment.BatchModel?.ProgramModel?.programName}
                                 </p>
                                 {displayAssignment.isCurrentlyAdvised && (
-                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[8px] font-black">
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[8px] font-bold">
                                     <CheckCircle size={8} />
                                     Current
                                   </span>
@@ -239,12 +239,12 @@ export function AdvisorsList() {
                               </div>
                             );
                           } else {
-                            return <p className="text-[11px] text-slate-400 italic">Not Assigned</p>;
+                            return <p className="text-[11px] text-slate-400 ">Not Assigned</p>;
                           }
                         })()}
                       </td>
                     <td className="px-6 py-4 text-center">
-                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-black uppercase ${
+                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-bold uppercase ${
                         advisor.User?.isActive 
                           ? 'bg-green-100 text-green-700' 
                           : 'bg-red-100 text-red-700'
@@ -282,7 +282,7 @@ export function AdvisorsList() {
                         <button
                           onClick={() => handleToggleStatus(advisor)}
                           disabled={updatingStatus === advisor.id}
-                          className={`p-2 rounded-lg transition-all flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider ${
+                          className={`p-2 rounded-lg transition-all flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider ${
                             advisor.User?.isActive
                               ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'
                               : 'bg-green-50 text-green-600 hover:bg-green-100 border border-green-200'

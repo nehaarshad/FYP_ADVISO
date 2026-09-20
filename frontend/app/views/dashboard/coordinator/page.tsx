@@ -1,9 +1,172 @@
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// 'use client';
+// import React, { useState, useEffect } from 'react';
+// import { useRouter } from 'next/navigation';
+// import {
+//   Users, ShieldCheck, Clock, 
+//   Map, BookOpen, Calendar, GraduationCap, 
+//   FileSearch, ChevronLeft, 
+//   SearchCheck
+// } from "lucide-react";
+// import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
+// import { Sidebar } from "@/components/navbars/route";
+// import { useStudents } from '@/src/hooks/studentsHook/useStudents';
+// import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
+// import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
+// import { CourseOffering } from '@/app/components/CourseOffering';
+// import { BatchResults } from '@/app/components/BatchResults';
+// import { StudentRecords } from '@/app/components/StudentRecords';
+// import { CourseCatalog } from '@/components/courseComponents/CourseCatalog';
+// import { Timetable } from '@/app/components/Timetable';
+// import { ProfileView } from '@/components/ProfileView/route';
+// import DegreeGuidelinesManagement from '@/components/Guidelines/degreeGuidlinesManagementComponent';
+// import { AddFaculty } from '@/app/components/AddFaculty';
+// import { AddStudent } from '@/app/components/AddStudents';
+// import { AddProgram } from '@/components/program/addNewprogram/route';
+// import { ProgramList } from '@/components/program/programList/programList';
+// import { AdvisorsList } from '@/components/advisors/advisorList';
+// import { StudentList } from '@/components/StudentDetails/StudentList';
+
+// export default function CoordinatorDashboard() {
+//   const [activeTab, setActiveTab] = useState("overview");
+//   const [navigationStack, setNavigationStack] = useState<string[]>(["overview"]);
+//   const router = useRouter();
+//   const { statistics: studentStats, fetchStudents } = useStudents();
+//   const { statistics: advisorStats, fetchAdvisors } = useAdvisors();
+  
+//   const activeStudentsCount = studentStats?.activeStudents || 0;
+//   const activeAdvisorCount = advisorStats?.activeAdvisors || 0;
+//   const totalStudentsCount = studentStats?.totalStudents || 0;
+//   const totalAdvisorsCount = advisorStats?.totalAdvisors || 0;
+
+//   useEffect(() => {
+//     if (!sessionManager.hasActiveSession()) {
+//       router.push('/login');
+//       return;
+//     }
+//     fetchStudents();
+//     fetchAdvisors();
+//   }, [router]);
+
+//   const navigateTo = (tab: string) => {
+//     setNavigationStack(prev => [...prev, tab]);
+//     setActiveTab(tab);
+//   };
+
+//   const goBack = () => {
+//     if (navigationStack.length > 1) {
+//       const newStack = [...navigationStack];
+//       newStack.pop();
+//       const lastScreen = newStack[newStack.length - 1];
+//       setNavigationStack(newStack);
+//       setActiveTab(lastScreen);
+//     }
+//   };
+
+//   return (
+//     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">
+//       <Sidebar 
+//         userRole='coordinator'
+//         activeTab={activeTab} 
+//         setActiveTab={navigateTo} 
+//       />
+//       <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
+//         {/* Empty Top Header Bar */}
+//         <header className="h-20 bg-white border-b border-slate-200 px-10 flex items-center justify-between sticky top-0 z-40 shrink-0">
+//           <div></div>
+//           <div></div>
+//         </header>
+
+//         <div className="p-8 max-w-7xl mx-auto w-full flex-1">
+//           {activeTab === "overview" && (
+//             <div className="space-y-8 animate-in fade-in duration-500">
+//               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//                 <StatCard 
+//                   label="Total Students" 
+//                   value={totalStudentsCount.toLocaleString()} 
+//                   icon={<Users/>} 
+//                   trend={`${activeStudentsCount} Active`} 
+//                 />
+//                 <StatCard 
+//                   label="Batch Advisors" 
+//                   value={totalAdvisorsCount.toLocaleString()} 
+//                   icon={<ShieldCheck/>} 
+//                   trend={`${activeAdvisorCount} Active`} 
+//                 />
+                
+//               </div>
+
+//               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+//                 <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
+//                 <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
+//                 <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
+//                 <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
+//                 <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
+//                 <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
+//               </div>
+//             </div>
+//           )}
+
+//           {/* -DYNAMIC COMPONENT SCREENS- */}
+//           {activeTab !== "overview" && (
+//             <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+//               <button 
+//                 onClick={goBack}
+//                 className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-bold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
+//               >
+//                 <ChevronLeft size={16} /> Back
+//               </button>
+//               {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
+//               {activeTab === "roadmaps" && <RoadmapSection />}
+//               {activeTab === "course-offering" && <CourseOffering />}
+//               {activeTab === "timetable" && <Timetable />}
+//               {activeTab === "results" && <BatchResults />}
+//               {activeTab === "course-details" && <CourseCatalog />}
+//               {activeTab === "bulk-student-upload" && <StudentRecords/>}
+//               {activeTab === "add-student" && <AddStudent/>}
+//               {activeTab === "add-faculty" && <AddFaculty/>}
+//               {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
+//               {activeTab === "edit-advisor" && <AdvisorsList/>}
+//               {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
+//               {activeTab === "profile" && <ProfileView />}
+//             </div>
+//           )}
+//         </div>
+//       </main>
+//     </div>
+//   );
+// }
+
+// function ActionCard({ icon, label, onClick }: any) {
+//   return (
+//     <div onClick={onClick} className="bg-white p-6 rounded-[1.8rem] border-2 border-slate-50 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#FDB813] hover:shadow-md transition-all min-h-[140px] group">
+//       <div className="h-12 w-12 rounded-xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#FDB813] transition-colors">
+//         {React.cloneElement(icon, { size: 24 })}
+//       </div>
+//       <p className="text-[10px] font-bold uppercase text-[#1e3a5f] text-center tracking-widest">{label}</p>
+//     </div>
+//   );
+// }
+
+// function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) {
+//   return (
+//     <div className="bg-white p-6 rounded-[1.8rem] shadow-sm border border-slate-100 group hover:border-[#FDB813] transition-all">
+//       <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#FDB813] transition-colors">
+//         {React.cloneElement(icon, { size: 20 })}
+//       </div>
+//       <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-1">{label}</p>
+//       <h3 className={`text-2xl font-bold ${color}`}>{value}</h3>
+//       <p className="text-[9px] font-bold text-green-500  mt-0.5">{trend}</p>
+//     </div>
+//   );
+// }
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Users, ShieldCheck, Clock, 
+  Users, ShieldCheck, 
   Map, BookOpen, Calendar, GraduationCap, 
   FileSearch, ChevronLeft, 
   SearchCheck
@@ -12,6 +175,8 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 import { Sidebar } from "@/components/navbars/route";
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
+// ===== DIRECT STORE IMPORT TO PREVENT MISSING EXPORT ERROR =====
+import { useProgramStore } from '@/src/storage/programStore/programStore'; 
 import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
 import { BatchResults } from '@/app/components/BatchResults';
@@ -34,10 +199,18 @@ export default function CoordinatorDashboard() {
   const { statistics: studentStats, fetchStudents } = useStudents();
   const { statistics: advisorStats, fetchAdvisors } = useAdvisors();
   
+  // Directly using the program store actions and state
+  const { programs, fetchPrograms } = useProgramStore();
+  
   const activeStudentsCount = studentStats?.activeStudents || 0;
   const activeAdvisorCount = advisorStats?.activeAdvisors || 0;
   const totalStudentsCount = studentStats?.totalStudents || 0;
   const totalAdvisorsCount = advisorStats?.totalAdvisors || 0;
+
+  // Active programs count
+  const activeProgramsCount = Array.isArray(programs) 
+    ? programs.length 
+    : 0;
 
   useEffect(() => {
     if (!sessionManager.hasActiveSession()) {
@@ -46,7 +219,8 @@ export default function CoordinatorDashboard() {
     }
     fetchStudents();
     fetchAdvisors();
-  }, [router]);
+    if (fetchPrograms) fetchPrograms();
+  }, [router, fetchStudents, fetchAdvisors, fetchPrograms]);
 
   const navigateTo = (tab: string) => {
     setNavigationStack(prev => [...prev, tab]);
@@ -80,6 +254,8 @@ export default function CoordinatorDashboard() {
         <div className="p-8 max-w-7xl mx-auto w-full flex-1">
           {activeTab === "overview" && (
             <div className="space-y-8 animate-in fade-in duration-500">
+              
+              {/* 3 STAT CARDS (Total Students, Batch Advisors, Active Programs) */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <StatCard 
                   label="Total Students" 
@@ -93,7 +269,12 @@ export default function CoordinatorDashboard() {
                   icon={<ShieldCheck/>} 
                   trend={`${activeAdvisorCount} Active`} 
                 />
-                
+                <StatCard 
+                  label="Active Programs" 
+                  value={activeProgramsCount.toLocaleString()} 
+                  icon={<GraduationCap/>} 
+                  trend="Currently Running" 
+                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -112,7 +293,7 @@ export default function CoordinatorDashboard() {
             <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
               <button 
                 onClick={goBack}
-                className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
+                className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-bold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
               >
                 <ChevronLeft size={16} /> Back
               </button>
@@ -143,7 +324,7 @@ function ActionCard({ icon, label, onClick }: any) {
       <div className="h-12 w-12 rounded-xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#FDB813] transition-colors">
         {React.cloneElement(icon, { size: 24 })}
       </div>
-      <p className="text-[10px] font-black uppercase text-[#1e3a5f] text-center tracking-widest">{label}</p>
+      <p className="text-[10px] font-bold uppercase text-[#1e3a5f] text-center tracking-widest">{label}</p>
     </div>
   );
 }
@@ -154,24 +335,9 @@ function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) 
       <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#FDB813] transition-colors">
         {React.cloneElement(icon, { size: 20 })}
       </div>
-      <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mb-1">{label}</p>
-      <h3 className={`text-2xl font-black ${color}`}>{value}</h3>
-      <p className="text-[9px] font-bold text-green-500 italic mt-0.5">{trend}</p>
+      <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-1">{label}</p>
+      <h3 className={`text-2xl font-bold ${color}`}>{value}</h3>
+      <p className="text-[9px] font-bold text-green-500  mt-0.5">{trend}</p>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

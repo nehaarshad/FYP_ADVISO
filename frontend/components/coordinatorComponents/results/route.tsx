@@ -7,8 +7,8 @@ export const BatchResults = () => {
     <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic leading-none">Batch Results</h2>
-          <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest italic opacity-70">
+          <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase  leading-none">Batch Results</h2>
+          <p className="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest  opacity-70">
             Preview and Manage Uploaded Results
           </p>
         </div>
@@ -23,7 +23,7 @@ export const BatchResults = () => {
             </div>
             <div>
               {/* Backend Title */}
-              <p className="font-black text-[#1e3a5f] text-sm uppercase">Result File </p>
+              <p className="font-bold text-[#1e3a5f] text-sm uppercase">Result File </p>
             </div>
           </div>
 

@@ -188,8 +188,8 @@ export const Header: React.FC<{
         </button>
       )}
       <div className="min-w-0">
-        <h1 className="text-xl font-black text-[#1e3a5f] uppercase tracking-tight truncate">{title}</h1>
-        {subtitle && <p className="text-[11px] font-extrabold text-[#FDB813] uppercase tracking-wider mt-0.5">{subtitle}</p>}
+        <h1 className="text-xl font-bold text-[#1e3a5f] uppercase tracking-tight truncate">{title}</h1>
+        {subtitle && <p className="text-[11px] font-bold text-[#FDB813] uppercase tracking-wider mt-0.5">{subtitle}</p>}
       </div>
     </div>
 
@@ -200,7 +200,7 @@ export const Header: React.FC<{
           <button
             key={t}
             onClick={() => onTabChange(t)}
-            className={`px-3.5 py-1.5 text-xs font-black uppercase tracking-wider rounded-lg transition-all ${
+            className={`px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
               tab === t 
                 ? 'bg-[#1e3a5f] text-white shadow-sm' 
                 : 'text-slate-500 hover:text-[#1e3a5f]'

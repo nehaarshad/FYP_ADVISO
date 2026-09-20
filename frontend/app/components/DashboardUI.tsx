@@ -47,11 +47,11 @@ export function StatCard({
         {icon}
       </div>
 
-      <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">
+      <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">
         {label}
       </p>
 
-      <h3 className={`text-3xl font-black ${color} tracking-tighter`}>
+      <h3 className={`text-3xl font-bold ${color} tracking-tighter`}>
         {value}
       </h3>
     </div>
@@ -67,19 +67,19 @@ export function RecentStudentCard({ student }: any) {
   return (
     <div className="min-w-[280px] bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#FDB813] transition-all">
       <div className="flex items-center gap-4">
-        <div className="h-12 w-12 bg-[#1e3a5f] rounded-2xl flex items-center justify-center text-[#FDB813] font-black italic">
+        <div className="h-12 w-12 bg-[#1e3a5f] rounded-2xl flex items-center justify-center text-[#FDB813] font-bold ">
           {student?.name ? student.name[0] : "S"}
         </div>
 
         <div>
-          <h4 className="font-black text-[#1e3a5f] text-sm uppercase italic line-clamp-1">
+          <h4 className="font-bold text-[#1e3a5f] text-sm uppercase  line-clamp-1">
             {student?.name || "Unknown Student"}
           </h4>
 
           <div className="flex items-center gap-1 text-slate-400">
             <Clock size={10} />
 
-            <p className="text-[9px] font-bold uppercase italic">
+            <p className="text-[9px] font-bold uppercase ">
               Viewed recently
             </p>
           </div>
@@ -109,12 +109,12 @@ export function StudentCard({
       }`}
     >
       <div className="flex items-center gap-5">
-        <div className="h-14 w-14 bg-slate-50 rounded-2xl flex items-center justify-center font-black text-[#1e3a5f] italic text-xl group-hover:bg-[#FDB813] transition-colors">
+        <div className="h-14 w-14 bg-slate-50 rounded-2xl flex items-center justify-center font-bold text-[#1e3a5f]  text-xl group-hover:bg-[#FDB813] transition-colors">
           {student?.name ? student.name[0] : "S"}
         </div>
 
         <div>
-          <h4 className="font-black text-[#1e3a5f] uppercase italic">
+          <h4 className="font-bold text-[#1e3a5f] uppercase ">
             {student?.name || "Unknown Student"}
           </h4>
 
@@ -126,7 +126,7 @@ export function StudentCard({
 
       <div className="flex items-center gap-4">
         <span
-          className={`text-[9px] font-black px-4 py-1.5 rounded-full uppercase italic ${
+          className={`text-[9px] font-bold px-4 py-1.5 rounded-full uppercase  ${
             student?.status === "Probation"
               ? "bg-red-50 text-red-500"
               : "bg-green-50 text-green-600"

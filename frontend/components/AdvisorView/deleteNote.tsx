@@ -21,7 +21,7 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Trash2 size={32} className="text-red-500" />
           </div>
-          <h3 className="text-lg font-black text-[#1e3a5f] uppercase tracking-tighter mb-2">
+          <h3 className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tighter mb-2">
             Delete Note
           </h3>
           <p className="text-sm text-slate-500 font-medium mb-6">
@@ -31,14 +31,14 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           <div className="flex gap-3">
             <button 
               onClick={onCancel}
-              className="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-colors"
+              className="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-colors"
               disabled={isDeleting}
             >
               Cancel
             </button>
             <button 
               onClick={onConfirm}
-              className="flex-1 bg-red-500 text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-red-500 text-white py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isDeleting}
             >
               {isDeleting ? (

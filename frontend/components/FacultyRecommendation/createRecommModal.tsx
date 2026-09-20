@@ -35,7 +35,7 @@ export const CreateRecommendationModal: React.FC<CreateRecommendationModalProps>
         >
           <X size={20} />
         </button>
-        <h3 className="text-xl font-black text-[#1e3a5f] uppercase tracking-tighter mb-6">
+        <h3 className="text-xl font-bold text-[#1e3a5f] uppercase tracking-tighter mb-6">
           New Recommendation
         </h3>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -66,7 +66,7 @@ export const CreateRecommendationModal: React.FC<CreateRecommendationModalProps>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-[#1e3a5f] text-white py-4 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg active:scale-95 transition-all hover:bg-[#2a5285] disabled:opacity-50"
+            className="w-full bg-[#1e3a5f] text-white py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest shadow-lg active:scale-95 transition-all hover:bg-[#2a5285] disabled:opacity-50"
           >
             {isSubmitting ? <Loader2 size={20} className="animate-spin mx-auto" /> : 'Submit Recommendation'}
           </button>

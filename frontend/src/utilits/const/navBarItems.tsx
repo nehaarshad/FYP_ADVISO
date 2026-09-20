@@ -51,8 +51,7 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     { key: "Overview",        label: "Overview",        icon: <LayoutDashboard size={20}/> },
     { key: "StudentChat",     label: "StudentChat",    icon: <MessageSquare size={20}/> },
     { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
-    { key: "advRec",         label: "Advisor Recommendation",      icon: <FileText size={20}/>},
-    { key: "sysRec",         label: "System Recommendation",      icon: <Map size={20}/>},
+    
     
   ],
 };

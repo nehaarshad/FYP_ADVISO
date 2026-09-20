@@ -81,7 +81,7 @@ export const AdvisoryParentScreen: React.FC<AdvisoryParentScreenProps> = ({
           <div className="w-16 h-16 bg-amber-50 border border-amber-200 rounded-2xl flex items-center justify-center mb-6 shadow-sm animate-pulse">
             <Sparkles size={32} className="text-amber-500" />
           </div>
-          <h2 className="text-xl font-black text-[#1e3a5f] uppercase tracking-tight mb-2">
+          <h2 className="text-xl font-bold text-[#1e3a5f] uppercase tracking-tight mb-2">
             Generating Smart Recommendations
           </h2>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest text-center max-w-sm mb-6">
@@ -149,7 +149,7 @@ function SessionPickerModal({ isOpen, studentName, isGenerating, onConfirm, onCl
               <Calendar size={20} />
             </div>
             <div>
-              <h3 className="font-black text-[#1e3a5f] text-base uppercase tracking-tight">Select Academic Session</h3>
+              <h3 className="font-bold text-[#1e3a5f] text-base uppercase tracking-tight">Select Academic Session</h3>
               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{studentName}</p>
             </div>
           </div>
@@ -167,7 +167,7 @@ function SessionPickerModal({ isOpen, studentName, isGenerating, onConfirm, onCl
                   key={type}
                   type="button"
                   onClick={() => setSessionType(type)}
-                  className={`py-2.5 rounded-xl text-xs font-black uppercase transition-all border ${
+                  className={`py-2.5 rounded-xl text-xs font-bold uppercase transition-all border ${
                     sessionType === type
                       ? 'bg-[#1e3a5f] text-white border-[#1e3a5f] shadow-md'
                       : 'bg-gray-50 text-slate-600 border-gray-200 hover:bg-gray-100'
@@ -194,7 +194,7 @@ function SessionPickerModal({ isOpen, studentName, isGenerating, onConfirm, onCl
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 text-slate-600 text-xs font-black uppercase rounded-xl transition-colors"
+            className="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 text-slate-600 text-xs font-bold uppercase rounded-xl transition-colors"
           >
             Cancel
           </button>
@@ -202,7 +202,7 @@ function SessionPickerModal({ isOpen, studentName, isGenerating, onConfirm, onCl
             type="button"
             disabled={isGenerating}
             onClick={() => onConfirm(sessionType, sessionYear)}
-            className="flex-1 py-3 px-4 bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs font-black uppercase rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+            className="flex-1 py-3 px-4 bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs font-bold uppercase rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {isGenerating ? <><Loader2 size={14} className="animate-spin" /> Generating...</> : 'Proceed'}
           </button>

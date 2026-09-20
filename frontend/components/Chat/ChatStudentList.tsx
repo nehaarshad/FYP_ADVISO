@@ -33,7 +33,7 @@ const ChatStudentList: React.FC<
       <div className="flex items-center justify-between px-2 pb-4">
 
         <div>
-          <h2 className="text-[#1e3a5f] text-sm font-black uppercase tracking-tight">
+          <h2 className="text-[#1e3a5f] text-sm font-bold uppercase tracking-tight">
             Inbox 
           </h2>
 
@@ -107,13 +107,13 @@ const ChatStudentList: React.FC<
                   {/* NAME + UNREAD */}
                   <div className="flex items-center justify-between gap-2">
 
-                    <p className="font-black text-[12.5px] text-[#1e3a5f] leading-tight truncate">
+                    <p className="font-bold text-[12.5px] text-[#1e3a5f] leading-tight truncate">
                           {chat.name ||
                               "Student"}
                         </p>
 
                     {!!chat.unreadCount && (
-                      <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-white text-[8px] font-black">
+                      <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-white text-[8px] font-bold">
                         {chat.unreadCount}
                       </span>
                     )}

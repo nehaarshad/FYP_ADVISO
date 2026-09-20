@@ -84,7 +84,7 @@ export function AddStudent() {
             <GraduationCap size={28} />
           </div>
           <div>
-            <h2 className="text-2xl font-black uppercase italic leading-none text-[#1e3a5f]">Enroll Student</h2>
+            <h2 className="text-2xl font-bold uppercase  leading-none text-[#1e3a5f]">Enroll Student</h2>
             <p className="text-[10px] text-slate-400 mt-1">Create new student account</p>
           </div>
         </div>
@@ -148,7 +148,7 @@ export function AddStudent() {
           </div>
           <div className="grid grid-cols-2 gap-6">
              <div className="space-y-3 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4">Staus *</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4">Staus *</label>
               <select 
               title='status'
                 name="currentStatus"
@@ -177,7 +177,7 @@ export function AddStudent() {
 
           <div className="grid grid-cols-3 gap-6">
             <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4">Program *</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4">Program *</label>
               <select 
               title='Program'
                 name="programName"
@@ -203,7 +203,7 @@ export function AddStudent() {
             />
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2 group">
-              <label className="text-[10px] font-black uppercase text-slate-400 ml-4">Batch *</label>
+              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4">Batch *</label>
               <select 
               title='batch'
                 name="batchName"
@@ -233,7 +233,7 @@ export function AddStudent() {
 
           {/* Guardian Information */}
           <div className="border-t border-slate-100 pt-6 mt-4">
-            <h3 className="text-sm font-black text-[#1e3a5f] mb-4">Guardian Information (Optional)</h3>
+            <h3 className="text-sm font-bold text-[#1e3a5f] mb-4">Guardian Information (Optional)</h3>
             <div className="grid grid-cols-2 gap-6">
               <InputField 
                 label="Guardian Name" 
@@ -266,7 +266,7 @@ export function AddStudent() {
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full py-5 bg-[#1e3a5f] text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-3 mt-6 disabled:opacity-50"
+            className="w-full py-5 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-3 mt-6 disabled:opacity-50"
           >
             <ArrowRight size={18} /> {isLoading ? 'Registering...' : 'Register Student'}
           </button>
@@ -279,7 +279,7 @@ export function AddStudent() {
 function InputField({ label, name, placeholder, icon, type = "text", value, onChange, required = false }: any) {
   return (
     <div className="space-y-2 group">
-      <label className="text-[10px] font-black uppercase text-slate-400 ml-4 tracking-widest">
+      <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">
         {label}
       </label>
       <div className="relative">

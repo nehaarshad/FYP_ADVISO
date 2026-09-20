@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use client';
@@ -9,7 +10,7 @@ import Link from 'next/link';
 import { Mail, Lock, ChevronLeft, AlertCircle } from "lucide-react";
 import UniversalInput from "@/components/textsComponents/universalInput";
 import BlueFilledButton from '@/components/buttons/FilledButton/blueFilledButton';
-import { authRepository } from '@/src/repositories/authRepository/authRepository'
+import { authRepository } from '@/src/repositories/authRepository/authRepository';
 import { LoginCredentials } from '@/src/credentials/authCred/loginCred';
 import Image from 'next/image';
 
@@ -38,6 +39,7 @@ export default function LoginPage() {
     if (authRepository.isAuthenticated()) {
       const user = authRepository.getCurrentUser();
       console.log("Already authenticated user:", user);
+
       if (user && user.data) {
         redirectBasedOnRole(user.data.role, router);
       }
@@ -46,42 +48,42 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Clear previous error
     setError(null);
-    
-    // Validate inputs
-   if (!sapId.trim()) {
-  setError("SAP ID is required");
-  return;
-}
 
-if (!/^\d+$/.test(sapId.trim())) {
-  setError("SAP ID must contain numbers only");
-  return;
-}
-    
+    // Validate inputs
+    if (!sapId.trim()) {
+      setError("SAP ID is required");
+      return;
+    }
+
+    if (!/^\d+$/.test(sapId.trim())) {
+      setError("SAP ID must contain numbers only");
+      return;
+    }
+
     if (!password.trim()) {
       setError("Password is required");
       return;
     }
-    
+
     // Set loading state
     setIsLoading(true);
-    
+
     try {
       // Prepare credentials
       const credentials: LoginCredentials = {
         sapid: sapId,
         password: password
       };
-      
+
       // Call login API through repository
       const user = await authRepository.login(credentials);
-      
+
       // Redirect based on user role
       redirectBasedOnRole(user.data!.role, router);
-      
+
     } catch (err: any) {
       // Handle error
       setError(err.message || "Login failed. Please try again.");
@@ -91,46 +93,65 @@ if (!/^\d+$/.test(sapId.trim())) {
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen bg-cover bg-center bg-no-repeat selection:bg-[#FDB813]/30 flex items-center justify-center p-4 md:p-6 relative overflow-hidden font-sans"
       style={{ backgroundImage: "url('/backgroundLanding.png')" }}
     >
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[3px] pointer-events-none" />
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="max-w-5xl w-full grid md:grid-cols-2 bg-white/95 backdrop-blur-md rounded-[2.5rem] shadow-[0_40px_100px_-15px_rgba(0,0,0,0.4)] overflow-hidden border border-white/20 relative z-10"
       >
         {/* LEFT SIDE: BRANDING */}
-        <div className="bg-[#1e3a5f]/90 p-12 text-white flex flex-col justify-between relative overflow-hidden">
+        <div className="bg-[#1e3a5f] p-12 text-white flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-400/10 to-transparent pointer-events-none" />
+
           <div className="relative z-10">
-            <motion.div custom={0} initial="hidden" animate="visible" variants={fadeUp}>
-              <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold group transition-all">
-                <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back
+            <motion.div
+              custom={0}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+            >
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold group transition-all"
+              >
+                <ChevronLeft
+                  size={18}
+                  className="group-hover:-translate-x-1 transition-transform"
+                />
+                Back
               </Link>
             </motion.div>
-            
-            <motion.div 
-              custom={1} initial="hidden" animate="visible" variants={fadeUp} 
+
+            <motion.div
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
               className="mb-8"
             >
-              <Image 
-                 width={154} 
-                 height={183}  
-                src="/Lightlogo.png" 
-                alt="Riphah Logo" 
-                className="w-32 h-32 object-contain drop-shadow-2xl" 
+              <Image
+                width={154}
+                height={183}
+                src="/lightLogo.png"
+                alt="Riphah Logo"
+                className="w-32 h-32 object-contain drop-shadow-2xl"
               />
             </motion.div>
 
-            <motion.h1 
-              custom={2} initial="hidden" animate="visible" variants={fadeUp}
-              className="text-3xl font-black tracking-tighter mb-4 leading-[1.1]"
+            <motion.h1
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="text-3xl font-bold tracking-tighter mb-4 leading-[1.1]"
             >
-              Welcome back <br /> 
+              Welcome back <br />
               to <span className="text-[#FDB813]">ADVISO.</span>
             </motion.h1>
           </div>
@@ -138,26 +159,31 @@ if (!/^\d+$/.test(sapId.trim())) {
 
         {/* RIGHT SIDE: FORM */}
         <div className="p-10 md:p-16 flex flex-col justify-center bg-white relative">
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }} 
-            animate={{ opacity: 1, x: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
           >
             <div className="mb-10 text-left">
-              <h2 className="text-4xl font-black text-[#1e3a5f] mb-2 tracking-tight">Login</h2>
+              <h2 className="text-4xl font-bold text-[#1e3a5f] mb-2 tracking-tight">
+                Login
+              </h2>
+
               <div className="h-1.5 w-12 bg-[#FDB813] rounded-full"></div>
             </div>
-            
+
             {/* Error Display */}
             {error && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[1.2rem]">
-                <p className="text-red-600 text-sm font-medium">{error}</p>
+                <p className="text-red-600 text-sm font-medium">
+                  {error}
+                </p>
               </div>
             )}
-            
-            {/* Form tag */}
+
+            {/* Form */}
             <form className="space-y-6" onSubmit={handleLogin}>
-              <UniversalInput 
+              <UniversalInput
                 label="SAP ID"
                 type="text"
                 placeholder="e.g. 49100"
@@ -167,7 +193,7 @@ if (!/^\d+$/.test(sapId.trim())) {
                 disabled={isLoading}
               />
 
-              <UniversalInput 
+              <UniversalInput
                 label="Password"
                 type="password"
                 placeholder="••••••••"
@@ -177,14 +203,15 @@ if (!/^\d+$/.test(sapId.trim())) {
                 disabled={isLoading}
               />
 
-              <BlueFilledButton text={isLoading ? "Signing In..." : "Sign In"} />
-         
+              <BlueFilledButton
+                text={isLoading ? "Signing In..." : "Sign In"}
+              />
             </form>
 
             {/* Forgot Password Link */}
             <div className="mt-4 text-right">
-              <Link 
-                href="/forgot-password" 
+              <Link
+                href="/forgot-password"
                 className="text-sm text-[#1e3a5f] hover:text-[#FDB813] transition-colors font-medium"
               >
                 Forgot Password?
@@ -195,8 +222,11 @@ if (!/^\d+$/.test(sapId.trim())) {
               <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
                 <AlertCircle size={15} className="text-blue-600" />
               </div>
+
               <p className="text-[11px] text-slate-600 font-bold leading-snug">
-                Issues logging in? Reach out to your <span className="text-[#1e3a5f]">Coordinator</span> for support.
+                Issues logging in? Reach out to your{" "}
+                <span className="text-[#1e3a5f]">Coordinator</span>{" "}
+                for support.
               </p>
             </div>
           </motion.div>
@@ -211,15 +241,19 @@ function redirectBasedOnRole(role: string, router: any) {
     case 'student':
       router.push('/views/dashboard/students');
       break;
+
     case 'advisor':
       router.push('/views/dashboard/advisor');
       break;
+
     case 'coordinator':
       router.push('/views/dashboard/coordinator');
       break;
+
     case 'admin':
       router.push('/views/dashboard/admin');
       break;
+
     default:
       router.push('/dashboard');
   }

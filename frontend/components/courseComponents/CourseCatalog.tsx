@@ -174,7 +174,7 @@ export const CourseCatalog = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Course Catalog</h2>
+            <h2 className="text-2xl font-bold text-slate-900 uppercase tracking-tighter">Course Catalog</h2>
             <div className="h-1 w-12 bg-slate-900 mt-1"></div>
             <p className="text-[10px] text-slate-400 mt-2">{courses.length} courses available</p>
           </div>
@@ -192,7 +192,7 @@ export const CourseCatalog = () => {
             </div>
             <button 
               onClick={() => setShowUploadModal(true)}
-              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-[10px] uppercase tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-[10px] uppercase tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
             >
               <Upload size={14} /> Upload
             </button>
@@ -204,7 +204,7 @@ export const CourseCatalog = () => {
           <div className="flex flex-wrap gap-2 mb-6 pb-4 border-b border-slate-100">
             <button
               onClick={() => handleCategoryFilter('')}
-              className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all ${
                 !selectedCategory ? 'bg-[#1e3a5f] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
               }`}
             >
@@ -214,7 +214,7 @@ export const CourseCatalog = () => {
               <button
                 key={cat}
                 onClick={() => handleCategoryFilter(cat)}
-                className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase transition-all ${
                   selectedCategory === cat ? 'bg-[#1e3a5f] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                 }`}
               >
@@ -241,11 +241,11 @@ export const CourseCatalog = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-300">
-                  <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Code</th>
-                  <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Course Name</th>
-                  <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Credit</th>
-                  <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest border-r border-slate-200">Categories</th>
-                  <th className="p-4 text-[10px] font-black uppercase text-slate-900 tracking-widest text-center">Action</th>
+                  <th className="p-4 text-[10px] font-bold uppercase text-slate-900 tracking-widest border-r border-slate-200">Code</th>
+                  <th className="p-4 text-[10px] font-bold uppercase text-slate-900 tracking-widest border-r border-slate-200">Course Name</th>
+                  <th className="p-4 text-[10px] font-bold uppercase text-slate-900 tracking-widest border-r border-slate-200">Credit</th>
+                  <th className="p-4 text-[10px] font-bold uppercase text-slate-900 tracking-widest border-r border-slate-200">Categories</th>
+                  <th className="p-4 text-[10px] font-bold uppercase text-slate-900 tracking-widest text-center">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -262,13 +262,13 @@ export const CourseCatalog = () => {
                     
                     return (
                       <tr key={course.id} className="hover:bg-slate-50 transition-colors group">
-                        <td className="p-4 text-xs font-black text-slate-900 border-r border-slate-200 uppercase">
+                        <td className="p-4 text-xs font-bold text-slate-900 border-r border-slate-200 uppercase">
                           {courseData?.courseCode || '-----'}
                         </td>
                         <td className="p-4 border-r border-slate-200">
                           <p className="text-[11px] text-slate-900 font-bold uppercase">{courseData?.courseName || 'N/A'}</p>
                         </td>
-                        <td className="p-4 text-xs font-black text-slate-900 border-r border-slate-200">
+                        <td className="p-4 text-xs font-bold text-slate-900 border-r border-slate-200">
                           {getCreditDisplay(courseData?.courseCredits)}
                         </td>
                         <td className="p-4 border-r border-slate-200">
@@ -309,14 +309,14 @@ export const CourseCatalog = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-md w-full p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Upload Course Details</h3>
+              <h3 className="text-lg font-bold text-[#1e3a5f] uppercase">Upload Course Details</h3>
               <button title='btn' onClick={() => setShowUploadModal(false)} className="p-1 hover:bg-slate-100 rounded">
                 <X size={20} />
               </button>
             </div>
             <form onSubmit={handleUpload} className="space-y-4">
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase">Excel File</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Excel File</label>
                 <div className="relative">
                   <input
                     title='upload file'
@@ -360,7 +360,7 @@ export const CourseCatalog = () => {
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
                 {isLoading ? 'Uploading...' : 'Upload'}
@@ -375,7 +375,7 @@ export const CourseCatalog = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-              <h3 className="text-lg font-black text-[#1e3a5f] uppercase">Course Details</h3>
+              <h3 className="text-lg font-bold text-[#1e3a5f] uppercase">Course Details</h3>
               <button title='Close' onClick={() => setShowDetailModal(false)} className="p-1 hover:bg-slate-100 rounded">
                 <X size={20} />
               </button>
@@ -410,7 +410,7 @@ export const CourseCatalog = () => {
 function InfoRow({ label, value }: { label: string; value: any }) {
   return (
     <div>
-      <p className="text-[9px] font-black text-slate-400 uppercase">{label}</p>
+      <p className="text-[9px] font-bold text-slate-400 uppercase">{label}</p>
       <p className="text-sm font-bold text-[#1e3a5f] break-words">{value || 'N/A'}</p>
     </div>
   );

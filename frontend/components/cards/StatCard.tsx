@@ -46,7 +46,7 @@ interface StatCardProps {
       
       {/* Text Content */}
       <div className="text-left w-full">
-        <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 transition-colors ${
+        <p className={`text-[10px] font-bold uppercase tracking-[0.2em] mb-1 transition-colors ${
           isActive 
             ? 'text-amber-600' 
             : variant === 'AdvisoryLog'
@@ -55,7 +55,7 @@ interface StatCardProps {
         }`}>
           {label}
         </p>
-        <p className="text-2xl font-black uppercase leading-tight text-[#1e3a5f] not-italic">
+        <p className="text-2xl font-bold uppercase leading-tight text-[#1e3a5f] not-italic">
           {value}
         </p>
       </div>

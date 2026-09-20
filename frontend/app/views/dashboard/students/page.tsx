@@ -1,5 +1,4 @@
 
-
 // /* eslint-disable react-hooks/set-state-in-effect */
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -24,9 +23,24 @@
 // // ===== IMPORT YOUR HOOKS =====
 // import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 // import { useTranscript } from '@/src/hooks/transcriptHook/transcriptHokk';
-// import { useBatchMeetings } from '@/src/hooks/batchMeetingHook/useBatchMeetings'; // <-- Import Batch Meetings Hook
+// import { useBatchMeetings } from '@/src/hooks/batchMeetingHook/useBatchMeetings'; 
 // import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 // import Guidelines from "@/components/Guidelines/Guidelines";
+
+// // Helper function to format 24h time ("11:00:00") to 12h AM/PM format ("11:00 AM")
+// const formatTimeTo12Hour = (timeStr: string) => {
+//   if (!timeStr) return '';
+//   const parts = timeStr.split(':');
+//   const hours = parts[0];
+//   const minutes = parts[1];
+//   if (!hours || !minutes) return timeStr;
+  
+//   const h = parseInt(hours, 10);
+//   const period = h >= 12 ? 'PM' : 'AM';
+//   const formattedHours = h % 12 || 12;
+  
+//   return `${formattedHours}:${minutes} ${period}`;
+// };
 
 // export default function StudentDashboard() {
 //   const [mounted, setMounted] = useState(false);
@@ -50,40 +64,32 @@
 //     fetchStudentTranscript,
 //   } = useTranscript();
 
+//   // Fetch batch meetings using current student ID
+//   const { meetings } = useBatchMeetings(currentStudentId);
+
 //   useEffect(() => {
 //     setMounted(true);
     
 //     if (!students || students.length === 0) {
-//       console.log("Waiting for students to load...");
 //       return;
 //     }
     
 //     const response = sessionManager.getCurrentUser<any>();
-//     console.log("Session response:", response);
-    
 //     const currentUser = response?.data;
     
 //     if (!currentUser) {
-//       console.warn("No current user found in session");
 //       return;
 //     }
-    
-//     console.log("Looking for student with SAP ID:", currentUser.sapid);
     
 //     const foundStudent = students.find((student: any) => {
 //       const studentSapId = student.User?.sapid || student.sapid;
 //       const sessionSapId = currentUser.sapid;
-      
-//       console.log(`Comparing student SAP ID: ${studentSapId} with session SAP ID: ${sessionSapId}`);
 //       return studentSapId?.toString() === sessionSapId?.toString();
 //     });
     
 //     if (foundStudent) {
-//       console.log("Found matching student:", foundStudent.id, foundStudent.studentName);
 //       setCurrentStudentId(foundStudent.id);
 //       fetchStudentTranscript(foundStudent.id);
-//     } else {
-//       console.error("No student found with SAP ID:", currentUser.sapid);
 //     }
 //   }, [students, getStudentBySapId, getStudentById, fetchStudentTranscript]);
 
@@ -127,41 +133,27 @@
 //     };
 //   }, [currentStudent, getCGPA, getTotalEarnedCredits]);
 
-//   // Get batch ID from student data to fetch batch-level meetings correctly
-//   const batchId = studentData?.BatchModel?.id;
-//   const { meetings } = useBatchMeetings(batchId);
-
-//   // Filter meetings where status is 'scheduled' and get the earliest/first one
+//   // Robust Meeting Filter Logic
 //   const upcomingMeeting = useMemo(() => {
-//     console.log("Batch ID passed to meetings hook:", batchId);
-//     console.log("Raw meetings response:", meetings);
-
-//     let meetingsList: any[] = [];
-//     if (Array.isArray(meetings)) {
-//       meetingsList = meetings;
-//     } else if (meetings && typeof meetings === 'object') {
-//       meetingsList = (meetings as any).data || (meetings as any).meetings || (meetings as any).batchMeetings || [];
-//     }
-
-//     if (!Array.isArray(meetingsList) || meetingsList.length === 0) return null;
+//     if (!meetings || !Array.isArray(meetings) || meetings.length === 0) return null;
     
-//     const scheduledMeetings = meetingsList.filter(
-//       (m: any) => m?.status?.toLowerCase() === 'scheduled'
+//     const scheduledMeetings = meetings.filter(
+//       (m: any) => {
+//         const s = m.status?.toLowerCase()?.trim();
+//         return s === 'scheduled' || s === 'pending' || !s;
+//       }
 //     );
 
-//     console.log("Filtered Scheduled Meetings:", scheduledMeetings);
+//     const targetList = scheduledMeetings.length > 0 ? scheduledMeetings : meetings;
 
-//     if (scheduledMeetings.length === 0) return null;
-
-//     // Sort by date/time to get the nearest upcoming one
-//     scheduledMeetings.sort((a: any, b: any) => {
+//     const sortedMeetings = [...targetList].sort((a: any, b: any) => {
 //       const dateA = a.date ? new Date(a.date).getTime() : 0;
 //       const dateB = b.date ? new Date(b.date).getTime() : 0;
 //       return dateA - dateB;
 //     });
 
-//     return scheduledMeetings[0];
-//   }, [meetings, batchId]);
+//     return sortedMeetings[0] || null;
+//   }, [meetings]);
 
 //   const completionPercentage = useMemo(() => {
 //     if (!studentData || studentData.totalCredits === 0) return 0;
@@ -289,54 +281,68 @@
                 
 //                 {/* STAT CARDS */}
 //                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-//                  <StatCard 
+//                   <StatCard 
 //                     label="Batch #" 
 //                     value={`${studentData.batch} - ${studentData.batchYear}`}
 //                     icon={<GraduationCap size={22}/>} 
-//                  />
+//                   />
 
-//                  <StatCard 
+//                   <StatCard 
 //                     label="Status" 
 //                     value={`${studentData.status}`} 
 //                     icon={<CheckCircle2 size={22}/>} 
-//                  />
-//                  <StatCard 
+//                   />
+                  
+//                   <StatCard 
 //                     label="Current CGPA" 
 //                     value={studentData.cgpa || "0.00"} 
 //                     icon={<Target size={22}/>} 
-//                  />
-                 
-//                  <StatCard 
+//                   />
+                  
+//                   <StatCard 
 //                     label="Upcoming Meeting" 
-//                     value={
-//                       upcomingMeeting ? (
-//                         <div className="flex flex-col gap-1 mt-1">
-//                           <div className="flex items-center gap-1.5">
-//                             <span className="text-xs font-bold text-slate-700">
-//                               {upcomingMeeting.date ? new Date(upcomingMeeting.date).toLocaleDateString() : upcomingMeeting.day}
-//                             </span>
+//                     value={(
+//                       <div className="flex flex-col gap-1 w-full overflow-hidden">
+//                         {upcomingMeeting ? (
+//                           <>
+//                             <div className="flex items-center justify-between gap-1">
+//                               <div className="flex items-center gap-1.5 text-xs font text-[#1e3a5f] truncate">
+//                                 <Calendar size={13} className="text-amber-500 shrink-0" />
+//                                 <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
+//                               </div>
+//                               <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-bold shrink-0 ${
+//                                 upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-50 text-blue-600' :
+//                                 upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-50 text-emerald-600' :
+//                                 upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-50 text-red-600' :
+//                                 'bg-amber-50 text-amber-600'
+//                               }`}>
+//                                 {upcomingMeeting.status || 'Scheduled'}
+//                               </span>
+//                             </div>
+//                             <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
+//                               <Clock size={12} className="text-amber-500 shrink-0" />
+//                               <span className="truncate">
+//                                 {upcomingMeeting.day ? `${upcomingMeeting.day} ` : ''} 
+//                                 {upcomingMeeting.startTime ? `(${formatTimeTo12Hour(upcomingMeeting.startTime)} - ${formatTimeTo12Hour(upcomingMeeting.endTime)})` : ''}
+//                               </span>
+//                             </div>
+//                           </>
+//                         ) : (
+//                           <div className="flex items-center gap-1.5 py-1">
+//                             <Clock size={12} className="text-amber-500 shrink-0" />
+//                             <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">To be scheduled</span>
 //                           </div>
-//                           <span className="text-[10px] font-medium text-slate-500">
-//                             {upcomingMeeting.startTime} - {upcomingMeeting.endTime} ({upcomingMeeting.day})
-//                           </span>
-//                         </div>
-//                       ) : (
-//                         <div className="flex flex-col gap-1.5 mt-1">
-//                           <div className="flex items-center gap-2">
-//                             <Clock size={10} className="text-amber-500 shrink-0" />
-//                             <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0em]">To be scheduled</span>
-//                           </div>
-//                         </div>
-//                       )
-//                     }
+//                         )}
+//                       </div>
+//                     )} 
 //                     icon={<Clock size={22}/>} 
 //                     color="text-orange-500"
-//                  />
+//                   />
 //                 </div>
 
 //                 {/* DEGREE COMPLETION */}
 //                 <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-//                   <h3 className="text-[11px] font-black text-[#1e3a5f] uppercase tracking-widest mb-6 border-l-4 border-[#FDB813] pl-3">
+//                   <h3 className="text-[11px] font-bold text-[#1e3a5f] uppercase tracking-widest mb-6 border-l-4 border-[#FDB813] pl-3">
 //                     Degree Completion - {studentData.department}
 //                   </h3>
 //                   <div className="space-y-6">
@@ -344,7 +350,7 @@
 //                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate mr-2">
 //                         {studentData.completedCredits} of {studentData.totalCredits} Credits Completed
 //                       </span>
-//                       <span className="text-2xl md:text-3xl font-black text-[#1e3a5f] tracking-tighter">
+//                       <span className="text-2xl md:text-3xl font-bold text-[#1e3a5f] tracking-tighter">
 //                         {Math.round(completionPercentage)}%
 //                       </span>
 //                     </div>
@@ -387,16 +393,16 @@
 //                 />
 //               )}
               
-//              {view === "CourseRecommendation" && studentData && (
-//               <CompleteCourseDashboard
-//                 onBack={goBack}
-//                 studentId={studentData.id}
-//                 studentName={studentData.studentName}
-//                 selectedBatch={`${studentData.batch} ${studentData.batchYear}`}
-//                 sessionType="Regular"
-//                 sessionYear={Number(studentData.batchYear)}
-//               />
-//             )}
+//               {view === "CourseRecommendation" && studentData && (
+//                 <CompleteCourseDashboard
+//                   onBack={goBack}
+//                   studentId={studentData.id}
+//                   studentName={studentData.studentName}
+//                   selectedBatch={`${studentData.batch} ${studentData.batchYear}`}
+//                   sessionType="Regular"
+//                   sessionYear={Number(studentData.batchYear)}
+//                 />
+//               )}
               
 //               {view === "StudentChat" && (
 //                 <StudentChat onBack={goBack} />
@@ -430,17 +436,20 @@
 
 // function StatCard({ icon, label, value, trend, color = "text-[#1e3a5f]" }: any) {
 //   return (
-//     <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-slate-100 shadow-sm transition-all hover:border-amber-400 hover:shadow-md group cursor-default outline-none select-none">
-//       <div className="w-10 h-10 md:w-12 md:h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-[#1e3a5f] mb-4 md:mb-5 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner">
-//         {icon}
+//     <div className="bg-white rounded-[2rem] p-5 md:p-6 border border-slate-100 shadow-sm transition-all hover:border-amber-400 hover:shadow-md group cursor-default outline-none select-none flex flex-col justify-between min-h-[135px]">
+//       <div className="flex items-center justify-between w-full">
+//         <div className="w-10 h-10 md:w-11 md:h-11 bg-slate-50 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner shrink-0">
+//           {icon}
+//         </div>
+//         {trend && (
+//           <span className="text-[9px] font-bold text-slate-400 uppercase">{trend}</span>
+//         )}
 //       </div>
-//       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">{label}</p>
-//       <div className="flex justify-between items-end">
-//         <div className={`text-lg md:text-2xl font-black tracking-tighter ${color}`}>{value}</div>
-//         <div className="mb-1">
-//           {trend && (
-//             <span className="text-[8px] font-bold text-slate-400 uppercase">{trend}</span>
-//           )}
+      
+//       <div className="mt-3">
+//         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 truncate">{label}</p>
+//         <div className={`text-base md:text-xl font-bold tracking-tight ${color}`}>
+//           {value}
 //         </div>
 //       </div>
 //     </div>
@@ -451,17 +460,29 @@
 //   return (
 //     <div 
 //       onClick={onClick} 
-//       className="bg-white p-4 md:p-6 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-2 md:gap-3 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all group active:scale-95 outline-none focus:outline-none focus:ring-0 select-none"
+//       className="bg-white p-5 md:p-6 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all group active:scale-95 outline-none focus:outline-none focus:ring-0 select-none min-h-[120px]"
 //     >
-//       <div className="h-10 w-10 md:h-12 md:w-12 bg-slate-50 rounded-xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 shadow-inner">
+//       <div className="h-10 w-10 md:h-12 md:w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 shadow-inner shrink-0">
 //         {icon}
 //       </div>
-//       <p className="text-[8px] md:text-[10px] font-black uppercase text-[#1e3a5f] text-center tracking-widest">
+//       <p className="text-[10px] md:text-xs font-bold uppercase text-[#1e3a5f] text-center tracking-wider truncate w-full">
 //         {label}
 //       </p>
 //     </div>
 //   );
 // }
+
+
+
+
+
+
+
+
+
+
+
+
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -489,6 +510,21 @@ import { useTranscript } from '@/src/hooks/transcriptHook/transcriptHokk';
 import { useBatchMeetings } from '@/src/hooks/batchMeetingHook/useBatchMeetings'; 
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import Guidelines from "@/components/Guidelines/Guidelines";
+
+// Helper function to format 24h time ("11:00:00") to 12h AM/PM format ("11:00 AM")
+const formatTimeTo12Hour = (timeStr: string) => {
+  if (!timeStr) return '';
+  const parts = timeStr.split(':');
+  const hours = parts[0];
+  const minutes = parts[1];
+  if (!hours || !minutes) return timeStr;
+  
+  const h = parseInt(hours, 10);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const formattedHours = h % 12 || 12;
+  
+  return `${formattedHours}:${minutes} ${period}`;
+};
 
 export default function StudentDashboard() {
   const [mounted, setMounted] = useState(false);
@@ -581,23 +617,27 @@ export default function StudentDashboard() {
     };
   }, [currentStudent, getCGPA, getTotalEarnedCredits]);
 
-  // Filter meetings where status is 'scheduled' and get the earliest/first one
+  // Updated Meeting Logic: Jab tak meeting explicitly 'completed' ya 'cancelled' na ho, refresh par bhi gayab nahi hogi
   const upcomingMeeting = useMemo(() => {
-    if (!meetings || !Array.isArray(meetings)) return null;
+    if (!meetings || !Array.isArray(meetings) || meetings.length === 0) return null;
     
-    const scheduledMeetings = meetings.filter(
-      (m: any) => m.status?.toLowerCase() === 'scheduled'
+    // Sirf un meetings ko filter karein jo completed ya cancelled nahi hain
+    const activeMeetings = meetings.filter(
+      (m:any) => {
+        const s = m.status?.toLowerCase()?.trim();
+        return s !== 'completed' && s !== 'cancelled';
+      }
     );
 
-    if (scheduledMeetings.length === 0) return null;
+    const targetList = activeMeetings.length > 0 ? activeMeetings : meetings;
 
-    scheduledMeetings.sort((a: any, b: any) => {
+    const sortedMeetings = [...targetList].sort((a: any, b: any) => {
       const dateA = a.date ? new Date(a.date).getTime() : 0;
       const dateB = b.date ? new Date(b.date).getTime() : 0;
       return dateA - dateB;
     });
 
-    return scheduledMeetings[0];
+    return sortedMeetings[0] || null;
   }, [meetings]);
 
   const completionPercentage = useMemo(() => {
@@ -750,13 +790,26 @@ export default function StudentDashboard() {
                       <div className="flex flex-col gap-1 w-full overflow-hidden">
                         {upcomingMeeting ? (
                           <>
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e3a5f] truncate">
-                              <Calendar size={13} className="text-amber-500 shrink-0" />
-                              <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
+                            <div className="flex items-center justify-between gap-1">
+                              <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e3a5f] truncate">
+                                <Calendar size={13} className="text-amber-500 shrink-0" />
+                                <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
+                              </div>
+                              <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-bold shrink-0 ${
+                                upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-50 text-blue-600' :
+                                upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-50 text-emerald-600' :
+                                upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-50 text-red-600' :
+                                'bg-amber-50 text-amber-600'
+                              }`}>
+                                {upcomingMeeting.status || 'Scheduled'}
+                              </span>
                             </div>
                             <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
                               <Clock size={12} className="text-amber-500 shrink-0" />
-                              <span className="truncate">{upcomingMeeting.day} ({upcomingMeeting.startTime} - {upcomingMeeting.endTime})</span>
+                              <span className="truncate">
+                                {upcomingMeeting.day ? `${upcomingMeeting.day} ` : ''} 
+                                {upcomingMeeting.startTime ? `(${formatTimeTo12Hour(upcomingMeeting.startTime)} - ${formatTimeTo12Hour(upcomingMeeting.endTime)})` : ''}
+                              </span>
                             </div>
                           </>
                         ) : (
@@ -774,7 +827,7 @@ export default function StudentDashboard() {
 
                 {/* DEGREE COMPLETION */}
                 <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-                  <h3 className="text-[11px] font-black text-[#1e3a5f] uppercase tracking-widest mb-6 border-l-4 border-[#FDB813] pl-3">
+                  <h3 className="text-[11px] font-bold text-[#1e3a5f] uppercase tracking-widest mb-6 border-l-4 border-[#FDB813] pl-3">
                     Degree Completion - {studentData.department}
                   </h3>
                   <div className="space-y-6">
@@ -782,7 +835,7 @@ export default function StudentDashboard() {
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate mr-2">
                         {studentData.completedCredits} of {studentData.totalCredits} Credits Completed
                       </span>
-                      <span className="text-2xl md:text-3xl font-black text-[#1e3a5f] tracking-tighter">
+                      <span className="text-2xl md:text-3xl font-bold text-[#1e3a5f] tracking-tighter">
                         {Math.round(completionPercentage)}%
                       </span>
                     </div>
@@ -879,8 +932,8 @@ function StatCard({ icon, label, value, trend, color = "text-[#1e3a5f]" }: any) 
       </div>
       
       <div className="mt-3">
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 truncate">{label}</p>
-        <div className={`text-base md:text-xl font-black tracking-tight truncate ${color}`}>
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 truncate">{label}</p>
+        <div className={`text-base md:text-xl font-bold tracking-tight ${color}`}>
           {value}
         </div>
       </div>
@@ -897,7 +950,7 @@ function ActionCard({ icon, label, onClick }: any) {
       <div className="h-10 w-10 md:h-12 md:w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 shadow-inner shrink-0">
         {icon}
       </div>
-      <p className="text-[10px] md:text-xs font-black uppercase text-[#1e3a5f] text-center tracking-wider truncate w-full">
+      <p className="text-[10px] md:text-xs font-bold uppercase text-[#1e3a5f] text-center tracking-wider truncate w-full">
         {label}
       </p>
     </div>

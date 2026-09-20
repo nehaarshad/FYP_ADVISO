@@ -38,14 +38,14 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, isUrgent, id }
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <span
-        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-black uppercase border ${getStatusColor(
+        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-bold uppercase border ${getStatusColor(
           status
         )}`}
       >
         {getStatusIcon(status)} {status}
       </span>
       {isUrgent && (
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-black uppercase border bg-red-50 text-red-600 border-red-200">
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-bold uppercase border bg-red-50 text-red-600 border-red-200">
           <AlertCircle size={12} /> Urgent
         </span>
       )}

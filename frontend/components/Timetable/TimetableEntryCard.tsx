@@ -34,13 +34,13 @@ export const TimetableEntryCard: React.FC<Props> = ({
       className={`flex items-center gap-4 p-4 rounded-2xl border ${variantStyles} transition-all`}
     >
       <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-[#1e3a5f] text-white shrink-0 shadow-sm">
-  <span className="text-[10px] font-black uppercase tracking-wider text-white">
+  <span className="text-[10px] font-bold uppercase tracking-wider text-white">
     {DAY_SHORT[entry.day] || entry.day.slice(0, 3)}
   </span>
 </div>
 
       <div className="flex-1 min-w-0">
-        <h4 className="font-black text-[#1e3a5f] uppercase tracking-tight truncate text-sm">
+        <h4 className="font-bold text-[#1e3a5f] uppercase tracking-tight truncate text-sm">
           {entry.course}
         </h4>
         <p className="text-xs font-bold text-slate-400 mt-0.5 tracking-wide">
@@ -49,10 +49,10 @@ export const TimetableEntryCard: React.FC<Props> = ({
 
         {/* Creator attribution */}
         {variant === 'personal' ? (
-          <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mt-1">You</p>
+          <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mt-1">You</p>
         ) : creatorName ? (
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
-            Added by <span className="text-[#1e3a5f] font-black">{creatorName}</span>
+            Added by <span className="text-[#1e3a5f] font-bold">{creatorName}</span>
           </p>
         ) : null}
       </div>
