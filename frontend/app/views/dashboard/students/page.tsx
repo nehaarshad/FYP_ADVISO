@@ -134,11 +134,10 @@ export default function StudentDashboard() {
     };
   }, [currentStudent, getCGPA, getTotalEarnedCredits]);
 
-  // Updated Meeting Logic: Jab tak meeting explicitly 'completed' ya 'cancelled' na ho, refresh par bhi gayab nahi hogi
+  // Updated Meeting Logic: Sabse qareeb ki (nearest future) date wali meeting uthane ke liye
   const upcomingMeeting = useMemo(() => {
     if (!meetings || !Array.isArray(meetings) || meetings.length === 0) return null;
     
-    // Sirf un meetings ko filter karein jo completed ya cancelled nahi hain
     const activeMeetings = meetings.filter(
       (m:any) => {
         const s = m.status?.toLowerCase()?.trim();
@@ -149,9 +148,9 @@ export default function StudentDashboard() {
     const targetList = activeMeetings.length > 0 ? activeMeetings : meetings;
 
     const sortedMeetings = [...targetList].sort((a: any, b: any) => {
-      const dateA = a.date ? new Date(a.date).getTime() : 0;
-      const dateB = b.date ? new Date(b.date).getTime() : 0;
-      return dateA - dateB;
+      const timeA = a.date ? new Date(a.date).getTime() : Number.MAX_SAFE_INTEGER;
+      const timeB = b.date ? new Date(b.date).getTime() : Number.MAX_SAFE_INTEGER;
+      return timeA - timeB;
     });
 
     return sortedMeetings[0] || null;
@@ -393,7 +392,7 @@ export default function StudentDashboard() {
 
               {view === "systemRec" && studentData && (
                 <StudentRecommendationView 
-                 onBack={goBack} 
+                   onBack={goBack} 
                 />
               )}
               
