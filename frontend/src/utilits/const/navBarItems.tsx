@@ -6,7 +6,8 @@ import {
   Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch,
   User,
   Lightbulb,
-  CombineIcon
+  CombineIcon,
+  Key
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";
@@ -33,6 +34,8 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     },
     { key: "edit-student", label: "Student", icon: <GraduationCap size={20}/>, group: "Users Management" },
     { key: "edit-advisor", label: "Batch Advisor", icon: <ShieldCheck size={20}/>, group: "Users Management" }, 
+    { key: "manage-passwords", label: "Manage Forgot Password", icon: <Key size={20}/>, group: "Users Management" },
+    
     { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Communication" },
   ],
 
