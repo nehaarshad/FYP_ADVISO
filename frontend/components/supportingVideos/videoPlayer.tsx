@@ -128,39 +128,69 @@ export default function VideoPlayer({
     setIsSpeedMenuOpen(false);
   };
 
-  // Keyboard shortcuts
+  const isTypingInInput = (target: EventTarget | null): boolean => {
+    if (!target) return false;
+    const el = target as HTMLElement;
+    const tag = el.tagName?.toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select") return true;
+    if (el.isContentEditable) return true;
+    return false;
+  };
+  const isModalOpen = (): boolean => {
+    return (
+      document.querySelector(
+        '[role="dialog"], [data-modal-open="true"]'
+      ) !== null
+    );
+  };
+
   useEffect(() => {
+    if (!showControls) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === " " || e.key === "k") {
-        e.preventDefault();
-        togglePlay();
-      }
-      if (e.key === "f") {
-        toggleFullscreen();
-      }
-      if (e.key === "m") {
-        toggleMute();
-      }
-      if (e.key === "ArrowRight") {
-        if (videoRef.current) {
-          videoRef.current.currentTime += 5;
-        }
-      }
-      if (e.key === "ArrowLeft") {
-        if (videoRef.current) {
-          videoRef.current.currentTime -= 5;
-        }
-      }
-      if (e.key === "Escape" && isFullscreen) {
-        document.exitFullscreen?.();
-        setIsFullscreen(false);
+      if (isTypingInInput(e.target)) return;
+
+      if (isModalOpen()) return;
+
+      const container = containerRef.current;
+      if (!container) return;
+      const hasFocus =
+        container === document.activeElement ||
+        container.contains(document.activeElement);
+      if (!hasFocus) return;
+
+      switch (e.key) {
+        case " ":
+        case "k":
+          e.preventDefault();
+          togglePlay();
+          break;
+        case "f":
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case "m":
+          e.preventDefault();
+          toggleMute();
+          break;
+        case "ArrowRight":
+          if (videoRef.current) videoRef.current.currentTime += 5;
+          break;
+        case "ArrowLeft":
+          if (videoRef.current) videoRef.current.currentTime -= 5;
+          break;
+        case "Escape":
+          if (isFullscreen) {
+            document.exitFullscreen?.();
+            setIsFullscreen(false);
+          }
+          break;
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isPlaying, isFullscreen]);
-
+  }, [isPlaying, isFullscreen, showControls]);
   // Auto-hide controls
   useEffect(() => {
     if (!showControls) return;
@@ -263,7 +293,8 @@ export default function VideoPlayer({
   return (
     <div
       ref={containerRef}
-      className={`relative group bg-black rounded-2xl overflow-hidden ${className}`}
+      tabIndex={0}
+      className={`relative group bg-black rounded-2xl overflow-hidden focus:outline-none focus:ring-2 focus:ring-white/40 ${className}`}
     >
       {/* Video Element */}
       <video
