@@ -86,7 +86,63 @@ const getUserById = async (req, res) => {
                         { model: StudentGuardians },
                         {
                             model: BatchModel,
-                            include: [{ model: ProgramModel }]
+                            include: [
+                                { model: ProgramModel },
+                                 { model :RoadmapModel,
+                                    required:false,
+                                    include:[
+                                                                        {
+                                                        model: RoadmapCourseCategoryModel,
+                                                        include: [
+                                                            {
+                                                            model: CategoryModel,
+                                                        }
+                                                    ]
+                                                },
+                                            {
+                                                    model: SemesterRoadmapModel,
+                                                    include: [
+                                                        {
+                                                            model: SemesterCourseModel,
+                                                            include: [
+                                                                {
+                                                                    model: CourseCategoryModel,
+                                                                    include: [
+                                                                        {
+                                                                            model: CoursesModel,
+                                                                            attributes: ["id", "courseName", "courseCredits"],
+                                                                            include: [{
+                                                    
+                                                                                    model: CoursePreReqModel,
+                                                                                    as: "prerequisites",  // Courses this course requires (incoming)
+                                                                                    include: [{
+                                                                                        model: CoursesModel,
+                                                                                        as: "prerequisiteCourse"
+                                                                                    }]
+                                                                                    },
+                                                                                    {
+                                                                                    model: CoursePreReqModel,
+                                                                                    as: "usedAsPrerequisiteFor",  // Courses that require this course (outgoing)
+                                                                                    include: [{
+                                                                                        model: CoursesModel,
+                                                                                        as: "mainCourse"
+                                                                                    }]
+                                                                                    
+                                                                                    }]
+                                                                        },
+                                                                        {
+                                                                            model: CategoryModel,
+                                                                            attributes: ["id", "categoryName", "colorScheme"]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                    ]
+                                 }
+                            ]
                         }
                     ]
                 });

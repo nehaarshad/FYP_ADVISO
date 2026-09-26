@@ -407,6 +407,9 @@ const data = await SessionalRecommendation.findOne({
     include: [
         {
             model: SuggestedCourses,
+        },
+        {
+            model:SessionModel
         }
     ]
 });

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
@@ -103,7 +103,6 @@ function useCourseData({
   }, [rec.llmRecommendations]);
 
   return {
-    // data
     summary,
     sessionId: rec.sessionId,
     grouped,
@@ -114,7 +113,6 @@ function useCourseData({
     allowedCreditHours: rec.allowedCreditHours,
     requiredCreditHours: rec.requiredCreditHours,
 
-    // state
     isGenerating: rec.isGenerating,
     isFinalizing: rec.isFinalizing,
     generateError: rec.generateError,
@@ -123,7 +121,6 @@ function useCourseData({
     electiveChoice,
     openDropdown,
 
-    // actions
     toggleExpand,
     toggleDropdown,
     selectElectiveOption,
@@ -136,7 +133,7 @@ function useCourseData({
   };
 }
 
-/* ─────────────────────────────────────────────── DashboardHeader ─────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────── Header ─────────────────────────────────────────────── */
 
 function DashboardHeader({
   summary,
@@ -194,6 +191,18 @@ function DashboardHeader({
 
 /* ─────────────────────────────────────────────── CourseSection ─────────────────────────────────────────────── */
 
+/** Must match the hook's selectionKey exactly */
+const buildParentKey = (course: SuggestedCourse) => {
+  const isElective = (course.electiveOptions?.length ?? 0) > 0;
+  const canonical = course.originalCourseName ?? course.courseName;
+  if (isElective && course.originalCourseName) {
+    return `elective:${course.originalCourseName}`;
+  }
+  return course.courseId != null
+    ? `id:${course.courseId}::${canonical}`
+    : `name:${canonical}`;
+};
+
 export function CourseSection({
   title, courses, badgeColor,
   selectedElectiveOptions, openDropdowns, toggleDropdown, selectOption,
@@ -207,9 +216,9 @@ export function CourseSection({
   openDropdowns: Record<string, boolean>;
   toggleDropdown: (courseName: string) => void;
   selectOption: (courseName: string, option: ElectiveOption) => void;
-  isCourseSelected: (courseId: number | null, courseName: string) => boolean;
+  isCourseSelected: (courseId: number | null, courseName: string, originalCourseName?: string | null) => boolean;
   toggleCourseSelection: (course: SuggestedCourse, override?: Partial<SuggestedCourse>) => void;
-  upsertCourseSelection: (course: SuggestedCourse, override?: Partial<SuggestedCourse>) => void;
+  upsertCourseSelection: (course: SuggestedCourse, override?: Partial<SuggestedCourse>, parentKey?: string) => void;
   expandedCourses: Set<string>;
   toggleCourseExpand: (key: string) => void;
 }) {
@@ -233,27 +242,43 @@ export function CourseSection({
             !!course.clashRecord;
 
           if (isClash) {
-            const substitute = (course as any).substituteDetails as
+            /* ✅ Prefer substituteDetails (legacy), fall back to `alternative` */
+            const substitute = ((course as any).substituteDetails ?? course.alternative) as
               | {
                   courseName: string;
                   credits?: number;
                   timeSlot?: string | null;
-                  timetableDetails?: any[];
+                  timetableDetails?: any;
                   reason?: string;
-                  offering?: {
-                    id?: number;
-                    courseCategory?: string;
-                    ProgramModel?: { programName?: string };
-                    BatchModel?: { batchName?: string; batchYear?: string };
-                  };
+                  courseId?: number | null;
+                  category?: string;
+                  program?: string | null;
+                  offeredProgram?: string | null;
+                  semester?: number;
+                  batch?: string;
+                  hasLab?: boolean;
+                  labDetails?: any;
+                  score?: number;
+                  actionRequired?: string;
+                  offering?: any;
                 }
               | undefined;
 
             const substituteSelected =
               !!substitute &&
-              isCourseSelected(substitute.offering?.id ?? null, substitute.courseName);
+              isCourseSelected(
+                substitute.courseId ?? substitute.offering?.id ?? null,
+                substitute.courseName,
+                course.originalCourseName ?? course.courseName
+              );
 
-            const primarySelected = isCourseSelected(course.courseId, course.courseName);
+            const primarySelected = isCourseSelected(
+              course.courseId,
+              course.courseName,
+              course.originalCourseName
+            );
+
+            const parentKey = buildParentKey(course);
 
             return (
               <ClashCourseCard
@@ -262,41 +287,52 @@ export function CourseSection({
                 isExpanded={expandedCourses.has(key)}
                 onToggle={() => toggleCourseExpand(key)}
 
-                /* ── select the CLASHED COURSE itself ── */
                 primarySelected={primarySelected}
                 onSelectPrimary={() => {
                   toggleCourseSelection(course, {
                     _selectionSource: 'RECOMMENDED',
                     _selectionReason:
                       `Advisor accepted "${course.originalCourseName ?? course.courseName}" ` +
-                      `despite the ${course.notSuggestedReason ?? 'unresolved'} conflict ` +
-                      `(${course.clashRecord?.clashesWith ?? 'clash'} at ${course.clashRecord?.clashDetails ?? '—'}). ` +
-                      `Lab will be handled separately / deferred.`,
+                      `despite the ${course.notSuggestedReason ?? 'unresolved'} conflict.`,
                   });
                 }}
 
-                /* ── select the SUBSTITUTE (when one exists) ── */
                 substitute={substitute}
                 substituteSelected={substituteSelected}
                 onSelectSubstitute={() => {
                   if (!substitute) return;
+
+                  const credits =
+                    (substitute.credits && substitute.credits > 0)
+                      ? substitute.credits
+                      : 3;
+
                   upsertCourseSelection(
                     {
-                      courseId: substitute.offering?.id ?? null,
+                      courseId: substitute.courseId ?? substitute.offering?.id ?? null,
                       courseName: substitute.courseName,
-                      credits: substitute.credits ?? 3,
-                      category: substitute.offering?.courseCategory ?? course.category,
+                      credits,
+                      category:
+                        substitute.category ??
+                        substitute.offering?.courseCategory ??
+                        course.category,
                       reason:
-                        `Substitute for "${course.originalCourseName ?? course.courseName}" ` +
-                        `(lab clash with ${course.clashRecord?.clashesWith ?? 'another course'}).`,
+                        substitute.reason ??
+                        `Substitute for "${course.originalCourseName ?? course.courseName}".`,
                       isOffered: true,
                       offeredProgram:
-                        substitute.offering?.ProgramModel?.programName ?? null,
+                        substitute.offeredProgram ??
+                        substitute.program ??
+                        substitute.offering?.ProgramModel?.programName ??
+                        null,
                       timeSlot: substitute.timeSlot ?? null,
                       timetableDetails: substitute.timetableDetails ?? [],
-                      hasLab: false,
-                      batch: substitute.offering?.BatchModel?.batchName ?? undefined,
-                      actionRequired: 'SUBSTITUTE_FOR_LAB_CLASH',
+                      hasLab: substitute.hasLab ?? false,
+                      labDetails: substitute.labDetails ?? null,
+                      batch: substitute.batch ?? substitute.offering?.BatchModel?.batchName,
+                      semester: substitute.semester,
+                      score: substitute.score,
+                      actionRequired: substitute.actionRequired ?? 'ALTERNATIVE_FOR_CLASH',
                       priority: course.priority,
                       originalCourseName: course.originalCourseName ?? course.courseName,
                     } as SuggestedCourse,
@@ -305,60 +341,19 @@ export function CourseSection({
                       _substituteFor: course.originalCourseName ?? course.courseName,
                       _selectionReason:
                         `Advisor chose "${substitute.courseName}" as the substitute for ` +
-                        `"${course.originalCourseName ?? course.courseName}". ` +
-                        `Resolves the ${course.clashRecord?.clashesWith ?? 'lab'} lab clash.`,
-                    }
+                        `"${course.originalCourseName ?? course.courseName}".`,
+                    },
+                    parentKey
                   );
                 }}
 
-                /* ── legacy `alternative` path ── */
-                alternativeSelected={
-                  !!course.alternative &&
-                  isCourseSelected(
-                    course.alternative.courseId ?? null,
-                    course.alternative.courseName
-                  )
-                }
-                onSelectAlternative={() => {
-                  const alt = course.alternative;
-                  if (!alt) return;
-                  const altMeta = course.allAlternatives?.available?.find(
-                    (a: any) => a.courseName === alt.courseName
-                  );
-                  upsertCourseSelection(
-                    {
-                      courseId: alt.courseId ?? null,
-                      courseName: alt.courseName,
-                      credits: alt.credits,
-                      category: alt.category ?? altMeta?.category ?? course.category,
-                      reason: alt.reason ?? 'Suggested alternative for clash',
-                      isOffered: true,
-                      offeredProgram: alt.offeredProgram ?? alt.program ?? null,
-                      timeSlot: alt.timeSlot ?? null,
-                      timetableDetails: alt.timetableDetails ?? altMeta?.timetableDetails,
-                      hasLab: alt.hasLab ?? false,
-                      labDetails: alt.labDetails ?? null,
-                      batch: alt.batch,
-                      semester: alt.bestMatchDetails?.semester ?? altMeta?.semester,
-                      score: alt.score,
-                      actionRequired: alt.actionRequired ?? 'ALTERNATIVE_FOR_CLASH',
-                      priority: course.priority,
-                      originalCourseName: alt.originalCourseName ?? course.originalCourseName,
-                    } as SuggestedCourse,
-                    {
-                      _selectionSource: 'ALTERNATIVE_FOR_CLASH',
-                      _substituteFor: course.originalCourseName ?? course.courseName,
-                      _selectionReason: `Advisor chose "${alt.courseName}" as the clash-free alternative to "${course.originalCourseName ?? course.courseName}".`,
-                    }
-                  );
-                }}
+                alternativeSelected={false}
+                onSelectAlternative={() => {}}
               />
             );
           }
 
-          /* ── Regular / elective card ──
-           * Electives key by parent slot; regulars key by real courseName.
-           */
+          /* ── Regular / elective ── */
           const slotKey = course.originalCourseName ?? course.courseName;
           const isElectiveCourse = (course.electiveOptions?.length ?? 0) > 0;
 
@@ -369,8 +364,8 @@ export function CourseSection({
             : null;
 
           const isSelected = isElectiveCourse
-            ? isCourseSelected(course.courseId, slotKey)
-            : isCourseSelected(course.courseId, course.courseName);
+            ? isCourseSelected(course.courseId, slotKey, course.originalCourseName)
+            : isCourseSelected(course.courseId, course.courseName, course.originalCourseName);
 
           return (
             <RegularCourseCard
@@ -441,6 +436,7 @@ export function CourseSection({
 }
 
 /* ─────────────────────────────────────────────── ClashCourseCard ─────────────────────────────────────────────── */
+
 function ClashCourseCard({
   course,
   isExpanded,
@@ -456,25 +452,22 @@ function ClashCourseCard({
   course: SuggestedCourse;
   isExpanded: boolean;
   onToggle: () => void;
-
   primarySelected: boolean;
   onSelectPrimary: () => void;
-
   substitute?: {
     courseName: string;
     credits?: number;
     timeSlot?: string | null;
-    timetableDetails?: any[];
+    timetableDetails?: any;
     reason?: string;
   };
   substituteSelected?: boolean;
   onSelectSubstitute?: () => void;
-
   alternativeSelected: boolean;
   onSelectAlternative: () => void;
 }) {
   const courseName = course.originalCourseName || course.courseName;
-  const credits = course.credits ?? 3;
+  const credits = (course.credits && course.credits > 0) ? course.credits : 3;
   const alt = course.alternative;
 
   const clashArray = course.clashRecord?.clashDetails?.detailedClashes ?? [];
@@ -494,11 +487,19 @@ function ClashCourseCard({
   const altSemester = alt?.bestMatchDetails?.semester ?? altMeta?.semester;
   const altCategory = altMeta?.category;
 
-  /* Resolve the substitute-or-alternative into one renderable source */
+  /* Unified substitute-or-alternative source */
   const subName = substitute?.courseName ?? alt?.courseName;
-  const subSlots = substitute?.timetableDetails ?? altSlots;
+  const subSlots = Array.isArray(substitute?.timetableDetails)
+    ? substitute!.timetableDetails
+    : Array.isArray(alt?.timetableDetails)
+    ? alt!.timetableDetails
+    : altSlots;
   const subLab = substitute ? [] : altLab;
-  const subCredits = substitute?.credits ?? alt?.credits ?? 3;
+  const subCredits = (substitute?.credits && substitute.credits > 0)
+    ? substitute.credits
+    : (alt?.credits && alt.credits > 0)
+    ? alt.credits
+    : 3;
   const subSemester = altSemester;
   const subCategory = altCategory;
   const subReason = substitute?.reason ?? alt?.reason;
@@ -554,7 +555,7 @@ function ClashCourseCard({
         )}
       </div>
 
-      {/* ACTION: Select Anyway (Advisor Override) */}
+      {/* Select Anyway */}
       <button
         type="button"
         onClick={e => {
@@ -575,8 +576,7 @@ function ClashCourseCard({
             </div>
             <p className="text-xs text-gray-900 font-medium mt-1.5 leading-snug">
               Adds {course.originalCourseName ?? course.courseName} to the final
-              recommendation despite the clash. Advisor takes responsibility for the
-              {course.clashRecord ? ` ${course.clashRecord.clashesWith}` : ""} conflict.
+              recommendation despite the clash.
             </p>
           </div>
           {primarySelected && (
@@ -585,7 +585,7 @@ function ClashCourseCard({
         </div>
       </button>
 
-      {/* ACTION: Substitute */}
+      {/* Substitute */}
       {hasSubstitute && (
         <div className="bg-blue-50/80 border border-blue-200 rounded-xl p-3 space-y-2 text-xs">
           <div className="flex items-center gap-1.5 text-blue-800 font-bold">
@@ -661,7 +661,6 @@ function ClashCourseCard({
                 )}
 
                 {subReason && (
-                  /* Yahan se  () hata kar non-italic aur dark font kar diya hai */
                   <p className="text-xs text-gray-900 font-medium mt-2 leading-relaxed">
                     {subReason}
                   </p>
@@ -712,8 +711,7 @@ function ClashCourseCard({
   );
 }
 
-
-// /* ─────────────────────────────────────────────── RegularCourseCard ─────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────── RegularCourseCard ─────────────────────────────────────────────── */
 
 function RegularCourseCard({
   course,
@@ -733,7 +731,18 @@ function RegularCourseCard({
   onSelectElective: (opt: ElectiveOption) => void;
 }) {
   const courseName = course.courseName || course.originalCourseName;
-  const credits = course.credits ?? 3;
+
+  // ✅ Fix: 0-credit combined lec+lab courses → infer 4 credits
+  const credits =
+    (course.credits && course.credits > 0)
+      ? course.credits
+      : (course.hasLab ||
+         (course as any).actionRequired === 'NEW_WITH_LAB' ||
+         (course as any).actionRequired === 'RETAKE_WITH_LAB' ||
+         course.labDetails != null)
+      ? 4
+      : 3;
+
   const electives = course.electiveOptions ?? [];
   const isElective = electives.length > 0 || course.isElective;
 
@@ -888,6 +897,7 @@ function RegularCourseCard({
     </div>
   );
 }
+
 /* ─────────────────────────────────────────────── DeferredPanel ─────────────────────────────────────────────── */
 
 function DeferredPanel({ raw }: { raw: any }) {
@@ -922,26 +932,6 @@ function DeferredPanel({ raw }: { raw: any }) {
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ─────────────────────────────────────────────── CompleteCourseDashboard ─────────────────────────────────────────────── */
 
 export interface CompleteCourseDashboardProps {
@@ -951,7 +941,7 @@ export interface CompleteCourseDashboardProps {
   sessionType: string;
   sessionYear: number;
   onFinalized?: () => void;
-   onBack?: () => void;
+  onBack?: () => void;
 }
 
 export function CompleteCourseDashboard({
@@ -1116,6 +1106,3 @@ export function CompleteCourseDashboard({
     </div>
   );
 }
-
-
-

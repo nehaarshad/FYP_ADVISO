@@ -253,7 +253,7 @@ function generateRecommendations(ctx) {
                     requiredCredits: credits,
                     availableCredits: bestMatch.credits,
                     reason: isCreditMismatch
-                        ? `Elective requirement "${rc.courseName}" fulfilled by: ${bestMatch.courseName} (${bestMatch.credits}/${credits} credits - ⚠️ Credit mismatch!) ${result.options?.length > 1 ? `(${result.options.length} options available)` : ''}`
+                        ? `Elective requirement "${rc.courseName}" fulfilled by: ${bestMatch.courseName} (${bestMatch.credits}/${credits} credits - Credit mismatch!) ${result.options?.length > 1 ? `(${result.options.length} options available)` : ''}`
                         : `Elective requirement "${rc.courseName}" fulfilled by: ${bestMatch.courseName} ${result.options?.length > 1 ? `(${result.options.length} options available)` : ''}`
                 });
 

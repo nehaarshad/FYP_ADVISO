@@ -1,8 +1,6 @@
 import assignPriority from './assignPriorityToRecCourses.js'
 const RESTRICTED_STATUSES = ['relegated', 'serious warning'];
 import buildExtraSemesterWarning from './buildExtraSemesterWarning.js';
-import helpingFunctions from '../utils/courseHelpingChecks.js';
-const {allocateByCredits} =helpingFunctions;
 import buildFypEligibilityWarning from '../utils/fypUneligibilityWarning.js'
 
 function buildFinalResponse(
@@ -24,8 +22,7 @@ function buildFinalResponse(
 ) {
     console.log('\n--- CREDIT ALLOCATION SUMMARY ---');
     console.log(`Total credits allocated: ${totalUsedCredits}/${allowedCredits}`);
-
-    let finalRecommendations = recommendations;
+    let finalRecommendations = assignPriority.normalizeBuckets(recommendations);
     let used = totalUsedCredits;
     let deferred = [];
 
@@ -44,7 +41,7 @@ function buildFinalResponse(
         currentSemester,
         degreeTranscript,
         suggestedCourses,
-        suggestedCreditsTotal: used,  
+        suggestedCreditsTotal: used,
         roadmapCourses,
         offeredCourses,
         placedTimetables,
@@ -93,10 +90,11 @@ function buildFinalResponse(
                 medium: finalRecommendations.medium.length,
                 low: finalRecommendations.low.length,
             },
-            totalCoursesRecommended: finalRecommendations.critical.length + 
-                                    finalRecommendations.high.length + 
-                                    finalRecommendations.medium.length + 
-                                    finalRecommendations.low.length,
+            totalCoursesRecommended:
+                finalRecommendations.critical.length +
+                finalRecommendations.high.length +
+                finalRecommendations.medium.length +
+                finalRecommendations.low.length,
             hasSpecialRequests: specialRequests.length > 0,
             hasWarnings: !!(extraSemesterWarning || fypEligibilityWarning),
         },

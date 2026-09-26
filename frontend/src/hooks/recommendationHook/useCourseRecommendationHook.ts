@@ -24,6 +24,7 @@ const initialState: RecommendationState = {
   logsError: null,
 };
 
+
 const selectionKey = (card: {
   courseId?: number | null;
   courseName: string;
@@ -33,17 +34,31 @@ const selectionKey = (card: {
   if (card.isElective && card.originalCourseName) {
     return `elective:${card.originalCourseName}`;
   }
+  const canonical = card.originalCourseName ?? card.courseName;
   return card.courseId != null
-    ? `id:${card.courseId}::${card.courseName}`
-    : `name:${card.courseName}`;
+    ? `id:${card.courseId}::${canonical}`
+    : `name:${canonical}`;
 };
 
-const entryKey = (c: SuggestedCourse) =>
-  selectionKey({
+const entryKey = (c: SuggestedCourse & { _parentKey?: string }) => {
+  if (c._parentKey) return c._parentKey;
+  return selectionKey({
     courseId: c.courseId,
-    courseName: c.originalCourseName ?? c.courseName,
+    courseName: c.courseName,
     originalCourseName: c.originalCourseName,
     isElective: c._selectionSource === 'ELECTIVE_OPTION',
+  });
+};
+
+const patchCombinedLabCredits = (arr: any[] = []): any[] =>
+  arr.map(c => {
+    const needsPatch =
+      (c?.credits === 0 || c?.credits == null) &&
+      (c?.hasLab === true ||
+        c?.actionRequired === 'NEW_WITH_LAB' ||
+        c?.actionRequired === 'RETAKE_WITH_LAB' ||
+        c?.labDetails != null);
+    return needsPatch ? { ...c, credits: 4 } : c;
   });
 
 export const useRecommendations = () => {
@@ -56,9 +71,6 @@ export const useRecommendations = () => {
     []
   );
 
-  // ─────────────────────────────────────────────────────────────
-  // GENERATE
-  // ─────────────────────────────────────────────────────────────
   const generateRecommendations = useCallback(
     async (studentId: number, sessionType: string, sessionYear: number) => {
       patch({
@@ -80,11 +92,12 @@ export const useRecommendations = () => {
         }
 
         const responseData = response.data.data ?? response.data;
+        console.log(responseData)
 
-        const critical = responseData.priorityWiseCourses?.critical ?? [];
-        const high     = responseData.priorityWiseCourses?.high     ?? [];
-        const medium   = responseData.priorityWiseCourses?.medium   ?? [];
-        const low      = responseData.priorityWiseCourses?.low      ?? [];
+        const critical = patchCombinedLabCredits(responseData.priorityWiseCourses?.critical ?? []);
+        const high     = patchCombinedLabCredits(responseData.priorityWiseCourses?.high     ?? []);
+        const medium   = patchCombinedLabCredits(responseData.priorityWiseCourses?.medium   ?? []);
+        const low      = patchCombinedLabCredits(responseData.priorityWiseCourses?.low      ?? []);
 
         const summary = {
           hasWarnings:            responseData.recommendedCoursesSummary?.hasWarnings ?? false,
@@ -119,6 +132,7 @@ export const useRecommendations = () => {
                             responseData.recommendedCoursesSummary?.totalCreditsAllowed || 18,
           requiredCreditHours: responseData.recommendedCoursesSummary?.totalRequiredCredits ?? null,
           sessionId: responseData.sessionId || null,
+          Session: responseData.SessionModel ?? null,
           selectedCourses: [],
         });
       } catch (err: any) {
@@ -130,19 +144,25 @@ export const useRecommendations = () => {
     [patch]
   );
 
-  // ─────────────────────────────────────────────────────────────
-  // SELECTION
-  // ─────────────────────────────────────────────────────────────
   const toggleCourseSelection = useCallback(
     (course: SuggestedCourse, override?: Partial<SuggestedCourse>) => {
-      const candidate: SuggestedCourse = override ? { ...course, ...override } : { ...course };
-      const key = selectionKey(course);   // keyed on the PARENT, not the candidate
+      const parentKey = selectionKey({
+        courseId: course.courseId,
+        courseName: course.courseName,
+        originalCourseName: course.originalCourseName,
+        isElective: course._selectionSource === 'ELECTIVE_OPTION',
+      });
+
+      const candidate = {
+        ...(override ? { ...course, ...override } : { ...course }),
+        _parentKey: parentKey,
+      } as SuggestedCourse;
 
       setState(prev => {
-        const already = prev.selectedCourses.some(c => entryKey(c) === key);
+        const already = prev.selectedCourses.some(c => entryKey(c) === parentKey);
 
         const selectedCourses = already
-          ? prev.selectedCourses.filter(c => entryKey(c) !== key)
+          ? prev.selectedCourses.filter(c => entryKey(c) !== parentKey)
           : [...prev.selectedCourses, candidate];
 
         return { ...prev, selectedCourses };
@@ -152,18 +172,33 @@ export const useRecommendations = () => {
   );
 
   const upsertCourseSelection = useCallback(
-    (course: SuggestedCourse, override?: Partial<SuggestedCourse>) => {
-      const candidate: SuggestedCourse = override ? { ...course, ...override } : { ...course };
-      const key = selectionKey(course);   // keyed on the PARENT
+    (
+      course: SuggestedCourse,
+      override?: Partial<SuggestedCourse>,
+      parentKeyOverride?: string
+    ) => {
+      const parentKey =
+        parentKeyOverride ??
+        selectionKey({
+          courseId: course.courseId,
+          courseName: course.courseName,
+          originalCourseName: course.originalCourseName,
+          isElective: course._selectionSource === 'ELECTIVE_OPTION',
+        });
+
+      const candidate = {
+        ...(override ? { ...course, ...override } : { ...course }),
+        _parentKey: parentKey,
+      } as SuggestedCourse;
 
       setState(prev => {
-        const idx = prev.selectedCourses.findIndex(c => entryKey(c) === key);
+        const idx = prev.selectedCourses.findIndex(c => entryKey(c) === parentKey);
 
         if (idx === -1) {
           return { ...prev, selectedCourses: [...prev.selectedCourses, candidate] };
         }
         const next = [...prev.selectedCourses];
-        next[idx] = candidate;   // replace in place
+        next[idx] = candidate;
         return { ...prev, selectedCourses: next };
       });
     },
@@ -184,14 +219,28 @@ export const useRecommendations = () => {
   );
 
   const isCourseSelected = useCallback(
-    (courseId: number | null, courseName: string) => {
+    (courseId: number | null, courseName: string, originalCourseName?: string | null) => {
+      const canonical = originalCourseName ?? courseName;
+
       return state.selectedCourses.some(c => {
-        // Elective entry: match on the parent slot name
+        // Elective — match parent slot name
         if (c._selectionSource === 'ELECTIVE_OPTION') {
-          return c.originalCourseName === courseName;
+          return c.originalCourseName === canonical;
         }
-        if (courseId == null) return c.courseName === courseName;
-        return c.courseId === courseId && c.courseName === courseName;
+
+        // Substitute / alternative — match on stored _parentKey
+        if ((c as any)._parentKey) {
+          const expected =
+            courseId != null
+              ? `id:${courseId}::${canonical}`
+              : `name:${canonical}`;
+          if ((c as any)._parentKey === expected) return true;
+        }
+
+        // Regular — match by id+canonical, or canonical-only when id null
+        const cCanonical = c.originalCourseName ?? c.courseName;
+        if (courseId == null) return cCanonical === canonical;
+        return c.courseId === courseId && cCanonical === canonical;
       });
     },
     [state.selectedCourses]
@@ -226,9 +275,6 @@ export const useRecommendations = () => {
     [state.llmRecommendations]
   );
 
-  // ─────────────────────────────────────────────────────────────
-  // FINALIZE
-  // ─────────────────────────────────────────────────────────────
   const finalizeRecommendations = useCallback(
     async (studentId: number, sessionId: number): Promise<boolean> => {
       if (!state.selectedCourses.length) {
@@ -302,7 +348,6 @@ export const useRecommendations = () => {
   );
 
   return {
-    // state
     llmRecommendations: state.llmRecommendations,
     savedRecommendationId: state.savedRecommendationId,
     allowedCreditHours: state.allowedCreditHours,
@@ -313,17 +358,14 @@ export const useRecommendations = () => {
     allRecommendedCourses,
     totalSelectedCredits,
 
-    // flags
     isGenerating: state.isGenerating,
     isFinalizing: state.isFinalizing,
     isLoadingLogs: state.isLoadingLogs,
 
-    // errors
     generateError: state.generateError,
     finalizeError: state.finalizeError,
     logsError: state.logsError,
 
-    // actions
     generateRecommendations,
     toggleCourseSelection,
     upsertCourseSelection,

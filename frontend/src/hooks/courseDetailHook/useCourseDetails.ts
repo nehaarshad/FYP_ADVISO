@@ -260,22 +260,29 @@ export const useCourseCatalog = () => {
   const clearUploadSuccess = useCallback(() => setUploadSuccess(false), []);
 
 
-  const convertARGBToHex = useCallback((argb: string): string => {
-    if (!argb) return '#64748b';
-    if (argb.startsWith('#')) return argb;
-    const stripped = argb.length === 8 ? argb.substring(2) : argb;
-    return `#${stripped}`;
+  const getColor = useCallback((colorScheme: string,): string => {
+
+      let color = colorScheme;
+
+      if (color.startsWith('FF')) {
+        color = `#${color.substring(2)}`;
+      } else if (!color.startsWith('#')) {
+        color = `#${color}`;
+      }
+
+      return color;
+    
   }, []);
 
-
-  const getColorWithOpacity = useCallback((colorScheme: string, opacity: number = 0.15): string => {
-    const hex = convertARGBToHex(colorScheme);
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-  }, [convertARGBToHex]);
-
+   const convertARGBToHex = (colorScheme: string): string => {
+    if (!colorScheme) return '#e5e7eb';
+    if (colorScheme.startsWith('#')) return colorScheme;
+    let hex = colorScheme;
+    if (hex.startsWith('FF')) {
+      hex = hex.substring(2);
+    }
+    return `#${hex}`;
+  };
 
   const getCategoryColor = useCallback((categoryName: string): string => {
     if (!categoryName) return '#64748b';
@@ -286,13 +293,13 @@ export const useCourseCatalog = () => {
   const getCategoryStyle = useCallback((categoryName: string) => {
     const colorScheme = getCategoryColor(categoryName);
     const textColor = convertARGBToHex(colorScheme);
-    const backgroundColor = getColorWithOpacity(colorScheme, 0.15);
+    const backgroundColor = convertARGBToHex(colorScheme, );
     return {
       color: textColor,
       backgroundColor,
-      borderColor: `${textColor}30`,
+      borderColor: `${textColor}`,
     };
-  }, [getCategoryColor, convertARGBToHex, getColorWithOpacity]);
+  }, [getCategoryColor,]);
 
 
   const categories = useMemo(() => Array.from(categoriesMap.keys()), [categoriesMap]);
@@ -302,9 +309,9 @@ export const useCourseCatalog = () => {
     Array.from(categoriesMap.values()).map(cat => ({
       name: cat.categoryName,
       colorScheme: cat.colorScheme,
-      hexColor: convertARGBToHex(cat.colorScheme),
+      hexColor: getColor(cat.colorScheme),
     })),
-    [categoriesMap, convertARGBToHex]
+    [categoriesMap]
   );
 
   return {
@@ -340,8 +347,6 @@ export const useCourseCatalog = () => {
     // Utility functions
     clearUploadSuccess,
     getCategoryColor,
-    convertARGBToHex,
-    getColorWithOpacity,
     getCategoryStyle,
     getCourseCategories,
     getAvailableCategories,
