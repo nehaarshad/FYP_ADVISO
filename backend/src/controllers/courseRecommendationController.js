@@ -594,45 +594,44 @@ console.log('='.repeat(80) + '\n');
     }
 };
  
- const getStudentRecommendations = async (req, res) => {
-    try {
-        const { studentId } = req.params;
-   
-        const where = { studentId: parseInt(studentId) };
-        
-        const recommendations = await AdvisorFinalRecommendation.findAll({
-            where,
-            include: [
-                {
-                    model: SessionModel,
-                },
-                {
-                    model:BatchAdvisor,
-                }
-            ],
-            order: [['createdAt', 'DESC']],
-        });
- 
-        if (!recommendations.length) {
-            return res.status(200).json({
-                success: true,
-                data: [],
-                message: 'No recommendations found for this student',
-            });
-        }
- 
-        console.log(`Fetched ${recommendations.length} recommendations for studentId: ${studentId}: \n ${JSON.stringify(recommendations)}`);
-        return res.status(200).json({ success: true, data: recommendations });
- 
-    } catch (error) {
-        console.error('Get student recommendations error:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error: error.message,
-        });
-    }
-};
+const getStudentRecommendations = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const id = parseInt(studentId, 10);
 
+    const rows = await SessionalRecommendation.findAll({
+      where: { studentId: id },
+      include: [
+        { model: SuggestedCourses },
+        { model: SessionModel },
+      ],
+      order: [['createdAt', 'DESC']],
+    });
+
+
+    //  keep ONLY the latest row per sessionId
+    const latestBySession = new Map();
+    for (const r of rows) {
+      if (!latestBySession.has(r.sessionId)) {
+        latestBySession.set(r.sessionId, r);
+      }
+    }
+
+    const data = Array.from(latestBySession.values());
+
+    return res.status(200).json({
+      success: true,
+      data,
+      message: data.length ? undefined : 'No recommendations found for this student',
+    });
+  } catch (error) {
+    console.error('Get student recommendations error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
 
 export default { recommendCourses ,finalizeRecommendation, getAdvisoryLogs,getStudentRecommendations};

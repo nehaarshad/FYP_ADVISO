@@ -28,7 +28,7 @@ export default function LandingPage() {
   }, [router]);
   
   const handleClick = () => {
-    router.push('/views/dashboard/coordinator'); 
+    router.push('/views/auth/login'); 
   };
 
   return (
@@ -54,7 +54,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-white text-lg md:text-2xl font-light tracking-wide mb-16 leading-relaxed">
+              className="text-white text-lg md:text-2xl font-normal tracking-wide mb-16 leading-relaxed">
               Smart Guidance, Simple Solution
           </motion.h2>
           <div className="mt-8">
@@ -96,7 +96,7 @@ export default function LandingPage() {
                 <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
                 <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
                 <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
-                <SmallFeature Icon={Send} title="Digital Requests Form Submissions" desc="Submit academic requests quickly and digitally." />
+                
               </div>
       </section>
     </div>
@@ -127,3 +127,11 @@ function redirectBasedOnRole(role: string, router: any) {
       router.push('/dashboard');
   }
 }
+
+
+
+
+
+
+
+

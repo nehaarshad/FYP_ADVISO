@@ -73,7 +73,7 @@ export function RoadmapDetailView({ isOpen, roadmap, onClose }: RoadmapDetailVie
                   <BookOpen size={20} className="text-[#FDB813]" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-black text-[#1e3a5f] uppercase">
+                  <h2 className="text-lg font-bold text-[#1e3a5f] uppercase">
                     {roadmap.versionName}
                   </h2>
                   <p className="text-xs text-gray-400">

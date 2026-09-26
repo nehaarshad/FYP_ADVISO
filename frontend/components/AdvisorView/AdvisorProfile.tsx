@@ -35,11 +35,11 @@ export function AdvisorProfile({ onBack }: AdvisorProfileProps) {
         </div>
         
         <div className="text-center md:text-left">
-          <h2 className="text-3xl md:text-4xl font-black text-[#1e3a5f] tracking-tighter mb-3 uppercase leading-tight">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a5f] tracking-tighter mb-3 uppercase leading-tight">
             {advisor.name}
           </h2>
           <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-4 items-center">
-            <span className="px-4 py-1.5 bg-[#FDB813] text-[#1e3a5f] text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-xl shadow-md">
+            <span className="px-4 py-1.5 bg-[#FDB813] text-[#1e3a5f] text-[9px] md:text-[10px] font-bold uppercase tracking-widest rounded-xl shadow-md">
               {advisor.role}
             </span>
             <span className="flex items-center gap-1.5 text-slate-400 text-[10px] md:text-xs font-medium">
@@ -52,10 +52,10 @@ export function AdvisorProfile({ onBack }: AdvisorProfileProps) {
       {/* Details Grid */}
       <div className="mt-10 md:mt-12">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-10">
-          <h3 className="text-[9px] md:text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">
+          <h3 className="text-[9px] md:text-[10px] font-bold uppercase text-slate-400 tracking-[0.2em]">
             Official Information
           </h3>
-          <span className="self-start sm:self-auto text-[8px] md:text-[9px] font-black text-blue-500 bg-blue-50 px-3 py-1 rounded-full uppercase">
+          <span className="self-start sm:self-auto text-[8px] md:text-[9px] font-bold text-blue-500 bg-blue-50 px-3 py-1 rounded-full uppercase">
             Member Since {advisor.joinedDate}
           </span>
         </div>
@@ -112,7 +112,7 @@ function InfoRow({ icon, label, value }: { icon: any, label: string, value: stri
         {React.cloneElement(icon, { size: 18, className: "md:w-5 md:h-5 text-[#1e3a5f]" })}
       </div>
       <div className="min-w-0"> {/* min-w-0 prevents text overflow in flex containers */}
-        <p className="text-[8px] md:text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1">
+        <p className="text-[8px] md:text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1">
           {label}
         </p>
         <p className="text-[#1e3a5f] font-bold text-sm md:text-[15px] tracking-tight break-words">

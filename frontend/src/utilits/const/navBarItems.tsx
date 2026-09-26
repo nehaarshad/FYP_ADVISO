@@ -6,7 +6,8 @@ import {
   Info, Database, FileSpreadsheet, Map, GraduationCap, FileSearch,
   User,
   Lightbulb,
-  CombineIcon
+  CombineIcon,
+  Key
 } from "lucide-react";
 
 export type UserRole = "coordinator" | "advisor" | "student";
@@ -33,17 +34,19 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     },
     { key: "edit-student", label: "Student", icon: <GraduationCap size={20}/>, group: "Users Management" },
     { key: "edit-advisor", label: "Batch Advisor", icon: <ShieldCheck size={20}/>, group: "Users Management" }, 
+    { key: "manage-passwords", label: "Manage Forgot Password", icon: <Key size={20}/>, group: "Users Management" },
+    
     { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Communication" },
   ],
 
   advisor: [
     { key: "overview", label: "Overview", icon: <LayoutDashboard size={20}/>, },
-    { key: "timetable", label: "Timetable", icon: <ClipboardList size={20}/>, group: "Advisory" },
-    { key: "notes", label: "Advisor Notes", icon: <StickyNote size={20}/>, group: "Advisory" },
-    { key: "advisor-chat", label: "Advisor Chat", icon: <MessageSquare size={20}/>, group: "Advisory" },
+    { key: "notes", label: "Sticky Notes", icon: <StickyNote size={20}/>, group: "Advisory" },
+    { key: "advisor-chat", label: "Inbox", icon: <MessageSquare size={20}/>, group: "Advisory" },
+     { key: "advisory-logs", label: "Advisory Logs", icon: <FileText size={20}/>, group: "Advisory" },
     { key: "meeting", label: "Batch Meeting", icon: <CombineIcon size={20}/>, group: "Advisory" },
-    { key: "advisory-logs", label: "Advisory Logs", icon: <FileText size={20}/>, group: "Advisory" },
-    { key: "faculty-recommendation", label: "Faculty Recommendation", icon: <Lightbulb size={20}/>, group: "Resources" },
+    { key: "timetable", label: "My Timetable", icon: <ClipboardList size={20}/>, group: "Advisory" },
+   { key: "faculty-recommendation", label: "Faculty Feed", icon: <Lightbulb size={20}/>, group: "Resources" },
     { key: "guidelines", label: "Guidelines", icon: <Info size={20}/>, group: "Resources" },
   ],
 
@@ -51,8 +54,6 @@ export const NAV_CONFIG: Record<UserRole, NavItem[]> = {
     { key: "Overview",        label: "Overview",        icon: <LayoutDashboard size={20}/> },
     { key: "StudentChat",     label: "StudentChat",    icon: <MessageSquare size={20}/> },
     { key: "guidelines",      label: "Guidelines",     icon: <Info size={20}/> },
-    { key: "advRec",         label: "Advisor Recommendation",      icon: <FileText size={20}/>},
-    { key: "sysRec",         label: "System Recommendation",      icon: <Map size={20}/>},
     
   ],
 };

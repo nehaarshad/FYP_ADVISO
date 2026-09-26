@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { TimetableEntry, DAY_SHORT, formatTime } from './types';
 
@@ -20,8 +21,8 @@ export const TimetableEntryCard: React.FC<Props> = ({
 }) => {
   const variantStyles =
     variant === 'personal'
-      ? 'bg-indigo-50 border-indigo-200'
-      : 'bg-white border-gray-200';
+      ? 'bg-amber-50/60 border-amber-200/80 shadow-xs'
+      : 'bg-white border-slate-100 hover:border-slate-200';
 
   const showEdit = canEdit && !!onEdit;
   const showDelete = canDelete && !!onDelete;
@@ -30,36 +31,38 @@ export const TimetableEntryCard: React.FC<Props> = ({
 
   return (
     <div
-      className={`flex items-center gap-4 p-4 rounded-xl border ${variantStyles} hover:shadow-sm transition`}
+      className={`flex items-center gap-4 p-4 rounded-2xl border ${variantStyles} transition-all`}
     >
-      <div className="flex flex-col items-center justify-center w-14 h-14 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 text-white shrink-0">
-        <span className="text-xs font-medium uppercase">
-          {DAY_SHORT[entry.day] || entry.day.slice(0, 3)}
-        </span>
-      </div>
+      <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-[#1e3a5f] text-white shrink-0 shadow-sm">
+  <span className="text-[10px] font-bold uppercase tracking-wider text-white">
+    {DAY_SHORT[entry.day] || entry.day.slice(0, 3)}
+  </span>
+</div>
 
       <div className="flex-1 min-w-0">
-        <h4 className="font-semibold text-gray-900 truncate">{entry.course}</h4>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h4 className="font-bold text-[#1e3a5f] uppercase tracking-tight truncate text-sm">
+          {entry.course}
+        </h4>
+        <p className="text-xs font-bold text-slate-400 mt-0.5 tracking-wide">
           {formatTime(entry.startTime)} — {formatTime(entry.endTime)}
         </p>
 
         {/* Creator attribution */}
         {variant === 'personal' ? (
-          <p className="text-xs text-indigo-600 font-medium mt-1">You</p>
+          <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mt-1">You</p>
         ) : creatorName ? (
-          <p className="text-xs text-gray-400 mt-1">
-            Added by <span className="text-gray-600 font-medium">{creatorName}</span>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+            Added by <span className="text-[#1e3a5f] font-bold">{creatorName}</span>
           </p>
         ) : null}
       </div>
 
       {(showEdit || showDelete) && (
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           {showEdit && (
             <button
               onClick={() => onEdit!(entry)}
-              className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition"
+              className="p-2 text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 rounded-xl transition"
               aria-label="Edit"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +78,7 @@ export const TimetableEntryCard: React.FC<Props> = ({
           {showDelete && (
             <button
               onClick={() => onDelete!(entry)}
-              className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition"
               aria-label="Delete"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

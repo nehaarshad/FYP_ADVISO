@@ -77,11 +77,11 @@ const profileData = {
         </div>
         
         <div className="text-center md:text-left">
-          <h2 className="text-4xl font-black text-[#1e3a5f] tracking-tight mb-2">
+          <h2 className="text-4xl font-bold text-[#1e3a5f] tracking-tight mb-2">
             {profileData.name}
           </h2>
           <div className="flex flex-wrap justify-center md:justify-start gap-4 items-center">
-            <span className="px-3 py-1 bg-[#1e3a5f] text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
+            <span className="px-3 py-1 bg-[#1e3a5f] text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded-full">
               {profileData.role}
             </span>
             <span className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
@@ -93,7 +93,7 @@ const profileData = {
 
       {/* Profile Details Grid */}
       <div className="mt-12">
-        <h3 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] mb-8">
+        <h3 className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.3em] mb-8">
           Account Information
         </h3>
         
@@ -168,7 +168,7 @@ function InfoRow({ icon, label, value }: { icon: any, label: string, value: stri
         {icon}
       </div>
       <div>
-        <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider mb-1.5">
+        <p className="text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1.5">
           {label}
         </p>
         <p className="text-slate-700 font-semibold tracking-tight">

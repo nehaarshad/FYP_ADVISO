@@ -66,7 +66,7 @@ export function StudentRecords() {
       className="max-w-2xl mx-auto space-y-6"
     >
       <div className="px-4">
-        <h2 className="text-2xl font-black text-[#1e3a5f] uppercase italic tracking-tighter leading-none">
+        <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase  tracking-tighter leading-none">
           Upload Student Records
         </h2>
       </div>
@@ -90,7 +90,7 @@ export function StudentRecords() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Program Name */}
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">
               Program Name *
             </label>
             <select 
@@ -113,7 +113,7 @@ export function StudentRecords() {
           {/* Batch Name and Year */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">
                 Batch Name *
               </label>
                <select 
@@ -133,7 +133,7 @@ export function StudentRecords() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">
                 Batch Year *
               </label>
               <input
@@ -149,7 +149,7 @@ export function StudentRecords() {
 
           {/* File Upload */}
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-4">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">
               Excel File *
             </label>
             <div className="relative">
@@ -187,7 +187,7 @@ export function StudentRecords() {
           <button 
             type="submit"
             disabled={isLoading || !selectedFile}
-            className="w-full py-5 bg-[#1e3a5f] text-white rounded-[1.8rem] font-black text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            className="w-full py-5 bg-[#1e3a5f] text-white rounded-[1.8rem] font-bold text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
           >
             <Upload size={18} />
             {isLoading ? 'Processing...' : 'Process Records'}

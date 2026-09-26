@@ -220,7 +220,7 @@ chat,
           <div>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <h2 className="text-[#1e3a5f] font-black text-[14px] uppercase tracking-tight">
+              <h2 className="text-[#1e3a5f] font-bold text-[14px] uppercase tracking-tight">
                 {chat.name}
               </h2>
             </div>
@@ -289,7 +289,7 @@ chat,
                   >
 
 <span
-  className={`text-[8px] font-black uppercase  mt-2 self-start underline
+  className={`text-[8px] font-bold uppercase  mt-2 self-start underline
   ${
                       isMine
                         ? "text-amber-400"
@@ -340,7 +340,7 @@ chat,
 
                     {/* TIME */}
                     <span
-                      className={`text-[7px] font-black uppercase opacity-80 mt-2 self-end ${
+                      className={`text-[7px] font-bold uppercase opacity-80 mt-2 self-end ${
                         isMine
                           ? "text-amber-400"
                           : "text-slate-400"

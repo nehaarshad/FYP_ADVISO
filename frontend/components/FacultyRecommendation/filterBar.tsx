@@ -37,7 +37,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <div className="flex flex-wrap gap-4">
         {/* Status Filter */}
         <div className="flex-1 min-w-[150px]">
-          <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">
+          <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">
             Status
           </label>
           <select
@@ -57,7 +57,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         {currentUserId && (
           <div className="flex-1 min-w-[150px] flex items-end">
             <button
-              className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+              className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
                 showMyIssues
                   ? 'bg-[#1e3a5f] text-white shadow-md'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'

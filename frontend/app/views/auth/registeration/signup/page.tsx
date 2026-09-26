@@ -138,13 +138,13 @@ export default function SignupPage() {
         className="max-w-5xl w-full grid md:grid-cols-2 bg-white rounded-[2.5rem] shadow-[0_40px_100px_-15px_rgba(30,58,95,0.15)] overflow-hidden border border-slate-100 z-10"
       >
         {/* LEFT SIDE */}
-        <div className="bg-[#1e3a5f] p-12 text-white flex flex-col justify-between">
+       <div className="bg-[#1e3a5f] p-6 sm:p-8 md:p-12 text-white flex flex-col justify-between">
           <div>
             <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold">
               <ChevronLeft size={18} /> Back 
             </Link>
 
-            <div className="p-3 mb-20 rounded-full w-max">
+            <div className="p-3 mb-10 sm:mb-14 md:mb-20 rounded-full w-max">
               <Image 
                 width={154} 
                 height={184} 
@@ -153,7 +153,7 @@ export default function SignupPage() {
               />
             </div>
 
-            <h1 className="text-4xl font-black mb-6 mt-10 leading-[1.1]">
+            <h1 className="text-4xl font-bold mb-6 mt-10 leading-[1.1]">
               Join <br />
               <span className="text-[#FDB813]">ADVISO.</span>
             </h1>
@@ -313,7 +313,7 @@ export default function SignupPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#1e3a5f] text-white py-4 rounded-[1.2rem] font-black text-lg flex items-center justify-center gap-3 mt-10 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#1e3a5f] text-white py-4 rounded-[1.2rem] font-bold text-lg flex items-center justify-center gap-3 mt-10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Creating Account..." : "Create New Account"} 
               {!isLoading && <ArrowRight size={22} />}

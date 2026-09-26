@@ -95,46 +95,56 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
   getProgramName,
 }) => {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-lg transition-all group">
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-slate-50 rounded-xl">
-            <GraduationCap size={18} className="text-[#1e3a5f]" />
-          </div>
-          <h3 className="font-bold text-[#1e3a5f] text-sm line-clamp-2">
-            {guideline.title}
-          </h3>
+  <div className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-lg transition-all group">
+    <div className="flex items-start justify-between mb-3">
+      <div className="flex items-center gap-3 overflow-hidden">
+        <div className="p-2 bg-slate-50 rounded-xl shrink-0">
+          <GraduationCap size={18} className="text-[#1e3a5f]" />
         </div>
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button
-            onClick={() => onEdit(guideline)}
-            className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
-            title="Edit"
-          >
-            <Edit size={16} className="text-slate-500" />
-          </button>
-          <button
-            onClick={() => onDelete(guideline.id)}
-            className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-            title="Delete"
-          >
-            <Trash2 size={16} className="text-red-400 hover:text-red-600" />
-          </button>
-        </div>
+       <h3 
+  className="font-bold text-[#1e3a5f] text-sm"
+  style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+>
+  {guideline.title}
+</h3>
       </div>
-
-      <p className="text-slate-600 text-sm line-clamp-3 mb-3">
-        {guideline.description}
-      </p>
-
-      <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-        <span className="text-[10px] font-bold text-slate-400 uppercase">
-          {getProgramName(guideline.programId)}
-        </span>
-        <span className="text-[10px] text-slate-400">
-          {new Date(guideline.createdAt!).toLocaleDateString()}
-        </span>
+      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+        <button
+          onClick={() => onEdit(guideline)}
+          className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
+          title="Edit"
+        >
+          <Edit size={16} className="text-slate-500" />
+        </button>
+        <button
+          onClick={() => onDelete(guideline.id)}
+          className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+          title="Delete"
+        >
+          <Trash2 size={16} className="text-red-400 hover:text-red-600" />
+        </button>
       </div>
     </div>
-  );
+
+    <p 
+  className="text-slate-600 text-sm mb-3"
+  style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+>
+  {guideline.description}
+</p>
+
+    <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+      <span className="text-[10px] font-bold text-slate-400 uppercase">
+        {getProgramName(guideline.programId)}
+      </span>
+      <span className="text-[10px] text-slate-400">
+        {new Date(guideline.createdAt!).toLocaleDateString()}
+      </span>
+    </div>
+  </div>
+);
+
+
+
 };
+

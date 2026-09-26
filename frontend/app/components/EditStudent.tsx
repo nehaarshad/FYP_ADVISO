@@ -121,7 +121,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
               <UserCog size={24} className="text-[#FDB813]" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-[#1e3a5f] uppercase italic">Edit Student Profile</h2>
+              <h2 className="text-xl font-bold text-[#1e3a5f] uppercase ">Edit Student Profile</h2>
               <p className="text-[10px] text-slate-400">Update student information</p>
             </div>
           </div>
@@ -138,7 +138,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
         <div className="p-8">
           {/* Status Badge */}
           {student && (
-            <div className={`mb-6 inline-flex px-4 py-2 rounded-xl font-black text-[9px] uppercase items-center gap-2 ${
+            <div className={`mb-6 inline-flex px-4 py-2 rounded-xl font-bold text-[9px] uppercase items-center gap-2 ${
               status === "Active" ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'
             }`}>
               <div className={`h-2 w-2 rounded-full ${status === "Active" ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
@@ -210,7 +210,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-400 ml-5">Program *</label>
+                  <label className="text-[10px] font-bold uppercase text-slate-400 ml-5">Program *</label>
                    <select 
               title='Program'
                 name="programName"
@@ -253,7 +253,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
                   icon={<GraduationCap size={18}/>} 
                 />
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-400 ml-5">Student Status</label>
+                  <label className="text-[10px] font-bold uppercase text-slate-400 ml-5">Student Status</label>
                   <select 
                     title="status"
                     name="currentStatus"
@@ -279,7 +279,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
               </div>
 
               <div className="border-t border-slate-100 pt-6">
-                <h3 className="text-sm font-black text-[#1e3a5f] mb-4">Guardian Information (Optional)</h3>
+                <h3 className="text-sm font-bold text-[#1e3a5f] mb-4">Guardian Information (Optional)</h3>
                 <div className="grid grid-cols-2 gap-6">
                   <EditField 
                     label="Guardian Name" 
@@ -310,14 +310,14 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
                 <button 
                   type="button"
                   onClick={onClose}
-                  className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-xl font-black text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
+                  className="flex-1 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                   {isLoading ? 'Updating...' : 'Update Student'}
@@ -334,7 +334,7 @@ export function EditStudent({ isOpen, student, onClose, onSuccess }: EditStudent
 function EditField({ label, name, value, onChange, icon, type = "text", placeholder = "", required = false }: any) {
   return (
     <div className="space-y-2 group">
-      <label className="text-[10px] font-black uppercase text-slate-400 ml-5 tracking-widest group-focus-within:text-[#FDB813] transition-colors">
+      <label className="text-[10px] font-bold uppercase text-slate-400 ml-5 tracking-widest group-focus-within:text-[#FDB813] transition-colors">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>

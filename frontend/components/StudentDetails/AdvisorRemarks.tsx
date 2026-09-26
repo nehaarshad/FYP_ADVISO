@@ -65,7 +65,7 @@ export const AdvisorRemarks = ({ onBack }: AdvisorRemarksProps) => {
             </button>
           )}
           <div>
-             <h2 className="text-lg md:text-xl font-black text-[#1e3a5f] uppercase tracking-tight leading-none">
+             <h2 className="text-lg md:text-xl font-bold text-[#1e3a5f] uppercase tracking-tight leading-none">
                Advisor Remarks
              </h2>
              <p className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">
@@ -93,14 +93,14 @@ export const AdvisorRemarks = ({ onBack }: AdvisorRemarksProps) => {
               {/* Category Tag */}
               <div className="flex items-center gap-2 mb-3 md:mb-4">
                 <div className={`px-2 md:px-2.5 py-1 rounded-lg ${item.tagBg} flex items-center gap-2 border border-black/5`}>
-                   <span className={`text-[7px] md:text-[8px] font-black uppercase tracking-widest ${item.accentColor}`}>
+                   <span className={`text-[7px] md:text-[8px] font-bold uppercase tracking-widest ${item.accentColor}`}>
                      {item.category}
                    </span>
                 </div>
               </div>
 
               {/* Title & Content */}
-              <h3 className="text-base md:text-lg font-black text-[#1e3a5f] leading-tight mb-2 tracking-tight uppercase line-clamp-1">
+              <h3 className="text-base md:text-lg font-bold text-[#1e3a5f] leading-tight mb-2 tracking-tight uppercase line-clamp-1">
                 {item.title}
               </h3>
               <p className="text-xs md:text-[13px] font-bold text-slate-600/90 leading-snug">
@@ -112,7 +112,7 @@ export const AdvisorRemarks = ({ onBack }: AdvisorRemarksProps) => {
             <div className="flex items-center justify-between mt-5 md:mt-6 pt-4 border-t border-black/5">
               <div className="flex items-center gap-1.5 text-slate-400/80">
                 <Clock size={12} />
-                <span className="text-[7px] md:text-[8px] font-black uppercase tracking-widest">
+                <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-widest">
                   {item.time}
                 </span>
               </div>

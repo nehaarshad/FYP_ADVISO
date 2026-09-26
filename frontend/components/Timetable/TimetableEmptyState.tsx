@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 interface Props {
@@ -14,9 +15,9 @@ export const TimetableEmptyState: React.FC<Props> = ({
   onAction,
 }) => (
   <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-    <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+    <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-4 shadow-sm">
       <svg
-        className="w-8 h-8 text-gray-400"
+        className="w-8 h-8 text-[#1e3a5f]"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -29,14 +30,14 @@ export const TimetableEmptyState: React.FC<Props> = ({
         />
       </svg>
     </div>
-    <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
-    <p className="text-sm text-gray-500 mb-4 max-w-sm">{description}</p>
+    <h3 className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tight mb-1">{title}</h3>
+    <p className="text-xs font-medium text-slate-400 mb-6 max-w-sm leading-relaxed uppercase tracking-wider">{description}</p>
     {actionLabel && onAction && (
       <button
         onClick={onAction}
-        className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition"
+        className="px-6 py-3 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 flex items-center gap-2"
       >
-        {actionLabel}
+        <span className="text-sm font-bold">+</span> {actionLabel}
       </button>
     )}
   </div>

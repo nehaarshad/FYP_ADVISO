@@ -287,7 +287,7 @@ const StudentChat: React.FC<
 
           <div>
 
-            <h3 className="font-black uppercase tracking-tight text-[12px] md:text-[14px]">
+            <h3 className="font-bold uppercase tracking-tight text-[12px] md:text-[14px]">
               INBOX
             </h3>
 
@@ -301,7 +301,7 @@ const StudentChat: React.FC<
         <div className="flex items-center gap-3">
 
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-[9px] font-black uppercase text-blue-200">
+            <span className="text-[9px] font-bold uppercase text-blue-200">
               Status
             </span>
 
@@ -376,7 +376,7 @@ const StudentChat: React.FC<
 
 
 <span
-  className={`text-[8px] font-black uppercase opacity-60 mt-2 self-start text-[#1e3a5f]`}
+  className={`text-[8px] font-bold uppercase opacity-60 mt-2 self-start text-[#1e3a5f]`}
 >
   {isMine
     ? null
@@ -423,7 +423,7 @@ const StudentChat: React.FC<
 
                     {/* TIME */}
                     <span
-                      className={`text-[8px] font-black uppercase mt-2 self-end opacity-60 ${
+                      className={`text-[8px] font-bold uppercase mt-2 self-end opacity-60 ${
                         isMine
                           ? "text-blue-100"
                           : "text-slate-400"

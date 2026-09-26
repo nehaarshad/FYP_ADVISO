@@ -55,7 +55,7 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
                 <input
                   value={editSubject}
                   onChange={(e) => setEditSubject(e.target.value)}
-                  className="w-full p-2 border border-slate-200 rounded-lg text-xl font-black text-[#1e3a5f] outline-none focus:ring-2 ring-blue-500/50"
+                  className="w-full p-2 border border-slate-200 rounded-lg text-xl font-bold text-[#1e3a5f] outline-none focus:ring-2 ring-blue-500/50"
                   placeholder="Subject"
                 />
                 <textarea
@@ -86,7 +86,7 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
               </div>
             ) : (
               <>
-                <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] mt-2 leading-tight">
+                <h2 className="text-xl md:text-2xl font-bold text-[#1e3a5f] mt-2 leading-tight">
                   {recommendation.subject}
                 </h2>
                 <p className="text-sm md:text-base font-medium text-slate-600 mt-1">
@@ -124,7 +124,7 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
         {!isEditing && (
           <div className="mt-6 space-y-4">
             <div>
-              <span className="flex items-center gap-1.5 text-[10px] font-black text-rose-600 uppercase tracking-widest">
+              <span className="flex items-center gap-1.5 text-[10px] font-bold text-rose-600 uppercase tracking-widest">
                 <AlertCircle size={14} /> Issue Description
               </span>
               <p className="text-sm md:text-base font-medium leading-relaxed text-slate-700 mt-1">
@@ -134,7 +134,7 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
 
             {acceptedSolution && (
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-                <span className="flex items-center gap-1.5 text-[10px] font-black text-emerald-700 uppercase tracking-widest">
+                <span className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-700 uppercase tracking-widest">
                   <CheckCircle size={14} /> Accepted Solution
                 </span>
                 <p className="text-sm font-medium leading-relaxed text-emerald-800 mt-1">

@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo, useState } from 'react';
 import { BulkTimetableModal } from '@/components/Timetable/BulkTimetableModal';
@@ -38,7 +39,6 @@ export const AdvisorTimetablePage: React.FC<AdvisorTimetablePageProps> = ({ onBa
   // 🔒 Guarantee array — fixes "entries is not iterable"
   const safeTimetables: TimetableEntry[] = useMemo(() => {
     if (Array.isArray(timetables)) return timetables;
-    // Handle wrapped responses just in case the store missed a layer
     const nested = (timetables as any)?.data;
     if (Array.isArray(nested)) return nested;
     return [];
@@ -79,10 +79,10 @@ export const AdvisorTimetablePage: React.FC<AdvisorTimetablePageProps> = ({ onBa
     }
     setSubmitting(false);
     if (res?.success) {
-      setToast({ msg: modalMode === 'add' ? 'Added' : 'Updated', type: 'success' });
+      setToast({ msg: modalMode === 'add' ? 'Added successfully' : 'Updated successfully', type: 'success' });
       setModalOpen(false);
     } else {
-      setToast({ msg: res?.error || 'Failed', type: 'error' });
+      setToast({ msg: res?.error || 'Failed to save', type: 'error' });
     }
   };
 
@@ -92,10 +92,10 @@ export const AdvisorTimetablePage: React.FC<AdvisorTimetablePageProps> = ({ onBa
     const res = await remove(deleteTarget.id);
     setDeleting(false);
     if (res?.success) {
-      setToast({ msg: 'Deleted', type: 'success' });
+      setToast({ msg: 'Deleted successfully', type: 'success' });
       setDeleteTarget(null);
     } else {
-      setToast({ msg: res?.error || 'Failed', type: 'error' });
+      setToast({ msg: res?.error || 'Failed to delete', type: 'error' });
     }
   };
 
@@ -147,7 +147,7 @@ export const AdvisorTimetablePage: React.FC<AdvisorTimetablePageProps> = ({ onBa
       {count === 0 ? (
         <TimetableEmptyState
           title="No slots scheduled"
-          description="Add your first slot to get started."
+          description="Add your first slot to get started with your advising timetable."
           actionLabel="Add slot"
           onAction={openAdd}
         />
@@ -174,7 +174,7 @@ export const AdvisorTimetablePage: React.FC<AdvisorTimetablePageProps> = ({ onBa
         title="Delete timetable entry?"
         description={
           deleteTarget
-            ? `${deleteTarget.course} on ${deleteTarget.day} will be removed.`
+            ? `${deleteTarget.course} on ${deleteTarget.day} will be removed from your schedule.`
             : ''
         }
         confirmLabel="Delete"
