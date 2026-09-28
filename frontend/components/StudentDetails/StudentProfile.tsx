@@ -86,7 +86,7 @@ export const StudentProfile = ({
   if (!student) return null;
 
   // Determine student status & safe class mapping for Tailwind
-  const isRegular = student.StudentStatus?.currentStatus === 'Promoted' || 
+  const isRegular = student.StudentStatus?.currentStatus === 'Promoted' || student.StudentStatus?.currentStatus === 'New Admission' || 
                     student.StudentStatus?.currentStatus === 'Regular';
   const statusBadgeClasses = isRegular 
     ? 'bg-green-100 text-green-700' 
@@ -225,7 +225,7 @@ export const StudentProfile = ({
                   Completed Credits
                 </p>
                 <p className="text-lg md:text-xl font-bold text-amber-400"> 
-                  {getTotalEarnedCredits()} <span className="text-white">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span> 
+                  {getTotalEarnedCredits()} <span className="text-white">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "0"}</span> 
                   <span className="text-[9px] md:text-[10px] text-slate-400 uppercase ml-1">Hrs</span>
                 </p>
               </div>

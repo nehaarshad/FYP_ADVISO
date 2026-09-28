@@ -96,9 +96,8 @@ export const AdvisoryParentScreen: React.FC<AdvisoryParentScreenProps> = ({
  
       {screen === 'advisory' && (
         <SmartAdvisory
-          studentId={student.id}
+          
           studentName={student.studentName}
-          sessionId={hook.sessionId ?? 0}
           selectedBatch={`${student.BatchModel?.batchName}-${student.BatchModel?.batchYear}`}
           onBack={() => setScreen('profile')}
           onSentSuccess={handleSentSuccess}
@@ -113,7 +112,17 @@ export const AdvisoryParentScreen: React.FC<AdvisoryParentScreenProps> = ({
           generateError={generateError}
           toggleCourseSelection={hook.toggleCourseSelection}
           isCourseSelected={hook.isCourseSelected}
-          finalizeRecommendations={hook.finalizeRecommendations}
+          finalizeRecommendations={() => {
+              if (!student?.id) {
+                console.error(' Cannot finalize: student.id missing');
+                return Promise.resolve(false);
+              }
+              if (!hook.sessionId) {
+                console.error(' Cannot finalize: hook.sessionId missing — regenerate first');
+                return Promise.resolve(false);
+              }
+              return hook.finalizeRecommendations(student.id, hook.sessionId);
+            }}
         />
       )}
  

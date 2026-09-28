@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Session } from '@/src/models/sessionModel';
 import { SuggestedCourse, SuggestedCourseMetadata } from '@/src/models/systemSuggestedCoursesModel';
 
 
@@ -73,6 +74,7 @@ export interface RecommendationData {
   llmRecommendations?: LLMRecommendations; 
   allowedCreditHours?: number; 
   savedRecommendationId?: number; 
+  SessionModel?:Session|null
 }
 
 export interface SavedSuggestedCourse { 

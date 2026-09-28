@@ -302,7 +302,7 @@ export default function AdvisorDashboard() {
   const { students, isLoading: studentsLoading, fetchStudents } = useStudents(); 
   
   // Sahi hook import aur use kiya gaya hai
-  const { meetings = [] } = useBatchMeetings() as { meetings?: any[] };
+  const { meetings = [] } = useBatchMeetings(selectedBatch?.batchId ?? '') as { meetings?: any[] };
 
   const [filteredStudents, setFilteredStudents] = useState<any[]>([]); 
   const [stats, setStats] = useState({ total: 0, irregular: 0, regular: 0 }); 

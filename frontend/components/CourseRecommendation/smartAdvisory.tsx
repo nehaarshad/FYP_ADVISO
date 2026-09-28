@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -23,8 +22,8 @@ interface SmartAdvisoryProps {
   finalizeError: string | null;
   generateError: string | null;
   toggleCourseSelection: (course: any, override?: any) => void;
-  upsertCourseSelection: (course: any, override?: any) => void;
-  isCourseSelected: (courseId: number | null, courseName: string) => boolean;
+  upsertCourseSelection: (course: any, override?: any, parentKey?: string) => void;
+  isCourseSelected: (courseId: number | null, courseName: string, originalCourseName?: string | null) => boolean;
   finalizeRecommendations: () => Promise<boolean>;
 }
 

@@ -138,7 +138,7 @@ const getGradeStyle = (grade: string) => {
             <div className="text-center md:text-right flex flex-col justify-center sm:col-span-2 md:col-span-1">
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Degree Progress</p>
               <p className="text-xl font-bold text-[#1e3a5f]">
-                {getTotalEarnedCredits()} <span className="text-slate-300">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span> 
+                {getTotalEarnedCredits()} <span className="text-slate-400">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span> 
                 <span className="text-[10px] text-slate-400 uppercase ml-1">Credits</span>
               </p>
             </div>
@@ -188,18 +188,20 @@ const getGradeStyle = (grade: string) => {
                             </div>
                           </td>
                           <td className="px-4 py-4">
-                           <ul className="list-disc pl-4">
-                              <li style={{ color: categoryStyle.color }}>
-                                <span 
-                                  className="text-[10px] font-bold uppercase py-1"
-                                  style={{ color: categoryStyle.color }}
-                                >
-                                  {course.courseCategory || 'N/A'}
-                                </span>
-                              </li>
-                            </ul>
-
-                          </td>
+                              <ul className="list-disc pl-4">
+                                <li style={{ color: categoryStyle.color }}>
+                                  <span
+                                    className="inline-block text-[9px] font-bold uppercase px-2 py-1 rounded-md"
+                                    style={{
+                                      backgroundColor: categoryStyle.color,
+                                      color: '#000',
+                                    }}
+                                  >
+                                    {course.courseCategory || 'N/A'}
+                                  </span>
+                                </li>
+                              </ul>
+                            </td>
                           <td className="px-4 py-4 text-center font-bold text-slate-500 text-xs">
                             {course.earnedCreditHours}/{course.totalCreditHours}
                           </td>
@@ -250,9 +252,9 @@ const getGradeStyle = (grade: string) => {
                       </div>
                       <div className="flex justify-between items-end">
                         <span 
-                          className="text-[8px] font-bold uppercase px-2 py-0.5 rounded-full"
+                          className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full"
                           style={{
-                            backgroundColor: categoryStyle.backgroundColor,
+                            //backgroundColor: categoryStyle.,
                             color: categoryStyle.color
                           }}
                         >
