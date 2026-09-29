@@ -1,3 +1,4 @@
+
 /* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -5,8 +6,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft, BookOpen, Calendar, ChevronDown, ChevronUp,
-  Clock, Loader2, AlertCircle, CheckCircle2, ShieldAlert,
-  Sparkles, Info, Target, Split, Layers, Search,
+  Clock, AlertCircle, CheckCircle2, ShieldAlert,
+  Sparkles, Info, Target, Split, Search,
 } from "lucide-react";
 import type {
   SuggestedCourse,
@@ -17,20 +18,18 @@ import type {
 } from "@/src/models/systemSuggestedCoursesModel";
 import { useStudentRecommendations } from "@/src/hooks/recommendationHook/useStudentRecommendation";
 
-
 interface StudentRecommendationViewProps {
   onBack?: () => void;
 }
 
 const PRIORITY_META = {
-  critical: { title: "Critical Priority",  badge: "bg-red-100 text-red-700 border-red-200",       dot: "bg-red-500"    },
-  high:     { title: "High Priority",      badge: "bg-orange-100 text-orange-700 border-orange-200", dot: "bg-orange-500" },
-  medium:   { title: "Medium Priority",    badge: "bg-yellow-100 text-yellow-800 border-yellow-200", dot: "bg-yellow-500" },
-  low:      { title: "Low Priority",       badge: "bg-green-100 text-green-700 border-green-200",   dot: "bg-green-500"  },
+  critical: { title: "Critical Priority",  badge: "bg-rose-50 text-rose-800 border-rose-200/80 font-semibold",     dot: "bg-rose-500"    },
+  high:     { title: "High Priority",       badge: "bg-amber-50 text-amber-800 border-amber-200/80 font-semibold", dot: "bg-amber-500" },
+  medium:   { title: "Medium Priority",     badge: "bg-blue-50 text-blue-800 border-blue-200/80 font-semibold",     dot: "bg-blue-500"    },
+  low:      { title: "Low Priority",        badge: "bg-emerald-50 text-emerald-800 border-emerald-200/80 font-semibold",  dot: "bg-emerald-500"  },
 } as const;
 
 type PriorityKey = keyof typeof PRIORITY_META;
-
 
 export const StudentRecommendationView: React.FC<StudentRecommendationViewProps> = ({ onBack }) => {
   const {
@@ -46,13 +45,6 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
 
   useEffect(() => { fetchStudentRecommendations(); }, [fetchStudentRecommendations]);
 
-  // Auto-open the newest session
-  useEffect(() => {
-    if (!openSession && groupedBySession.length > 0) {
-     
-    }
-  }, [groupedBySession, openSession]);
-
   const toggleSession = (key: string) =>
     setOpenSession(prev => (prev === key ? null : key));
 
@@ -63,7 +55,6 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
       return n;
     });
 
-  // Search filter — match session label or any course name inside
   const filteredSessions = useMemo(() => {
     if (!searchTerm.trim()) return groupedBySession;
     const q = searchTerm.toLowerCase();
@@ -89,13 +80,13 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
   /* ─── Loading ─── */
   if (isLoading) {
     return (
-      <div className="w-full max-w-[1300px] mx-auto p-4 md:p-6">
+      <div className="w-full px-0 py-4">
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 mb-6"
+            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-200 mb-6 hover:bg-slate-50 transition-colors"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} />
           </button>
         )}
         <div className="space-y-4">
@@ -110,26 +101,26 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
   /* ─── Error ─── */
   if (error) {
     return (
-      <div className="w-full max-w-[1300px] mx-auto p-4 md:p-6">
+      <div className="w-full px-0 py-4">
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 mb-6"
+            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-200 mb-6 hover:bg-slate-50 transition-colors"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} />
           </button>
         )}
         <div className="flex flex-col items-center py-20">
-          <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mb-4">
-            <AlertCircle size={28} className="text-red-400" />
+          <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-4 border border-rose-100">
+            <AlertCircle size={26} className="text-rose-500" />
           </div>
-          <p className="text-sm font-black text-[#1e3a5f] uppercase tracking-tight mb-1">
+          <p className="text-xs font-semibold text-slate-900 tracking-tight mb-1">
             Failed to Load Recommendations
           </p>
-          <p className="text-[10px] text-slate-400 font-bold text-center max-w-xs mb-6">{error}</p>
+          <p className="text-xs text-slate-700 text-center max-w-xs mb-6">{error}</p>
           <button
             onClick={fetchStudentRecommendations}
-            className="px-6 py-2.5 bg-[#1e3a5f] text-white text-[10px] font-black uppercase rounded-xl hover:bg-amber-500 transition-all"
+            className="px-5 py-2 bg-[#1e3a5f] text-white text-xs font-medium rounded-xl hover:bg-[#152a47] transition-all shadow-xs"
           >
             Retry
           </button>
@@ -141,20 +132,20 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
   /* ─── Empty ─── */
   if (filteredSessions.length === 0) {
     return (
-      <div className="w-full max-w-[1300px] mx-auto p-4 md:p-6">
+      <div className="w-full px-0 py-4">
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 mb-6"
+            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-200 mb-6 hover:bg-slate-50 transition-colors"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} />
           </button>
         )}
-        <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-12 text-center">
-          <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
-            <BookOpen size={22} className="text-slate-300" />
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-xs p-12 text-center">
+          <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-slate-100">
+            <BookOpen size={20} className="text-[#1e3a5f]" />
           </div>
-          <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest">
+          <p className="text-slate-800 font-semibold text-xs">
             {searchTerm ? "No matching courses found" : "No recommendations yet"}
           </p>
         </div>
@@ -164,47 +155,45 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
 
   /* ─── Main view ─── */
   return (
-    <div className="animate-in fade-in duration-500 w-full max-w-[1300px] mx-auto p-4 md:p-6 space-y-6">
+    <div className="animate-in fade-in duration-300 w-full min-w-full px-0 py-4 space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-5 mb-2">
+      <div className="flex flex-col gap-4 mb-2 px-0 w-full">
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-[#1e3a5f] transition-colors w-fit border border-slate-100"
+            className="p-2 hover:bg-slate-100 bg-white shadow-xs rounded-xl text-slate-800 transition-colors w-fit border border-slate-200"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={18} />
           </button>
         )}
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
           <div>
-            <h2 className="text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase">
-              My Recommendations
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1e3a5f] tracking-tight">
+              System Recommendations
             </h2>
-            <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-              {groupedBySession.length} session{groupedBySession.length !== 1 ? "s" : ""}
+            <p className="text-xs text-slate-700 font-medium mt-0.5">
+              {groupedBySession.length} session{groupedBySession.length !== 1 ? "s" : ""} available
             </p>
           </div>
 
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+          <div className="relative w-full sm:w-auto">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" size={15} />
             <input
               type="text"
               placeholder="Search course..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full sm:w-[240px] pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold focus:ring-2 ring-amber-400 outline-none"
+              className="w-full sm:w-[280px] pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#1e3a5f] shadow-xs transition-colors"
             />
           </div>
         </div>
       </div>
 
-      {/* Session list */}
-      <div className="space-y-6">
+      {/* Session list - Main Cards */}
+      <div className="space-y-4 w-full min-w-full">
         {filteredSessions.map(session => {
           const isOpen = openSession === session.key;
-
-          // Aggregate counts across records (usually one record per session)
           const totals = session.records.reduce(
             (acc, rec) => {
               acc.courses +=
@@ -212,9 +201,6 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
                 rec.priorityWiseCourses.high.length +
                 rec.priorityWiseCourses.medium.length +
                 rec.priorityWiseCourses.low.length;
-              acc.credits += rec.summary.totalCoursesRecommended
-                ? 0
-                : 0;
               return acc;
             },
             { courses: 0, credits: 0 }
@@ -225,47 +211,46 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
           return (
             <div
               key={session.key}
-              className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm"
+              className="border border-slate-200/90 rounded-2xl overflow-hidden bg-white shadow-xs w-full block transition-all"
             >
               {/* Session header */}
               <button
                 type="button"
                 onClick={() => toggleSession(session.key)}
-                className="w-full flex items-center justify-between gap-3 px-4 md:px-5 py-4 hover:bg-slate-50/70 transition-colors text-left"
+                className="w-full flex items-center justify-between gap-4 px-5 py-4 hover:bg-slate-50/80 transition-colors text-left"
               >
-                <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className="w-10 h-10 rounded-xl bg-[#1e3a5f] flex items-center justify-center text-white shrink-0">
-                    <Calendar size={18} />
+                <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                  {/* Small cylinder icon container updated with #1e3a5f */}
+                  <div className="w-9 h-9 rounded-xl bg-[#1e3a5f] flex items-center justify-center text-white shrink-0 shadow-xs">
+                    <Calendar size={16} />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-black text-[#1e3a5f] uppercase tracking-tight truncate">
+                    <p className="text-xs md:text-sm font-semibold text-slate-900 tracking-tight truncate">
                       {session.label}
                     </p>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">
+                    <p className="text-[11px] font-semibold text-slate-700 truncate mt-0.5">
                       {totals.courses} course{totals.courses !== 1 ? "s" : ""} recommended
                       {firstRec?.summary.totalCreditsAllowed != null &&
-                        ` · cap ${firstRec.summary.totalCreditsAllowed} cr`}
+                        ` · Cap: ${firstRec.summary.totalCreditsAllowed} cr`}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-2.5 shrink-0">
                   {firstRec?.summary.hasWarnings && (
-                    <span className="hidden sm:flex items-center gap-1 px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded-md text-[9px] font-black uppercase">
-                      <AlertCircle size={10} /> Warnings
+                    <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200/80 rounded-lg text-[10px] font-semibold">
+                      <AlertCircle size={12} /> Warnings
                     </span>
                   )}
-                  {isOpen ? (
-                    <ChevronUp size={18} className="text-slate-400" />
-                  ) : (
-                    <ChevronDown size={18} className="text-slate-400" />
-                  )}
+                  <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
+                    {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  </div>
                 </div>
               </button>
 
               {/* Session body */}
               {isOpen && (
-                <div className="border-t border-slate-100 bg-slate-50/40 p-4 md:p-5 space-y-5">
+                <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-5 space-y-5 w-full">
                   {session.records.map(rec => (
                     <SessionRecord
                       key={rec.id ?? Math.random()}
@@ -299,17 +284,15 @@ const SessionRecord: React.FC<{
   };
 
   return (
-    <div className="space-y-5">
-      {/* Recommendation explanation */}
+    <div className="space-y-5 w-full">
       {record.detailedExplanation && (
-        <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl p-3 text-amber-900">
-          <Info size={14} className="shrink-0 mt-0.5 text-amber-600" />
-          <p className="text-[11px] font-bold leading-relaxed">{record.detailedExplanation}</p>
+        <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-200 rounded-xl p-3.5 text-slate-900 w-full shadow-2xs">
+          <Info size={16} className="shrink-0 mt-0.5 text-[#1e3a5f]" />
+          <p className="text-xs font-semibold leading-relaxed">{record.detailedExplanation}</p>
         </div>
       )}
 
-      {/* Priority summary chips */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 w-full">
         {(["critical", "high", "medium", "low"] as PriorityKey[]).map(p => {
           const count = grouped[p].length;
           if (!count) return null;
@@ -317,7 +300,7 @@ const SessionRecord: React.FC<{
           return (
             <span
               key={p}
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[10px] font-black uppercase ${meta.badge}`}
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] ${meta.badge}`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${meta.dot}`} />
               {meta.title} · {count}
@@ -326,23 +309,22 @@ const SessionRecord: React.FC<{
         })}
       </div>
 
-      {/* Course sections */}
       {(["critical", "high", "medium", "low"] as PriorityKey[]).map(p => {
         const courses: SuggestedCourse[] = grouped[p];
         if (!courses.length) return null;
         const meta = PRIORITY_META[p];
 
         return (
-          <div key={p} className="space-y-3">
-            <div className="flex items-center gap-2">
+          <div key={p} className="space-y-3 w-full">
+            <div className="flex items-center gap-2 w-full">
               <span className={`w-2 h-2 rounded-full ${meta.dot}`} />
-              <h3 className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+              <h3 className="text-xs font-bold text-slate-900 tracking-wide">
                 {meta.title} ({courses.length})
               </h3>
-              <div className="flex-1 h-px bg-slate-200" />
+              <div className="flex-1 h-px bg-slate-300" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3.5 w-full">
               {courses.map((course, idx) => {
                 const key = `${record.id}-${p}-${course.courseId ?? "noid"}-${course.courseName}-${idx}`;
                 const isClash =
@@ -371,18 +353,17 @@ const SessionRecord: React.FC<{
         );
       })}
 
-      {/* Footer meta */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200">
-        <p className="text-[9px] font-bold text-slate-400 uppercase">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200 w-full">
+        <p className="text-[11px] text-slate-700 font-semibold">
           {record.sentAt
-            ? `Sent ${new Date(record.sentAt).toLocaleString("en-GB", {
+            ? `Sent: ${new Date(record.sentAt).toLocaleString("en-GB", {
                 day: "2-digit", month: "short", year: "numeric",
                 hour: "2-digit", minute: "2-digit",
               })}`
             : "—"}
         </p>
         {record.notes && (
-          <p className="text-[9px] text-slate-500 italic">Note: {record.notes}</p>
+          <p className="text-[11px] text-slate-800 font-semibold italic">Note: {record.notes}</p>
         )}
       </div>
     </div>
@@ -412,58 +393,56 @@ const ReadOnlyCourseCard: React.FC<{
        []);
 
   return (
-    <div className="border border-emerald-100 rounded-2xl p-4 bg-white shadow-sm space-y-3">
-      {/* Header */}
+    <div className="border border-slate-300 rounded-2xl p-4 bg-white shadow-2xs space-y-3 w-full hover:border-[#1e3a5f] transition-all">
       <div className="flex items-start justify-between gap-3">
-        <div className="h-9 w-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+        <div className="h-9 w-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#1e3a5f] shrink-0">
           <CheckCircle2 size={18} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md text-[9px] font-bold uppercase border border-emerald-100">
+            <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded-md text-[10px] font-semibold border border-slate-200">
               {course.category || "ELIGIBLE"}
             </span>
             {isElective && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-purple-50 rounded-md text-[9px] font-bold text-purple-600 uppercase border border-purple-100">
-                <Sparkles size={10} /> {electives.length || (course as any).totalOptions || 0} options
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-indigo-50/80 rounded-md text-[10px] font-semibold text-indigo-900 border border-indigo-200">
+                <Sparkles size={11} className="text-indigo-600" /> {electives.length || (course as any).totalOptions || 0} options
               </span>
             )}
             {course.actionRequired && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 rounded-md text-[9px] font-bold text-blue-600 uppercase border border-blue-100">
-                <Target size={10} /> {String(course.actionRequired).replace(/_/g, " ")}
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-sky-50 rounded-md text-[10px] font-semibold text-sky-900 border border-sky-200">
+                <Target size={11} className="text-sky-600" /> {String(course.actionRequired).replace(/_/g, " ")}
               </span>
             )}
           </div>
-          <h4 className="font-bold text-gray-900 text-sm uppercase leading-tight truncate">
+          <h4 className="font-bold text-slate-900 text-xs sm:text-[13px] leading-snug break-words">
             {courseName}
           </h4>
           {course.originalCourseName && course.originalCourseName !== course.courseName && (
-            <p className="text-[10px] text-slate-400 font-bold uppercase">
-              replaces: {course.originalCourseName}
+            <p className="text-[11px] text-slate-700 font-medium mt-0.5">
+              Replaces: {course.originalCourseName}
             </p>
           )}
         </div>
-        <span className="text-xs font-bold px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg shrink-0">
-          {credits} cr
+        
+        <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-[#1e3a5f] rounded-xl shrink-0 border border-slate-300">
+          {credits} CR
         </span>
       </div>
 
-      {/* System reason */}
       {course.reason && (
-        <div className="text-[11px] bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-gray-600 flex items-start gap-2">
-          <Info className="w-3.5 h-3.5 text-blue-500 shrink-0 mt-0.5" />
+        <div className="text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-slate-800 flex items-start gap-2">
+          <Info className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
           <p className="font-medium">{course.reason}</p>
         </div>
       )}
 
-      {/* Lecture schedule */}
       {lectureSlots.length > 0 && (
         <div className="space-y-1">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">Lecture</p>
+          <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Lecture</p>
           {lectureSlots.map((l, i) => (
-            <div key={i} className="flex items-center gap-1 text-[10px] text-slate-600 font-medium">
-              <Clock className="w-3 h-3 text-emerald-600 shrink-0" />
-              <span className="truncate">
+            <div key={i} className="flex items-center gap-1.5 text-xs text-slate-800 font-semibold">
+              <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+              <span className="break-words">
                 {l.day}: {l.startTime}–{l.endTime} ({l.room ?? l.venue ?? "—"})
                 {l.instructor ? ` · ${l.instructor}` : ""}
               </span>
@@ -472,14 +451,13 @@ const ReadOnlyCourseCard: React.FC<{
         </div>
       )}
 
-      {/* Lab schedule */}
       {labSlots.length > 0 && (
-        <div className="bg-purple-50 border border-purple-100 p-2.5 rounded-xl text-purple-900 space-y-1">
-          <span className="text-[9px] font-black uppercase block">Lab</span>
+        <div className="bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-slate-800 space-y-1">
+          <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Lab</span>
           {labSlots.map((l, i) => (
-            <div key={i} className="flex items-center gap-1 text-[10px] font-medium">
-              <Clock className="w-3 h-3 shrink-0" />
-              <span className="truncate">
+            <div key={i} className="flex items-center gap-1.5 text-xs font-semibold">
+              <Clock className="w-3.5 h-3.5 shrink-0 text-slate-500" />
+              <span className="break-words">
                 {l.day}: {l.startTime}–{l.endTime} ({l.room ?? l.venue})
                 {l.instructor ? ` · ${l.instructor}` : ""}
               </span>
@@ -488,32 +466,31 @@ const ReadOnlyCourseCard: React.FC<{
         </div>
       )}
 
-      {/* Elective options (read-only list) */}
       {electives.length > 0 && (
-        <div className="pt-2 border-t border-gray-100 space-y-1.5">
+        <div className="pt-2 border-t border-slate-200 space-y-2">
           <button
             type="button"
             onClick={onToggle}
-            className="w-full flex items-center justify-between text-[10px] font-black text-purple-700 uppercase tracking-wider"
+            className="w-full flex items-center justify-between text-xs font-bold text-[#1e3a5f] hover:text-[#152a47] py-1 px-1 rounded transition-colors"
           >
             <span className="flex items-center gap-1">
-              <Sparkles size={10} /> Elective options ({electives.length})
+              <Sparkles size={12} className="text-[#1e3a5f]" /> Elective options ({electives.length})
             </span>
-            {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </button>
 
           {isExpanded && (
             <div className="space-y-1.5">
               {electives.map((opt: ElectiveOption, i: number) => (
-                <div key={i} className="bg-white border border-purple-100 rounded-lg p-2 text-[10px]">
+                <div key={i} className="bg-white border border-slate-200 rounded-xl p-2.5 text-xs space-y-1 shadow-2xs">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="font-bold text-gray-800 truncate">{opt.courseName}</p>
-                    <span className="text-[9px] font-bold bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded shrink-0">
-                      {opt.credits} cr
+                    <p className="font-bold text-slate-900 break-words">{opt.courseName}</p>
+                    <span className="text-[10px] font-semibold bg-slate-100 text-slate-800 px-2 py-0.5 rounded shrink-0 border border-slate-200">
+                      {opt.credits} CR
                     </span>
                   </div>
                   {opt.matchReason && (
-                    <p className="text-gray-500 mt-0.5">{opt.matchReason}</p>
+                    <p className="text-slate-700 font-medium text-[11px]">{opt.matchReason}</p>
                   )}
                 </div>
               ))}
@@ -538,80 +515,79 @@ const ReadOnlyClashCard: React.FC<{
   const clashArray = (course as any).clashRecord?.clashDetails?.detailedClashes ?? [];
 
   return (
-    <div className="border-2 border-red-200 bg-red-50/40 rounded-2xl p-4 space-y-3">
-      {/* Header */}
+    <div className="border border-rose-300 bg-rose-50/30 rounded-2xl p-4 space-y-3 w-full">
       <div className="flex items-start justify-between gap-3">
-        <div className="h-9 w-9 rounded-xl bg-red-100 border border-red-200 flex items-center justify-center text-red-600 shrink-0">
+        <div className="h-9 w-9 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0">
           <ShieldAlert size={18} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-md text-[9px] font-bold uppercase">
+            <span className="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md text-[10px] font-semibold border border-rose-200">
               {(course as any).notSuggestedReason === "LAB_CLASH_UNRESOLVED"
                 ? "Lab Clash"
                 : "Time Clash"}
             </span>
-            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md text-[9px] font-bold uppercase">
-              {(course as any).priority ?? "CRITICAL"}
+            <span className="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md text-[10px] font-semibold border border-rose-200">
+              {((course as any).priority ?? "CRITICAL").toUpperCase()}
             </span>
           </div>
-          <h4 className="font-bold text-gray-900 text-sm uppercase leading-tight truncate">
+          <h4 className="font-bold text-slate-900 text-xs sm:text-[13px] leading-snug break-words">
             {courseName}
           </h4>
         </div>
-        <span className="text-xs font-bold px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg shrink-0">
-          {credits} cr
+        
+        <span className="text-xs font-bold px-3 py-1 bg-rose-100 text-rose-900 rounded-xl shrink-0 border border-rose-200">
+          {credits} CR
         </span>
       </div>
 
-      {/* Reason */}
-      <div className="text-[11px] bg-white p-2.5 rounded-xl border border-red-100 text-red-700 flex items-start gap-2">
-        <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+      <div className="text-xs bg-white p-2.5 rounded-xl border border-rose-200 text-slate-900 flex items-start gap-2 shadow-2xs">
+        <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0 mt-0.5" />
         <p className="font-medium leading-relaxed">
           {course.reason || (course as any).notSuggestedReason || "Schedule conflict detected."}
         </p>
       </div>
 
-      {/* Suggested alternative */}
       {alt && (
-        <div className="bg-blue-50/80 border border-blue-200 rounded-xl p-3 space-y-1.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-black text-blue-800 uppercase tracking-wider">
-            <Split size={12} className="text-blue-600" />
+        <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-3 space-y-2">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e3a5f]">
+            <Split size={13} className="text-[#1e3a5f]" />
             Suggested Alternative
           </div>
-          <div className="bg-white border border-blue-100 rounded-lg p-2">
-            <p className="font-bold text-gray-900 text-xs uppercase truncate">
-              {alt.courseName}
-            </p>
-            <div className="flex flex-wrap gap-1 mt-1">
-              <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-bold uppercase">
-                {alt.credits} cr
+          <div className="bg-white border border-blue-200 rounded-xl p-2.5 space-y-1.5 shadow-2xs">
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-bold text-slate-900 text-xs break-words">
+                {alt.courseName}
+              </p>
+              <span className="text-[10px] font-semibold bg-blue-50 text-[#1e3a5f] px-2.5 py-0.5 rounded-full shrink-0 border border-blue-200">
+                {alt.credits} CR
               </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
               {alt.bestMatchDetails?.semester != null && (
-                <span className="px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded text-[9px] font-bold uppercase">
+                <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[10px] font-medium border border-slate-200">
                   Sem {alt.bestMatchDetails.semester}
                 </span>
               )}
               {alt.score != null && (
-                <span className="px-1.5 py-0.5 bg-amber-50 text-amber-700 rounded text-[9px] font-bold uppercase">
+                <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[10px] font-medium border border-slate-200">
                   Score {alt.score}
                 </span>
               )}
             </div>
             {alt.reason && (
-              <p className="text-[10px] text-gray-500 mt-1.5 leading-snug">{alt.reason}</p>
+              <p className="text-[11px] text-slate-700 font-medium leading-snug">{alt.reason}</p>
             )}
           </div>
         </div>
       )}
 
-      {/* Clash details expander */}
       {clashArray.length > 0 && (
         <div>
           <button
             type="button"
             onClick={onToggle}
-            className="w-full flex items-center justify-between text-[10px] bg-white border border-red-200 text-red-800 px-2.5 py-1.5 rounded-xl font-semibold hover:bg-red-50 transition-colors"
+            className="w-full flex items-center justify-between text-xs bg-white border border-rose-200 text-rose-900 px-3 py-2 rounded-xl font-semibold hover:bg-rose-50/50 transition-colors shadow-2xs"
           >
             <span>
               {isExpanded ? "Hide" : "View"} clash details ({clashArray.length})
@@ -620,14 +596,14 @@ const ReadOnlyClashCard: React.FC<{
           </button>
 
           {isExpanded && (
-            <div className="mt-1.5 p-2.5 bg-white border border-red-200 rounded-xl text-[10px] space-y-1 text-gray-700">
-              <p className="font-bold text-red-900 uppercase">
+            <div className="mt-2 p-2.5 bg-white border border-rose-200 rounded-xl text-xs space-y-1 text-slate-800 shadow-2xs">
+              <p className="font-bold text-rose-950">
                 Conflicting with: {(course as any).clashRecord?.clashesWith ?? "—"}
               </p>
               {clashArray.map((c: any, i: number) => (
-                <div key={i} className="flex items-center gap-1 text-gray-600">
-                  <Clock size={11} className="text-red-500" />
-                  <span>
+                <div key={i} className="flex items-center gap-1.5 text-slate-800 font-semibold text-[11px]">
+                  <Clock size={11} className="text-rose-500" />
+                  <span className="break-words">
                     {c.day} {c.startTime && c.endTime ? `${c.startTime}–${c.endTime}` : c.time}
                     {c.venue ? ` (${c.venue})` : ""}
                   </span>
