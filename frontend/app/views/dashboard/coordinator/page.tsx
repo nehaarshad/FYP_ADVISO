@@ -1,5 +1,4 @@
 
-
 // /* eslint-disable @typescript-eslint/no-explicit-any */
 // 'use client';
 // import React, { useState, useEffect } from 'react';
@@ -30,6 +29,7 @@
 // import { ProgramList } from '@/components/program/programList/programList';
 // import { AdvisorsList } from '@/components/advisors/advisorList';
 // import { StudentList } from '@/components/StudentDetails/StudentList';
+// import ForgetPasswordPage from '@/app/views/auth/forgetPassword/page';
 
 // export default function CoordinatorDashboard() {
 //   const [activeTab, setActiveTab] = useState("overview");
@@ -63,10 +63,11 @@
 //   }, [router, fetchStudents, fetchAdvisors, fetchPrograms]);
 
 //   const navigateTo = (tab: string) => {
-//   setNavigationStack(prev => [...prev, tab]);
-//   setActiveTab(tab);
-//   setIsSidebarOpen(false);
-// };
+//     setNavigationStack(prev => [...prev, tab]);
+//     setActiveTab(tab);
+//     setIsSidebarOpen(false);
+//   };
+
 //   const goBack = () => {
 //     if (navigationStack.length > 1) {
 //       const newStack = [...navigationStack];
@@ -78,79 +79,89 @@
 //   };
 
 //   return (
-//     <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">
+//     <div className="bg-[#f8fafc] font-sans text-slate-900 flex min-h-screen">
 //       {/* Mobile Overlay */}
-// {isSidebarOpen && (
-//   <div
-//     className="fixed inset-0 bg-black/25 backdrop-blur-sm z-40 lg:hidden"
-//     onClick={() => setIsSidebarOpen(false)}
-//   />
-// )}
+//       {isSidebarOpen && (
+//         <div
+//           className="fixed inset-0 bg-black/25 backdrop-blur-sm z-40 lg:hidden"
+//           onClick={() => setIsSidebarOpen(false)}
+//         />
+//       )}
 
-// {/* Sidebar */}
-// <div
-//   className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out
-//     ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-//     lg:relative lg:translate-x-0`}
-// >
-//   <Sidebar
-//     userRole="coordinator"
-//     activeTab={activeTab}
-//     setActiveTab={navigateTo}
-//   />
-// </div>
+//       {/* Sidebar */}
+//       <div
+//         className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out
+//           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+//           lg:relative lg:translate-x-0`}
+//       >
+//         <Sidebar
+//           userRole="coordinator"
+//           activeTab={activeTab}
+//           setActiveTab={navigateTo}
+//         />
+//       </div>
 
-// <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
+//       <div className="flex-1 flex flex-col min-w-0">
+//         {/* Top Header Bar */}
+//         <header className="h-20 bg-white border-b border-slate-200 px-4 md:px-10 flex items-center justify-between sticky top-0 z-30">
+//           <div className="flex items-center gap-4">
+//             <button
+//               type="button"
+//               title="Open Menu"
+//               onClick={() => setIsSidebarOpen(true)}
+//               className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+//             >
+//               <Menu size={24} />
+//             </button>
+//             <h1 className="text-lg md:text-xl font-extrabold text-[#1e3a5f] tracking-tight">
+//               Coordinator Dashboard
+//             </h1>
+//           </div>
+//           <div></div>
+//         </header>
 
-//         {/* Empty Top Header Bar */}
-//         <header className="h-20 bg-white border-b border-slate-200 px-4 md:px-10 flex items-center justify-between sticky top-0 z-30 shrink-0">
-//   <button
-//     type="button"
-//     title="Open Menu"
-//     onClick={() => setIsSidebarOpen(true)}
-//     className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
-//   >
-//     <Menu size={24} />
-//   </button>
-
-//   <div className="hidden lg:block"></div>
-//   <div></div>
-// </header>
-
-//         <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full flex-1">
+//         <main className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full space-y-8">
 //           {activeTab === "overview" && (
 //             <div className="space-y-8 animate-in fade-in duration-500">
               
-//               {/* 3 STAT CARDS (Total Students, Batch Advisors, Active Programs) */}
-//               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//                 <StatCard 
-//                   label="Total Students" 
-//                   value={totalStudentsCount.toLocaleString()} 
-//                   icon={<Users/>} 
-//                   trend={`${activeStudentsCount} Active`} 
-//                 />
-//                 <StatCard 
-//                   label="Batch Advisors" 
-//                   value={totalAdvisorsCount.toLocaleString()} 
-//                   icon={<ShieldCheck/>} 
-//                   trend={`${activeAdvisorCount} Active`} 
-//                 />
-//                 <StatCard 
-//                   label="Active Programs" 
-//                   value={activeProgramsCount.toLocaleString()} 
-//                   icon={<GraduationCap/>} 
-//                   trend="Currently Running" 
-//                 />
+//               {/* SECTION 1: SYSTEM STATISTICS (Static with No Pop-up/Hover Effect) */}
+//               <div className="space-y-3">
+//                 <h2 className="text-xs font-extrabold uppercase tracking-widest text-slate-800">System Statistics</h2>
+//                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//                   <StatCard 
+//                     label="Total Students" 
+//                     value={totalStudentsCount.toLocaleString()} 
+//                     icon={<Users/>} 
+//                     trend={`${activeStudentsCount} Active`} 
+//                   />
+//                   <StatCard 
+//                     label="Batch Advisors" 
+//                     value={totalAdvisorsCount.toLocaleString()} 
+//                     icon={<ShieldCheck/>} 
+//                     trend={`${activeAdvisorCount} Active`} 
+//                   />
+//                   <StatCard 
+//                     label="Active Programs" 
+//                     value={activeProgramsCount.toLocaleString()} 
+//                     icon={<GraduationCap/>} 
+//                     trend="Currently Running" 
+//                   />
+//                 </div>
 //               </div>
 
-//               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-//                 <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
-//                 <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
-//                 <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
-//                 <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
-//                 <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
-//                 <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
+//               {/* SECTION 2: MANAGEMENT MODULES */}
+//               <div className="space-y-3">
+//                 <h2 className="text-xs font-extrabold uppercase tracking-widest text-slate-800">Management Modules</h2>
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+//                   <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
+//                   <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
+//                   <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
+//                   <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
+//                   <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
+//                   <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
+//                 </div>
 //               </div>
+
 //             </div>
 //           )}
 
@@ -174,39 +185,45 @@
 //               {activeTab === "add-faculty" && <AddFaculty/>}
 //               {activeTab === "edit-student" && <StudentList selectedBatch={''} activeTab={'Regular' } />}
 //               {activeTab === "edit-advisor" && <AdvisorsList/>}
+//               {activeTab === "manage-passwords" && <ForgetPasswordPage />}
 //               {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
 //               {activeTab === "profile" && <ProfileView />}
 //             </div>
 //           )}
-//         </div>
-//       </main>
+//         </main>
+//       </div>
 //     </div>
 //   );
 // }
 
 // function ActionCard({ icon, label, onClick }: any) {
 //   return (
-//     <div onClick={onClick} className="bg-white p-6 rounded-[1.8rem] border-2 border-slate-50 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#FDB813] hover:shadow-md transition-all min-h-[140px] group">
-//       <div className="h-12 w-12 rounded-xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#FDB813] transition-colors">
-//         {React.cloneElement(icon, { size: 24 })}
+//     <div 
+//       onClick={onClick} 
+//       className="bg-white p-8 rounded-[1.8rem] border-2 border-slate-50 shadow-sm flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#1e3a5f] hover:shadow-md transition-all min-h-[165px] group"
+//     >
+//       <div className="h-14 w-14 rounded-2xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#1e3a5f] group-hover:text-white transition-colors">
+//         {React.cloneElement(icon, { size: 28 })}
 //       </div>
-//       <p className="text-[10px] font-bold uppercase text-[#1e3a5f] text-center tracking-widest">{label}</p>
+//       <p className="text-xs font-extrabold uppercase text-[#1e3a5f] text-center tracking-widest">{label}</p>
 //     </div>
 //   );
 // }
 
 // function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) {
 //   return (
-//     <div className="bg-white p-6 rounded-[1.8rem] shadow-sm border border-slate-100 group hover:border-[#FDB813] transition-all">
-//       <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#FDB813] transition-colors">
+//     <div className="bg-white p-6 rounded-[1.8rem] shadow-sm border border-slate-100">
+//       <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-4 text-[#1e3a5f]">
 //         {React.cloneElement(icon, { size: 20 })}
 //       </div>
-//       <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-1">{label}</p>
-//       <h3 className={`text-2xl font-bold ${color}`}>{value}</h3>
-//       <p className="text-[9px] font-bold text-green-500  mt-0.5">{trend}</p>
+//       <p className="text-slate-600 text-[11px] font-bold uppercase tracking-wider mb-1">{label}</p>
+//       <h3 className={`text-3xl font-extrabold ${color}`}>{value}</h3>
+//       <p className="text-[10px] font-bold text-emerald-600 mt-1">{trend}</p>
 //     </div>
 //   );
 // }
+
+
 
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -216,7 +233,7 @@ import { useRouter } from 'next/navigation';
 import {
   Users, ShieldCheck, 
   Map, BookOpen, Calendar, GraduationCap, 
-  FileSearch, ChevronLeft, 
+  FileSearch, ChevronLeft, ArrowLeft,
   SearchCheck, Menu
 } from "lucide-react";
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
@@ -289,7 +306,7 @@ export default function CoordinatorDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-[#f8fafc] font-sans text-slate-900 overflow-hidden">
+    <div className="bg-[#f8fafc] font-sans text-slate-900 flex h-screen overflow-hidden">
       {/* Mobile Overlay */}
       {isSidebarOpen && (
         <div
@@ -298,11 +315,11 @@ export default function CoordinatorDashboard() {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Fixed Position & Height */}
       <div
         className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out
           ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
-          lg:relative lg:translate-x-0`}
+          lg:relative lg:translate-x-0 flex-shrink-0 h-full`}
       >
         <Sidebar
           userRole="coordinator"
@@ -311,56 +328,68 @@ export default function CoordinatorDashboard() {
         />
       </div>
 
-      <main className="flex-1 flex flex-col min-w-0 h-full overflow-y-auto">
-        {/* Empty Top Header Bar */}
-        <header className="h-20 bg-white border-b border-slate-200 px-4 md:px-10 flex items-center justify-between sticky top-0 z-30 shrink-0">
-          <button
-            type="button"
-            title="Open Menu"
-            onClick={() => setIsSidebarOpen(true)}
-            className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
-          >
-            <Menu size={24} />
-          </button>
-
-          <div className="hidden lg:block"></div>
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        {/* Top Header Bar - Sticky/Fixed inside the main container */}
+        <header className="h-20 bg-white border-b border-slate-200 px-4 md:px-10 flex items-center justify-between flex-shrink-0 z-30">
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              title="Open Menu"
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+            >
+              <Menu size={24} />
+            </button>
+            <h1 className="text-lg md:text-xl font-extrabold text-[#1e3a5f] tracking-tight">
+              Coordinator Dashboard
+            </h1>
+          </div>
           <div></div>
         </header>
 
-        <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full flex-1">
+        {/* Scrollable Main Area */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full space-y-8">
           {activeTab === "overview" && (
             <div className="space-y-8 animate-in fade-in duration-500">
               
-              {/* 3 STAT CARDS */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <StatCard 
-                  label="Total Students" 
-                  value={totalStudentsCount.toLocaleString()} 
-                  icon={<Users/>} 
-                  trend={`${activeStudentsCount} Active`} 
-                />
-                <StatCard 
-                  label="Batch Advisors" 
-                  value={totalAdvisorsCount.toLocaleString()} 
-                  icon={<ShieldCheck/>} 
-                  trend={`${activeAdvisorCount} Active`} 
-                />
-                <StatCard 
-                  label="Active Programs" 
-                  value={activeProgramsCount.toLocaleString()} 
-                  icon={<GraduationCap/>} 
-                  trend="Currently Running" 
-                />
+              {/* SECTION 1: SYSTEM STATISTICS */}
+              <div className="space-y-3">
+                <h2 className="text-sm font-extrabold tracking-wider text-slate-800 capitalize">System statistics</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <StatCard 
+                    label="Total students" 
+                    value={totalStudentsCount.toLocaleString()} 
+                    icon={<Users/>} 
+                    trend={`${activeStudentsCount} active`} 
+                  />
+                  <StatCard 
+                    label="Batch advisors" 
+                    value={totalAdvisorsCount.toLocaleString()} 
+                    icon={<ShieldCheck/>} 
+                    trend={`${activeAdvisorCount} active`} 
+                  />
+                  <StatCard 
+                    label="Active programs" 
+                    value={activeProgramsCount.toLocaleString()} 
+                    icon={<GraduationCap/>} 
+                    trend="Currently running" 
+                  />
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
-                <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
-                <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
-                <ActionCard icon={<BookOpen/>} label="Course Offering" onClick={() => navigateTo("course-offering")} />
-                <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
-                <ActionCard icon={<FileSearch/>} label="Course Details" onClick={() => navigateTo("course-details")} />
+              {/* SECTION 2: MANAGEMENT MODULES */}
+              <div className="space-y-3">
+                <h2 className="text-sm font-extrabold tracking-wider text-slate-800 capitalize">Management modules</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
+                  <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
+                  <ActionCard icon={<Map/>} label="Roadmaps" onClick={() => navigateTo("roadmaps")} />
+                  <ActionCard icon={<BookOpen/>} label="Course offering" onClick={() => navigateTo("course-offering")} />
+                  <ActionCard icon={<Calendar/>} label="Timetable" onClick={() => navigateTo("timetable")} />
+                  <ActionCard icon={<FileSearch/>} label="Course details" onClick={() => navigateTo("course-details")} />
+                </div>
               </div>
+
             </div>
           )}
 
@@ -368,11 +397,28 @@ export default function CoordinatorDashboard() {
           {activeTab !== "overview" && (
             <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
               <button 
-                onClick={goBack}
-                className="flex items-center gap-2 mb-4 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[#1e3a5f] font-bold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm w-fit"
-              >
-                <ChevronLeft size={16} /> Back
-              </button>
+      onClick={goBack}
+      title="Back"
+      className="
+        p-3 
+        hover:bg-slate-100 
+        bg-white 
+        shadow-sm 
+        rounded-full 
+        text-[#1e3a5f] 
+        transition-colors 
+        w-fit 
+        border 
+        border-slate-200
+        mb-4
+        flex
+        items-center
+        justify-center
+        cursor-pointer
+      "
+    >
+      <ArrowLeft size={20} />
+    </button>
               {activeTab === "programs" && (<div className="space-y-6"><AddProgram /><ProgramList /></div>)}
               {activeTab === "roadmaps" && <RoadmapSection />}
               {activeTab === "course-offering" && <CourseOffering />}
@@ -387,34 +433,39 @@ export default function CoordinatorDashboard() {
               {activeTab === "manage-passwords" && <ForgetPasswordPage />}
               {activeTab === "guidelines" && <DegreeGuidelinesManagement onBack={goBack}/>}
               {activeTab === "profile" && <ProfileView />}
+              {/* Parent file mein AddStudent ko aise render karein */}
+
             </div>
           )}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
 
 function ActionCard({ icon, label, onClick }: any) {
   return (
-    <div onClick={onClick} className="bg-white p-6 rounded-[1.8rem] border-2 border-slate-50 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-[#FDB813] hover:shadow-md transition-all min-h-[140px] group">
-      <div className="h-12 w-12 rounded-xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#FDB813] transition-colors">
-        {React.cloneElement(icon, { size: 24 })}
+    <div 
+      onClick={onClick} 
+      className="bg-white p-8 rounded-[1.8rem] border-2 border-slate-50 shadow-sm flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#1e3a5f] hover:shadow-md transition-all min-h-[165px] group"
+    >
+      <div className="h-14 w-14 rounded-2xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#1e3a5f] group-hover:text-white transition-colors">
+        {React.cloneElement(icon, { size: 28 })}
       </div>
-      <p className="text-[10px] font-bold uppercase text-[#1e3a5f] text-center tracking-widest">{label}</p>
+      <p className="text-sm font-extrabold capitalize text-[#1e3a5f] text-center tracking-wide">{label}</p>
     </div>
   );
 }
 
 function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) {
   return (
-    <div className="bg-white p-6 rounded-[1.8rem] shadow-sm border border-slate-100 group hover:border-[#FDB813] transition-all">
-      <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#FDB813] transition-colors">
+    <div className="bg-white p-6 rounded-[1.8rem] shadow-sm border border-slate-100">
+      <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-4 text-[#1e3a5f]">
         {React.cloneElement(icon, { size: 20 })}
       </div>
-      <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-1">{label}</p>
-      <h3 className={`text-2xl font-bold ${color}`}>{value}</h3>
-      <p className="text-[9px] font-bold text-green-500  mt-0.5">{trend}</p>
+      <p className="text-slate-800 text-sm font-extrabold capitalize tracking-wide mb-1">{label}</p>
+      <h3 className={`text-3xl font-extrabold ${color}`}>{value}</h3>
+      <p className="text-[10px] font-bold text-emerald-600 mt-1 capitalize">{trend}</p>
     </div>
   );
 }
