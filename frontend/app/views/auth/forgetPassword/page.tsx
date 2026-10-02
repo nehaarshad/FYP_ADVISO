@@ -70,131 +70,137 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="max-w-3xl mx-auto w-full bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm"
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      className="max-w-5xl mx-auto px-4 sm:px-6 pb-12 -mt-6"
     >
-      {/* Header */}
-      <div className="mb-8 text-left">
-        <div className="h-12 w-12 rounded-2xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] mb-4">
-          <KeyRound size={24} />
+      {/* Top Header Section */}
+      <div className="flex items-center justify-between mb-6 px-1">
+        <div className="flex items-center gap-4 ml-1">
+          <div className="h-14 w-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200 shrink-0">
+            <KeyRound size={26} />
+          </div>
+          <div>
+            <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">Manage & Reset Password</h2>
+            <p className="text-xs font-medium text-slate-400 mt-0.5">Update user credentials directly via SAP ID</p>
+          </div>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#1e3a5f] mb-2 tracking-tight">
-          Manage & Reset Password
-        </h2>
-        <div className="h-1.5 w-12 bg-[#FDB813] rounded-full mb-3"></div>
-        <p className="text-xs text-slate-500 font-medium leading-relaxed">
-          Enter the student or faculty member SAP ID along with their new password to update system credentials directly.
-        </p>
       </div>
 
-      {/* Error Display */}
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[1.2rem] flex items-center gap-3">
-          <AlertCircle size={18} className="text-red-600 shrink-0" />
-          <p className="text-red-600 text-xs font-medium">
-            {error}
-          </p>
-        </div>
-      )}
+      {/* Main Card */}
+      <div className="bg-white p-10 sm:p-12 rounded-[2.5rem] shadow-xl border border-slate-100">
 
-      {/* Success State */}
-      {isSuccess ? (
-        <div className="space-y-6">
-          <div className="p-5 bg-emerald-50 border border-emerald-200 rounded-[1.2rem] flex items-start gap-3">
-            <CheckCircle2 size={20} className="text-emerald-600 shrink-0 mt-0.5" />
-            <p className="text-emerald-700 text-xs font-semibold leading-relaxed">
-              Password has been successfully updated for SAP ID: <span className="font-bold underline">{sapId}</span>. The user can now log in using this new password.
+        {/* Error Display */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[1.5rem] flex items-center gap-3">
+            <AlertCircle size={20} className="text-red-500 shrink-0" />
+            <p className="text-red-600 text-sm font-medium">
+              {error}
             </p>
           </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={() => {
-                setIsSuccess(false);
-                setSapId("");
-                setNewPassword("");
-                setConfirmPassword("");
-              }}
-              className="flex-1 py-2.5 bg-slate-100 text-slate-700 rounded-[1.2rem] font-bold text-xs hover:bg-slate-200 transition-all"
-            >
-              Reset Another Password
-            </button>
-            {onBack && (
-              <button
-                onClick={onBack}
-                className="flex-1 py-2.5 bg-[#1e3a5f] text-white rounded-[1.2rem] font-bold text-xs hover:bg-[#1e3a5f]/90 transition-all shadow-md shadow-blue-900/10"
-              >
-                Back to Overview
-              </button>
-            )}
-          </div>
-        </div>
-      ) : (
-        /* Form */
-        <form className="space-y-6" onSubmit={handleUpdatePassword}>
-          <UniversalInput
-            label="User SAP ID"
-            type="text"
-            placeholder="e.g. 49100"
-            value={sapId}
-            onChange={setSapId}
-            Icon={User}
-            disabled={isLoading}
-          />
+        )}
 
-          <UniversalInput
-            label="New Password"
-            type="password"
-            placeholder="Enter new secure password"
-            value={newPassword}
-            onChange={setNewPassword}
-            Icon={Lock}
-            disabled={isLoading}
-          />
-
-          <div>
-            <UniversalInput
-              label="Confirm New Password"
-              type="password"
-              placeholder="Re-enter new password"
-              value={confirmPassword}
-              onChange={setConfirmPassword}
-              Icon={Lock}
-              disabled={isLoading}
-            />
-            {/* Show error only when user types something mismatched */}
-            {isPasswordMismatch && (
-              <p className="text-red-500 text-[11px] font-medium mt-1.5 ml-1 animate-fadeIn">
-                Passwords do not match
+        {/* Success State */}
+        {isSuccess ? (
+          <div className="space-y-8">
+            <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-[2rem] flex items-start gap-4">
+              <CheckCircle2 size={24} className="text-emerald-600 shrink-0 mt-0.5" />
+              <p className="text-emerald-700 text-xs sm:text-sm font-medium leading-relaxed">
+                Password has been successfully updated for SAP ID: <span className="font-bold underline">{sapId}</span>. The user can now log in using this new password.
               </p>
-            )}
-          </div>
-
-          {/* Managed Buttons Box */}
-          <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            {onBack && (
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 type="button"
-                onClick={onBack}
-                className="w-full sm:w-auto px-5 py-2 bg-slate-100 text-slate-600 rounded-[1.2rem] font-bold text-xs hover:bg-slate-200 transition-all text-center"
+                onClick={() => {
+                  setIsSuccess(false);
+                  setSapId("");
+                  setNewPassword("");
+                  setConfirmPassword("");
+                }}
+                className="flex-1 py-4 bg-slate-100 text-slate-700 rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-slate-200 transition-all cursor-pointer"
               >
-                Cancel
+                Reset Another Password
               </button>
-            )}
-            
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full sm:w-50 py-3 bg-[#1e3a5f] text-white rounded-[0.9rem] font-bold text-sm hover:bg-[#1e3a5f]/90 transition-all shadow-md shadow-blue-900/10 flex items-center justify-center disabled:opacity-50"
-            >
-              {isLoading ? "Updating..." : "Update Password"}
-            </button>
+              {onBack && (
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-xl cursor-pointer"
+                >
+                  Back to Overview
+                </button>
+              )}
+            </div>
           </div>
-        </form>
-      )}
+        ) : (
+          /* Form */
+          <form className="space-y-8" onSubmit={handleUpdatePassword}>
+            <div className="space-y-6">
+              <UniversalInput
+                label="User SAP ID"
+                type="text"
+                placeholder="xxxxx"
+                value={sapId}
+                onChange={setSapId}
+                Icon={User}
+                disabled={isLoading}
+              />
+
+              <UniversalInput
+                label="New Password"
+                type="password"
+                placeholder="Enter new secure password"
+                value={newPassword}
+                onChange={setNewPassword}
+                Icon={Lock}
+                disabled={isLoading}
+              />
+
+              <div>
+                <UniversalInput
+                  label="Confirm New Password"
+                  type="password"
+                  placeholder="Re-enter new password"
+                  value={confirmPassword}
+                  onChange={setConfirmPassword}
+                  Icon={Lock}
+                  disabled={isLoading}
+                />
+                {/* Show error only when user types something mismatched */}
+                {isPasswordMismatch && (
+                  <p className="text-red-500 text-[11px] font-medium mt-1.5 ml-4 animate-fadeIn">
+                    Passwords do not match
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Managed Buttons Box */}
+            <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-4 pt-4">
+              {onBack && (
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="w-full sm:w-auto px-10 py-4 bg-slate-100 text-slate-600 rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-slate-200 transition-all text-center cursor-pointer"
+                >
+                  Cancel
+                </button>
+              )}
+              
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full sm:w-auto px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              >
+                {isLoading ? "Updating..." : "Update Password"}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
     </motion.div>
   );
 }
