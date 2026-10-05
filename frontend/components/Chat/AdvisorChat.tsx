@@ -88,7 +88,7 @@ const AdvisorChat: React.FC<AdvisorChatProps> = ({ onBack }) => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
-      className="flex flex-col gap-5 w-full max-w-6xl mx-auto overflow-hidden p-4 md:p-6 pt-4 md:pt-2 -mt-2"
+      className="flex flex-col gap-5 w-full max-w-6xl mx-auto overflow-hidden p-4 md:p-5 py-4 md:pt-2 -mt-2"
     >
       {/* HEADER SECTION */}
     {/* HEADER SECTION */}
