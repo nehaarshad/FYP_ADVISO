@@ -18,10 +18,11 @@ import {
   Split,
   Target,
   GraduationCap,
+  FileText,
 } from "lucide-react";
 import { useRecommendations } from "../../src/hooks/recommendationHook/useCourseRecommendationHook";
 import { useUserProfile } from "@/src/hooks/profileHook/useProfile";
-
+import { motion } from "framer-motion";
 interface AdvisoryLogsProps {
   onBack?: () => void;
   onOpenStudentRecommendations?: () => void;
@@ -292,11 +293,24 @@ function CourseDetailCard({
           </p>
         )}
 
-      {/* Instructors summary */}
+      {/* UPDATED: Faculty / Instructors UI Section */}
       {course.instructors.length > 0 && (
-        <p className="text-xs text-slate-600 font-medium">
-          <span className="font-semibold text-slate-800">Faculty:</span> {course.instructors.join(" · ")}
-        </p>
+        <div className="pt-2 border-t border-slate-100 flex flex-col gap-1.5">
+          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            Assigned Faculty
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {course.instructors.map((instructorName, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-sky-50 text-sky-800 border border-sky-200/60 rounded-lg text-xs font-semibold"
+              >
+                <Users size={12} className="text-sky-600 shrink-0" />
+                {instructorName}
+              </span>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Advisor rationale */}
@@ -644,36 +658,37 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
     );
   }
 
-  /* ── Main view ───────────────────────────────────────────────────── */
-
-  return (
+  /* ── Main view ────────────────────────────────────────────────     */
+ return (
     <div className="w-full py-4 font-sans">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        className="relative min-h-screen w-full max-w-6.5xl mx-auto p-4 md:p-8 pb-10 -mt-6"
+      >
+            
       {/* Header */}
-      <div className="flex flex-col gap-6 mb-8 px-2">
+      <div className="flex flex-col gap-4 mb-8">
         <button
           title="Back"
           onClick={onBack}
-          className="
-            p-3 
-            hover:bg-slate-100 
-            bg-white 
-            shadow-sm 
-            rounded-full 
-            text-[#1e3a5f] 
-            transition-colors 
-            w-fit 
-            border 
-            border-slate-200
-          "
+          className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors w-fit border border-slate-100"
         >
           <ArrowLeft size={20} />
         </button>
 
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1e3a5f] tracking-tight">
-              Advisory Logs
-            </h2>
+        {/* Heading & Search on the same horizontal line with matching padding */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-2 pl-20 md:pl-23">
+          <div className="space-y-1">
+            {/* Icon box and Advisory Logs heading */}
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200 shrink-0">
+                <FileText size={24} />
+              </div>
+              <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">
+                Advisory Logs
+              </h2>
+            </div>
 
             <p className="text-xs text-slate-500 font-medium mt-1">
               Grouped by Session · {groupedBySession.length}{" "}
@@ -683,8 +698,9 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
             </p>
           </div>
 
+          {/* Search bar on the same horizontal line */}
           {isAdvisor ? (
-            <div className="relative w-full lg:w-auto">
+            <div className="relative w-full lg:w-[320px]">
               <Search
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
                 size={16}
@@ -699,7 +715,6 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
                 }
                 className="
                   w-full 
-                  sm:w-[320px]
                   pl-10 
                   pr-4 
                   py-3 
@@ -734,7 +749,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
       </div>
 
       {/* Session sections */}
-      <div className="space-y-8 w-full">
+      <div className="space-y-8 w-full md:pl-18">
         {groupedBySession.map((session) => (
           <div
             key={session.sessionLabel}
@@ -785,8 +800,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
           </div>
         ))}
       </div>
+    </motion.div>
     </div>
   );
 };
-
-
