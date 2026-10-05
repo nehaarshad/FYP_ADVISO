@@ -141,7 +141,7 @@ export default function AdvisoryNotes({ onBack, batchId }: AdvisoryNotesProps) {
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
-      className="relative min-h-screen w-full max-w-6.5xl mx-auto p-4 md:p-8 pb-10 -mt-6"
+      className="relative min-h-screen w-full max-w-6xl mx-auto p-4 md:p-8 pb-10 -mt-6"
     >
       {/* Header */}
       <div className="flex flex-col gap-4 mb-8">
