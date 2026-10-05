@@ -1,3 +1,7 @@
+
+// export default ChatArea;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React, {
@@ -18,6 +22,7 @@ import {
 
 import { ChatListItem } from "@/src/hooks/chatHook/chatType/chatTypes";
 import { Message } from "@/src/models/messagesModel";
+import { sessionManager } from "@/src/services/sessionManagement/sessionManager";
 
 interface ChatAreaProps {
   chat: ChatListItem | null;
@@ -51,7 +56,7 @@ interface ChatAreaProps {
 const ChatArea: React.FC<
   ChatAreaProps
 > = ({
-chat,
+  chat,
   messages,
   receiverId,
   loading,
@@ -67,6 +72,10 @@ chat,
   const scrollRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Get current logged-in advisor ID to reliably detect "my message"
+  const currentUser = sessionManager.getCurrentUser<any>();
+  const currentUserId = currentUser?.data?.id || currentUser?.id;
+
   useEffect(() => {
     if (!scrollRef.current) return;
 
@@ -76,7 +85,6 @@ chat,
     messages,
     typingUserId,
   ]);
-
 
   useEffect(() => {
     if (!chat) return;
@@ -90,11 +98,8 @@ chat,
     onMarkAsRead,
   ]);
 
-    const canSend = true;
-
   const handleSend = () => {
-    const cleanText =
-      input.trim();
+    const cleanText = input.trim();
 
     if (!cleanText) return;
 
@@ -128,20 +133,15 @@ chat,
       }, 1000);
   };
 
-  /*
-   * FILE
-   */
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file =
-      event.target.files?.[0];
+    const file = event.target.files?.[0];
 
     if (!file) return;
 
     try {
       setUploading(true);
-
       await onSendFile(file);
     } catch (error) {
       console.error(
@@ -154,22 +154,14 @@ chat,
     }
   };
 
-  /*
-   * FORMAT TIME
-   */
   const formatTime = (
     date?: string
   ) => {
     if (!date) return "";
 
-    const parsed =
-      new Date(date);
+    const parsed = new Date(date);
 
-    if (
-      Number.isNaN(
-        parsed.getTime()
-      )
-    ) {
+    if (Number.isNaN(parsed.getTime())) {
       return "";
     }
 
@@ -182,214 +174,167 @@ chat,
     );
   };
 
-  /*
-   * NO CHAT
-   */
+  /* NO CHAT SELECTED */
   if (!chat) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-white rounded-3xl border border-slate-100 shadow-sm">
-
-        <div className="w-14 h-14 bg-slate-50 rounded-full flex items-center justify-center mb-3">
+      <div className="h-full flex flex-col items-center justify-center bg-white rounded-3xl border border-slate-100 shadow-sm p-6 text-center">
+        <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
           <User
-            size={24}
-            className="opacity-20 text-[#1e3a5f]"
+            size={28}
+            className="text-amber-500"
           />
         </div>
-
-        <p className="text-[10px] font-bold uppercase tracking-widest text-[#1e3a5f]/30 text-center px-10">
-          Select a student from the list
-          <br />
-          to view conversation
+        <h3 className="text-[#1e3a5f] font-bold text-sm uppercase tracking-tight mb-1">
+          No Conversation Selected
+        </h3>
+        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest max-w-xs">
+          Choose a student from the inbox list to start or view messages
         </p>
-
       </div>
     );
   }
 
+  const initials = chat.name
+    ? chat.name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()
+    : "ST";
+
   return (
     <div className="h-full flex flex-col bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
 
-    <div className="px-6 py-4 border-b border-slate-50 bg-white shrink-0">
-        <div className="flex items-center gap-3">
+      {/* CHAT HEADER */}
+      <div className="px-6 py-3.5 border-b border-slate-100 bg-white shrink-0 flex items-center justify-between shadow-xs z-10">
+        <div className="flex items-center gap-3.5">
           {onBack && (
-            <button onClick={onBack} className="md:hidden p-2 bg-slate-50 rounded-full">
-              <ArrowLeft size={17} />
+            <button 
+              onClick={onBack} 
+              className="md:hidden p-2 bg-slate-50 hover:bg-slate-100 rounded-xl text-slate-600 transition-colors"
+            >
+              <ArrowLeft size={18} />
             </button>
           )}
 
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#1e3a5f] to-[#2c4c78] text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-sm">
+            {initials}
+          </div>
+
           <div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <h2 className="text-[#1e3a5f] font-bold text-[14px] uppercase tracking-tight">
-                {chat.name}
-              </h2>
-            </div>
-            <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-0.5 ml-4 opacity-70">
-               Semester {chat.semester}
+            <h2 className="text-[#1e3a5f] font-bold text-[13.5px] uppercase tracking-tight">
+              {chat.name}
+            </h2>
+            <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-0.5">
+              Semester {chat.semester || "N/A"}
             </p>
           </div>
         </div>
       </div>
 
-      {/* MESSAGES */}
+      {/* MESSAGES CONTAINER */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/30"
+        className="flex-1 overflow-y-auto p-6 space-y-3 bg-gradient-to-b from-slate-100/60 via-slate-50 to-slate-100/60 custom-scrollbar"
       >
-
         {loading ? (
           <div className="h-full flex items-center justify-center">
-
             <Loader2
-              size={25}
+              size={24}
               className="animate-spin text-[#1e3a5f]"
             />
-
           </div>
         ) : messages.length === 0 ? (
           <div className="h-full flex items-center justify-center">
-
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">
-              No messages yet
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-white/80 backdrop-blur-sm px-5 py-2.5 rounded-2xl shadow-xs border border-slate-200/60">
+              No messages yet. Send a message to start conversation!
             </p>
-
           </div>
         ) : (
-          messages.map(
-            (message) => {
-              const isMine = message.sender?.role == 'advisor'
-                  const uniqueKey = chat.chatId ? `chat-${chat.chatId}` : `user-${chat.id}`;
-        
-                 const senderName = typeof message.senderName === 'string' 
-    ? message.senderName 
-    : (message.sender?.sapid || 
-       message.sender?.Students?.[0]?.studentName || 
-       message.sender?.BatchAdvisors?.[0]?.advisorName || 
-       "SAP ID");
-              return (
+          messages.map((message) => {
+            // Check if message is sent by current advisor (via ID or role)
+            const senderId = message.senderId || message.sender?.id;
+            const role = message.sender?.role?.toLowerCase();
+            const isMine = (currentUserId && senderId === currentUserId) || role === 'advisor' || role === 'admin';
+
+            const uniqueKey = chat.chatId ? `chat-${chat.chatId}` : `user-${chat.id}`;
+
+            return (
+              <div
+                key={uniqueKey + "-" + message.id}
+                className={`flex w-full ${
+                  isMine ? "justify-end" : "justify-start"
+                }`}
+              >
                 <div
-                  key={
-                    uniqueKey + "-" + message.id
-                  }
-                  className={`flex ${
+                  className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl shadow-sm transition-all ${
                     isMine
-                      ? "justify-end"
-                      : "justify-start"
+                      ? "bg-[#1e3a5f] text-white rounded-br-xs" // Advisor (Blue)
+                      : "bg-white text-[#1e3a5f] border border-slate-200/80 rounded-bl-xs" // Student (White)
                   }`}
                 >
+                  {/* TEXT */}
+                  {message.text && (
+                    <p className="text-[13px] font-medium leading-snug break-words">
+                      {message.text}
+                    </p>
+                  )}
 
-                    
-
-                  <div
-                    className={`max-w-[75%] p-3 px-4 rounded-2xl flex flex-col shadow-sm ${
-                      isMine
-                        ? "bg-[#1e3a5f] text-white rounded-tr-none"
-                        : "bg-white text-[#1e3a5f] border border-slate-100 rounded-tl-none"
-                    }`}
-                  >
-
-<span
-  className={`text-[8px] font-bold uppercase  mt-2 self-start underline
-  ${
-                      isMine
-                        ? "text-amber-400"
-                        : "text-[#1e3a5f]   "    }
-                     `}
->
-  {isMine
-    ? senderName
-    :senderName}
-</span>
-                    {/* TEXT */}
-                    {message.text && (
-                      <p className="text-[12.5px] font-medium leading-relaxed break-words">
-                        {message.text}
-                      </p>
-                    )}
-
-                    {/* FILE */}
-                    {message.fileAttachment && (
-                      <a
-                        href={
-                          message.fileAttachment
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex items-center gap-2 mt-2 p-2 rounded-xl border ${
-                          isMine
-                            ? "border-white/20 bg-white/10"
-                            : "border-slate-100 bg-slate-50"
-                        }`}
-                      >
-
-                        <FileText
-                          size={16}
-                        />
-
-                        <span className="text-[9px] font-bold truncate">
-                          Attachment
-                        </span>
-
-                        <Download
-                          size={13}
-                          className="ml-auto"
-                        />
-
-                      </a>
-                    )}
-
-                    {/* TIME */}
-                    <span
-                      className={`text-[7px] font-bold uppercase opacity-80 mt-2 self-end ${
+                  {/* FILE ATTACHMENT */}
+                  {message.fileAttachment && (
+                    <a
+                      href={message.fileAttachment}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`flex items-center gap-2 mt-2 p-2 rounded-xl border transition-all ${
                         isMine
-                          ? "text-amber-400"
-                          : "text-slate-400"
+                          ? "border-white/20 bg-white/10 hover:bg-white/20 text-white"
+                          : "border-slate-200 bg-slate-50 hover:bg-slate-100 text-[#1e3a5f]"
                       }`}
                     >
-                      {formatTime(
-                        message.createdAt
-                      )}
+                      <FileText size={15} className="shrink-0" />
+                      <span className="text-[10px] font-bold truncate flex-1">
+                        Attachment File
+                      </span>
+                      <Download size={12} className="shrink-0 opacity-80" />
+                    </a>
+                  )}
+
+                  {/* TIME */}
+                  <div className="flex justify-end mt-1">
+                    <span
+                      className={`text-[8px] font-bold uppercase tracking-wider ${
+                        isMine ? "text-amber-300/80" : "text-slate-400"
+                      }`}
+                    >
+                      {formatTime(message.createdAt)}
                     </span>
-
                   </div>
-
                 </div>
-              );
-            }
-          )
+              </div>
+            );
+          })
         )}
 
-        {/* TYPING */}
+        {/* TYPING INDICATOR */}
         {typingUserId && (
           <div className="flex justify-start">
-
-            <div className="bg-white border border-slate-100 rounded-2xl rounded-tl-none px-4 py-3">
-
-              <div className="flex gap-1">
-
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" />
-
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:150ms]" />
-
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:300ms]" />
-
+            <div className="bg-white border border-slate-200/80 rounded-2xl rounded-bl-xs px-4 py-2.5 shadow-sm">
+              <div className="flex gap-1.5 items-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce [animation-delay:150ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-bounce [animation-delay:300ms]" />
               </div>
-
             </div>
-
           </div>
         )}
-
       </div>
 
-  {/* INPUT - Always enabled for advisors */}
-      <div className="p-4 bg-white border-t border-slate-50 shrink-0">
-        <div className="flex gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-100 items-center focus-within:border-amber-400 transition-all">
-          <label className="p-2 cursor-pointer text-slate-400 hover:text-[#1e3a5f]">
+      {/* INPUT BAR */}
+      <div className="p-4 bg-white border-t border-slate-100 shrink-0 z-10 shadow-sm">
+        <div className="flex gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200/80 items-center focus-within:border-amber-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-amber-50/50 transition-all shadow-xs">
+          
+          <label className="p-2 cursor-pointer text-slate-400 hover:text-[#1e3a5f] transition-colors rounded-xl hover:bg-slate-200/50">
             {uploading ? (
-              <Loader2 size={16} className="animate-spin" />
+              <Loader2 size={18} className="animate-spin text-amber-500" />
             ) : (
-              <Paperclip size={16} />
+              <Paperclip size={18} />
             )}
             <input
               type="file"
@@ -401,7 +346,7 @@ chat,
 
           <input
             type="text"
-            placeholder={`Reply to ${chat.name}...`}
+            placeholder={`Reply to ${chat.name}...` }
             value={input}
             onChange={(e) => handleInputChange(e.target.value)}
             onKeyDown={(e) => {
@@ -410,15 +355,15 @@ chat,
                 handleSend();
               }
             }}
-            className="flex-1 bg-transparent text-[#1e3a5f] px-2 py-1.5 outline-none placeholder:text-slate-400 text-[12.5px] font-medium"
+            className="flex-1 bg-transparent text-[#1e3a5f] px-2 py-1.5 outline-none placeholder:text-slate-400 text-[13px] font-medium"
           />
 
           <button
             onClick={handleSend}
             disabled={!input.trim()}
-            className="bg-[#1e3a5f] p-2.5 rounded-xl text-white hover:bg-amber-500 active:scale-90 transition-all shadow-lg disabled:opacity-40"
+            className="bg-[#1e3a5f] p-2.5 rounded-xl text-white hover:bg-amber-500 active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:hover:bg-[#1e3a5f] cursor-pointer"
           >
-            <Send size={14} />
+            <Send size={15} />
           </button>
         </div>
       </div>

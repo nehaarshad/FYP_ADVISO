@@ -1,21 +1,20 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from 'react';
 import { 
-  Plus, Clock, FileText, Tag, X, Check, Edit2, ArrowLeft, 
-  AlertCircle
+  Plus, X, ArrowLeft, AlertCircle, StickyNote 
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { useAdvisorNotes } from '@/src/hooks/advisorNotesHook/useAdvisorNotes';
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import { AdvisorNote } from '@/src/models/AdvisorNotes';
 import { NoteFormData } from '@/src/hooks/advisorNotesHook/types/advisorNoteType';
 import { LoadingState } from '../states/loadingState';
 import { NoteCard } from './noteCard';
-import { EmptyState } from '../states/emptystate';
 import { NoteFormModal } from './noteFormModal';
 import { DeleteConfirmModal } from './deleteNote';
 import { NotesEmptyState } from './emptyState';
-
 
 interface AdvisoryNotesProps {
   onBack: () => void;
@@ -116,7 +115,7 @@ export default function AdvisoryNotes({ onBack, batchId }: AdvisoryNotesProps) {
   const handleDeleteConfirm = async () => {
     if (!noteToDelete) return;
 
-console.log(' deleting note:', noteToDelete.id);
+    console.log('deleting note:', noteToDelete.id);
     const response = await removeNote(noteToDelete.id);
     
     if (!response.success) {
@@ -139,7 +138,11 @@ console.log(' deleting note:', noteToDelete.id);
   }
 
   return (
-    <div className="relative min-h-screen w-full max-w-[1200px] mx-auto p-4 md:p-6">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      className="relative min-h-screen w-full max-w-6.5xl mx-auto p-4 md:p-8 pb-10 -mt-6"
+    >
       {/* Header */}
       <div className="flex flex-col gap-4 mb-8">
         <button 
@@ -149,16 +152,22 @@ console.log(' deleting note:', noteToDelete.id);
           <ArrowLeft size={20} />
         </button>
         
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-xl md:text-2xl font-bold text-[#1e3a5f] tracking-tighter uppercase">
-              ADVISOR NOTES
-            </h2>
-            {batchId && (
-              <p className="text-sm text-gray-500 mt-1">Filtering by batch: {batchId}</p>
-            )}
+        {/* Heading ko mazeed right side par shift karne ke liye padding barha di hai */}
+        <div className="flex items-center justify-between mb-2 pl-20 md:pl-23">
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200">
+              <StickyNote size={24} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">
+                Advisor Notes
+              </h2>
+              <p className="text-xs font-medium text-slate-400 mt-0.5">
+                {batchId ? `Filtering by batch: ${batchId}` : "Advisor add their notes here"}
+              </p>
+            </div>
           </div>
-          
+
           <button
             onClick={handleAddNote}
             className="bg-[#1e3a5f] text-white px-4 md:px-6 py-2.5 rounded-xl font-bold text-[10px] md:text-[12px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#2a4a6f] transition-colors shadow-lg"
@@ -184,7 +193,7 @@ console.log(' deleting note:', noteToDelete.id);
       {notes.length === 0 && !isLoading ? (
         <NotesEmptyState onAddNote={handleAddNote} />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 ml-1 md:pl-18">
           {notes.map((note) => (
             <NoteCard
               key={note.id}
@@ -202,7 +211,7 @@ console.log(' deleting note:', noteToDelete.id);
         onClose={handleFormClose}
         onSave={handleFormSave}
         initialData={editingNote ? {
-          id:editingNote.id,
+          id: editingNote.id,
           title: editingNote.title,
           content: editingNote.noteContent,
         } : undefined}
@@ -218,6 +227,7 @@ console.log(' deleting note:', noteToDelete.id);
         onCancel={handleDeleteCancel}
         isDeleting={isDeleting}
       />
-    </div>
+    </motion.div>
   );
 }
+
