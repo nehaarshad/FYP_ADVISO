@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React from "react";
@@ -75,13 +77,20 @@ const ChatStudentList: React.FC<
 
           </div>
         ) : (
-          chats.map((chat) => {
+          chats.map((chat, index) => {
 
+            // chatId aur id dono ko check karein ge taake 4th student ke baad bhi border match ho jaye
             const isActive =
-              selectedChatId ===
-              chat.chatId;
+              selectedChatId !== null &&
+              selectedChatId !== undefined &&
+              (
+                Number(selectedChatId) === Number(chat.chatId) ||
+                Number(selectedChatId) === Number(chat.id) ||
+                selectedChatId === chat.chatId ||
+                selectedChatId === chat.id
+              );
 
-                const uniqueKey = chat.chatId ? `chat-${chat.chatId}` : `user-${chat.id}`;
+            const uniqueKey = chat.chatId ? `chat-${chat.chatId}` : `user-${chat.id}-${index}`;
         
             return (
               <button
@@ -108,9 +117,8 @@ const ChatStudentList: React.FC<
                   <div className="flex items-center justify-between gap-2">
 
                     <p className="font-bold text-[12.5px] text-[#1e3a5f] leading-tight truncate">
-                          {chat.name ||
-                              "Student"}
-                        </p>
+                      {chat.name || "Student"}
+                    </p>
 
                     {!!chat.unreadCount && (
                       <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-white text-[8px] font-bold">
@@ -120,10 +128,9 @@ const ChatStudentList: React.FC<
 
                   </div>
 
-                  {/* LAST MESSAGE */}
+                  {/* SEMESTER */}
                   <p className="text-[9px] text-slate-400 truncate">
-                    {chat.lastMessageText ||
-                      "No messages yet"}
+                    Semester: {chat.semester || "N/A"}
                   </p>
 
                 </div>
