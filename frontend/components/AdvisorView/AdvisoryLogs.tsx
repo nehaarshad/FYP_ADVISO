@@ -680,7 +680,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
         {/* Heading & Search on the same horizontal line with matching padding */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-2 pl-20 md:pl-23">
           <div className="space-y-1">
-            {/* Icon box and Advisory Logs heading */}
+
             <div className="flex items-center gap-4">
               <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200 shrink-0">
                 <FileText size={24} />
@@ -690,7 +690,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
               </h2>
             </div>
 
-            <p className="text-xs text-slate-500 font-medium mt-1">
+            <p className="text-xs text-slate-500 font-medium mt-1 pl-16">
               Grouped by Session · {groupedBySession.length}{" "}
               session{groupedBySession.length !== 1 ? "s" : ""} ·{" "}
               {filteredLogs.length} total record
