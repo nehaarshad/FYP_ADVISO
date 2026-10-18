@@ -53,6 +53,3 @@ export function RoadmapCard({ roadmap, onView, onAssign }: RoadmapCardProps) {
     </div>
   );
 }
-
-
-

@@ -167,15 +167,23 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
           </button>
         )}
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1e3a5f] tracking-tight">
-              System Recommendations
-            </h2>
-            <p className="text-xs text-slate-700 font-medium mt-0.5">
-              {groupedBySession.length} session{groupedBySession.length !== 1 ? "s" : ""} available
-            </p>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+  <div className="flex items-center gap-4 md:ml-10">
+    {/* Icon Container */}
+    <div className="h-11 w-11 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200 shrink-0">
+      <Sparkles size={22} />
+    </div>
+
+    {/* Title & Subtitle */}
+    <div>
+      <h2 className="text-xl sm:text-2xl font-extrabold text-[#1e3a5f] tracking-tight">
+        System Recommendations
+      </h2>
+      <p className="text-xs text-slate-700 font-medium mt-0.5">
+        {groupedBySession.length} session{groupedBySession.length !== 1 ? "s" : ""} available
+      </p>
+    </div>
+  </div>
 
           <div className="relative w-full sm:w-auto">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" size={15} />

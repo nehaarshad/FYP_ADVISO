@@ -186,7 +186,7 @@ export default function LoginPage() {
               <UniversalInput
                 label="SAP ID"
                 type="text"
-                placeholder="e.g. 49100"
+                placeholder="*****"
                 value={sapId}
                 onChange={setSapId}
                 Icon={Mail}

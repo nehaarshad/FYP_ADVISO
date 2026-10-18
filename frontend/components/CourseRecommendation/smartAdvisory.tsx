@@ -59,20 +59,39 @@ export default function SmartAdvisory({
     }
   };
 
-  if (generateError) {
-    return (
-      <div className="w-full flex flex-col items-center justify-center py-24 px-4">
-        <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mb-4">
-          <AlertCircle size={28} className="text-red-400" />
+
+   if (generateError) {
+  return (
+    <div className="w-full min-h-[500px] flex flex-col items-center justify-center py-24 px-4 font-sans">
+      <div className="w-full max-w-lg bg-white border border-slate-100 rounded-[2.5rem] p-10 text-center shadow-xl shadow-slate-200/50 flex flex-col items-center">
+        
+        {/* Icon Container */}
+        <div className="w-16 h-16 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-center mb-5 shadow-inner">
+          <AlertCircle size={32} className="text-red-500" />
         </div>
-        <p className="text-sm font-bold text-[#1e3a5f] uppercase tracking-tight mb-1">Generation Failed</p>
-        <p className="text-[10px] text-slate-400 font-bold text-center max-w-xs mb-6">{generateError}</p>
-        <button onClick={onBack} className="flex items-center gap-2 text-[10px] font-bold uppercase text-slate-500 hover:text-[#1e3a5f]">
-          <ArrowLeft size={14} /> Go Back
+
+        {/* Heading */}
+        <p className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tight mb-2">
+          Generation Failed
+        </p>
+
+        {/* Error Message */}
+        <p className="text-xs text-slate-600 font-medium leading-relaxed max-w-sm mb-8">
+          {generateError}
+        </p>
+
+        {/* Action Button */}
+        <button 
+          onClick={onBack} 
+          className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e3a5f] text-white text-xs font-bold uppercase tracking-wider rounded-2xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-md shadow-[#1e3a5f]/10 active:scale-95"
+        >
+          <ArrowLeft size={16} /> Go Back
         </button>
+
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   if (!llmRecommendations || allRecommendedCourses.length === 0) {
     return (

@@ -6,7 +6,7 @@ import { formatTime12, formatDuration } from './types';
 
 const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-// Case-insensitive aur trim check lagane se doosre dinon ka masla bhi hal ho jaye ga
+//Case-insensitive aur trim check lagane se doosre dinon ka masla bhi hal ho jaye ga
 const isSameWeekday = (iso: string, day: string) => {
   if (!iso || !day) return false;
   const selectedDayName = DAY_NAMES[new Date(iso + 'T00:00:00').getDay()];
