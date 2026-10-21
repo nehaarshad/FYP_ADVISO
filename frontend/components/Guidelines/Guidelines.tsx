@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Info,
+  Key, // <-- Password wala icon use kiya hai
   ChevronDown,
   PlayCircle,
   CheckCircle2,
@@ -12,6 +12,8 @@ import {
   AlertTriangle,
   Filter,
   Search,
+  Plus,
+  Upload,
 } from "lucide-react";
 import { useUserProfile } from "@/src/hooks/profileHook/useProfile";
 import { useDegreeGuidelines } from "@/src/hooks/degreeGuidlineHook/degreeGuidlineHook";
@@ -218,7 +220,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in duration-500">
       
-      {/* 1. Back Button (Bahar) */}
+      {/* 1. Back Button */}
       <button
         onClick={onBack}
         className="mb-4 p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 hover:bg-slate-50 transition-colors"
@@ -229,20 +231,45 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
       {/* 2. SINGLE MAIN CARD */}
       <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm flex flex-col min-h-[500px]">
         
-        {/* HEADER */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase flex items-center gap-2">
-              <Info className="text-[#1e3a5f]" size={24} /> 
-              DEGREE GUIDELINES
-            </h2>
-            <p className="text-xs text-slate-400 mt-1">
-              {isStudent ? `For ${programName}` : isAdvisor ? `Advisor View - ${programName}` : "Manage academic guidelines and requirements"}
-            </p>
+        {/* HEADER SECTION - EXACT MATCH WITH MANAGE PASSWORD */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-slate-100 pb-6">
+          <div className="flex items-center gap-4">
+            
+            {/* Dark Blue Box + Yellow Key Icon */}
+            <div className="w-14 h-14 bg-[#1e3a5f] rounded-2xl flex items-center justify-center shrink-0 shadow-md">
+              <Key size={24} className="text-[#FDB813]" />
+            </div>
+            
+            <div>
+              <h2 className="text-2xl font-bold text-[#1e3a5f]">
+                Degree Guidelines
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">
+                {isStudent ? `For ${programName}` : isAdvisor ? `Advisor View - ${programName}` : "Manage academic guidelines and requirements"}
+              </p>
+            </div>
           </div>
+
+          {/* Buttons - Admin Only */}
+          {isAdmin && (
+            <div className="flex gap-2">
+              <button 
+                onClick={() => console.log("Add Guideline clicked")}
+                className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#152a45] transition-all"
+              >
+                <Plus size={16} /> Add Guideline
+              </button>
+              <button 
+                onClick={() => console.log("Upload Video clicked")}
+                className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#152a45] transition-all"
+              >
+                <Upload size={16} /> Upload Video
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* FILTER SECTION (Exact Match with Course Offerings) */}
+        {/* FILTER SECTION */}
         <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
           <div className="flex items-center gap-2 mb-3">
             <Filter size={16} className="text-[#1e3a5f]" />
@@ -252,7 +279,6 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
           </div>
           
           <div className="flex flex-col md:flex-row gap-3">
-            {/* Search Input */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <input 
@@ -263,8 +289,6 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
                 className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
               />
             </div>
-            
-            {/* Dropdown */}
             <select
               title="Filter Program"
               className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
@@ -287,19 +311,32 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
         ) : (
           <div className="flex-1 flex flex-col gap-6">
             
-            {/* VIDEO SECTION (If any) */}
+            {/* VIDEO SECTION */}
             {videoGuides.length > 0 && activeVideo && (
-              <div className="bg-[#1e3a5f] rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6">
-                <div className="w-full md:w-[300px] h-[160px] bg-black rounded-xl overflow-hidden shrink-0">
+              <div className="bg-[#1e3a5f] rounded-2xl p-5 flex flex-col md:flex-row items-center gap-6 shadow-md w-full max-w-3xl">
+                <div className="w-full md:w-[280px] h-[150px] bg-black rounded-xl overflow-hidden shrink-0">
                   {activeVideo.videoUrl ? (
-                    <VideoPlayer videoUrl={activeVideo.videoUrl} title={activeVideo.title} autoPlay={false} showControls={true} />
+                    <VideoPlayer 
+                      videoUrl={activeVideo.videoUrl} 
+                      title={activeVideo.title} 
+                      autoPlay={false} 
+                      showControls={true} 
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <div className="flex items-center justify-center w-full h-full"><PlayCircle size={40} className="text-slate-600" /></div>
+                    <div className="flex items-center justify-center w-full h-full">
+                      <PlayCircle size={40} className="text-slate-600" />
+                    </div>
                   )}
                 </div>
-                <div className="flex-1 text-white">
-                  <h3 className="text-lg font-bold uppercase mb-2">{activeVideo.title}</h3>
-                  <p className="text-white/70 text-xs leading-relaxed">{activeVideo.desc}</p>
+
+                <div className="flex-1 text-white text-center md:text-left">
+                  <h3 className="text-base md:text-lg font-bold mb-2 leading-tight">
+                    {activeVideo.title}
+                  </h3>
+                  <p className="text-white/70 text-xs md:text-sm leading-relaxed line-clamp-3">
+                    {activeVideo.desc}
+                  </p>
                 </div>
               </div>
             )}
