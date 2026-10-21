@@ -4,15 +4,13 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { Filter } from 'lucide-react'; // Only Filter icon needed now
 import { useRoadmap } from '@/src/hooks/contentUploader/roadmapUploader/roadmapHook';
 import { usePrograms } from '@/src/hooks/programHook/useProgram';
 import { RoadmapDetailView } from './RoadmapView';
-import { RoadmapHeader } from './header';
 import { RoadmapUploadForm } from './uploadRoadmap';
-import { RoadmapFilter } from './filterRoadmap';
 import { RoadmapCard } from './roadmapCard';
 import { AssignBatchModal } from './assignToBatch';
-import { EmptyState } from '../states/emptystate';
 import { LoadingState } from '../states/loadingState';
 import { Roadmap, UploadData, AssignData } from './types';
 
@@ -87,17 +85,17 @@ export function RoadmapSection() {
     }
   };
 
-const handleAssign = async (data: AssignData) => {
-  const result = await assignRoadmapToBatch(data);
-  
-  if (result.success) {
-    setShowAssignModal(false);
-    setSelectedRoadmapForAssign(null);
-    await fetchProgramRoadmaps(selectedProgram, true);
-  }
-  
-  return result; // Return the result so the modal can show the message
-};
+  const handleAssign = async (data: AssignData) => {
+    const result = await assignRoadmapToBatch(data);
+    
+    if (result.success) {
+      setShowAssignModal(false);
+      setSelectedRoadmapForAssign(null);
+      await fetchProgramRoadmaps(selectedProgram, true);
+    }
+    
+    return result; 
+  };
 
   const handleViewRoadmap = (roadmap: Roadmap) => {
     setSelectedRoadmap(roadmap);
@@ -119,87 +117,123 @@ const handleAssign = async (data: AssignData) => {
 
   return (
     <>
-      <div className="space-y-8 animate-in fade-in zoom-in-95 duration-300">
-        {/* Header */}
-        <RoadmapHeader 
-          showUploadForm={showUploadForm}
-          onToggleUpload={() => setShowUploadForm(!showUploadForm)}
-        />
+      <div className="w-full max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in zoom-in-95 duration-300">
+        
+        {/* SINGLE MAIN CARD - EXACT MATCH WITH COURSE OFFERINGS */}
+        <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm flex flex-col min-h-[500px]">
+          
+          {/* HEADER SECTION */}
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase">
+                ROADMAP MANAGEMENT
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">
+                View, filter and manage academic roadmaps
+              </p>
+            </div>
 
-        {/* Upload Form */}
-        <AnimatePresence>
-          {showUploadForm && (
-            <RoadmapUploadForm
-              programs={programs}
-              isLoading={isLoading}
-              uploadProgress={uploadProgress}
-              onUpload={handleUpload}
-              onCancel={() => {
-                setShowUploadForm(false);
-              }}
-            />
-          )}
-        </AnimatePresence>
+            <button 
+              onClick={() => setShowUploadForm(!showUploadForm)}
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#FDB813] transition-all"
+            >
+              Upload New Roadmap
+            </button>
+          </div>
 
-        {/* Filter */}
-        <RoadmapFilter
-          programs={programs}
-          selectedProgram={selectedProgram}
-          onProgramChange={handleProgramChange}
-          error={error}
-          onClearError={clearError}
-          isSwitchingProgram={isSwitchingProgram}
-        />
+          {/* UPLOAD FORM (Shows when clicked) */}
+          <AnimatePresence>
+            {showUploadForm && (
+              <div className="mb-6">
+                <RoadmapUploadForm
+                  programs={programs}
+                  isLoading={isLoading}
+                  uploadProgress={uploadProgress}
+                  onUpload={handleUpload}
+                  onCancel={() => setShowUploadForm(false)}
+                />
+              </div>
+            )}
+          </AnimatePresence>
 
-        {/* No Program State */}
-        {!selectedProgram && programs.length === 0 && (
-          <EmptyState
-            title="No programs available"
-            message="Please add a program first to upload roadmaps"
-          />
-        )}
-
-        {/* Roadmaps List */}
-        {selectedProgram && (
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div className="p-6 border-b border-slate-100">
-              <h3 className="font-bold uppercase  text-sm text-[#1e3a5f]">
-                {selectedProgram} Roadmaps ({uniqueRoadmaps.length})
+          {/* FILTER SECTION - EXACT MATCH WITH COURSE OFFERINGS */}
+          <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
+            <div className="flex items-center gap-2 mb-3">
+              <Filter size={16} className="text-[#1e3a5f]" />
+              <h3 className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">
+                Filter Roadmaps
               </h3>
             </div>
             
-            <div className="divide-y divide-slate-50">
-              {uniqueRoadmaps.length === 0 && !isLoading && !isSwitchingProgram ? (
-                <EmptyState
-                  title={`No roadmaps found for ${selectedProgram}`}
-                  message="Upload a roadmap to get started"
-                />
-              ) : (
-                uniqueRoadmaps.map((roadmap) => (
-                  <RoadmapCard
-                    key={roadmap.id}
-                    roadmap={roadmap}
-                    onView={() => handleViewRoadmap(roadmap)}
-                    onAssign={() => {
-                      setSelectedRoadmapForAssign(roadmap);
-                      setShowAssignModal(true);
-                    }}
-                  />
-                ))
-              )}
+            <div className="flex flex-wrap gap-3">
+              <select
+                title="Select Program"
+                value={selectedProgram}
+                onChange={(e) => handleProgramChange(e.target.value)}
+                className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
+              >
+                {programs.map((p: any) => (
+                  <option key={p.id} value={p.programName}>{p.programName}</option>
+                ))}
+              </select>
             </div>
+            
+            {error && (
+              <p className="text-red-500 text-xs mt-2">{error}</p>
+            )}
           </div>
-        )}
+
+          {/* CONTENT AREA */}
+          <div className="flex-1 mt-2">
+            {!selectedProgram && programs.length === 0 && (
+              <div className="text-center py-12 text-slate-400">
+                No programs available. Please add a program first.
+              </div>
+            )}
+
+            {selectedProgram && (
+              <div>
+                {/* List Heading */}
+                <div className="mb-4">
+                  <h3 className="text-sm font-bold text-[#1e3a5f] uppercase tracking-wider">
+                    {selectedProgram} Roadmaps ({uniqueRoadmaps.length})
+                  </h3>
+                </div>
+                
+                {/* Empty State or Cards */}
+                {uniqueRoadmaps.length === 0 && !isLoading && !isSwitchingProgram ? (
+                  <div className="text-center py-12 text-slate-400">
+                    No roadmaps found for {selectedProgram.toLowerCase()}
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {uniqueRoadmaps.map((roadmap) => (
+                      <RoadmapCard
+                        key={roadmap.id}
+                        roadmap={roadmap}
+                        onView={() => handleViewRoadmap(roadmap)}
+                        onAssign={() => {
+                          setSelectedRoadmapForAssign(roadmap);
+                          setShowAssignModal(true);
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+        </div>
       </div>
 
-      {/* Detail Modal */}
+      {/* Modals */}
       <RoadmapDetailView
         isOpen={showDetailView}
         roadmap={selectedRoadmap}
         onClose={() => setShowDetailView(false)}
       />
 
-      {/* Assign Modal */}
       <AssignBatchModal
         isOpen={showAssignModal}
         roadmap={selectedRoadmapForAssign}
