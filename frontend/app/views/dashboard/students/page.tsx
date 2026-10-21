@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 
@@ -15,16 +16,17 @@ import { Sidebar } from "@/components/navbars/route";
 import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
 import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
 import StudentChat from "../../../../components/Chat/StudentChat"; 
-import { AdvisorRemarks } from "../../../../components/StudentDetails/AdvisorRemarks";
 import { BatchTimetablePage } from "../../../../components/Timetable/Timetable";
 import { RoadmapDetailView } from "../../../../components/Roadmap/RoadmapView";
-import { CompleteCourseDashboard } from "../../../../components/CourseRecommendation/CompleteCourseDashboard";
+
 // ===== IMPORT YOUR HOOKS =====
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useTranscript } from '@/src/hooks/transcriptHook/transcriptHokk';
 import { useBatchMeetings } from '@/src/hooks/batchMeetingHook/useBatchMeetings'; 
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
 import Guidelines from "@/components/Guidelines/Guidelines";
+import { AdvisoryLogs } from "@/components/AdvisorView/AdvisoryLogs";
+import StudentRecommendationView from "@/components/CourseRecommendation/systemRecommendationView";
 
 // Helper function to format 24h time ("11:00:00") to 12h AM/PM format ("11:00 AM")
 const formatTimeTo12Hour = (timeStr: string) => {
@@ -40,8 +42,6 @@ const formatTimeTo12Hour = (timeStr: string) => {
   
   return `${formattedHours}:${minutes} ${period}`;
 };
-import { AdvisoryLogs } from "@/components/AdvisorView/AdvisoryLogs";
-import StudentRecommendationView from "@/components/CourseRecommendation/systemRecommendationView";
 
 export default function StudentDashboard() {
   const [mounted, setMounted] = useState(false);
@@ -114,8 +114,8 @@ export default function StudentDashboard() {
     
     return {
       id: student.id,
-      studentName: student.studentName  || 'Student',
-      email: student.email ,
+      studentName: student.studentName || 'Student',
+      email: student.email,
       sapid: student.User?.sapid,
       batch: student.BatchModel?.batchName || 'N/A',
       batchYear: student.BatchModel?.batchYear || 'N/A',
@@ -134,12 +134,12 @@ export default function StudentDashboard() {
     };
   }, [currentStudent, getCGPA, getTotalEarnedCredits]);
 
-  // Updated Meeting Logic: Sabse qareeb ki (nearest future) date wali meeting uthane ke liye
+  // Meeting Logic
   const upcomingMeeting = useMemo(() => {
     if (!meetings || !Array.isArray(meetings) || meetings.length === 0) return null;
     
     const activeMeetings = meetings.filter(
-      (m:any) => {
+      (m: any) => {
         const s = m.status?.toLowerCase()?.trim();
         return s !== 'completed' && s !== 'cancelled';
       }
@@ -180,7 +180,7 @@ export default function StudentDashboard() {
       return;
     } else if (target === "guidelines") {
       normalizedView = "Guidelines";
-    } else if (target === "systemrec" ) {
+    } else if (target === "systemrec") {
       normalizedView = "systemRec";
     } else {
       normalizedView = tab.charAt(0).toUpperCase() + tab.slice(1);
@@ -203,10 +203,10 @@ export default function StudentDashboard() {
 
   if (!mounted || studentsLoading || (currentStudentId && !studentData && !studentsLoading)) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
         <div className="text-center">
           <Loader2 size={48} className="animate-spin text-[#1e3a5f] mx-auto mb-4" />
-          <p className="text-gray-600 font-medium">Loading your dashboard...</p>
+          <p className="text-slate-700 font-semibold text-base">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -214,13 +214,13 @@ export default function StudentDashboard() {
 
   if (studentsError || !studentData) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="text-center bg-red-50 p-8 rounded-2xl max-w-md">
-          <p className="text-red-600 font-bold mb-2">Error loading profile</p>
-          <p className="text-red-500 text-sm">{studentsError || "Student not found"}</p>
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <div className="text-center bg-red-50 p-8 rounded-2xl max-w-md border border-red-200">
+          <p className="text-red-700 font-bold text-base mb-2">Error loading profile</p>
+          <p className="text-red-600 text-sm font-medium">{studentsError || "Student not found"}</p>
           <button 
             onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-bold"
+            className="mt-4 px-5 py-2.5 bg-red-600 text-white rounded-xl text-sm font-bold shadow-sm hover:bg-red-700 transition-colors"
           >
             Try Again
           </button>
@@ -253,71 +253,74 @@ export default function StudentDashboard() {
         />
       </div>
 
-      <main className="flex-1 flex flex-col min-w-0 bg-[#f8fafc]">
-        
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
         {/* HEADER */}
-        <header className="h-20 bg-white border-b border-slate-200 px-4 md:px-10 flex items-center justify-between sticky top-0 z-30">
-          <div className="flex items-center gap-4 flex-1">
+        <header className="h-20 bg-white border-b border-slate-200 px-4 md:px-10 flex items-center justify-between flex-shrink-0 z-30 shadow-xs">
+          <div className="flex items-center gap-4">
             <button 
-              title="btn"
+              type="button"
+              title="Open Menu"
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
+              className="lg:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
             >
               <Menu size={24} />
             </button>
+            <h1 className="text-xl md:text-2xl font-extrabold text-[#1e3a5f] tracking-tight">
+              Student Dashboard
+            </h1>
           </div>
         </header>
 
         {/* CONTENT AREA */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth outline-none">
-          <div className="max-w-6xl mx-auto p-5 md:p-10 w-full">
+        <main className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth outline-none bg-[#f8fafc]">
+          <div className="max-w-7xl mx-auto p-6 md:p-10 w-full">
             
             {/* OVERVIEW VIEW */}
             {view === "Overview" && (
-              <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500">
+              <div className="space-y-7 md:space-y-9 animate-in fade-in duration-500">
                 
-                {/* STAT CARDS */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                {/* 4 STATIC STAT CARDS */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
                   <StatCard 
-                    label="Batch #" 
-                    value={`${studentData.batch} - ${studentData.batchYear}`}
-                    icon={<GraduationCap size={22}/>} 
+                    label="Batch" 
+                    value={`${studentData.batch} ${studentData.batchYear}`}
+                    icon={<GraduationCap size={25}/>} 
                   />
 
                   <StatCard 
                     label="Status" 
                     value={`${studentData.status}`} 
-                    icon={<CheckCircle2 size={22}/>} 
+                    icon={<CheckCircle2 size={25}/>} 
                   />
                   
                   <StatCard 
                     label="Current CGPA" 
                     value={studentData.cgpa || "0.00"} 
-                    icon={<Target size={22}/>} 
+                    icon={<Target size={25}/>} 
                   />
                   
                   <StatCard 
                     label="Upcoming Meeting" 
                     value={(
-                      <div className="flex flex-col gap-1 w-full overflow-hidden">
+                      <div className="flex flex-col gap-1.5 w-full overflow-hidden">
                         {upcomingMeeting ? (
                           <>
                             <div className="flex items-center justify-between gap-1">
                               <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e3a5f] truncate">
-                                <Calendar size={13} className="text-amber-500 shrink-0" />
+                                <Calendar size={14} className="text-amber-600 shrink-0" />
                                 <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
                               </div>
-                              <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-bold shrink-0 ${
-                                upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-50 text-blue-600' :
-                                upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-50 text-emerald-600' :
-                                upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-50 text-red-600' :
-                                'bg-amber-50 text-amber-600'
+                              <span className={`text-[10px] px-2 py-0.5 rounded font-bold capitalize shrink-0 ${
+                                upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                                upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-100 text-emerald-800' :
+                                upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-100 text-red-800' :
+                                'bg-amber-100 text-amber-900'
                               }`}>
                                 {upcomingMeeting.status || 'Scheduled'}
                               </span>
                             </div>
-                            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
-                              <Clock size={12} className="text-amber-500 shrink-0" />
+                            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 truncate">
+                              <Clock size={13} className="text-amber-600 shrink-0" />
                               <span className="truncate">
                                 {upcomingMeeting.day ? `${upcomingMeeting.day} ` : ''} 
                                 {upcomingMeeting.startTime ? `(${formatTimeTo12Hour(upcomingMeeting.startTime)} - ${formatTimeTo12Hour(upcomingMeeting.endTime)})` : ''}
@@ -326,32 +329,32 @@ export default function StudentDashboard() {
                           </>
                         ) : (
                           <div className="flex items-center gap-1.5 py-1">
-                            <Clock size={12} className="text-amber-500 shrink-0" />
-                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">To be scheduled</span>
+                            <Clock size={14} className="text-amber-600 shrink-0" />
+                            <span className="text-xs font-semibold text-slate-500">To be scheduled</span>
                           </div>
                         )}
                       </div>
                     )} 
-                    icon={<Clock size={22}/>} 
-                    color="text-orange-500"
+                    icon={<Clock size={25}/>} 
+                    color="text-orange-600"
                   />
                 </div>
 
-                {/* DEGREE COMPLETION */}
-                <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-                  <h3 className="text-[11px] font-bold text-[#1e3a5f] uppercase tracking-widest mb-6 border-l-4 border-[#FDB813] pl-3">
+                {/* DEGREE COMPLETION SECTION */}
+                <div className="bg-white p-8 md:p-10 rounded-[2.2rem] border border-slate-200/80 shadow-xs">
+                  <h3 className="text-sm md:text-base font-extrabold text-[#1e3a5f] mb-6 border-l-4 border-[#FDB813] pl-3">
                     Degree Completion - {studentData.department}
                   </h3>
                   <div className="space-y-6">
-                    <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate mr-2">
-                        {studentData.completedCredits} of {studentData.totalCredits} Credits Completed
+                    <div className="flex justify-between items-end gap-3 flex-wrap">
+                      <span className="text-sm md:text-base font-semibold text-slate-700 truncate">
+                        {studentData.completedCredits} of {studentData.totalCredits} credits completed
                       </span>
-                      <span className="text-2xl md:text-3xl font-bold text-[#1e3a5f] tracking-tighter">
+                      <span className="text-3xl md:text-4xl font-black text-[#1e3a5f] tracking-tight">
                         {Math.round(completionPercentage)}%
                       </span>
                     </div>
-                    <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden border border-slate-50">
+                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60 p-0.5">
                       <motion.div 
                         initial={{ width: 0 }} 
                         animate={{ width: `${completionPercentage}%` }} 
@@ -363,11 +366,11 @@ export default function StudentDashboard() {
                 </div>
 
                 {/* ACTION CARDS */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <ActionCard icon={<BookOpen size={24}/>} label="Recommendations" onClick={() => navigateTo("Recommendations")} />
-                  <ActionCard icon={<Map size={24}/>} label="Roadmap" onClick={() => navigateTo("Roadmap")} />
-                  <ActionCard icon={<FileText size={24}/>} label="My Transcript" onClick={() => navigateTo("Transcript")} />
-                  <ActionCard icon={<Calendar size={24}/>} label="Timetable" onClick={() => navigateTo("Timetable")} />
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
+                  <ActionCard icon={<BookOpen size={28}/>} label="Recommendations" onClick={() => navigateTo("Recommendations")} />
+                  <ActionCard icon={<Map size={28}/>} label="Roadmap" onClick={() => navigateTo("Roadmap")} />
+                  <ActionCard icon={<FileText size={28}/>} label="My Transcript" onClick={() => navigateTo("Transcript")} />
+                  <ActionCard icon={<Calendar size={28}/>} label="Timetable" onClick={() => navigateTo("Timetable")} />
                 </div>
               </div>
             )}
@@ -392,7 +395,7 @@ export default function StudentDashboard() {
 
               {view === "systemRec" && studentData && (
                 <StudentRecommendationView 
-                   onBack={goBack} 
+                  onBack={goBack} 
                 />
               )}
               
@@ -416,8 +419,8 @@ export default function StudentDashboard() {
               )}
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
 
       {/* Roadmap Modal */}
       <RoadmapDetailView
@@ -429,21 +432,22 @@ export default function StudentDashboard() {
   );
 }
 
+// STATIC STAT CARD COMPONENT
 function StatCard({ icon, label, value, trend, color = "text-[#1e3a5f]" }: any) {
   return (
-    <div className="bg-white rounded-[2rem] p-5 md:p-6 border border-slate-100 shadow-sm transition-all hover:border-amber-400 hover:shadow-md group cursor-default outline-none select-none flex flex-col justify-between min-h-[135px]">
+    <div className="bg-white rounded-[2.2rem] p-6 md:p-7 border border-slate-200/80 shadow-xs select-none flex flex-col justify-between min-h-[155px]">
       <div className="flex items-center justify-between w-full">
-        <div className="w-10 h-10 md:w-11 md:h-11 bg-slate-50 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner shrink-0">
+        <div className="w-12 h-12 bg-slate-100/80 rounded-2xl flex items-center justify-center text-[#1e3a5f] shrink-0">
           {icon}
         </div>
         {trend && (
-          <span className="text-[9px] font-bold text-slate-400 uppercase">{trend}</span>
+          <span className="text-[11px] font-semibold text-slate-500 capitalize">{trend}</span>
         )}
       </div>
       
-      <div className="mt-3">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 truncate">{label}</p>
-        <div className={`text-base md:text-xl font-bold tracking-tight ${color}`}>
+      <div className="mt-3.5">
+        <p className="text-xs font-semibold text-slate-500 mb-1.5 truncate capitalize">{label}</p>
+        <div className={`text-base md:text-xl font-extrabold tracking-tight capitalize ${color}`}>
           {value}
         </div>
       </div>
@@ -451,16 +455,17 @@ function StatCard({ icon, label, value, trend, color = "text-[#1e3a5f]" }: any) 
   );
 }
 
+// ACTION CARD COMPONENT
 function ActionCard({ icon, label, onClick }: any) {
   return (
     <div 
       onClick={onClick} 
-      className="bg-white p-5 md:p-6 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all group active:scale-95 outline-none focus:outline-none focus:ring-0 select-none min-h-[120px]"
+      className="bg-white p-6 md:p-8 rounded-[2.2rem] border border-slate-200/80 shadow-xs flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#1e3a5f] hover:shadow-md transition-all group active:scale-95 outline-none focus:outline-none focus:ring-0 select-none min-h-[155px]"
     >
-      <div className="h-10 w-10 md:h-12 md:w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300 shadow-inner shrink-0">
+      <div className="h-13 w-13 md:h-14 md:w-14 bg-slate-100/80 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#1e3a5f] group-hover:text-white transition-colors duration-300 shrink-0">
         {icon}
       </div>
-      <p className="text-[10px] md:text-xs font-bold uppercase text-[#1e3a5f] text-center tracking-wider truncate w-full">
+      <p className="text-xs md:text-sm font-bold text-[#1e3a5f] text-center tracking-wide truncate w-full">
         {label}
       </p>
     </div>
