@@ -13,7 +13,9 @@ import {
   ChevronLeft, 
   User,
   Phone,
-  GraduationCap
+  GraduationCap,
+  Eye,      // <-- Added for show password
+  EyeOff    // <-- Added for hide password
 } from "lucide-react";
 import Image from 'next/image';
 import { authRepository } from '@/src/repositories/authRepository/authRepository';
@@ -25,7 +27,8 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [sapId, setSapId] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<  "advisor" | "coordinator" | "admin">("coordinator");
+  const [confirmPassword, setConfirmPassword] = useState(""); // <-- Added Confirm Password state
+  const [role, setRole] = useState<"advisor" | "coordinator" | "admin">("coordinator");
   const [department, setDepartment] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [gender, setGender] = useState("");
@@ -33,8 +36,12 @@ export default function SignupPage() {
   // UI state
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  
+  // Password Visibility States
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const router = useRouter();
 
   const validateForm = (): boolean => {
     // Name validation
@@ -74,8 +81,13 @@ export default function SignupPage() {
       return false;
     }
 
+    // Confirm Password validation
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
     
-    if ( role === 'coordinator' && !department) {
+    if (role === 'coordinator' && !department) {
       setError("Department is required for this role");
       return false;
     }
@@ -89,7 +101,6 @@ export default function SignupPage() {
     // Clear previous error
     setError(null);
     
-    validateForm();
     // Validate form
     if (!validateForm()) {
       return;
@@ -99,7 +110,7 @@ export default function SignupPage() {
     setIsLoading(true);
     
     try {
-      // Prepare signup credentials
+      // Prepare signup credentials (we don't send confirmPassword to backend)
       const credentials: SignupCredentials = {
         sapid: sapId,
         password: password,
@@ -115,8 +126,8 @@ export default function SignupPage() {
       const user = await authRepository.signup(credentials);
       
       setTimeout(() => {
-      redirectBasedOnRole(user.data!.role, router);
-    }, 100);
+        redirectBasedOnRole(user.data!.role, router);
+      }, 100);
       
     } catch (err: any) {
       // Handle error
@@ -176,7 +187,6 @@ export default function SignupPage() {
           
            <form className="space-y-4" onSubmit={handleSubmit}>
            
-
             {/* Name */}
             <div>
               <div className="relative">
@@ -238,72 +248,102 @@ export default function SignupPage() {
             </div>
 
             {/* Department (for coordinators) */}
-              <div>
-               <div className="relative">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
-                  <select
-                    title='department'
-                    value={department}
-                    onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
-                    disabled={isLoading}
-                  >
-                    <option value="" disabled>---Select Department---</option>
-                    <option value="COMPUTING">COMPUTING</option>
-                    <option value="SOCIAL SCIENCES">SOCIAL SCIENCES</option>
-                  </select>
-                </div>
+            <div>
+             <div className="relative">
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <select
+                  title='department'
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
+                  disabled={isLoading}
+                >
+                  <option value="" disabled>---Select Department---</option>
+                  <option value="COMPUTING">COMPUTING</option>
+                  <option value="SOCIAL SCIENCES">SOCIAL SCIENCES</option>
+                </select>
               </div>
-            
- {/* role (for coordinators) */}
-              <div>
-               <div className="relative">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
-                  <select
-                    title='role'
-                    value={role}
-                    onChange={(e) => setRole(e.target.value as "advisor" | "coordinator" | "admin")}
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
-                    disabled={isLoading}
-                  >
-                    <option value="" disabled>---Select Role---</option>
-                    <option value="coordinator">COORDINATOR</option>
-                    <option value="advisor" >ADVISOR</option>
-                  </select>
-                </div>
+            </div>
+          
+            {/* role (for coordinators) */}
+            <div>
+             <div className="relative">
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <select
+                  title='role'
+                  value={role}
+                  onChange={(e) => setRole(e.target.value as "advisor" | "coordinator" | "admin")}
+                  className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
+                  disabled={isLoading}
+                >
+                  <option value="" disabled>---Select Role---</option>
+                  <option value="coordinator">COORDINATOR</option>
+                  <option value="advisor" >ADVISOR</option>
+                </select>
               </div>
-            
+            </div>
+          
             {/* Gender (for advisors) */}
-            
-              <div>
-               <div className="relative">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
-                  <select
-                    title='gender'
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
-                    disabled={isLoading}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                </div>
+            <div>
+             <div className="relative">
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <select
+                  title='gender'
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
+                  disabled={isLoading}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
               </div>
+            </div>
 
             {/* Password */}
             <div>
              <div className="relative">
                 <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
                 <input 
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
+                  className="w-full pl-14 pr-14 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
                 />
+                {/* Eye Icon Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1e3a5f] transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+             <div className="relative">
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <input 
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  className="w-full pl-14 pr-14 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  disabled={isLoading}
+                />
+                {/* Eye Icon Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1e3a5f] transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
             </div>
 
@@ -313,15 +353,13 @@ export default function SignupPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#1e3a5f] text-white py-4 rounded-[1.2rem] font-bold text-lg flex items-center justify-center gap-3 mt-10 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#1e3a5f] text-white py-4 rounded-[1.2rem] font-bold text-lg flex items-center justify-center gap-3 mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Creating Account..." : "Create New Account"} 
               {!isLoading && <ArrowRight size={22} />}
             </motion.button>
           </form>
 
-  
-         
         </div>
       </motion.div>
     </div>
