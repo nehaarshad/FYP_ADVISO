@@ -1,19 +1,483 @@
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+
+// "use client";
+
+// import React, { useEffect, useMemo, useState } from "react";
+// import {
+//   Key,
+//   ChevronDown,
+//   PlayCircle,
+//   CheckCircle2,
+//   FileStack,
+//   ArrowLeft,
+//   Loader2,
+//   Plus,
+//   Upload,
+//   Filter,
+//   Search,
+//   ChevronLeft,
+//   ChevronRight,
+// } from "lucide-react";
+// import { useUserProfile } from "@/src/hooks/profileHook/useProfile";
+// import { useDegreeGuidelines } from "@/src/hooks/degreeGuidlineHook/degreeGuidlineHook";
+// import { useSupportingVideos } from "@/src/hooks/suppportingVideo/supportingVideoHook";
+// import VideoPlayer from "../supportingVideos/videoPlayer";
+
+// interface GuidelinesProps {
+//   onBack: () => void;
+// }
+
+// const normalizeGuidelineText = (text: string) => {
+//   return text
+//     .replace(/\r\n/g, "\n")
+//     .replace(/\r/g, "\n")
+//     .split("\n")
+//     .map((line) => line.trim())
+//     .filter((line) => line.length > 0)
+//     .join("\n");
+// };
+
+// const parseGuidelineDescription = (text: string) => {
+//   const normalizedText = normalizeGuidelineText(text);
+//   if (!normalizedText) return { type: "empty" as const, items: [] as string[] };
+
+//   const lines = normalizedText.split("\n").map((line) => line.trim()).filter(Boolean);
+//   const numberedLineRegex = /^\d+(?:[\.\),:]*)\s*(.+)$/;
+//   const numberedItems: string[] = [];
+//   let allNumbered = true;
+
+//   for (const line of lines) {
+//     const match = line.match(numberedLineRegex);
+//     if (match) numberedItems.push(match[1].trim());
+//     else { allNumbered = false; break; }
+//   }
+//   if (allNumbered && numberedItems.length >= 2) return { type: "numbered" as const, items: numberedItems };
+
+//   const bulletLineRegex = /^[-*•]\s*(.+)$/;
+//   const bulletItems: string[] = [];
+//   let allBullets = true;
+
+//   for (const line of lines) {
+//     const match = line.match(bulletLineRegex);
+//     if (match) bulletItems.push(match[1].trim());
+//     else { allBullets = false; break; }
+//   }
+//   if (allBullets && bulletItems.length >= 2) return { type: "bullet" as const, items: bulletItems };
+
+//   const inlineNumberedRegex = /(?:^|\s)(\d+)(?:[\.\),:]*)\s*(?=\S)/g;
+//   const inlineMatches = [...normalizedText.matchAll(inlineNumberedRegex)];
+//   if (inlineMatches.length >= 2) {
+//     const items: string[] = [];
+//     for (let i = 0; i < inlineMatches.length; i++) {
+//       const current = inlineMatches[i];
+//       const start = (current.index ?? 0) + current[0].length;
+//       const next = inlineMatches[i + 1];
+//       const end = next ? next.index ?? normalizedText.length : normalizedText.length;
+//       const item = normalizedText.slice(start, end).trim();
+//       if (item) items.push(item);
+//     }
+//     if (items.length >= 2) return { type: "numbered" as const, items };
+//   }
+
+//   return { type: "paragraph" as const, items: [normalizedText] };
+// };
+
+// export default function Guidelines({ onBack }: GuidelinesProps) {
+//   const [activeSection, setActiveSection] = useState<string | null>(null);
+//   const [currentVideo, setCurrentVideo] = useState(0);
+//   const [searchQuery, setSearchQuery] = useState("");
+
+//   const { userProfile, isLoading: profileLoading } = useUserProfile();
+//   const { guidelines, selectedProgramGuidelines, isLoading: guidelinesLoading, error: guidelinesError, fetchGuidelines, fetchGuidelinesForProgram } = useDegreeGuidelines();
+//   const { videos, isLoading: isVideosLoading, fetchVideos } = useSupportingVideos();
+
+//   const role = userProfile?.role;
+//   const isStudent = role === "student";
+//   const isAdvisor = role === "advisor";
+//   const isAdmin = role === "admin" || role === "coordinator";
+
+//   useEffect(() => {
+//     if (!userProfile) return;
+//     if (isStudent || isAdvisor) {
+//       const programId = (userProfile as any)?.profile?.Batch?.Program?.id || (userProfile as any)?.profile?.BatchModel?.ProgramModel?.id || (userProfile as any)?.profile?.BatchAssignments?.[0]?.BatchModel?.ProgramModel?.id;
+//       if (programId) fetchGuidelinesForProgram(programId);
+//     } else if (isAdmin) {
+//       fetchGuidelines();
+//     }
+//   }, [userProfile?.role, userProfile?.id]);
+
+//   useEffect(() => { fetchVideos(); }, []);
+
+//   const visibleGuidelines = useMemo(() => {
+//     let list = [];
+//     if (isStudent || isAdvisor) {
+//       list = selectedProgramGuidelines?.length > 0 ? selectedProgramGuidelines : [];
+//     } else {
+//       list = guidelines?.length > 0 ? guidelines : [];
+//     }
+//     if (isAdmin && searchQuery.trim() !== "") {
+//       const q = searchQuery.toLowerCase();
+//       list = list.filter((g: any) => g.title?.toLowerCase().includes(q));
+//     }
+//     return list;
+//   }, [isStudent, isAdvisor, selectedProgramGuidelines, guidelines, searchQuery, isAdmin]);
+
+//   const programName = useMemo(() => {
+//     if (isStudent) return (userProfile as any)?.profile?.Batch?.Program?.name || (userProfile as any)?.profile?.BatchModel?.ProgramModel?.name || "Your Program";
+//     if (isAdvisor) return (userProfile as any)?.profile?.BatchAssignments?.[0]?.BatchModel?.ProgramModel?.name || "Advised Program";
+//     return "";
+//   }, [userProfile, isStudent, isAdvisor]);
+
+//   const videoGuides = useMemo(() => {
+//     if (!videos || videos.length === 0) return [];
+//     return videos.map((video) => ({
+//       title: video.title,
+//       desc: video.description || "Watch this video guide for more information.",
+//       videoUrl: video.videoUrl,
+//       id: video.id,
+//     }));
+//   }, [videos]);
+
+//   const activeVideo = videoGuides[currentVideo];
+
+//   const handlePrevVideo = () => {
+//     setCurrentVideo((prev) => (prev > 0 ? prev - 1 : videoGuides.length - 1));
+//   };
+
+//   const handleNextVideo = () => {
+//     setCurrentVideo((prev) => (prev < videoGuides.length - 1 ? prev + 1 : 0));
+//   };
+
+//   const renderGuidelineContent = (guideline: any) => {
+//     if (guideline.renderType === "table" && guideline.tableData) {
+//       return (
+//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+//           {guideline.tableData.map((row: any, i: number) => (
+//             <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+//               <p className="text-[10px] font-bold text-slate-400 uppercase">{row.category}</p>
+//               <p className="text-lg font-bold text-[#1e3a5f]">{row.credits} Credits</p>
+//             </div>
+//           ))}
+//         </div>
+//       );
+//     }
+//     if (guideline.renderType === "list" && guideline.items) {
+//       return (
+//         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+//           {guideline.items.map((item: string, i: number) => (
+//             <div key={i} className="flex items-start gap-3 text-xs font-bold text-slate-600 bg-slate-50/50 p-3 rounded-xl">
+//               <CheckCircle2 size={14} className="text-green-500 shrink-0 mt-0.5" />
+//               <span className="break-words">{item}</span>
+//             </div>
+//           ))}
+//         </div>
+//       );
+//     }
+//     if (guideline.renderType === "policy") {
+//       return (
+//         <div className="space-y-5 text-slate-600 border-t border-slate-100 pt-5">
+//           {guideline.enrollmentLimits && (
+//             <div>
+//               <h4 className="text-[10px] font-bold text-[#1e3a5f] uppercase mb-3 tracking-widest">Enrollment Limits:</h4>
+//               <div className="text-xs leading-relaxed space-y-2">
+//                 {guideline.enrollmentLimits.map((row: any, i: number) => (
+//                   <div key={i} className="flex justify-between p-2 border-b border-slate-50">
+//                     <span>{row.label}</span>
+//                     <span className="font-bold">{row.credits}</span>
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           )}
+//           {guideline.requiredProcessText && (
+//             <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+//               <h4 className="text-[10px] font-bold text-[#1e3a5f] uppercase mb-2 tracking-widest flex items-center gap-2">
+//                 <FileStack size={14} /> Required Process:
+//               </h4>
+//               <p className="text-xs leading-relaxed">{guideline.requiredProcessText}</p>
+//             </div>
+//           )}
+//         </div>
+//       );
+//     }
+//     const rawText = guideline.description || guideline.content || "";
+//     const parsed = parseGuidelineDescription(rawText);
+//     if (parsed.type === "empty") return null;
+//     if (parsed.type === "numbered") {
+//       return (
+//         <ol className="list-decimal pl-5 text-slate-600 text-sm leading-7 space-y-1">
+//           {parsed.items.map((item: string, index: number) => (
+//             <li key={index} className="pl-1">{item}</li>
+//           ))}
+//         </ol>
+//       );
+//     }
+//     if (parsed.type === "bullet") {
+//       return (
+//         <ul className="list-disc pl-5 text-slate-600 text-sm leading-7 space-y-1">
+//           {parsed.items.map((item: string, index: number) => (
+//             <li key={index} className="pl-1">{item}</li>
+//           ))}
+//         </ul>
+//       );
+//     }
+//     return <p className="text-slate-600 text-sm leading-7 whitespace-pre-line">{parsed.items[0]}</p>;
+//   };
+
+//   const renderContent = () => (
+//     <div className="flex-1 flex flex-col items-center gap-6 w-full">
+      
+//       {/* VIDEO CAROUSEL SECTION */}
+//       {videoGuides.length > 0 && activeVideo && (
+//         <div className="flex flex-col items-center w-full my-2 px-6 md:px-10">
+          
+//           <div className="relative w-full max-w-5xl flex items-center justify-center">
+            
+//             {/* Left Outer Semi-Circle Button */}
+//             {(isStudent || isAdvisor) && (
+//               <button
+//                 onClick={handlePrevVideo}
+//                 title="Previous Video"
+//                 className="absolute -left-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-l-full flex items-center justify-center shadow-xl border-y border-l border-white/20 transition-all active:scale-90"
+//               >
+//                 <ChevronLeft size={30} className="-ml-0.5" />
+//               </button>
+//             )}
+
+//             {/* Video Card */}
+//             <div className="bg-[#1e3a5f] rounded-[2rem] p-5 md:p-6 flex flex-col md:flex-row items-center gap-6 shadow-xl w-full border border-slate-700/50 relative z-10">
+//               <div className="w-full md:w-[280px] h-[160px] bg-black rounded-2xl overflow-hidden shrink-0 border border-white/10">
+//                 {activeVideo.videoUrl ? (
+//                   <VideoPlayer 
+//                     videoUrl={activeVideo.videoUrl} 
+//                     title={activeVideo.title} 
+//                     autoPlay={false} 
+//                     showControls={true} 
+//                     className="w-full h-full object-cover"
+//                   />
+//                 ) : (
+//                   <div className="flex items-center justify-center w-full h-full text-slate-500">
+//                     <PlayCircle size={44} />
+//                   </div>
+//                 )}
+//               </div>
+
+//               <div className="flex-1 text-white text-center md:text-left">
+//                 <h3 className="text-base md:text-lg font-bold mb-2 leading-snug">
+//                   {activeVideo.title}
+//                 </h3>
+//                 <p className="text-white/70 text-xs md:text-sm leading-relaxed line-clamp-3">
+//                   {activeVideo.desc}
+//                 </p>
+//               </div>
+//             </div>
+
+//             {/* Right Outer Semi-Circle Button */}
+//             {(isStudent || isAdvisor) && (
+//               <button
+//                 onClick={handleNextVideo}
+//                 title="Next Video"
+//                 className="absolute -right-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-r-full flex items-center justify-center shadow-xl border-y border-r border-white/20 transition-all active:scale-90"
+//               >
+//                 <ChevronRight size={30} className="-mr-0.5" />
+//               </button>
+//             )}
+
+//           </div>
+
+//           {/* Dots Indicator */}
+//           {(isStudent || isAdvisor) && videoGuides.length > 1 && (
+//             <div className="flex items-center gap-1.5 mt-4">
+//               {videoGuides.map((_, idx) => (
+//                 <button
+//                   key={idx}
+//                   onClick={() => setCurrentVideo(idx)}
+//                   className={`h-2 rounded-full transition-all ${
+//                     currentVideo === idx
+//                       ? "w-6 bg-[#1e3a5f]"
+//                       : "w-2 bg-slate-300 hover:bg-slate-400"
+//                   }`}
+//                   title={`Go to video ${idx + 1}`}
+//                 />
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       )}
+
+//       {/* WIDER GUIDELINES LIST SECTION */}
+//       {visibleGuidelines.length === 0 ? (
+//         <div className="text-center py-12 text-slate-400 bg-white rounded-2xl border border-slate-100 shadow-sm w-full max-w-5xl">
+//           No guidelines found.
+//         </div>
+//       ) : (
+//         <div className="space-y-3 w-full max-w-5xl">
+//           {visibleGuidelines.map((guideline: any) => (
+//             <div key={guideline.id} className="border border-slate-200 bg-white rounded-xl overflow-hidden shadow-sm">
+//               <button onClick={() => setActiveSection(activeSection === String(guideline.id) ? null : String(guideline.id))} className="w-full flex items-center justify-between p-4 text-left">
+//                 <h3 className="font-bold text-[#1e3a5f] text-sm">{guideline.title}</h3>
+//                 <ChevronDown size={20} className={`transition-transform ${activeSection === String(guideline.id) ? "rotate-180" : ""}`} />
+//               </button>
+//               {activeSection === String(guideline.id) && (
+//                 <div className="px-4 pb-4 border-t border-slate-100 pt-4">{renderGuidelineContent(guideline)}</div>
+//               )}
+//             </div>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+
+//   return (
+//     <div className="w-full py-4 font-sans">
+//       <div className="relative min-h-screen w-full max-w-6.5xl mx-auto p-4 md:p-8 pb-10 -mt-6">
+        
+//         {/* Back Button */}
+//         <div className="flex items-center gap-4 mb-8">
+//           <button
+//             title="Back"
+//             onClick={onBack}
+//             className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors w-fit border border-slate-100"
+//           >
+//             <ArrowLeft size={20} />
+//           </button>
+//         </div>
+
+//         {/* --- COORDINATOR / ADMIN VIEW --- */}
+//         {isAdmin ? (
+//           <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm flex flex-col min-h-[500px]">
+//             {/* Header */}
+//             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-slate-100 pb-6">
+//               <div className="flex items-center gap-4">
+//                 <div className="w-14 h-14 bg-[#1e3a5f] rounded-2xl flex items-center justify-center shrink-0 shadow-md">
+//                   <Key size={24} className="text-[#FDB813]" />
+//                 </div>
+//                 <div>
+//                   <h2 className="text-2xl font-bold text-[#1e3a5f]">
+//                     Degree Guidelines
+//                   </h2>
+//                   <p className="text-xs text-slate-400 mt-1">
+//                     Manage academic guidelines and requirements
+//                   </p>
+//                 </div>
+//               </div>
+
+//               <div className="flex items-center gap-3">
+//                 <button 
+//                   onClick={() => console.log("Add Guideline clicked")}
+//                   className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+//                 >
+//                   <Plus size={16} /> Add Guideline
+//                 </button>
+//                 <button 
+//                   onClick={() => console.log("Upload Video clicked")}
+//                   className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+//                 >
+//                   <Upload size={16} /> Upload Video
+//                 </button>
+//               </div>
+//             </div>
+
+//             {/* Filter Section (Admin) */}
+//             <div className="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+//               <div className="flex items-center gap-2 mb-3">
+//                 <Filter size={16} className="text-[#1e3a5f]" />
+//                 <h3 className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">
+//                   Filter Guidelines
+//                 </h3>
+//               </div>
+//               <div className="flex flex-col md:flex-row gap-3">
+//                 <div className="relative flex-1">
+//                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+//                   <input 
+//                     type="text"
+//                     placeholder="Search guidelines..."
+//                     value={searchQuery}
+//                     onChange={(e) => setSearchQuery(e.target.value)}
+//                     className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+//                   />
+//                 </div>
+//                 <select
+//                   title="Filter Program"
+//                   className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
+//                 >
+//                   <option>All Programs</option>
+//                 </select>
+//               </div>
+//             </div>
+
+//             {/* Content Area */}
+//             {(isVideosLoading || profileLoading || guidelinesLoading) ? (
+//               <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+//                 <Loader2 className="animate-spin mb-4 text-[#1e3a5f]" size={32} />
+//                 <p className="text-sm font-bold">Loading...</p>
+//               </div>
+//             ) : guidelinesError ? (
+//               <div className="text-center py-12 text-red-500 font-bold">{guidelinesError}</div>
+//             ) : (
+//               renderContent()
+//             )}
+//           </div>
+//         ) : (
+
+//           /* --- STUDENT / ADVISOR VIEW --- */
+//           <>
+//             <div className="flex flex-col justify-between gap-6 mb-8 pl-0">
+//               <div className="flex items-center gap-4 pl-10 md:pl-13">
+//                 <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200 shrink-0">
+//                   <Key size={24} />
+//                 </div>
+//                 <div>
+//                   <h2 className="text-2xl font-bold text-[#1e3a5f]">
+//                     Degree Guidelines
+//                   </h2>
+//                   <p className="text-xs text-slate-500 font-medium mt-1">
+//                     {isStudent ? `For ${programName}` : `Advisor View - ${programName}`}
+//                   </p>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* Content Area */}
+//             {(isVideosLoading || profileLoading || guidelinesLoading) ? (
+//               <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+//                 <Loader2 className="animate-spin mb-4 text-[#1e3a5f]" size={32} />
+//                 <p className="text-sm font-bold">Loading...</p>
+//               </div>
+//             ) : guidelinesError ? (
+//               <div className="text-center py-12 text-red-500 font-bold">{guidelinesError}</div>
+//             ) : (
+//               renderContent()
+//             )}
+//           </>
+//         )}
+
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Key, // <-- Password icon
+  Key,
   ChevronDown,
   PlayCircle,
   CheckCircle2,
   FileStack,
   ArrowLeft,
   Loader2,
-  AlertTriangle,
-  Filter,
-  Search,
   Plus,
   Upload,
+  Filter,
+  Search,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useUserProfile } from "@/src/hooks/profileHook/useProfile";
 import { useDegreeGuidelines } from "@/src/hooks/degreeGuidlineHook/degreeGuidlineHook";
@@ -88,7 +552,8 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
   const { guidelines, selectedProgramGuidelines, isLoading: guidelinesLoading, error: guidelinesError, fetchGuidelines, fetchGuidelinesForProgram } = useDegreeGuidelines();
   const { videos, isLoading: isVideosLoading, fetchVideos } = useSupportingVideos();
 
-  const role = userProfile?.role;
+  // Bulletproof role checking (Handles casing and variations)
+  const role = userProfile?.role ? String(userProfile.role).toLowerCase().trim() : "";
   const isStudent = role === "student";
   const isAdvisor = role === "advisor";
   const isAdmin = role === "admin" || role === "coordinator";
@@ -112,12 +577,12 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
     } else {
       list = guidelines?.length > 0 ? guidelines : [];
     }
-    if (searchQuery.trim() !== "") {
+    if (isAdmin && searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase();
       list = list.filter((g: any) => g.title?.toLowerCase().includes(q));
     }
     return list;
-  }, [isStudent, isAdvisor, selectedProgramGuidelines, guidelines, searchQuery]);
+  }, [isStudent, isAdvisor, selectedProgramGuidelines, guidelines, searchQuery, isAdmin]);
 
   const programName = useMemo(() => {
     if (isStudent) return (userProfile as any)?.profile?.Batch?.Program?.name || (userProfile as any)?.profile?.BatchModel?.ProgramModel?.name || "Your Program";
@@ -125,13 +590,9 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
     return "";
   }, [userProfile, isStudent, isAdvisor]);
 
-  useEffect(() => {
-    if (!activeSection && visibleGuidelines.length > 0) setActiveSection(String(visibleGuidelines[0].id));
-  }, [visibleGuidelines, activeSection]);
-
   const videoGuides = useMemo(() => {
     if (!videos || videos.length === 0) return [];
-    return videos.map((video, index) => ({
+    return videos.map((video) => ({
       title: video.title,
       desc: video.description || "Watch this video guide for more information.",
       videoUrl: video.videoUrl,
@@ -140,6 +601,14 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
   }, [videos]);
 
   const activeVideo = videoGuides[currentVideo];
+
+  const handlePrevVideo = () => {
+    setCurrentVideo((prev) => (prev > 0 ? prev - 1 : videoGuides.length - 1));
+  };
+
+  const handleNextVideo = () => {
+    setCurrentVideo((prev) => (prev < videoGuides.length - 1 ? prev + 1 : 0));
+  };
 
   const renderGuidelineContent = (guideline: any) => {
     if (guideline.renderType === "table" && guideline.tableData) {
@@ -217,51 +686,160 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
     return <p className="text-slate-600 text-sm leading-7 whitespace-pre-line">{parsed.items[0]}</p>;
   };
 
-  return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-6 animate-in fade-in duration-500">
+  const renderContent = () => (
+    <div className="flex-1 flex flex-col items-center gap-6 w-full">
       
-      {/* 1. Back Button */}
-      <button
-        onClick={onBack}
-        className="mb-4 p-2 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-100 hover:bg-slate-50 transition-colors"
-      >
-        <ArrowLeft size={20} />
-      </button>
+      {/* VIDEO CAROUSEL SECTION */}
+      {videoGuides.length > 0 && activeVideo && (
+        <div className="flex flex-col items-center w-full my-2 px-6 md:px-10">
+          
+          <div className="relative w-full max-w-5xl flex items-center justify-center">
+            
+            {/* Left Outer Semi-Circle Button */}
+            {videoGuides.length > 1 && (
+              <button
+                onClick={handlePrevVideo}
+                title="Previous Video"
+                className="absolute -left-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-l-full flex items-center justify-center shadow-xl border-y border-l border-white/20 transition-all active:scale-90"
+              >
+                <ChevronLeft size={30} className="-ml-0.5" />
+              </button>
+            )}
 
-      {/* 2. SINGLE MAIN CARD */}
-      <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm flex flex-col min-h-[500px]">
-        
-        {/* HEADER SECTION - EXACT MATCH WITH MANAGE PASSWORD */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-slate-100 pb-6">
-          <div className="flex items-center gap-4">
-            
-            {/* Dark Blue Box + Yellow Key Icon */}
-            <div className="w-14 h-14 bg-[#1e3a5f] rounded-2xl flex items-center justify-center shrink-0 shadow-md">
-              <Key size={24} className="text-[#FDB813]" />
+            {/* Video Card */}
+            <div className="bg-[#1e3a5f] rounded-[2rem] p-5 md:p-6 flex flex-col md:flex-row items-center gap-6 shadow-xl w-full border border-slate-700/50 relative z-10">
+              <div className="w-full md:w-[280px] h-[160px] bg-black rounded-2xl overflow-hidden shrink-0 border border-white/10">
+                {activeVideo.videoUrl ? (
+                  <VideoPlayer 
+                    videoUrl={activeVideo.videoUrl} 
+                    title={activeVideo.title} 
+                    autoPlay={false} 
+                    showControls={true} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full text-slate-500">
+                    <PlayCircle size={44} />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex-1 text-white text-center md:text-left">
+                <h3 className="text-base md:text-lg font-bold mb-2 leading-snug">
+                  {activeVideo.title}
+                </h3>
+                <p className="text-white/70 text-xs md:text-sm leading-relaxed line-clamp-3">
+                  {activeVideo.desc}
+                </p>
+              </div>
             </div>
-            
+
+            {/* Right Outer Semi-Circle Button */}
+            {videoGuides.length > 1 && (
+              <button
+                onClick={handleNextVideo}
+                title="Next Video"
+                className="absolute -right-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-r-full flex items-center justify-center shadow-xl border-y border-r border-white/20 transition-all active:scale-90"
+              >
+                <ChevronRight size={30} className="-mr-0.5" />
+              </button>
+            )}
+
+          </div>
+
+          {/* Dots Indicator */}
+          {videoGuides.length > 1 && (
+            <div className="flex items-center gap-1.5 mt-4">
+              {videoGuides.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentVideo(idx)}
+                  className={`h-2 rounded-full transition-all ${
+                    currentVideo === idx
+                      ? "w-6 bg-[#1e3a5f]"
+                      : "w-2 bg-slate-300 hover:bg-slate-400"
+                  }`}
+                  title={`Go to video ${idx + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* WIDER GUIDELINES LIST SECTION */}
+      {visibleGuidelines.length === 0 ? (
+        <div className="text-center py-12 text-slate-400 bg-white rounded-2xl border border-slate-100 shadow-sm w-full max-w-5xl">
+          No guidelines found.
+        </div>
+      ) : (
+        <div className="space-y-3 w-full max-w-5xl">
+          {visibleGuidelines.map((guideline: any) => (
+            <div key={guideline.id} className="border border-slate-200 bg-white rounded-xl overflow-hidden shadow-sm">
+              <button onClick={() => setActiveSection(activeSection === String(guideline.id) ? null : String(guideline.id))} className="w-full flex items-center justify-between p-4 text-left">
+                <h3 className="font-bold text-[#1e3a5f] text-sm">{guideline.title}</h3>
+                <ChevronDown size={20} className={`transition-transform ${activeSection === String(guideline.id) ? "rotate-180" : ""}`} />
+              </button>
+              {activeSection === String(guideline.id) && (
+                <div className="px-4 pb-4 border-t border-slate-100 pt-4">{renderGuidelineContent(guideline)}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="w-full py-4 font-sans">
+      <div className="relative min-h-screen w-full max-w-6xl mx-auto p-4 md:p-8 pb-10 -mt-6">
+        
+        {/* Back Button */}
+        <div className="flex items-center gap-4 mb-8">
+          <button
+            title="Back"
+            onClick={onBack}
+            className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors w-fit border border-slate-100"
+          >
+            <ArrowLeft size={20} />
+          </button>
+        </div>
+
+        {/* --- MAIN HEADER FOR ALL ROLES --- */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 w-full">
+          <div className="flex items-center gap-4">
+            <div 
+              style={{ background: 'linear-gradient(to bottom right, #1e3a5f, #2c5282)' }}
+              className="h-12 w-12 rounded-2xl flex items-center justify-center text-[#FDB813] shadow-md shadow-slate-200 shrink-0"
+            >
+              <Key size={24} style={{ color: '#FDB813' }} />
+            </div>
             <div>
               <h2 className="text-2xl font-bold text-[#1e3a5f]">
                 Degree Guidelines
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                {isStudent ? `For ${programName}` : isAdvisor ? `Advisor View - ${programName}` : "Manage academic guidelines and requirements"}
+              <p className="text-xs text-slate-500 font-medium mt-1">
+                {isAdmin
+                  ? "Manage academic guidelines and requirements"
+                  : isStudent
+                  ? `For ${programName}`
+                  : `Advisor View - ${programName}`}
               </p>
             </div>
           </div>
 
-          {/* Buttons - Admin Only */}
+          {/* Action buttons for Coordinator/Admin View */}
           {isAdmin && (
-            <div className="flex gap-2">
+            <div className="flex items-center gap-3">
               <button 
                 onClick={() => console.log("Add Guideline clicked")}
-                className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#152a45] transition-all"
+                className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
               >
                 <Plus size={16} /> Add Guideline
               </button>
               <button 
                 onClick={() => console.log("Upload Video clicked")}
-                className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#152a45] transition-all"
+                className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
               >
                 <Upload size={16} /> Upload Video
               </button>
@@ -269,100 +847,48 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
           )}
         </div>
 
-        {/* FILTER SECTION */}
-        <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
-          <div className="flex items-center gap-2 mb-3">
-            <Filter size={16} className="text-[#1e3a5f]" />
-            <h3 className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">
-              Filter Guidelines
-            </h3>
-          </div>
-          
-          <div className="flex flex-col md:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-              <input 
-                type="text"
-                placeholder="Search guidelines..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
-              />
+        {/* --- FILTER SECTION FOR COORDINATOR/ADMIN --- */}
+        {isAdmin && (
+          <div className="mb-6 p-4 bg-white rounded-2xl border border-slate-200 shadow-sm max-w-5xl mx-auto w-full">
+            <div className="flex items-center gap-2 mb-3">
+              <Filter size={16} className="text-[#1e3a5f]" />
+              <h3 className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">
+                Filter Guidelines
+              </h3>
             </div>
-            <select
-              title="Filter Program"
-              className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
-            >
-              <option>All Programs</option>
-            </select>
+            <div className="flex flex-col md:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                <input 
+                  type="text"
+                  placeholder="Search guidelines..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+                />
+              </div>
+              <select
+                title="Filter Program"
+                className="p-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
+              >
+                <option>All Programs</option>
+              </select>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* CONTENT AREA */}
+        {/* --- CONTENT AREA --- */}
         {(isVideosLoading || profileLoading || guidelinesLoading) ? (
           <div className="flex flex-col items-center justify-center py-20 text-slate-400">
             <Loader2 className="animate-spin mb-4 text-[#1e3a5f]" size={32} />
             <p className="text-sm font-bold">Loading...</p>
           </div>
         ) : guidelinesError ? (
-          <div className="text-center py-12 text-red-500 font-bold">
-            {guidelinesError}
-          </div>
+          <div className="text-center py-12 text-red-500 font-bold">{guidelinesError}</div>
         ) : (
-          <div className="flex-1 flex flex-col gap-6">
-            
-            {/* VIDEO SECTION */}
-            {videoGuides.length > 0 && activeVideo && (
-              <div className="bg-[#1e3a5f] rounded-2xl p-5 flex flex-col md:flex-row items-center gap-6 shadow-md w-full max-w-3xl">
-                <div className="w-full md:w-[280px] h-[150px] bg-black rounded-xl overflow-hidden shrink-0">
-                  {activeVideo.videoUrl ? (
-                    <VideoPlayer 
-                      videoUrl={activeVideo.videoUrl} 
-                      title={activeVideo.title} 
-                      autoPlay={false} 
-                      showControls={true} 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center w-full h-full">
-                      <PlayCircle size={40} className="text-slate-600" />
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex-1 text-white text-center md:text-left">
-                  <h3 className="text-base md:text-lg font-bold mb-2 leading-tight">
-                    {activeVideo.title}
-                  </h3>
-                  <p className="text-white/70 text-xs md:text-sm leading-relaxed line-clamp-3">
-                    {activeVideo.desc}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* LIST OR EMPTY STATE */}
-            {visibleGuidelines.length === 0 ? (
-              <div className="text-center py-12 text-slate-400">
-                No guidelines found.
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {visibleGuidelines.map((guideline: any) => (
-                  <div key={guideline.id} className="border border-slate-200 bg-white rounded-xl overflow-hidden">
-                    <button onClick={() => setActiveSection(activeSection === String(guideline.id) ? null : String(guideline.id))} className="w-full flex items-center justify-between p-4 text-left">
-                      <h3 className="font-bold text-[#1e3a5f] text-sm">{guideline.title}</h3>
-                      <ChevronDown size={20} className={activeSection === String(guideline.id) ? "rotate-180" : ""} />
-                    </button>
-                    {activeSection === String(guideline.id) && (
-                      <div className="px-4 pb-4 border-t border-slate-100 pt-4">{renderGuidelineContent(guideline)}</div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          renderContent()
         )}
+
       </div>
     </div>
   );
