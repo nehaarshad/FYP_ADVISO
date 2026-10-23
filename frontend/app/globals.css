@@ -1,4 +1,5 @@
 
+
 @import "tailwindcss";
 
 :root {
@@ -25,4 +26,13 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter);
   font-weight: 400;
+}
+
+/* Poore project se uppercase classes aur uppercase headings ko override karne ke liye */
+.uppercase {
+  text-transform: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: none !important;
 }
