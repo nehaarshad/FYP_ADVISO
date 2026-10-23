@@ -45,7 +45,7 @@ export const useUserProfile = () => {
   const getDisplayName = useCallback(() => {
     if (!userProfile) return 'User';
     
-    // 🔥 Yahan '?' laga diya hai taake null se crash na ho
+    // we used ? operator so screen do not crashes if profile in not available for any reason.
     if (userProfile?.profile?.advisorName) return userProfile.profile.advisorName;
     if (userProfile?.profile?.coordinatorName) return userProfile.profile.coordinatorName;
     if (userProfile?.profile?.studentName) return userProfile.profile.studentName;
