@@ -114,7 +114,7 @@ export const CourseCatalog = () => {
     
     if (categories.length === 0) {
       return (
-        <span className="text-[10px] font-bold uppercase text-gray-500">
+        <span className="text-xs font-bold uppercase text-slate-900">
           Uncategorized
         </span>
       );
@@ -125,7 +125,7 @@ export const CourseCatalog = () => {
         {categories.map((cat:any, index:any) => (
           <span 
             key={index}
-            className="px-2 py-0.5 rounded text-[9px] font-bold uppercase whitespace-nowrap"
+            className="px-2 py-0.5  text-slate-900 rounded text-xs font-bold uppercase whitespace-nowrap"
             style={{
               backgroundColor: parseColorScheme(cat.colorScheme),
               color: '#000000'
@@ -266,7 +266,7 @@ export const CourseCatalog = () => {
                           {courseData?.courseCode || '-----'}
                         </td>
                         <td className="p-4 border-r border-slate-200">
-                          <p className="text-[11px] text-slate-900 font-bold uppercase">{courseData?.courseName || 'N/A'}</p>
+                          <p className="text-xs text-slate-900 font-bold uppercase">{courseData?.courseName || 'N/A'}</p>
                         </td>
                         <td className="p-4 text-xs font-bold text-slate-900 border-r border-slate-200">
                           {getCreditDisplay(courseData?.courseCredits)}

@@ -5,7 +5,16 @@ const auth = async (req, res, next) => {
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
     try {
+
+      if (!req.headers.authorization.startsWith('Bearer ')) {
+      return res.status(401).json({ success: false, message: "Invalid token format" });
+    }
+
       token = req.headers.authorization.split(" ")[1];
+
+      if (!token || token === 'null' || token === 'undefined') {
+      return res.status(401).json({ success: false, message: "Token is null or undefined" });
+    }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
    

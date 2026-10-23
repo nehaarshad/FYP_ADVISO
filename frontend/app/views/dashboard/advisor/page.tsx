@@ -24,6 +24,7 @@ import AdvisorChat from "../../../../components/Chat/AdvisorChat";
 import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs'; 
 import Guidelines from "../../../../components/Guidelines/Guidelines"; 
 import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation"; 
+import { useAuthGuard } from "@/src/hooks/authHook/useAuthGuard";
 
 // Helper function to format 24h time to 12h AM/PM format
 const formatTimeTo12Hour = (timeStr: string) => {
@@ -56,6 +57,7 @@ export default function AdvisorDashboard() {
   const [filteredStudents, setFilteredStudents] = useState<any[]>([]); 
   const [stats, setStats] = useState({ total: 0, irregular: 0, regular: 0 }); 
  
+    useAuthGuard();
   useEffect(() => { 
     fetchStudents(); 
   }, [fetchStudents]); 

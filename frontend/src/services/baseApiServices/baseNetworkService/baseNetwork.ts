@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { sessionManager } from "../../sessionManagement/sessionManager";
 import { ApiResponse } from "../ApiResponseType/apiResponseType";
 
 export class BaseApiService {
+      currentUser = sessionManager.getCurrentUser<any>();
+      token =sessionManager.getSessionToken() || '';
 
   protected async postApiWithJson<T>(
     url: string,           
@@ -15,7 +18,7 @@ export class BaseApiService {
         method: 'POST',        
         headers: {
           'Content-Type': 'application/json', 
-        
+          'Authorization': `Bearer ${this.token}`,
         },
         body: JSON.stringify(data),  
       });
@@ -31,13 +34,20 @@ export class BaseApiService {
       } else {
         if (response.status === 400) {
           throw new Error(responseData.message || 'Invalid input');
-        } else if (response.status === 401) {
-          throw new Error(responseData.message || 'Unauthorized');
-        } else if (response.status === 404) {
+        } else if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('user'); 
+        localStorage.removeItem('token');
+       window.location.href = '/session-expired';
+       return {
+          success: false,
+          error: 'Session expired',
+        };
+      } else if (response.status === 404) {
           throw new Error(responseData.message || 'Resource not found');
         } else {
           throw new Error(responseData.message || 'Request failed');
         }
+        
       }
     } catch (error: any) {
       console.error('API Error:', error);
@@ -58,6 +68,7 @@ export class BaseApiService {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
         },
       });
 
@@ -65,7 +76,16 @@ export class BaseApiService {
 
       if (response.ok) {
         return { success: true, data, status: response.status };
-      } else {
+      } else if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('user'); // Adjust based on your storage key
+        localStorage.removeItem('token');
+        window.location.href = '/session-expired';
+        return {
+          success: false,
+          error: 'Session expired',
+        };
+      }
+      else {
         throw new Error(data.message || 'Request failed');
       }
     } catch (error: any) {
@@ -82,6 +102,7 @@ export class BaseApiService {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
         },
         body: JSON.stringify(data),
       });
@@ -90,6 +111,14 @@ export class BaseApiService {
 
       if (response.ok) {
         return { success: true, data: responseData, status: response.status };
+      } else if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('user'); // Adjust based on your storage key
+        localStorage.removeItem('token');
+        window.location.href = '/session-expired';
+        return {
+          success: false,
+          error: 'Session expired',
+        };
       } else {
         throw new Error(responseData.message || 'Update failed');
       }
@@ -101,14 +130,13 @@ export class BaseApiService {
   // DELETE request method
   protected async deleteApiResponse<T>(
     url: string,
-    headers: Record<string, string> = {}
   ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(url, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          ...headers,
+          'Authorization': `Bearer ${this.token}`,
         },
       });
 
@@ -116,6 +144,14 @@ export class BaseApiService {
 
       if (response.ok) {
         return { success: true, data, status: response.status };
+      } else if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('user'); // Adjust based on your storage key
+        localStorage.removeItem('token');
+        window.location.href = '/session-expired';
+        return {
+          success: false,
+          error: 'Session expired',
+        };
       } else {
         throw new Error(data.message || 'Delete failed');
       }
@@ -271,7 +307,9 @@ export class BaseApiService {
     const response = await fetch(url, {
       method: 'POST',
       body: formData,
-      // Don't set Content-Type header - browser will set it with boundary
+      headers: {
+        'Authorization': `Bearer ${this.token}`,
+      },
     });
 
     const responseData = await response.json();
@@ -282,7 +320,16 @@ export class BaseApiService {
         data: responseData,
         status: response.status,
       };
-    } else {
+    } else  if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('user'); 
+        localStorage.removeItem('token');
+       window.location.href = '/session-expired';
+       return {
+          success: false,
+          error: 'Session expired',
+        };
+      }
+    else {
       throw new Error(responseData.message || responseData.error || 'File upload failed');
     }
   } catch (error: any) {

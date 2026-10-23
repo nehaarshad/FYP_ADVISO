@@ -27,6 +27,7 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 import Guidelines from "@/components/Guidelines/Guidelines";
 import { AdvisoryLogs } from "@/components/AdvisorView/AdvisoryLogs";
 import StudentRecommendationView from "@/components/CourseRecommendation/systemRecommendationView";
+import { useAuthGuard } from "@/src/hooks/authHook/useAuthGuard";
 
 // Helper function to format 24h time ("11:00:00") to 12h AM/PM format ("11:00 AM")
 const formatTimeTo12Hour = (timeStr: string) => {
@@ -51,6 +52,7 @@ export default function StudentDashboard() {
   const [showRoadmapModal, setShowRoadmapModal] = useState(false);
   const [currentStudentId, setCurrentStudentId] = useState<number | null>(null);
 
+    useAuthGuard();
   const { 
     students,
     getStudentById,
@@ -77,10 +79,7 @@ export default function StudentDashboard() {
     
     const response = sessionManager.getCurrentUser<any>();
     const currentUser = response?.data;
-    
-    if (!currentUser) {
-      return;
-    }
+ 
     
     const foundStudent = students.find((student: any) => {
       const studentSapId = student.User?.sapid || student.sapid;

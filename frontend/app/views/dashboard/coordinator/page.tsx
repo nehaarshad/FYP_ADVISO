@@ -30,6 +30,7 @@ import { ProgramList } from '@/components/program/programList/programList';
 import { AdvisorsList } from '@/components/advisors/advisorList';
 import { StudentList } from '@/components/StudentDetails/StudentList';
 import ForgetPasswordPage from '@/app/views/auth/forgetPassword/page';
+import { useAuthGuard } from '@/src/hooks/authHook/useAuthGuard';
 
 export default function CoordinatorDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -38,6 +39,7 @@ export default function CoordinatorDashboard() {
   const router = useRouter();
   const { statistics: studentStats, fetchStudents } = useStudents();
   const { statistics: advisorStats, fetchAdvisors } = useAdvisors();
+   useAuthGuard();
   
   // Directly using the program store actions and state
   const { programs, fetchPrograms } = useProgramStore();
@@ -53,10 +55,6 @@ export default function CoordinatorDashboard() {
     : 0;
 
   useEffect(() => {
-    if (!sessionManager.hasActiveSession()) {
-      router.push('/login');
-      return;
-    }
     fetchStudents();
     fetchAdvisors();
     if (fetchPrograms) fetchPrograms();
