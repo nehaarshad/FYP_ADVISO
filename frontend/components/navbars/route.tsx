@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/navbars/route.tsx
 "use client";
@@ -87,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div key={group} className="py-2.5">
 
             {/* Group Heading */}
-            <p className="px-5 text-[10px] font-black uppercase tracking-[0.18em] text-white/30 mb-2.5">
+            <p className="px-5 text-[11.5px] font-semibold uppercase tracking-[0.18em] text-[#FDB813] mb-2.5">
               {group}
             </p>
 
@@ -139,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {getDisplayName()}
               </p>
 
-              <p className="text-[9px] opacity-50 font-bold uppercase tracking-tighter">
+              <p className="text-[9px] opacity-75 font-bold uppercase tracking-tighter">
                 {userRole}
               </p>
             </div>
@@ -181,7 +180,7 @@ function ExpandableItem({
         className={`w-full flex items-center gap-4 px-5 py-[13.2px] rounded-xl transition-all ${
           open
             ? "bg-white/10"
-            : "hover:bg-white/5 opacity-70 hover:opacity-100"
+            : "hover:bg-white/5 opacity-80 hover:opacity-100"
         }`}
       >
         <div className="text-lg shrink-0">
@@ -215,7 +214,7 @@ function ExpandableItem({
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-[10px] font-bold italic ${
                   activeTab === sub.key
                     ? "text-[#FDB813] bg-white/10 opacity-100"
-                    : "opacity-60 hover:opacity-100 hover:bg-white/10"
+                    : "opacity-75 hover:opacity-100 hover:bg-white/10"
                 }`}
               >
                 {sub.icon}
@@ -244,7 +243,7 @@ function SidebarItem({
       className={`flex items-center gap-4 px-5 py-[13.2px] rounded-xl cursor-pointer transition-all ${
         active
           ? "bg-[#FDB813] text-[#1e3a5f] font-black shadow-xl scale-[1.01]"
-          : "opacity-60 hover:opacity-100 hover:bg-white/5 font-bold"
+          : "opacity-80 hover:opacity-100 hover:bg-white/5 font-bold"
       }`}
     >
       <span className="shrink-0">
@@ -257,4 +256,3 @@ function SidebarItem({
     </div>
   );
 }
-
