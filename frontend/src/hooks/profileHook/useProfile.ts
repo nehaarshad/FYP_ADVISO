@@ -44,11 +44,12 @@ export const useUserProfile = () => {
   // Get display name based on role
   const getDisplayName = useCallback(() => {
     if (!userProfile) return 'User';
-    console.log("to get user name: " ,userProfile)
-    if (userProfile.profile.advisorName) return userProfile.profile.advisorName;
-    if (userProfile.profile.coordinatorName) return userProfile.profile.coordinatorName;
-    if (userProfile.profile.studentName) return userProfile.profile.studentName;
-    if (userProfile.profile.name) return userProfile.profile.name;
+    
+    // 🔥 Yahan '?' laga diya hai taake null se crash na ho
+    if (userProfile?.profile?.advisorName) return userProfile.profile.advisorName;
+    if (userProfile?.profile?.coordinatorName) return userProfile.profile.coordinatorName;
+    if (userProfile?.profile?.studentName) return userProfile.profile.studentName;
+    if (userProfile?.profile?.name) return userProfile.profile.name;
     
     return `${userProfile.role?.charAt(0).toUpperCase()}${userProfile.role?.slice(1)}`;
   }, [userProfile]);
@@ -57,7 +58,7 @@ export const useUserProfile = () => {
   // Get email
   const getEmail = useCallback(() => {
     if (!userProfile) return '';
-    return userProfile.email || userProfile.profile?.email || '';
+    return userProfile.email || userProfile?.profile?.email || '';
   }, [userProfile]);
 
   // Get role display name
