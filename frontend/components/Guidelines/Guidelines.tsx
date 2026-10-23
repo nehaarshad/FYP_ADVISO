@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Key, // <-- Password wala icon use kiya hai
+  Key, // <-- Password icon
   ChevronDown,
   PlayCircle,
   CheckCircle2,
