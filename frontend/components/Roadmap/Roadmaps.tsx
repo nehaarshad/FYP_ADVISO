@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { Filter } from 'lucide-react'; // Only Filter icon needed now
+import { Filter } from 'lucide-react';
 import { useRoadmap } from '@/src/hooks/contentUploader/roadmapUploader/roadmapHook';
 import { usePrograms } from '@/src/hooks/programHook/useProgram';
 import { RoadmapDetailView } from './RoadmapView';
@@ -125,8 +125,9 @@ export function RoadmapSection() {
           {/* HEADER SECTION */}
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase">
-                ROADMAP MANAGEMENT
+              {/* Yahan Heading ko update kiya hai (normal aur chota) */}
+              <h2 className="text-xl font-bold text-[#1e3a5f]">
+                Roadmap Management
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 View, filter and manage academic roadmaps
