@@ -23,6 +23,7 @@ import {
 import { useRecommendations } from "../../src/hooks/recommendationHook/useCourseRecommendationHook";
 import { useUserProfile } from "@/src/hooks/profileHook/useProfile";
 import { motion } from "framer-motion";
+import { LoadingState } from "../states/loadingState";
 interface AdvisoryLogsProps {
   onBack?: () => void;
   onOpenStudentRecommendations?: () => void;
@@ -469,8 +470,6 @@ function StudentBlock({ log }: { log: any }) {
   );
 }
 
-/* ─────────────────────────── main component ─────────────────────────── */
-
 export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
   onBack,
   onOpenStudentRecommendations,
@@ -479,6 +478,7 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
     advisoryLogs,
     isLoadingLogs,
     logsError,
+    isProfileLoading,
     fetchAdvisoryLogs,
   } = useRecommendations();
 
@@ -489,13 +489,15 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
   const isAdvisor = role === "advisor";
 
   useEffect(() => {
+    if (isProfileLoading) return;
     fetchAdvisoryLogs();
-  }, [fetchAdvisoryLogs]);
+  }, [isProfileLoading, fetchAdvisoryLogs]);
 
   const logsArray = Array.isArray(advisoryLogs)
     ? advisoryLogs
     : [];
 
+    
   /* ── Filter by search term ───────────────────────────────────────── */
 
   const filteredLogs = useMemo(() => {
@@ -570,28 +572,9 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
 
   /* ── Loading ─────────────────────────────────────────────────────── */
 
-  if (isLoadingLogs) {
-    return (
-      <div className="w-full py-4 font-sans">
-        <button
-          title="Back"
-          onClick={onBack}
-          className="p-3 bg-white shadow-sm rounded-full text-[#1e3a5f] border border-slate-200 mb-6 hover:bg-slate-50"
-        >
-          <ArrowLeft size={20} />
-        </button>
-
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="h-24 bg-slate-100 rounded-2xl animate-pulse"
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
+if (isProfileLoading || isLoadingLogs) {
+  return LoadingState({ message: "Loading..." });
+}
 
   /* ── Error ───────────────────────────────────────────────────────── */
 
@@ -781,11 +764,6 @@ export const AdvisoryLogs: React.FC<AdvisoryLogsProps> = ({
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600">
-                <Users size={14} />
-                {session.students.length} student
-                {session.students.length !== 1 ? "s" : ""}
-              </div>
             </div>
 
             {/* Students in this session */}
