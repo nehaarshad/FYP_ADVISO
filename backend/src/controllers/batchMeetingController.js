@@ -2,6 +2,7 @@ import AdvisorTimetableModel from '../models/advisorTimetable.js';
 import BatchTimetableModel from '../models/batchTimetable.js';
 import BatchAdvisor from '../models/FacultyAdvisorModel.js';
 import BatchAssignment from '../models/batchAssignmentModel.js';
+import Student from '../models/StudentModel.js';
 import BatchMeeting from '../models/BatchMeetingModel.js';
 import { findFreeSlots } from '../utils/meetingFinder.js';
 
@@ -175,10 +176,22 @@ const getMeetingsForAdvisor = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const advisor = await BatchAdvisor.findOne({ where: { userId } });
+    let advisor = await BatchAdvisor.findOne({ where: { userId } });
     if (!advisor) {
-      return res.status(404).json({ success: false, error: 'Advisor not found' });
+      let student = await Student.findOne({ where: { userId } });
+      if (!student) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+      }
+      let batch = await BatchAssignment.findOne({ where: { batchId: student.batchId, isCurrentlyAdvised: true } });
+      if (!batch) {
+        return res.status(404).json({ success: false, error: 'No active advisor found for the student' });
+      }
+      advisor = await BatchAdvisor.findByPk(batch.advisorId);
+      if (!advisor) {
+        return res.status(404).json({ success: false, error: 'Advisor not found for the student' });
+      }
     }
+    console.log("advisor found for userId: ", userId, " is: ", advisor.id)
 
     const meetings = await BatchMeeting.findAll({
       where: { advisorId: advisor.id },
