@@ -25,4 +25,13 @@ const deleteFileFromS3 = async (key) => {
     return await s3.send(command);
 };
 
-export default { getFileFromS3, deleteFileFromS3 };
+const getKeyFromUrl = (url) => {
+    try {
+        const parsedUrl = new URL(url);
+        return decodeURIComponent(parsedUrl.pathname.substring(1));
+    } catch (e) {
+        return url;
+    }
+};
+
+export default { getFileFromS3, deleteFileFromS3 , getKeyFromUrl };

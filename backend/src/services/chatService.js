@@ -4,7 +4,7 @@ import Message from '../models/messagesModel.js';
 import User from '../models/userModel.js';
 import Student from '../models/studentModel.js';
 import BatchAdvisor from '../models/FacultyAdvisorModel.js';
-import BatchAssignment from '../models/BatchAssignmentModel.js';
+import BatchAssignment from '../models/batchAssignmentModel.js';
 
 const chatService = (io) => {
   const userSockets = new Map();

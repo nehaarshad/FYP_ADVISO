@@ -5,7 +5,8 @@ import CoursePreReqModel from '../models/coursePreReqModel.js';
 import CourseCategoryModel from '../models/courseCategoryModel.js';
 import { Op } from 'sequelize';
 import CategoryModel from '../models/categoryModel.js';
-import fs from 'fs';
+import s3Service from '../services/s3Services.js';
+const { getFileFromS3, deleteFileFromS3 } = s3Service;
 dotenv.config();
 
 const uploadCourseDetail = async (req, res) => {
@@ -16,8 +17,9 @@ const uploadCourseDetail = async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
+        const s3Response = await getFileFromS3(courseFile.key);
         const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(courseFile.path);
+        await workbook.xlsx.read(s3Response.Body);
         const worksheet = workbook.worksheets[0];
         const versionName = worksheet.name;
         console.log("Processing sheet:", versionName);
@@ -156,7 +158,7 @@ const uploadCourseDetail = async (req, res) => {
                 console.log(`Added prerequisite: ${prereq.courseCode} `);
             } 
         }
-           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+           await deleteFileFromS3(courseFile.key);
                
         // Return success response
         res.status(200).json({
@@ -164,8 +166,9 @@ const uploadCourseDetail = async (req, res) => {
         });
         
     } catch (error) {
-           fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
-               
+          if (courseFile && courseFile.key) {
+            await deleteFileFromS3(courseFile.key).catch(err => console.error(err));
+        }     
         console.error('Error uploading course detail:', error);
         res.status(500).json({ 
             message: 'Failed to upload course detail',

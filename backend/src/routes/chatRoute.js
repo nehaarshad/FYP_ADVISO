@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
-import fs from "fs";
+import s3Service from "../services/s3Services.js"; 
+const { deleteFileFromS3 } = s3Service;
 import { fileURLToPath } from "url";
 import { uploadChatFile } from "../middleWares/chatFileAttachments.js";
 
@@ -20,14 +21,14 @@ chatRouter.post(
             });
         }
 
-            const fileUrl = `${process.env.BASE_URL}/src/uploads/${req.file.filename}`; 
+            const fileUrl = req.file.location
 
         res.status(200).json({
             success: true,
             message: "File uploaded successfully",
             file: {
                 originalName: req.file.originalname,
-                fileName: req.file.filename,
+                fileName: req.file.key,
                 mimeType: req.file.mimetype,
                 size: req.file.size,
                 url: fileUrl
@@ -36,17 +37,11 @@ chatRouter.post(
     }
 );
 
-chatRouter.delete("/chat/delete/:filename", (req, res) => {
+chatRouter.delete("/chat/delete/:filename", async (req, res) => {
     const { filename } = req.params;
-    const filePath = path.join(dirname, "..", "src/uploads", filename);
-   if (!fs.existsSync(filePath)) {
-    return res.status(404).json({
-        success: false,
-        message: "File not found"
-    });
-}
+    
+      await deleteFileFromS3(filename);
 
-    fs.unlinkSync(filePath);
     res.status(200).json({
         success: true,
         message: "File deleted successfully"

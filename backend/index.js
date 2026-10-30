@@ -11,11 +11,7 @@ import router from "./src/routes/indexRoutes.js";
 import chatService from "./src/services/chatService.js";
 import { Server as SocketServer } from 'socket.io'; 
 import startReminderJob from './src/services/meetingReminderService.js'
-import path from "path";
 dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
@@ -45,12 +41,6 @@ app.use(bodyparser.urlencoded({ extended: true, limit: '50mb' }));
 app.use((req, res, next) => {
     next();
 });
-
-app.use("/src/uploads", express.static(path.join(__dirname, "src/uploads"), {
-    maxAge: '1y', // Tells browsers to cache the image for 1 year.
-   lastModified: true, //Adds a Last-Modified header for cache validation.
-    cacheControl: true, //Enables Cache-Control headers.
-}));
 
 
 //app routes
