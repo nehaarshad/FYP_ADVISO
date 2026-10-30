@@ -75,7 +75,7 @@ Chat.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
 
   // ==================== Student ====================
 
-  Student.hasOne(StudentStatus, { foreignKey: "studentId" });
+  Student.hasOne(StudentStatus, { foreignKey: "studentId", sourceKey: 'id'});
   StudentStatus.belongsTo(Student, { foreignKey: "studentId" });
 
   Student.hasOne(DegreeTranscript, { foreignKey: "studentId" });
@@ -264,8 +264,8 @@ CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId
   DegreeTranscript.hasMany(Student, { foreignKey: "studentId" });
   Student.belongsTo(DegreeTranscript, { foreignKey: "studentId" });
 
-Student.hasMany(BatchTimetableModel, { foreignKey: 'userId', sourceKey: 'userId'});
-BatchTimetableModel.belongsTo(Student, { foreignKey: 'userId', targetKey: 'userId' });
+Student.hasMany(BatchTimetableModel, { foreignKey: 'userId'});
+BatchTimetableModel.belongsTo(Student, { foreignKey: 'userId'});
 
   BatchModel.hasMany(BatchTimetableModel, { foreignKey: "batchId" });
   BatchTimetableModel.belongsTo(BatchModel, { foreignKey: "batchId" });

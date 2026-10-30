@@ -1,11 +1,7 @@
 import SupportingVideo from "../models/supportingVideoModel.js";
 import { Op } from "sequelize";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+import  s3Service from '../services/s3Services.js';
+const { getFileFromS3, deleteFileFromS3 } = s3Service;
 
 // Create new supporting video with file upload
 const createVideo = async (req, res) => {

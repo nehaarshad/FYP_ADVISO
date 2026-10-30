@@ -1,34 +1,29 @@
 import multer from "multer";
+import multerS3 from "multer-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 import path from "path";
-import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
-import { fileURLToPath } from "url";
 
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const dest = path.join(dirname, "..", "uploads");
-
-        if (!fs.existsSync(dest)) {
-            fs.mkdirSync(dest, { recursive: true });
-            fs.chmodSync(dest, 0o755);
-        }
-
-        cb(null, dest);
+// Initialize S3 client
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     },
+});
 
-    filename: function (req, file, cb) {
-        const uniqueName = Date.now() + "-" + uuidv4();
-        const ext = path.extname(file.originalname).toLowerCase();
-
-        const fileName =
-            file.fieldname + "-" + uniqueName + ext;
-
-        cb(null, fileName);
+// Configure multer to upload to S3
+const storage = multerS3({
+    s3: s3,
+    bucket: process.env.AWS_BUCKET_NAME,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    key: function (req, file, cb) {
+        // Save videos in the public-videos folder
+        cb(null, "public-videos/" + Date.now() + "-" + file.originalname);
     }
 });
+
 
 const chatFileFilter = (req, file, cb) => {
     const allowedMimeTypes = [
