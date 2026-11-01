@@ -24,9 +24,9 @@ const getMeetingSuggestions = async (req, res) => {
     });
 
     if (!assignment) {
-      return res.status(404).json({
+      return res.status(200).json({
         success: false,
-        error: 'No active batch assignment for this advisor',
+        message: 'No active batch assignment for this advisor',
       });
     }
 

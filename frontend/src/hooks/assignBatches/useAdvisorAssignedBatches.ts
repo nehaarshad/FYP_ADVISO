@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAdvisorStore } from '../../storage/advisorStore/advisorsData';
 import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
+import { BatchAssignment } from '@/src/models/batchAssignmentModel';
 
 export const useAdvisorAssignedBatches = () => {
   const [assignedBatches, setAssignedBatches] = useState<any[]>([]);
@@ -46,7 +47,7 @@ export const useAdvisorAssignedBatches = () => {
 
       if (advisor) {
         setCurrentAdvisor(advisor);
-        const batches = (advisor.BatchAssignments || []).map((assignment: any) => ({
+         const batches = (advisor.BatchAssignments || []).map((assignment: any) => ({
           id: assignment.BatchModel?.id,
           batchName: assignment.BatchModel?.batchName,
           batchYear: assignment.BatchModel?.batchYear,
@@ -57,7 +58,9 @@ export const useAdvisorAssignedBatches = () => {
           endDate: assignment.endDate,
           isCurrentlyAdvised: assignment.isCurrentlyAdvised
         }));
-        setAssignedBatches(batches);
+        const currentlyAdvised = batches.filter((batch:BatchAssignment)=> batch.isCurrentlyAdvised == true)
+        console.log("Currently Advised ", batches, currentlyAdvised)
+        setAssignedBatches(currentlyAdvised);
       }
     } catch (error) {
       console.error('Error loading advisor assigned batches:', error);
