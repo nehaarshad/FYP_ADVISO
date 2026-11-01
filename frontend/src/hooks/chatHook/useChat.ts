@@ -373,7 +373,7 @@ const openChat = useCallback(
         receiverId: receiverId,
       });
 
-      return fileUrl;
+      return fileUrl.data;
     },
     [selectedChat, uploadFile, sendMessage]
   );

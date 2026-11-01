@@ -2,7 +2,7 @@ import AdvisorTimetableModel from '../models/advisorTimetable.js';
 import BatchTimetableModel from '../models/batchTimetable.js';
 import BatchAdvisor from '../models/FacultyAdvisorModel.js';
 import BatchAssignment from '../models/batchAssignmentModel.js';
-import Student from '../models/StudentModel.js';
+import Student from '../models/studentModel.js';
 import BatchMeeting from '../models/BatchMeetingModel.js';
 import { findFreeSlots } from '../utils/meetingFinder.js';
 
