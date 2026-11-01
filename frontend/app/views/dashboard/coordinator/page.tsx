@@ -12,7 +12,6 @@ import { sessionManager } from '@/src/services/sessionManagement/sessionManager'
 import { Sidebar } from "@/components/navbars/route";
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useAdvisors } from '@/src/hooks/advisorHooks/useAdvisorHook';
-// ===== DIRECT STORE IMPORT TO PREVENT MISSING EXPORT ERROR =====
 import { useProgramStore } from '@/src/storage/programStore/programStore'; 
 import { RoadmapSection } from '@/components/Roadmap/Roadmaps';
 import { CourseOffering } from '@/app/components/CourseOffering';
@@ -191,38 +190,15 @@ export default function CoordinatorDashboard() {
               </button>
               
               {/* UPDATED PROGRAM TAB HERE */}
-              {activeTab === "programs" && (
-                <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm flex flex-col min-h-[500px] w-full max-w-5xl mx-auto">
-                  
-                  {/* HEADER SECTION */}
-                  <div className="mb-6 border-b border-slate-100 pb-6">
-                    <h2 className="text-xl font-bold text-[#1e3a5f]">
-                      Program Management
-                    </h2>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Add and manage academic programs
-                    </p>
-                  </div>
-
-                  {/* ADD PROGRAM FORM (Inline UI) */}
-                  <div className="mb-8 p-4 bg-slate-50 rounded-2xl flex flex-col md:flex-row gap-4 items-center">
-                    <input
-                      type="text"
-                      placeholder="Enter new program name (e.g., BS Computer Science)"
-                      className="flex-1 w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
-                    />
-                    <button
-                      className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-6 py-2.5 rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#152a45] transition-all"
-                    >
-                      <GraduationCap size={16} /> Add Program
-                    </button>
-                  </div>
-
-                  {/* PROGRAM LIST */}
-                  <ProgramList />
-                  
-                </div>
-              )}
+        {activeTab === "programs" && (
+  <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm w-full max-w-6xl mx-auto min-h-[500px]">
+    
+      
+         <AddProgram />
+        <ProgramList />
+      
+  </div>
+)}
 
               {activeTab === "roadmaps" && <RoadmapSection />}
               {activeTab === "course-offering" && <CourseOffering />}

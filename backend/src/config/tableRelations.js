@@ -58,37 +58,35 @@ export default function relations() {
   BatchAdvisor.hasMany(RequestFormType, { foreignKey: "preReviewedById" });
   RequestFormType.belongsTo(BatchAdvisor, { foreignKey: "preReviewedById" });
 
-// ==================== MESSAGE ↔ USER ====================
+  // ==================== MESSAGE ↔ USER ====================
+  User.hasMany(Message, { foreignKey: "senderId", as: "sentMessages" });
+  Message.belongsTo(User, { foreignKey: "senderId", as: "sender" });
+  User.hasMany(Message, { foreignKey: "receiverId", as: "receivedMessages" });
+  Message.belongsTo(User, { foreignKey: "receiverId", as: "receiver" });
 
-User.hasMany(Message, {foreignKey: "senderId",as: "sentMessages",});
-Message.belongsTo(User, {foreignKey: "senderId",as: "sender",});
-User.hasMany(Message, {foreignKey: "receiverId",as: "receivedMessages"});
-Message.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
-
-
-// ==================== CHAT ↔ USER ====================
-
-User.hasMany(Chat, {foreignKey: "senderId",as: "sentChats",});
-Chat.belongsTo(User, {foreignKey: "senderId",as: "sender",});
-User.hasMany(Chat, {foreignKey: "receiverId",as: "receivedChats",});
-Chat.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
+  // ==================== CHAT ↔ USER ====================
+  User.hasMany(Chat, { foreignKey: "senderId", as: "sentChats" });
+  Chat.belongsTo(User, { foreignKey: "senderId", as: "sender" });
+  User.hasMany(Chat, { foreignKey: "receiverId", as: "receivedChats" });
+  Chat.belongsTo(User, { foreignKey: "receiverId", as: "receiver" });
 
   // ==================== Student ====================
+  // ✅ FIXED: Explicitly link Student.id to StudentStatus.studentId
+  Student.hasOne(StudentStatus, { foreignKey: "studentId", sourceKey: 'id' });
+  StudentStatus.belongsTo(Student, { foreignKey: "studentId", targetKey: 'id' });
 
-  Student.hasOne(StudentStatus, { foreignKey: "studentId", sourceKey: 'id'});
-  StudentStatus.belongsTo(Student, { foreignKey: "studentId" });
+  // ✅ FIXED: Explicitly link Student.id to DegreeTranscript.studentId
+  Student.hasOne(DegreeTranscript, { foreignKey: "studentId", sourceKey: 'id' });
+  DegreeTranscript.belongsTo(Student, { foreignKey: "studentId", targetKey: 'id' });
 
-  Student.hasOne(DegreeTranscript, { foreignKey: "studentId" });
-  DegreeTranscript.belongsTo(Student, { foreignKey: "studentId" });
+  Student.hasMany(SessionalTranscript, { foreignKey: "studentId", sourceKey: 'id' });
+  SessionalTranscript.belongsTo(Student, { foreignKey: "studentId", targetKey: 'id' });
 
-  Student.hasMany(SessionalTranscript, { foreignKey: "studentId" });
-  SessionalTranscript.belongsTo(Student, { foreignKey: "studentId" });
+  Student.hasMany(RequestFormType, { foreignKey: "studentId", sourceKey: 'id' });
+  RequestFormType.belongsTo(Student, { foreignKey: "studentId", targetKey: 'id' });
 
-  Student.hasMany(RequestFormType, { foreignKey: "studentId" });
-  RequestFormType.belongsTo(Student, { foreignKey: "studentId" });
-
-  Student.hasMany(AdvisorDecision, { foreignKey: "studentId" });
-  AdvisorDecision.belongsTo(Student, { foreignKey: "studentId" });
+  Student.hasMany(AdvisorDecision, { foreignKey: "studentId", sourceKey: 'id' });
+  AdvisorDecision.belongsTo(Student, { foreignKey: "studentId", targetKey: 'id' });
 
   BatchAdvisor.hasMany(AdvisorNotes, { foreignKey: "advisorId" });
   AdvisorNotes.belongsTo(BatchAdvisor, { foreignKey: "advisorId" });
@@ -96,20 +94,19 @@ Chat.belongsTo(User, {foreignKey: "receiverId",as: "receiver",});
   BatchModel.hasMany(AdvisorNotes, { foreignKey: "batchId" });
   AdvisorNotes.belongsTo(BatchModel, { foreignKey: "batchId" });
 
-  Student.hasMany(StudentGuardian, { foreignKey: "studentId" });
-  StudentGuardian.belongsTo(Student, { foreignKey: "studentId" });
+  Student.hasMany(StudentGuardian, { foreignKey: "studentId", sourceKey: 'id' });
+  StudentGuardian.belongsTo(Student, { foreignKey: "studentId", targetKey: 'id' });
 
-Student.belongsTo(BatchModel, { foreignKey: "batchId" });
-BatchModel.hasMany(Student, { foreignKey: "batchId" });
+  Student.belongsTo(BatchModel, { foreignKey: "batchId" });
+  BatchModel.hasMany(Student, { foreignKey: "batchId" });
+
   // ==================== Program ====================
-
   BatchModel.belongsTo(ProgramModel, { foreignKey: "programId" });
   ProgramModel.hasMany(BatchModel, { foreignKey: "programId" });
 
   ProgramModel.hasMany(RoadmapModel, { foreignKey: "programId" });
   RoadmapModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
-  
   ProgramModel.hasMany(CourseOfferingModel, { foreignKey: "programId" });
   CourseOfferingModel.belongsTo(ProgramModel, { foreignKey: "programId" });
 
@@ -129,14 +126,12 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   BatchModel.hasMany(BatchMeeting, { foreignKey: "batchId" });
   BatchMeeting.belongsTo(BatchModel, { foreignKey: "batchId" });
 
-  
   BatchModel.hasMany(CourseOfferingModel, { foreignKey: "batchId" });
   CourseOfferingModel.belongsTo(BatchModel, { foreignKey: "batchId" });
 
   // ==================== Sessional Recommendation Courses ====================
-
-  Student.hasMany(SessionalRecommendation, { foreignKey: "studentId" });
-  SessionalRecommendation.belongsTo(Student, { foreignKey: "studentId" });
+  Student.hasMany(SessionalRecommendation, { foreignKey: "studentId", sourceKey: 'id' });
+  SessionalRecommendation.belongsTo(Student, { foreignKey: "studentId", targetKey: 'id' });
 
   SessionModel.hasMany(SessionalRecommendation, { foreignKey: "sessionId" });
   SessionalRecommendation.belongsTo(SessionModel, { foreignKey: "sessionId" });
@@ -158,11 +153,11 @@ BatchModel.hasMany(Student, { foreignKey: "batchId" });
   AdvisorNotes.belongsTo(BatchAdvisor, { foreignKey: "advisorId" });
 
   // ==================== Faculty Recommendation ====================
-FacultyRecommendation.belongsTo(BatchAdvisor, {foreignKey: 'postingAdvisorId',as: 'postingAdvisor'});
-FacultyRecommendation.hasMany(RecommendationComment, {foreignKey: 'recommendationId',as: 'comments',onDelete: 'CASCADE'});
+  FacultyRecommendation.belongsTo(BatchAdvisor, { foreignKey: 'postingAdvisorId', as: 'postingAdvisor' });
+  FacultyRecommendation.hasMany(RecommendationComment, { foreignKey: 'recommendationId', as: 'comments', onDelete: 'CASCADE' });
 
-RecommendationComment.belongsTo(BatchAdvisor, {foreignKey: 'commentingAdvisorId',as: 'commentingAdvisor'});
-RecommendationComment.belongsTo(FacultyRecommendation, {foreignKey: 'recommendationId', as: 'recommendation'});
+  RecommendationComment.belongsTo(BatchAdvisor, { foreignKey: 'commentingAdvisorId', as: 'commentingAdvisor' });
+  RecommendationComment.belongsTo(FacultyRecommendation, { foreignKey: 'recommendationId', as: 'recommendation' });
 
   // ==================== Course & Offerings ====================
   CourseOfferingModel.hasMany(CourseModel, { foreignKey: "courseId" });
@@ -172,80 +167,55 @@ RecommendationComment.belongsTo(FacultyRecommendation, {foreignKey: 'recommendat
   CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
 
   // Prerequisites (self-referential many-to-many)
-   CourseModel.hasMany(CoursePreReqModel, {foreignKey: "courseid",
-        as: "prerequisites", 
-        sourceKey: "id",
-    });
-    
-    CourseModel.hasMany(CoursePreReqModel, {foreignKey: "preReqCourseId",
-        as: "usedAsPrerequisiteFor",
-        sourceKey: "id",
-    });
-    
-    CoursePreReqModel.belongsTo(CourseModel, {
-        foreignKey: "courseid",
-        as: "mainCourse",
-        targetKey: "id",
-    });
-    
-    CoursePreReqModel.belongsTo(CourseModel, {
-        foreignKey: "preReqCourseId",
-        as: "prerequisiteCourse",
-        targetKey: "id",
-    });
+  CourseModel.hasMany(CoursePreReqModel, { foreignKey: "courseid", as: "prerequisites", sourceKey: "id" });
+  CourseModel.hasMany(CoursePreReqModel, { foreignKey: "preReqCourseId", as: "usedAsPrerequisiteFor", sourceKey: "id" });
+  
+  CoursePreReqModel.belongsTo(CourseModel, { foreignKey: "courseid", as: "mainCourse", targetKey: "id" });
+  CoursePreReqModel.belongsTo(CourseModel, { foreignKey: "preReqCourseId", as: "prerequisiteCourse", targetKey: "id" });
 
-      // ==================== course Recommendations  ====================
-
-  AdvisorFinalRecommendation.belongsTo(Student, { foreignKey: 'studentId',  as: 'Student' });
-  AdvisorFinalRecommendation.belongsTo(SessionModel,{ foreignKey: 'sessionId',   as: 'Session' });
-  AdvisorFinalRecommendation.belongsTo(SessionalRecommendation, { foreignKey: 'sessionalRecommendationId', });
-  AdvisorFinalRecommendation.belongsTo(BatchAdvisor, { foreignKey: 'advisorId',  as: 'Advisor' });
+  // ==================== Course Recommendations ====================
+  AdvisorFinalRecommendation.belongsTo(Student, { foreignKey: 'studentId', as: 'Student' });
+  AdvisorFinalRecommendation.belongsTo(SessionModel, { foreignKey: 'sessionId', as: 'Session' });
+  AdvisorFinalRecommendation.belongsTo(SessionalRecommendation, { foreignKey: 'sessionalRecommendationId' });
+  AdvisorFinalRecommendation.belongsTo(BatchAdvisor, { foreignKey: 'advisorId', as: 'Advisor' });
  
-  Student.hasMany(AdvisorFinalRecommendation,    { foreignKey: 'studentId' });
-  SessionModel.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionId' });
-  SessionalRecommendation.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionalRecommendationId' });
-  SessionalRecommendation.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionalRecommendationId' });
+  Student.hasMany(AdvisorFinalRecommendation, { foreignKey: 'studentId', sourceKey: 'id' });
+  SessionModel.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionId', sourceKey: 'id' });
+  SessionalRecommendation.hasMany(AdvisorFinalRecommendation, { foreignKey: 'sessionalRecommendationId', sourceKey: 'id' });
 
-  // ==================== Session  ====================
-
+  // ==================== Session ====================
   SessionModel.hasMany(CourseOfferingModel, { foreignKey: "sessionId" });
   CourseOfferingModel.belongsTo(SessionModel, { foreignKey: "sessionId" });
 
-// ==================== Roadmap & Semester ====================
-RoadmapModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "roadmapId", });
-RoadmapCourseCategoryModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId",  });
+  // ==================== Roadmap & Semester ====================
+  RoadmapModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "roadmapId" });
+  RoadmapCourseCategoryModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });
 
-RoadmapModel.hasMany(SemesterRoadmapModel, { foreignKey: "roadmapId",  });
-SemesterRoadmapModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId", });
+  RoadmapModel.hasMany(SemesterRoadmapModel, { foreignKey: "roadmapId" });
+  SemesterRoadmapModel.belongsTo(RoadmapModel, { foreignKey: "roadmapId" });
 
-// RoadmapCourseCategory → Category (NOT the other way around)
-RoadmapCourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId", });
-CategoryModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "categoryId", });
+  RoadmapCourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
+  CategoryModel.hasMany(RoadmapCourseCategoryModel, { foreignKey: "categoryId" });
 
-// Category → CourseCategoryModel
-CategoryModel.hasMany(CourseCategoryModel, { foreignKey: "categoryId", });
-CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId",  });
+  CategoryModel.hasMany(CourseCategoryModel, { foreignKey: "categoryId" });
+  CourseCategoryModel.belongsTo(CategoryModel, { foreignKey: "categoryId" });
 
-// CourseModel → CourseCategoryModel
-CourseModel.hasMany(CourseCategoryModel, { foreignKey: "courseId",  });
-CourseCategoryModel.belongsTo(CourseModel, { foreignKey: "courseId",  });
+  CourseModel.hasMany(CourseCategoryModel, { foreignKey: "courseId" });
+  CourseCategoryModel.belongsTo(CourseModel, { foreignKey: "courseId" });
 
-// Semester courses
-SemesterRoadmapModel.hasMany(SemesterCourseModel, { foreignKey: "semesterRoadmapId", });
-SemesterCourseModel.belongsTo(SemesterRoadmapModel, { foreignKey: "semesterRoadmapId",  });
+  SemesterRoadmapModel.hasMany(SemesterCourseModel, { foreignKey: "semesterRoadmapId" });
+  SemesterCourseModel.belongsTo(SemesterRoadmapModel, { foreignKey: "semesterRoadmapId" });
 
-SemesterCourseModel.belongsTo(CourseCategoryModel, { foreignKey: "courseCategoryId", });
-CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId",  });
+  SemesterCourseModel.belongsTo(CourseCategoryModel, { foreignKey: "courseCategoryId" });
+  CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId" });
 
   // ==================== Timetable ====================
-
-    CourseOfferingModel.hasMany(TimetableModel, { foreignKey: "courseOfferingId"  });
-
-    TimetableModel.belongsTo(CourseOfferingModel, { foreignKey: "courseOfferingId",});
+  CourseOfferingModel.hasMany(TimetableModel, { foreignKey: "courseOfferingId" });
+  TimetableModel.belongsTo(CourseOfferingModel, { foreignKey: "courseOfferingId" });
     
   // ==================== Chat & Messages ====================
-  ChatsModel.hasMany(Message, { foreignKey: "chatId" ,as: "messages"});
-  Message.belongsTo(ChatsModel, { foreignKey: "chatId" ,as: "messages"});
+  ChatsModel.hasMany(Message, { foreignKey: "chatId", as: "messages" });
+  Message.belongsTo(ChatsModel, { foreignKey: "chatId", as: "messages" });
 
   // ==================== Transcripts Management ====================
   SessionalTranscript.hasMany(TranscriptCoursesDetail, { foreignKey: "sessionalTranscriptId" });
@@ -256,16 +226,17 @@ CourseCategoryModel.hasMany(SemesterCourseModel, { foreignKey: "courseCategoryId
 
   TranscriptCoursesDetail.hasMany(CourseModel, { foreignKey: "courseId" });
 
-    // ==================== Degree Transcripts ====================
-
+  // ==================== Degree Transcripts ====================
   DegreeTranscript.hasMany(SessionalTranscript, { foreignKey: "degreeTranscriptId" });
   SessionalTranscript.belongsTo(DegreeTranscript, { foreignKey: "degreeTranscriptId" });
   
-  DegreeTranscript.hasMany(Student, { foreignKey: "studentId" });
-  Student.belongsTo(DegreeTranscript, { foreignKey: "studentId" });
+  // ✅ FIXED: Explicitly link DegreeTranscript.id to Student.id
+  DegreeTranscript.hasMany(Student, { foreignKey: "id", sourceKey: 'id' });
+  Student.belongsTo(DegreeTranscript, { foreignKey: "id", targetKey: 'id' });
 
-Student.hasMany(BatchTimetableModel, { foreignKey: 'userId'});
-BatchTimetableModel.belongsTo(Student, { foreignKey: 'userId'});
+  // ✅ FIXED: The main culprit! Explicitly link Student.id to BatchTimetable.userId
+  Student.hasMany(BatchTimetableModel, { foreignKey: 'userId', sourceKey: 'id' });
+  BatchTimetableModel.belongsTo(Student, { foreignKey: 'userId', targetKey: 'id' });
 
   BatchModel.hasMany(BatchTimetableModel, { foreignKey: "batchId" });
   BatchTimetableModel.belongsTo(BatchModel, { foreignKey: "batchId" });

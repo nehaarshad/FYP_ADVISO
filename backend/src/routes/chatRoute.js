@@ -26,7 +26,7 @@ chatRouter.post(
         res.status(200).json({
             success: true,
             message: "File uploaded successfully",
-            file: {
+            data: {
                 originalName: req.file.originalname,
                 fileName: req.file.key,
                 mimeType: req.file.mimetype,

@@ -29,12 +29,12 @@ const chatService = (io) => {
     // Get all chats based on user role
     socket.on('getAdvisorChats', async (userId) => {
       try {
-        const user = await User.findByPk(userId, {
-          include: [
-            { model: Student,  },
-            { model: BatchAdvisor,  }
-          ]
-        });
+
+          const user = await User.findByPk(userId);
+          if (!user) return socket.emit('error', { message: 'User not found' });
+
+
+// You can now use studentDetails or advisorDetails in your logic
 
         if (!user) {
           socket.emit('error', { message: 'User not found' });
@@ -206,12 +206,9 @@ console.log(`User ${userId} has ${JSON.stringify(chats.length)} chats: ${JSON.st
     });
         socket.on('getStudentChats', async (userId) => {
       try {
-        const user = await User.findByPk(userId, {
-          include: [
-            { model: Student, },
-            { model: BatchAdvisor,  }
-          ]
-        });
+
+            const user = await User.findByPk(userId);
+            if (!user) return socket.emit('error', { message: 'User not found' });
 
         if (!user) {
           socket.emit('error', { message: 'User not found' });
