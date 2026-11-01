@@ -1,16 +1,12 @@
-// frontend/src/app/session-expired/page.tsx
 "use client";
-import React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { ShieldAlert, ArrowRight } from "lucide-react";
-import Link from "next/link";
 
 export default function SessionExpiredPage() {
   const router = useRouter();
 
   const handleLoginRedirect = () => {
-    // Optional: Clear any leftover data before redirecting
     localStorage.clear(); 
     router.push("/views/auth/login");
   };
@@ -56,12 +52,6 @@ export default function SessionExpiredPage() {
           Login Again <ArrowRight size={20} />
         </motion.button>
 
-        {/* Optional Footer */}
-        <div className="mt-8">
-          <Link href="/" className="text-xs font-bold text-slate-400 hover:text-[#FDB813] uppercase tracking-widest transition-colors">
-            Return to Home
-          </Link>
-        </div>
       </motion.div>
     </div>
   );

@@ -43,7 +43,7 @@ export const TimetableEntryCard: React.FC<Props> = ({
         <h4 className="font-bold text-[#1e3a5f] uppercase tracking-tight truncate text-sm">
           {entry.course}
         </h4>
-        <p className="text-xs font-bold text-slate-400 mt-0.5 tracking-wide">
+        <p className="text-xs font-bold text-slate-600 mt-0.5 tracking-wide">
           {formatTime(entry.startTime)} — {formatTime(entry.endTime)}
         </p>
 
@@ -51,8 +51,8 @@ export const TimetableEntryCard: React.FC<Props> = ({
         {variant === 'personal' ? (
           <p className="text-[10px] font-bold text-amber-600 uppercase tracking-widest mt-1">You</p>
         ) : creatorName ? (
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
-            Added by <span className="text-[#1e3a5f] font-bold">{creatorName}</span>
+          <p className="text-[10px] font-medium text-slate-800 uppercase tracking-wider mt-1">
+            Added by <span className=" text-amber-600 font-bold">{creatorName}</span>
           </p>
         ) : null}
       </div>

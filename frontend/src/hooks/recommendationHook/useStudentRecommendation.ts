@@ -24,23 +24,17 @@ const pickPayloads = (response: any): any[] => {
 };
 
 export const useStudentRecommendations = () => {
+    const { userProfile } = useUserProfile();
   const [state, setState] = useState<StudentRecommendationState>({
     recommendations: [],
     isLoading: false,
     error: null,
   });
-  const { userProfile } = useUserProfile();
+
+  const studentId = userProfile?.profile?.id ?? null;
 
   const fetchStudentRecommendations = useCallback(async () => {
-    const studentId = userProfile?.profile?.id;
-    if (!studentId) {
-      setState(prev => ({
-        ...prev,
-        error: 'Student profile not found. Please log in again.',
-        isLoading: false,
-      }));
-      return;
-    }
+   if (!studentId) return;
 
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
@@ -74,7 +68,7 @@ export const useStudentRecommendations = () => {
       }
 
       const deduped = Array.from(latestBySession.values());
-      console.log('✅ Deduped sessions:', deduped.length);
+      console.log('Deduped sessions:', deduped.length);
 
       setState({
         recommendations: deduped,
@@ -84,14 +78,16 @@ export const useStudentRecommendations = () => {
           : response?.message || 'No recommendations found for this student',
       });
     } catch (err: any) {
-      console.error('💥 fetch error:', err);
+      console.error('fetch error:', err);
       setState({
         recommendations: [],
         isLoading: false,
         error: err?.message || 'Unexpected error loading recommendations',
       });
     }
-  }, [userProfile]);
+  }, [studentId]);
+
+ const isProfileLoading = !studentId;
 
   const clearRecommendations = useCallback(() => {
     setState({ recommendations: [], isLoading: false, error: null });
@@ -138,6 +134,7 @@ export const useStudentRecommendations = () => {
     allRecommendedCourses,
     isLoading: state.isLoading,
     error: state.error,
+    isProfileLoading,
     fetchStudentRecommendations,
     clearRecommendations,
   };

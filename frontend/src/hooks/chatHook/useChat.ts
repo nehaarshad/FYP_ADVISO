@@ -182,10 +182,10 @@ const handleReceiveMessage = (data: { chatId: number; message: Message }) => {
 
     // Load data based on user role
     if (isStudent) {
-      console.log("🎓 Loading student chat data for user:", userId);
+      console.log(" Loading student chat data for user:", userId);
       chatSocketService.getStudentChats(userId);
     } else {
-      console.log("👨‍🏫 Loading advisor chat data for user:", userId);
+      console.log(" Loading advisor chat data for user:", userId);
       chatSocketService.getAdvisorChats(userId);
     }
 
@@ -360,18 +360,20 @@ const openChat = useCallback(
         throw new Error("No chat selected");
       }
 
+      console.log("file sending ", receiverId, file)
       const fileUrl = await uploadFile(file);
 
       if (!fileUrl) {
         throw new Error("File upload failed");
       }
 
+      console.log("File Attachment ",fileUrl.data.url)
       sendMessage({
-        fileAttachment: fileUrl.url,
+        fileAttachment: fileUrl.data.url,
         receiverId: receiverId,
       });
 
-      return fileUrl;
+      return fileUrl.data;
     },
     [selectedChat, uploadFile, sendMessage]
   );

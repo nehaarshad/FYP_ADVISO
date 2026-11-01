@@ -320,14 +320,16 @@ export const useRecommendations = () => {
     [state.selectedCourses, state.savedRecommendationId, state.Session, userProfile, patch]
   );
 
+  const advisorId = userProfile?.profile?.id ?? null;
+
   const fetchAdvisoryLogs = useCallback(async () => {
-    const advisorId = userProfile?.profile?.id;
-    if (!advisorId) { patch({ logsError: 'Advisor profile not found. Please log in again.' }); return; }
+    if (!advisorId) return;
+    console.log('[fetchAdvisoryLogs] called, advisorId =', userProfile?.profile?.id);
     patch({ isLoadingLogs: true, logsError: null });
     try {
       const response = await recommendationRepository.getAdvisoryLogs(advisorId);
       if (response.success && response.data) {
-        patch({ advisoryLogs: response.data, logsError: null });
+        patch({ advisoryLogs: response.data, logsError: null ,isFinalizing: false});
       } else {
         patch({ advisoryLogs: [], logsError: response.error || 'Failed to load advisory logs' });
       }
@@ -336,7 +338,8 @@ export const useRecommendations = () => {
     } finally {
       patch({ isLoadingLogs: false });
     }
-  }, [userProfile, patch]);
+  }, [advisorId, patch]);
+    const isProfileLoading = !advisorId;
 
   const resetRecommendations = useCallback(() => setState(initialState), []);
 
@@ -357,7 +360,7 @@ export const useRecommendations = () => {
     advisoryLogs: state.advisoryLogs,
     allRecommendedCourses,
     totalSelectedCredits,
-
+    isProfileLoading,
     isGenerating: state.isGenerating,
     isFinalizing: state.isFinalizing,
     isLoadingLogs: state.isLoadingLogs,

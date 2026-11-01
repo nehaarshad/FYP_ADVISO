@@ -17,14 +17,13 @@ import { ProfileView } from "@/components/ProfileView/route";
 import { AdvisoryParentScreen } from '@/components/AdvisorView/advisoryNavPtterrn'; 
 import { AdvisorTimetablePage } from "@/components/Timetable/AdvisorTimetablePage";
 import { AdvisorMeetingsPage } from "@/components/Meetings/AdvisorMeetingsPage";
-
-// Local component fallbacks or direct imports
 import AdvisoryNotes from "../../../../components/AdvisorView/AdvisoryNotes"; 
 import AdvisorChat from "../../../../components/Chat/AdvisorChat"; 
 import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs'; 
 import Guidelines from "../../../../components/Guidelines/Guidelines"; 
 import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation"; 
 import { useAuthGuard } from "@/src/hooks/authHook/useAuthGuard";
+import { EmptyState } from "@/components/states/emptystate";
 
 // Helper function to format 24h time to 12h AM/PM format
 const formatTimeTo12Hour = (timeStr: string) => {
@@ -84,7 +83,7 @@ export default function AdvisorDashboard() {
  
   useEffect(() => { 
     if (assignedBatches.length > 0 && !selectedBatch) { 
-      setSelectedBatch(assignedBatches[0]); 
+      setSelectedBatch(assignedBatches[assignedBatches.length - 1]); 
     } 
   }, [assignedBatches, selectedBatch]); 
 
@@ -235,11 +234,19 @@ export default function AdvisorDashboard() {
                   /> 
                 </div> 
  
+                    {(!assignedBatches || assignedBatches.length === 0) && (
+                          <EmptyState
+                          title="No Batch Assigned"
+                          message="You currently don't have any batch assigned to advise. New assignments will appear here once allocated."
+                        />
+                    )
+
+                    }
                 {assignedBatches.length > 0 && ( 
                   <div> 
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Your Assigned Batches</h3> 
+                    <h3 className="text-sm font-bold text-[#1e3a5f]  uppercase tracking-wider mb-3">Your Assigned Batches</h3> 
                     <div className="flex flex-wrap gap-2 md:gap-3"> 
-                      {assignedBatches.map((batch: any) => ( 
+                      {assignedBatches.toReversed().map((batch: any) => ( 
                         <button 
                           key={`${batch.batchName}-${batch.batchYear}`} 
                           onClick={() => { 

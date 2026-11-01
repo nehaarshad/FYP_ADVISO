@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/immutability */
 import { CreateMeetingPayload, UpdateMeetingPayload } from '@/src/repositories/batchMeetingRepository/types/batchMeetingTypes';
 import { useBatchMeetingStore } from '@/src/storage/batchMeetingStore/batchMeetingStore';
 import { useCallback, useEffect } from 'react';
+import { useUserProfile } from '../profileHook/useProfile';
 
 
 export const useBatchMeetings = (userId: number | null | undefined) => {
@@ -19,6 +21,8 @@ export const useBatchMeetings = (userId: number | null | undefined) => {
     clearCache,
   } = useBatchMeetingStore();
 
+    const { userProfile } = useUserProfile();
+  userId =   userProfile?.profile.userId ?? userId; 
   useEffect(() => {
     if (userId) {
       fetchSuggestions(userId);

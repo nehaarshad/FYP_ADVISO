@@ -36,6 +36,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
     groupedBySession,
     isLoading,
     error,
+    isProfileLoading,
     fetchStudentRecommendations,
   } = useStudentRecommendations();
 
@@ -43,7 +44,10 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
   const [openSession, setOpenSession] = useState<string | null>(null);
   const [expandedCourseKeys, setExpandedCourseKeys] = useState<Set<string>>(new Set());
 
-  useEffect(() => { fetchStudentRecommendations(); }, [fetchStudentRecommendations]);
+  useEffect(() => {
+      if (isProfileLoading) return;
+       fetchStudentRecommendations(); 
+    }, [isProfileLoading,fetchStudentRecommendations]);
 
   const toggleSession = (key: string) =>
     setOpenSession(prev => (prev === key ? null : key));
@@ -157,7 +161,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
   return (
     <div className="animate-in fade-in duration-300 w-full min-w-full px-0 py-4 space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 mb-2 px-0 w-full">
+      <div className="flex flex-col gap-4 mb-15 w-full">
         {onBack && (
           <button
             onClick={onBack}
@@ -176,7 +180,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
 
     {/* Title & Subtitle */}
     <div>
-      <h2 className="text-xl sm:text-2xl font-extrabold text-[#1e3a5f] tracking-tight">
+      <h2 className="text-xl sm:text-2xl font-extrabold text-[#1e3a5f] tracking-tight ">
         System Recommendations
       </h2>
       <p className="text-xs text-slate-700 font-medium mt-0.5">
@@ -184,17 +188,6 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
       </p>
     </div>
   </div>
-
-          <div className="relative w-full sm:w-auto">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" size={15} />
-            <input
-              type="text"
-              placeholder="Search course..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="w-full sm:w-[280px] pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-[#1e3a5f] shadow-xs transition-colors"
-            />
-          </div>
         </div>
       </div>
 
@@ -233,7 +226,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
                     <Calendar size={16} />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs md:text-sm font-semibold text-slate-900 tracking-tight truncate">
+                    <p className="text-s md:text-sm font-bold text-[#1e3a5f] tracking-tight truncate">
                       {session.label}
                     </p>
                     <p className="text-[11px] font-semibold text-slate-700 truncate mt-0.5">

@@ -14,8 +14,8 @@ import SemesterRoadmapModel from '../models/semesterRoadmapModel.js';
 import CoursesModel from '../models/coursesModel.js';
 import ExcelJS from 'exceljs';
 import CoursePreReqModel from '../models/coursePreReqModel.js';
-
-import fs from 'fs';
+import s3Service from '../services/s3Services.js';
+const { getFileFromS3, deleteFileFromS3 } = s3Service;
 
 const uploadNewRoadmap = async (req, res) => {
     const roadmapFile=req.file; 
@@ -36,8 +36,9 @@ const uploadNewRoadmap = async (req, res) => {
         if (!roadmapFile) {
             return res.status(400).json({ error: 'Roadmap file is required.' });
         }
+        const s3Response = await getFileFromS3(roadmapFile.key);
         const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(roadmapFile.path);
+        await workbook.xlsx.read(s3Response.Body);
         const worksheet = workbook.worksheets[0]; 
         const versionName = worksheet._name;
         console.log("Extracted name of worksheet:", versionName);
@@ -45,8 +46,8 @@ const uploadNewRoadmap = async (req, res) => {
          const {  categories, totalCreditHours } = detectSummaryRow(worksheet);
          
          //1. create roadmap
-        const pathUrl = `${process.env.BASE_URL}/src/uploads/${roadmapFile.filename}`;        
-   
+        const pathUrl = roadmapFile.location; // Use the S3 file URL
+        console.log("Extracted roadmap file path:", pathUrl);
         let roadmap= await RoadmapModel.findOne({ where:
            { programId: program.id,
             versionName
@@ -185,14 +186,14 @@ const uploadNewRoadmap = async (req, res) => {
 
                     
                 }
-   fs.unlinkSync(roadmapFile.path); // Delete the uploaded file after processing
-       
+   await deleteFileFromS3(roadmapFile.key).catch(err => console.error(err)); // Delete the uploaded file after processing
+
         return res.status(201).json({ message: 'Roadmap uploaded successfully', data:roadmap });
 
     }
     catch (error) {
         console.log(error);
-         fs.unlinkSync(roadmapFile.path); 
+         await deleteFileFromS3(roadmapFile.key).catch(err => console.error(err)); // Delete the uploaded file after processing
         return res.json({ error: "Internal Server Error" });
     }
 };

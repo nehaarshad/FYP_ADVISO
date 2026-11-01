@@ -10,16 +10,12 @@ import {
   Target
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-
-// Components Imports
 import { Sidebar } from "@/components/navbars/route";
 import { StudentTranscript } from "../../../../components/StudentDetails/StudentTranscript";
 import { StudentProfile } from "../../../../components/StudentDetails/StudentProfile";
 import StudentChat from "../../../../components/Chat/StudentChat"; 
 import { BatchTimetablePage } from "../../../../components/Timetable/Timetable";
 import { RoadmapDetailView } from "../../../../components/Roadmap/RoadmapView";
-
-// ===== IMPORT YOUR HOOKS =====
 import { useStudents } from '@/src/hooks/studentsHook/useStudents';
 import { useTranscript } from '@/src/hooks/transcriptHook/transcriptHokk';
 import { useBatchMeetings } from '@/src/hooks/batchMeetingHook/useBatchMeetings'; 
