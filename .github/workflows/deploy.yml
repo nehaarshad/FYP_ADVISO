@@ -25,8 +25,7 @@ jobs:
 
       - name: Build and Push Frontend
         run: |
-          docker build --build-arg NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }} \
-          -t ${{ env.DOCKER_USER }}/adviso-frontend:latest ./frontend
+          docker build --build-arg NEXT_PUBLIC_API_URL=http://65.0.138.40:5000/auth -t ${{ env.DOCKER_USER }}/adviso-frontend:latest ./frontend
           docker push ${{ env.DOCKER_USER }}/adviso-frontend:latest
 
       # 2. Build and Push Backend
