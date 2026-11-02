@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   backend:
+    image: nehaarshad/adviso-backend:latest
     build: ./backend
     container_name: adviso_backend
     restart: unless-stopped
@@ -12,13 +13,14 @@ services:
       - app-network
 
   frontend:
+    image: nehaarshad/adviso-frontend:latest
     build: ./frontend
     container_name: adviso_frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://<your-EC2-public-IP>:5000 
+      - NEXT_PUBLIC_API_URL=http://65.0.138.40:5000
     depends_on:
       - backend
     networks:
