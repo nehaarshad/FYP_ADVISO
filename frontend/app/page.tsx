@@ -33,7 +33,8 @@ export default function LandingPage() {
 
   return (
     <>
-       <div className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden">
+       {/* Yahan id="home" add ki hai */}
+       <div id="home" className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden scroll-smooth">
       
       {/* ---- HERO SECTION ----*/}
       <section className="relative h-screen flex items-center justify-center text-center px-6">
@@ -58,14 +59,13 @@ export default function LandingPage() {
               Smart Guidance, Simple Solution
           </motion.h2>
           <div className="mt-8">
-               {/* Button triggers the handleClick function */}
                <YellowFilledButtonProps text="Get Started" onClick={handleClick}/>
           </div>
         </div>
       </section>
 
-      {/* ---- WHY CHOOSE US ---- */}
-      <section className="py-32 px-6 md:px-12 text-center max-w-7xl mx-auto">
+      {/* ---- WHY CHOOSE US (id="services" yahan hai) ---- */}
+      <section id="services" className="py-32 px-6 md:px-12 text-center max-w-7xl mx-auto">
             <OutlinedTextHeading text="Why Choose Us" hasDot={true} />
         <div className="grid md:grid-cols-3 gap-12">
           <SmallFeature Icon={Users} title="Structured Advisory System" desc="A well-organized platform that streamlines academic advising and student guidance." />
@@ -74,7 +74,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ---- ABOUT US SECTION --- */}
+      {/* ---- ABOUT US SECTION (id="about" yahan hai) --- */}
       <section id="about" className="bg-[#1e3a5f] text-white py-32 px-6 md:px-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div className="text-left">
@@ -88,6 +88,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ---- FEATURES SECTION (id="features" yahan hai) --- */}
       <section id="features" className="py-32 px-6 md:px-12 text-center bg-white">
               <OutlinedTextHeading text="Features" hasDot={true} />
               <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
@@ -96,12 +97,9 @@ export default function LandingPage() {
                 <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
                 <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
                 <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
-                
               </div>
       </section>
     </div>
-
-    
 
       <LandingFooter />
     </>

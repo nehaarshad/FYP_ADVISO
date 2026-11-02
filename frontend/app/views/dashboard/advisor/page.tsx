@@ -244,7 +244,7 @@ export default function AdvisorDashboard() {
                     }
                 {assignedBatches.length > 0 && ( 
                   <div> 
-                    <h3 className="text-sm font-bold text-[#1e3a5f]  uppercase tracking-wider mb-3">Your Assigned Batches</h3> 
+                    <h3 className="text-sm font-bold text-[#1e3a5f]  uppercase tracking-wider mb-3">Assigned Batches</h3> 
                     <div className="flex flex-wrap gap-2 md:gap-3"> 
                       {assignedBatches.toReversed().map((batch: any) => ( 
                         <button 
