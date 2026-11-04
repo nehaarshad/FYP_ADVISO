@@ -23,6 +23,7 @@ import { AdvisoryLogs } from '../../../../components/AdvisorView/AdvisoryLogs';
 import Guidelines from "../../../../components/Guidelines/Guidelines"; 
 import FacultyRecommendation from "../../../../components/FacultyRecommendation/FacultyRecommendation"; 
 import { useAuthGuard } from "@/src/hooks/authHook/useAuthGuard";
+import { EmptyState } from "@/components/states/emptystate";
 
 // Helper function to format 24h time to 12h AM/PM format
 const formatTimeTo12Hour = (timeStr: string) => {
@@ -233,9 +234,17 @@ export default function AdvisorDashboard() {
                   /> 
                 </div> 
  
+                    {(!assignedBatches || assignedBatches.length === 0) && (
+                          <EmptyState
+                          title="No Batch Assigned"
+                          message="You currently don't have any batch assigned to advise. New assignments will appear here once allocated."
+                        />
+                    )
+
+                    }
                 {assignedBatches.length > 0 && ( 
                   <div> 
-                    <h3 className="text-sm font-bold text-[#1e3a5f]  uppercase tracking-wider mb-3">Your Assigned Batches</h3> 
+                    <h3 className="text-sm font-bold text-[#1e3a5f]  uppercase tracking-wider mb-3">Assigned Batches</h3> 
                     <div className="flex flex-wrap gap-2 md:gap-3"> 
                       {assignedBatches.toReversed().map((batch: any) => ( 
                         <button 

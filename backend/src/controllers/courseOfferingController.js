@@ -7,7 +7,8 @@ import sheetProcessingHelperFunction from '../utils/sheetProcessingHelperFunctio
 const { getCellText } = sheetProcessingHelperFunction;
 import SessionModel from '../models/sessionModel.js';
 import { Op } from 'sequelize';
-import fs from 'fs';
+import s3Service from '../services/s3Services.js';
+const { getFileFromS3, deleteFileFromS3 } = s3Service;
 dotenv.config();
 
 const uploadCourseOffering = async (req, res) => {
@@ -31,8 +32,9 @@ const uploadCourseOffering = async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
+        const s3Response = await getFileFromS3(courseFile.key);
         const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(courseFile.path);
+        await workbook.xlsx.read(s3Response.Body);
         const worksheet = workbook.worksheets[0];
         
         console.log("Processing course offering sheet:", worksheet.name);
@@ -230,7 +232,7 @@ for (let i = 1; i <= 5; i++) {
             }
         }
         
-        fs.unlinkSync(courseFile.path); // Delete the uploaded file after processing
+          await deleteFileFromS3(courseFile.key); // Delete the uploaded file after processing
                
         res.status(200).json({
             data: offerings,
@@ -241,7 +243,7 @@ for (let i = 1; i <= 5; i++) {
     } catch (error) {
         try {
             if (courseFile && fs.existsSync(courseFile.path)) {
-                fs.unlinkSync(courseFile.path);
+                   await deleteFileFromS3(courseFile.key);
             }
         } catch (unlinkError) {
             console.error('Error deleting file:', unlinkError);

@@ -10,8 +10,8 @@ import Student from "../models/studentModel.js";
 import ExcelJS from 'exceljs';
 import utils from '../utils/sheetProcessingHelperFunction.js';
 const { getCellText } = utils;
-
-import fs from 'fs';
+import  s3Service from '../services/s3Services.js';
+const { getFileFromS3, deleteFileFromS3 } = s3Service;
 import { Op } from "sequelize";
 
 const addAdvisor = async(req,res)=>{
@@ -353,9 +353,10 @@ const addViaExcelSheet = async(req,res)=>{
         });
         console.log("Batch:", batch.batchName, batch.batchYear);
 
+         const s3Response = await getFileFromS3(studentFile.key);
         // Read Excel file
         const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(studentFile.path);
+        await workbook.xlsx.read(s3Response.Body);
         const worksheet = workbook.worksheets[0];
         const sheetName = worksheet.name;
         console.log("Worksheet name:", sheetName);
@@ -446,13 +447,13 @@ const addViaExcelSheet = async(req,res)=>{
         }
         
     
-           fs.unlinkSync(studentFile.path); // Delete the uploaded file after processing
+        await deleteFileFromS3(studentFile.key);
                
         return res.status(200).json( {message:"Student upload completed",success:true} );
         
     } catch(error) {
         console.error("Error while uploading students via Excel sheet:", error);
-         fs.unlinkSync(studentFile.path); // Delete the uploaded file after processing
+        await deleteFileFromS3(studentFile.key); // Delete the uploaded file after processing
         return res.status(500).json({ 
             error: error.message 
         });

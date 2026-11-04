@@ -34,7 +34,8 @@ export default function LandingPage() {
 
   return (
     <>
-       <div className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden">
+       {/* Yahan id="home" add ki hai */}
+       <div id="home" className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden scroll-smooth">
       
       {/* ---- HERO SECTION (Added id="home") ----*/}
       <section id="home" className="relative h-screen flex items-center justify-center text-center px-6">
@@ -74,7 +75,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ---- ABOUT US SECTION --- */}
+      {/* ---- ABOUT US SECTION (id="about" yahan hai) --- */}
       <section id="about" className="bg-[#1e3a5f] text-white py-32 px-6 md:px-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div className="text-left">

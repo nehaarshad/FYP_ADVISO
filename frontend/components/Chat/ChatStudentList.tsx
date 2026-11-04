@@ -72,7 +72,7 @@ const ChatStudentList: React.FC<
             />
 
             <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400">
-              No conversations yet
+             No Batch Assigned
             </p>
 
           </div>

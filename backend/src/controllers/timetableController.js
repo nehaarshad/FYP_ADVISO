@@ -10,7 +10,8 @@ const {findBestMatch } = courseNormalizer;
 import ProgramModel from '../models/programModel.js';
 import SessionModel from '../models/sessionModel.js';
 import { Op } from 'sequelize';
-import fs from 'fs';
+import s3Service from '../services/s3Services.js';
+const { getFileFromS3, deleteFileFromS3 } = s3Service;
 
 dotenv.config();
 
@@ -39,8 +40,8 @@ const uploadTimetable = async (req, res) => {
         
         console.log("Program lookup result:", program ? program.programName : "No program found");
         if (!program) {
-            fs.unlinkSync(timetableFile.path); // Delete the uploaded file after processing
-        
+            await deleteFileFromS3(timetableFile.key).catch(err => console.error(err)); // Delete the uploaded file after processing
+
             return res.status(404).json({ 
                 message: 'Program not found',
                 searchedProgram: programName 
@@ -53,8 +54,9 @@ const uploadTimetable = async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
+        const s3Response = await getFileFromS3(timetableFile.key);
         const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(timetableFile.path);
+        await workbook.xlsx.read(s3Response.Body);
         const worksheet = workbook.worksheets[0];
         
         console.log("Processing timetable sheet:", worksheet.name);
@@ -132,13 +134,12 @@ const uploadTimetable = async (req, res) => {
             console.log(`    Created entry`);
         }
         
-           fs.unlinkSync(timetableFile.path); // Delete the uploaded file after processing
+           await deleteFileFromS3(timetableFile.key).catch(err => console.error(err)); // Delete the uploaded file after processing
                
         res.status(200).json({data:timetables});
         
     } catch (error) {
-           fs.unlinkSync(timetableFile.path); // Delete the uploaded file after processing
-               
+           await deleteFileFromS3(timetableFile.key).catch(err => console.error(err)); // Delete the uploaded file after processing     
         console.error('Error:', error);
         res.status(500).json({ message: 'Failed to upload timetable', error: error.message });
     }

@@ -39,7 +39,8 @@ interface ChatAreaProps {
   }) => void;
 
   onSendFile: (
-    file: File
+    file: File,
+    receiverId: number
   ) => Promise<string | null>;
 
   onMarkAsRead: (
@@ -142,7 +143,7 @@ const ChatArea: React.FC<
 
     try {
       setUploading(true);
-      await onSendFile(file);
+      await onSendFile(file,receiverId);
     } catch (error) {
       console.error(
         "File upload failed:",

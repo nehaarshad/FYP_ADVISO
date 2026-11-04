@@ -1,11 +1,7 @@
 import SupportingVideo from "../models/supportingVideoModel.js";
 import { Op } from "sequelize";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+import  s3Service from '../services/s3Services.js';
+const { getKeyFromUrl, deleteFileFromS3 } = s3Service;
 
 // Create new supporting video with file upload
 const createVideo = async (req, res) => {
@@ -29,8 +25,7 @@ const createVideo = async (req, res) => {
         }
 
         console.log(req.body,req.file)
-        const videoUrl = `${process.env.BASE_URL}/src/uploads/${req.file.filename}`; 
-
+        const videoUrl = req.file.location 
         const video = await SupportingVideo.create({
             title,
             description: description || "",
@@ -46,11 +41,8 @@ const createVideo = async (req, res) => {
     } catch (error) {
         console.error("Error creating video:", error);
         // Delete uploaded file if error occurs
-        if (req.file) {
-            const filePath = path.join(dirname, "..", "uploads", req.file.filename);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
+        if (req.file && req.file.key) {
+            await deleteFileFromS3(req.file.key).catch(err => console.error(err));
         }
         return res.status(500).json({
             success: false,
@@ -103,18 +95,6 @@ const updateVideo = async (req, res) => {
         }
 
         console.log("updating video file: ",video)
-        // If new video file is uploaded, delete old one
-        if (videoFile) {
-            // Delete old video file
-            const oldVideoPath = path.join(dirname, "..", "uploads", 
-                path.basename(video.videoUrl));
-            if (fs.existsSync(oldVideoPath)) {
-                fs.unlinkSync(oldVideoPath);
-            }
-            
-            // Update video URL
-            video.videoUrl = `${process.env.BASE_URL}/src/uploads/${videoFile.filename}`; ;
-        }
 
         await video.update({
             title: title || video.title,
@@ -130,13 +110,7 @@ const updateVideo = async (req, res) => {
 
     } catch (error) {
         console.error("Error updating video:", error);
-        // Delete uploaded file if error occurs
-        if (req.file) {
-            const filePath = path.join(dirname, "..", "uploads", req.file.filename);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
-        }
+      
         return res.status(500).json({
             success: false,
             message: "Internal server error",
@@ -160,10 +134,11 @@ const deleteVideo = async (req, res) => {
         }
 
         // Delete video file from storage
-        const videoPath = path.join(dirname, "..", "uploads",
-            path.basename(video.videoUrl));
-        if (fs.existsSync(videoPath)) {
-            fs.unlinkSync(videoPath);
+        try {
+            const key = getKeyFromUrl(video.videoUrl);
+            await deleteFileFromS3(key);
+        } catch (err) {
+            console.error("Error deleting video from S3:", err);
         }
 
         await video.destroy();

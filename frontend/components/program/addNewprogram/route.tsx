@@ -1,4 +1,3 @@
-// app/components/AddProgram.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -31,7 +30,7 @@ export function AddProgram() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto w-full">
       <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
         
         {/* Header */}
