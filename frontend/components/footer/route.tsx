@@ -1,4 +1,8 @@
+
+// export default LandingFooter;
+
 import Image from "next/image";
+import Link from "next/link";
 
 const LandingFooter = () => {
   return (
@@ -9,53 +13,62 @@ const LandingFooter = () => {
         <div className="flex flex-col md:flex-row items-start">
           
           <div className="md:w-1/8 mt-0">
-  <Image
-    src="/lightLogo.png"
-    alt="Adviso"
-    width={120}
-    height={120}
-  />
-</div>
+            <Image
+              src="/lightLogo.png"
+              alt="Adviso"
+              width={120}
+              height={120}
+            />
+          </div>
 
           <div className="md:w-2/3 text-left">
             
             {/* Row 1 - Social Media Icons */}
             <div className="flex gap-3 mb-6">
               <Image 
-              src="/Facebook.png" 
-              alt="Adviso" 
-              width={5}
-              height={5}
-              className="h-8 w-auto"
-            />
+                src="/Facebook.png" 
+                alt="Adviso" 
+                width={5}
+                height={5}
+                className="h-8 w-auto"
+              />
               <Image 
-              src="/Instagram.png" 
-              alt="Adviso" 
-              width={5}
-              height={5}
-              className="h-8 w-auto"
-            /><Image 
-              src="/LinkedIn.png" 
-              alt="Adviso" 
-              width={5}
-              height={5}
-              className="h-8 w-auto"
-            />
+                src="/Instagram.png" 
+                alt="Adviso" 
+                width={5}
+                height={5}
+                className="h-8 w-auto"
+              />
+              <Image 
+                src="/LinkedIn.png" 
+                alt="Adviso" 
+                width={5}
+                height={5}
+                className="h-8 w-auto"
+              />
             </div>
 
-            <p className="text-sm  opacity-80 leading-relaxed mb-1">
+            <p className="text-sm opacity-80 leading-relaxed mb-1">
               Riphah International University Gulberg Green Campus Islamabad
             </p>
 
             {/* Row 3 - Navigation Links with Pipe Separator */}
             <div className="text-sm">
-              <span className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">Home</span>
+              <Link href="#home" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+                Home
+              </Link>
               <span className="mx-2 opacity-80">|</span>
-              <span className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">Services</span>
+              <Link href="#services" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+                Services
+              </Link>
               <span className="mx-2 opacity-80">|</span>
-              <span className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">About Us</span>
+              <Link href="#about" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+                About Us
+              </Link>
               <span className="mx-2 opacity-80">|</span>
-              <span className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">Features</span>
+              <Link href="#features" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+                Features
+              </Link>
             </div>
           </div>
         </div>

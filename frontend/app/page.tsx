@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import OutlinedTextHeading from "@/components/textsComponents/OutlinedTextHeading";
@@ -8,7 +9,7 @@ import {
   ShieldCheck, History, Send, 
   CheckCircle2, Lightbulb, Search 
 } from "lucide-react";
-import LandingFooter from "@/components/footer/route"
+import LandingFooter from "@/components/footer/route";
 import SmallFeature from "@/components/cards/featureCards";
 import { useRouter } from 'next/navigation';
 import { authRepository } from "@/src/repositories/authRepository/authRepository";
@@ -28,15 +29,15 @@ export default function LandingPage() {
   }, [router]);
   
   const handleClick = () => {
-      router.push('/views/auth/registeration/signup'); 
+      router.push('/views/auth/login'); 
   };
 
   return (
     <>
        <div className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden">
       
-      {/* ---- HERO SECTION ----*/}
-      <section className="relative h-screen flex items-center justify-center text-center px-6">
+      {/* ---- HERO SECTION (Added id="home") ----*/}
+      <section id="home" className="relative h-screen flex items-center justify-center text-center px-6">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('/backgroundLanding.png')" }}
@@ -58,14 +59,13 @@ export default function LandingPage() {
               Smart Guidance, Simple Solution
           </motion.h2>
           <div className="mt-8">
-               {/* Button triggers the handleClick function */}
                <YellowFilledButtonProps text="Get Started" onClick={handleClick}/>
           </div>
         </div>
       </section>
 
-      {/* ---- WHY CHOOSE US ---- */}
-      <section className="py-32 px-6 md:px-12 text-center max-w-7xl mx-auto">
+      {/* ---- WHY CHOOSE US / SERVICES (Added id="services") ---- */}
+      <section id="services" className="py-32 px-6 md:px-12 text-center max-w-7xl mx-auto">
             <OutlinedTextHeading text="Why Choose Us" hasDot={true} />
         <div className="grid md:grid-cols-3 gap-12">
           <SmallFeature Icon={Users} title="Structured Advisory System" desc="A well-organized platform that streamlines academic advising and student guidance." />
@@ -88,24 +88,21 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ---- FEATURES SECTION --- */}
       <section id="features" className="py-32 px-6 md:px-12 text-center bg-white">
-              <OutlinedTextHeading text="Features" hasDot={true} />
-              <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
-                <SmallFeature Icon={CheckCircle2} title="Smart Course Advising" desc="Automatically suggests eligible courses along with specific reasons." />
-                <SmallFeature Icon={Calendar} title="Meeting Scheduling" desc="Schedule and track advisory sessions easily." />
-                <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
-                <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
-                <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
-                
-              </div>
+            <OutlinedTextHeading text="Features" hasDot={true} />
+            <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
+              <SmallFeature Icon={CheckCircle2} title="Smart Course Advising" desc="Automatically suggests eligible courses along with specific reasons." />
+              <SmallFeature Icon={Calendar} title="Meeting Scheduling" desc="Schedule and track advisory sessions easily." />
+              <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
+              <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
+              <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
+            </div>
       </section>
     </div>
 
-    
-
-      <LandingFooter />
+    <LandingFooter />
     </>
- 
   );
 }
 
@@ -127,11 +124,3 @@ function redirectBasedOnRole(role: string, router: any) {
       router.push('/dashboard');
   }
 }
-
-
-
-
-
-
-
-

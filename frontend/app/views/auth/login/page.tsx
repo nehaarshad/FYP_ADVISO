@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use client';
@@ -98,8 +99,8 @@ export default function LoginPage() {
         transition={{ duration: 0.6 }}
         className="max-w-5xl w-full grid md:grid-cols-2 bg-white/95 backdrop-blur-md rounded-[2.5rem] shadow-[0_40px_100px_-15px_rgba(0,0,0,0.4)] overflow-hidden border border-white/20 relative z-10"
       >
-        {/* LEFT SIDE: BRANDING */}
-        <div className="bg-[#1e3a5f]/90 p-12 text-white flex flex-col justify-between relative overflow-hidden">
+        {/* LEFT SIDE: BRANDING - Solid #1e3a5f color */}
+        <div className="bg-[#1e3a5f] p-12 text-white flex flex-col justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-400/10 to-transparent pointer-events-none" />
           <div className="relative z-10">
             <motion.div custom={0} initial="hidden" animate="visible" variants={fadeUp}>
@@ -173,7 +174,7 @@ export default function LoginPage() {
               />
 
               <BlueFilledButton text={isLoading ? "Signing In..." : "Sign In"} />
-         
+           
             </form>
 
             <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50/50 rounded-[1.2rem] border border-blue-100/50">
