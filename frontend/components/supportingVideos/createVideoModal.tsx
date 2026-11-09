@@ -167,7 +167,7 @@ export default function VideoModal({
               <FileVideo size={20} className="text-[#1e3a5f]" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tight">
+              <h3 className="text-lg font-bold text-[#1e3a5f]  tracking-tight">
                 {isEditing ? "Edit Video" : "Upload New Video"}
               </h3>
               <p className="text-xs text-slate-400">
@@ -196,7 +196,7 @@ export default function VideoModal({
 
           {/* Video Upload Area */}
           <div>
-            <label className="block text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">
+            <label className="block text-xs font-bold text-slate-600  tracking-widest mb-2">
               {isEditing ? "Video File (Optional)" : "Video File *"}
             </label>
 
@@ -319,7 +319,7 @@ export default function VideoModal({
 
           {/* Title */}
           <div>
-            <label className="block text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">
+            <label className="block text-xs font-bold text-slate-600  tracking-widest mb-2">
               Title *
             </label>
             <input
@@ -340,7 +340,7 @@ export default function VideoModal({
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">
+            <label className="block text-xs font-bold text-slate-600  tracking-widest mb-2">
               Description
             </label>
             <textarea
@@ -378,14 +378,14 @@ export default function VideoModal({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="flex-1 px-6 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold uppercase hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold  hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading || (uploadProgress > 0 && uploadProgress < 100)}
-              className="flex-1 px-6 py-3 bg-[#1e3a5f] text-white rounded-xl text-xs font-bold uppercase hover:bg-[#15304a] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-3 bg-[#1e3a5f] text-white rounded-xl text-xs font-bold  hover:bg-[#15304a] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <Loader2 className="animate-spin" size={18} />

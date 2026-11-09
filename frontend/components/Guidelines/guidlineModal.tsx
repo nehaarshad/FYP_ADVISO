@@ -40,7 +40,7 @@ export const GuidelineModal: React.FC<GuidelineModalProps> = ({
 >
       <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-in fade-in zoom-in duration-300">
         <div className="sticky top-0 bg-white border-b border-slate-200 p-4 md:p-6 flex items-center justify-between z-10">
-          <h3 className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tight">
+          <h3 className="text-lg font-bold text-[#1e3a5f]  tracking-tight">
             {editingGuideline ? "Edit Guideline" : "Create New Guideline"}
           </h3>
           <button
@@ -124,7 +124,7 @@ const FormField: React.FC<FormFieldProps> = ({
   
   return (
     <div>
-      <label className="block text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">
+      <label className="block text-xs font-bold text-slate-600  tracking-widest mb-2">
         {label} *
       </label>
       <InputComponent
@@ -158,7 +158,7 @@ const ProgramSelection: React.FC<ProgramSelectionProps> = ({
 }) => {
   return (
     <div>
-      <label className="block text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">
+      <label className="block text-xs font-bold text-slate-600  tracking-widest mb-2">
         Select Programs *
       </label>
       <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 bg-slate-50 rounded-xl border border-slate-200">
@@ -216,14 +216,14 @@ const FormActions: React.FC<FormActionsProps> = ({
       <button
         type="button"
         onClick={onCancel}
-        className="flex-1 px-6 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold uppercase hover:bg-slate-200 transition-colors"
+        className="flex-1 px-6 py-3 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold  hover:bg-slate-200 transition-colors"
       >
         Cancel
       </button>
       <button
         type="submit"
         disabled={isLoading}
-        className="flex-1 px-6 py-3 bg-[#1e3a5f] text-white rounded-xl text-xs font-bold uppercase hover:bg-[#15304a] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="flex-1 px-6 py-3 bg-[#1e3a5f] text-white rounded-xl text-xs font-bold  hover:bg-[#15304a] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {isLoading ? (
           <Loader2 className="animate-spin" size={18} />

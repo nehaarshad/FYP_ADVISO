@@ -35,14 +35,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onCreate}
-          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
+          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
         >
           <Plus size={16} />
           Add Guideline
         </button>
         <button
           onClick={onUploadVideo}
-          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
+          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
         >
           <Upload size={16} />
           Upload Video

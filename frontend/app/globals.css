@@ -1,9 +1,25 @@
+
+ 
 @import "tailwindcss";
 
-
 :root {
+  /* Brand Colors */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1B3555;
+
+  --color-primary: #1B4B82;
+  --color-accent: #F2A93B;
+  --color-white: #FFFFFF;
+
+  /* Typography Colors */
+  --text-heading: #1B4B82;
+  --text-label: #526782;
+  --text-value: #1B3555;
+  --text-placeholder: #91A1B7;
+  --text-helper: #8293AA;
+
+  /* Font */
+  --font-primary: var(--font-inter);
 }
 
 @theme inline {
@@ -13,31 +29,35 @@
   --font-mono: monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Global Styles */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter);
+  background: #FFFFFF;
+  color: var(--text-value);
+  font-family: var(--font-primary), sans-serif;
   font-weight: 400;
 }
 
-/* Poore project se uppercase classes aur uppercase headings ko override karne ke liye */
-.uppercase {
-  text-transform: none !important;
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-primary), sans-serif;
+  text-transform: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  text-transform: none !important;
+/* Form Elements */
+input,
+textarea,
+select,
+button {
+  font-family: var(--font-primary), sans-serif;
 }
-html {
-  scroll-behavior: smooth;
-}
+
+/* Preserve existing text transformations unless explicitly needed */

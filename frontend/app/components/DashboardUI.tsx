@@ -47,7 +47,7 @@ export function StatCard({
         {icon}
       </div>
 
-      <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">
+      <p className="text-slate-400 text-[10px] font-bold  tracking-widest mb-1">
         {label}
       </p>
 
@@ -72,14 +72,14 @@ export function RecentStudentCard({ student }: any) {
         </div>
 
         <div>
-          <h4 className="font-bold text-[#1e3a5f] text-sm uppercase  line-clamp-1">
+          <h4 className="font-bold text-[#1e3a5f] text-sm   line-clamp-1">
             {student?.name || "Unknown Student"}
           </h4>
 
           <div className="flex items-center gap-1 text-slate-400">
             <Clock size={10} />
 
-            <p className="text-[9px] font-bold uppercase ">
+            <p className="text-[9px] font-bold  ">
               Viewed recently
             </p>
           </div>
@@ -114,11 +114,11 @@ export function StudentCard({
         </div>
 
         <div>
-          <h4 className="font-bold text-[#1e3a5f] uppercase ">
+          <h4 className="font-bold text-[#1e3a5f]  ">
             {student?.name || "Unknown Student"}
           </h4>
 
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <p className="text-[10px] font-bold text-slate-400  tracking-widest">
             ID: {student?.id} • CGPA: {student?.cgpa}
           </p>
         </div>
@@ -126,7 +126,7 @@ export function StudentCard({
 
       <div className="flex items-center gap-4">
         <span
-          className={`text-[9px] font-bold px-4 py-1.5 rounded-full uppercase  ${
+          className={`text-[9px] font-bold px-4 py-1.5 rounded-full   ${
             student?.status === "Probation"
               ? "bg-red-50 text-red-500"
               : "bg-green-50 text-green-600"

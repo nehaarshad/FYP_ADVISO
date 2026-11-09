@@ -110,18 +110,18 @@ export const BatchResults = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-[#1e3a5f] uppercase  leading-none">
+            <h2 className="text-2xl font-bold text-[#1e3a5f]   leading-none">
               Batch Results
             </h2>
 
-            <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest">
+            <p className="text-[10px] text-slate-400 font-bold mt-1 tracking-widest">
               {uploadedResults.length} results uploaded
             </p>
           </div>
 
           <button
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[10px] uppercase tracking-widest hover:bg-[#FDB813] transition-all"
+            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[10px]  tracking-widest hover:bg-[#FDB813] transition-all"
           >
             Upload Results
           </button>
@@ -145,17 +145,17 @@ export const BatchResults = () => {
                   </div>
 
                   <div>
-                    <p className="font-bold text-[#1e3a5f] text-sm uppercase">
+                    <p className="font-bold text-slate-500 text-sm ">
                       {result.programName} - {result.batchName}{" "}
                       {result.batchYear}
                     </p>
 
                     <div className="flex gap-3 mt-1">
-                      <span className="text-[9px] text-slate-400">
+                      <span className="text-[9px] text-slate-500">
                         {result.session}
                       </span>
 
-                      <span className="text-[9px] text-slate-400">
+                      <span className="text-[9px] text-slate-500">
                         Uploaded: {result.uploadedAt}
                       </span>
                     </div>
@@ -173,7 +173,7 @@ export const BatchResults = () => {
           <div className="bg-white rounded-2xl max-w-md w-full p-6">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-[#1e3a5f] uppercase">
+              <h3 className="text-lg font-bold text-[#1e3a5f] ">
                 Upload Batch Results
               </h3>
 
@@ -190,7 +190,7 @@ export const BatchResults = () => {
               {/* Session Type + Session Year */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 ">
                     Session Type
                   </label>
 
@@ -212,7 +212,7 @@ export const BatchResults = () => {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 ">
                     Session Year
                   </label>
 
@@ -233,7 +233,7 @@ export const BatchResults = () => {
 
               {/* Program Name */}
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase">
+                <label className="text-[10px] font-bold text-slate-400 ">
                   Program Name
                 </label>
 
@@ -265,7 +265,7 @@ export const BatchResults = () => {
               {/* Batch Name + Batch Year */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 ">
                     Batch Name
                   </label>
 
@@ -289,7 +289,7 @@ export const BatchResults = () => {
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">
+                  <label className="text-[10px] font-bold text-slate-400 ">
                     Batch Year
                   </label>
 
@@ -311,7 +311,7 @@ export const BatchResults = () => {
 
               {/* Excel File - Custom UI */}
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase">
+                <label className="text-[10px] font-bold text-slate-400 ">
                   Excel File *
                 </label>
 
@@ -382,7 +382,7 @@ export const BatchResults = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs  tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <Loader2

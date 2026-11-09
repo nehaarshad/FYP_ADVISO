@@ -303,7 +303,7 @@ export const Header: React.FC<{
               <button
                 key={v}
                 onClick={() => onViewChange(v)}
-                className={`px-4 py-2 text-[10px] md:text-[12px] font-bold uppercase tracking-wider rounded-lg transition-all ${
+                className={`px-4 py-2 text-[10px] md:text-[12px] font-bold  tracking-wider rounded-lg transition-all ${
                   view === v 
                     ? 'bg-[#1e3a5f] text-white shadow-sm' 
                     : 'text-slate-500 hover:text-[#1e3a5f]'
@@ -318,7 +318,7 @@ export const Header: React.FC<{
         {onAdd && (
           <button
             onClick={onAdd}
-            className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1e3a5f] text-white text-[10px] md:text-[12px] font-bold uppercase tracking-wider rounded-xl transition-all hover:bg-amber-500 shadow-sm"
+            className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1e3a5f] text-white text-[10px] md:text-[12px] font-bold  tracking-wider rounded-xl transition-all hover:bg-amber-500 shadow-sm"
           >
             <Plus size={14} strokeWidth={2.5} />
             <span>Add Entry</span>

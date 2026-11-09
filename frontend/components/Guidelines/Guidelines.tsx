@@ -154,7 +154,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
           {guideline.tableData.map((row: any, i: number) => (
             <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-              <p className="text-[10px] font-bold text-slate-400 uppercase">{row.category}</p>
+              <p className="text-[10px] font-bold text-slate-400 ">{row.category}</p>
               <p className="text-lg font-bold text-[#1e3a5f]">{row.credits} Credits</p>
             </div>
           ))}
@@ -178,7 +178,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
         <div className="space-y-5 text-slate-600 border-t border-slate-100 pt-5">
           {guideline.enrollmentLimits && (
             <div>
-              <h4 className="text-[10px] font-bold text-[#1e3a5f] uppercase mb-3 tracking-widest">Enrollment Limits:</h4>
+              <h4 className="text-[10px] font-bold text-[#1e3a5f]  mb-3 tracking-widest">Enrollment Limits:</h4>
               <div className="text-xs leading-relaxed space-y-2">
                 {guideline.enrollmentLimits.map((row: any, i: number) => (
                   <div key={i} className="flex justify-between p-2 border-b border-slate-50">
@@ -191,7 +191,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
           )}
           {guideline.requiredProcessText && (
             <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <h4 className="text-[10px] font-bold text-[#1e3a5f] uppercase mb-2 tracking-widest flex items-center gap-2">
+              <h4 className="text-[10px] font-bold text-[#1e3a5f]  mb-2 tracking-widest flex items-center gap-2">
                 <FileStack size={14} /> Required Process:
               </h4>
               <p className="text-xs leading-relaxed">{guideline.requiredProcessText}</p>
@@ -365,13 +365,13 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
               <div className="flex items-center gap-3">
                 <button 
                   onClick={() => console.log("Add Guideline clicked")}
-                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
                 >
                   <Plus size={16} /> Add Guideline
                 </button>
                 <button 
                   onClick={() => console.log("Upload Video clicked")}
-                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
                 >
                   <Upload size={16} /> Upload Video
                 </button>
@@ -382,7 +382,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
             <div className="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
               <div className="flex items-center gap-2 mb-3">
                 <Filter size={16} className="text-[#1e3a5f]" />
-                <h3 className="text-xs font-bold text-[#1e3a5f] uppercase tracking-wider">
+                <h3 className="text-xs font-bold text-[#1e3a5f]  tracking-wider">
                   Filter Guidelines
                 </h3>
               </div>

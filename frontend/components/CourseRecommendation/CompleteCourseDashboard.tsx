@@ -147,7 +147,7 @@ function DashboardHeader({
   return (
     <div className="bg-white border border-gray-200/80 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div className="space-y-1">
-        <div className="flex items-center gap-2 text-indigo-600 text-xs font-bold uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-indigo-600 text-xs font-bold  tracking-wider">
           <Layers size={14} />
           <span>Academic Advising Portal</span>
         </div>
@@ -163,7 +163,7 @@ function DashboardHeader({
         <button
           onClick={onRegenerate}
           disabled={isGenerating}
-          className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase hover:bg-indigo-100 disabled:opacity-50 transition-colors"
+          className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold  hover:bg-indigo-100 disabled:opacity-50 transition-colors"
         >
           {isGenerating ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
           {isGenerating ? "Regenerating…" : "Regenerate"}
@@ -173,7 +173,7 @@ function DashboardHeader({
             <BookOpen size={20} />
           </div>
           <div>
-            <p className="text-[10px] uppercase font-bold text-gray-400">Credit Hours</p>
+            <p className="text-[10px]  font-bold text-gray-400">Credit Hours</p>
             <p className="text-lg font-bold text-gray-900">
               {summary.creditLimits.allowed} Allowed
               {summary.creditLimits.required != null && (
@@ -227,7 +227,7 @@ export function CourseSection({
   return (
     <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-4">
       <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-        <h2 className="text-lg font-bold text-gray-800 uppercase tracking-tight">{title}</h2>
+        <h2 className="text-lg font-bold text-gray-800  tracking-tight">{title}</h2>
         <span className={`text-xs px-3 py-1 rounded-full font-semibold border ${badgeColor}`}>
           {courses.length} Course{courses.length > 1 ? 's' : ''}
         </span>
@@ -516,21 +516,21 @@ function ClashCourseCard({
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-md text-[9px] font-bold uppercase">
+            <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-md text-[9px] font-bold ">
               {course.notSuggestedReason === 'LAB_CLASH_UNRESOLVED'
                 ? 'Lab Clash Unresolved'
                 : 'Time Clash / Not Suggested'}
             </span>
-            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md text-[9px] font-bold uppercase">
+            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md text-[9px] font-bold ">
               {course.priority ?? "CRITICAL"}
             </span>
             {hasSubstitute && (
-              <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md text-[9px] font-bold uppercase border border-blue-100">
+              <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md text-[9px] font-bold  border border-blue-100">
                 Substitute Available
               </span>
             )}
           </div>
-          <h3 className="font-bold text-gray-900 text-base uppercase leading-tight">
+          <h3 className="font-bold text-gray-900 text-base  leading-tight">
             {courseName}
           </h3>
         </div>
@@ -607,18 +607,18 @@ function ClashCourseCard({
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-gray-900 uppercase truncate">{subName}</p>
+                <p className="font-bold text-gray-900  truncate">{subName}</p>
                 <div className="flex flex-wrap gap-1 mt-1.5">
-                  <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-bold uppercase">
+                  <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-bold ">
                     {subCredits} cr
                   </span>
                   {subCategory && (
-                    <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[9px] font-bold uppercase">
+                    <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[9px] font-bold ">
                       {subCategory}
                     </span>
                   )}
                   {subSemester != null && (
-                    <span className="px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded text-[9px] font-bold uppercase">
+                    <span className="px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded text-[9px] font-bold ">
                       Sem {subSemester}
                     </span>
                   )}
@@ -644,7 +644,7 @@ function ClashCourseCard({
 
                 {subLab.length > 0 && (
                   <div className="mt-1.5 pt-1.5 border-t border-blue-100 space-y-0.5">
-                    <p className="text-[9px] font-bold uppercase text-purple-700">Lab</p>
+                    <p className="text-[9px] font-bold  text-purple-700">Lab</p>
                     {subLab.map((s, i) => (
                       <div
                         key={i}
@@ -690,7 +690,7 @@ function ClashCourseCard({
 
           {isExpanded && (
             <div className="mt-2 p-3 bg-white border border-red-200 rounded-xl text-xs space-y-1 text-gray-700">
-              <p className="font-bold text-red-900 text-[10px] uppercase">
+              <p className="font-bold text-red-900 text-[10px] ">
                 Conflicting with: {course.clashRecord?.clashesWith ?? "—"}
               </p>
               {clashArray.map((c: any, i: number) => (
@@ -777,25 +777,25 @@ function RegularCourseCard({
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md text-[9px] font-bold uppercase border border-emerald-100">
+            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md text-[9px] font-bold  border border-emerald-100">
               {course.category || course.actionRequired || "ELIGIBLE"}
             </span>
             {course.actionRequired && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 rounded-md text-[9px] font-bold text-blue-600 uppercase border border-blue-100">
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 rounded-md text-[9px] font-bold text-blue-600  border border-blue-100">
                 <Target size={10} /> {String(course.actionRequired).replace(/_/g, " ")}
               </span>
             )}
             {isElective && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-purple-50 rounded-md text-[9px] font-bold text-purple-600 uppercase border border-purple-100">
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-purple-50 rounded-md text-[9px] font-bold text-purple-600  border border-purple-100">
                 <Sparkles size={10} /> {electives.length || course.totalOptions || 0} options
               </span>
             )}
           </div>
-          <h3 className="font-bold text-gray-900 text-base uppercase leading-tight">
+          <h3 className="font-bold text-gray-900 text-base  leading-tight">
             {courseName}
           </h3>
           {course.originalCourseName && course.originalCourseName !== course.courseName && (
-            <p className="text-[10px] text-gray-600 font-bold uppercase">
+            <p className="text-[10px] text-gray-600 font-bold ">
               replaces: {course.originalCourseName}
             </p>
           )}
@@ -890,7 +890,7 @@ function RegularCourseCard({
       )}
 
       <div className="pt-2 flex justify-end">
-        <div className="text-green-800 font-bold text-[10px] uppercase bg-green-50 px-3 py-1.5 rounded-lg border border-green-300">
+        <div className="text-green-800 font-bold text-[10px]  bg-green-50 px-3 py-1.5 rounded-lg border border-green-300">
           Eligible
         </div>
       </div>
@@ -914,14 +914,14 @@ function DeferredPanel({ raw }: { raw: any }) {
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-3">
         <ListChecks size={16} className="text-slate-500" />
-        <h3 className="text-sm font-bold uppercase tracking-tight text-slate-700">
+        <h3 className="text-sm font-bold  tracking-tight text-slate-700">
           Deferred / All-Eligible (advisor reference)
         </h3>
       </div>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {deferred.map((c, i) => (
           <li key={i} className="border border-slate-200 rounded-xl p-3 text-xs">
-            <p className="font-bold text-slate-800 uppercase">{c.courseName}</p>
+            <p className="font-bold text-slate-800 ">{c.courseName}</p>
             <p className="text-slate-500">
               {c.credits} credits · {c.category}
             </p>
@@ -963,7 +963,7 @@ export function CompleteCourseDashboard({
       <div className="min-h-screen bg-gray-50/50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <Loader2 size={28} className="animate-spin text-indigo-500" />
-          <p className="text-xs font-bold uppercase tracking-widest text-gray-500">
+          <p className="text-xs font-bold  tracking-widest text-gray-500">
             Generating recommendations…
           </p>
         </div>
@@ -978,13 +978,13 @@ export function CompleteCourseDashboard({
           <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto">
             <AlertCircle size={28} className="text-red-400" />
           </div>
-          <p className="text-sm font-bold text-gray-800 uppercase tracking-tight">
+          <p className="text-sm font-bold text-gray-800  tracking-tight">
             Generation Failed
           </p>
           <p className="text-xs text-gray-500">{data.generateError}</p>
           <button
             onClick={data.resetRecommendations}
-            className="px-6 py-3 bg-indigo-600 text-white text-xs font-bold uppercase rounded-xl hover:bg-indigo-500"
+            className="px-6 py-3 bg-indigo-600 text-white text-xs font-bold  rounded-xl hover:bg-indigo-500"
           >
             Try Again
           </button>
@@ -1020,11 +1020,11 @@ export function CompleteCourseDashboard({
         />
 
         <div className="flex items-center justify-between bg-white border border-gray-200 rounded-2xl px-5 py-3">
-          <div className="text-xs font-bold uppercase text-gray-500">
+          <div className="text-xs font-bold  text-gray-500">
             {studentName} · Batch {selectedBatch} · {sessionType} {sessionYear}
           </div>
           <div
-            className={`text-xs font-bold uppercase px-3 py-1 rounded-lg ${
+            className={`text-xs font-bold  px-3 py-1 rounded-lg ${
               isOverAllowed
                 ? "bg-red-50 text-red-600 border border-red-200"
                 : "bg-amber-50 text-amber-700 border border-amber-200"
@@ -1063,16 +1063,16 @@ export function CompleteCourseDashboard({
 
         <div className="bg-[#1e3a5f] p-6 md:p-8 rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border-b-4 border-amber-400">
           <div className="text-center md:text-left">
-            <h3 className="text-lg md:text-xl uppercase tracking-tighter font-bold">
+            <h3 className="text-lg md:text-xl  tracking-tighter font-bold">
               Finalize Recommendation
             </h3>
-            <p className="text-slate-300 text-xs font-bold uppercase tracking-widest mt-1">
+            <p className="text-slate-300 text-xs font-bold  tracking-widest mt-1">
               {data.selectedCourses.length === 0
                 ? "Select courses above to continue"
                 : `Sending ${data.selectedCourses.length} course${data.selectedCourses.length !== 1 ? "s" : ""} · ${data.totalSelectedCredits} credit hrs`}
             </p>
             {isOverAllowed && (
-              <p className="text-red-400 text-xs font-bold uppercase mt-1">
+              <p className="text-red-400 text-xs font-bold  mt-1">
                 ⚠ Over allowed credit limit
               </p>
             )}
@@ -1084,7 +1084,7 @@ export function CompleteCourseDashboard({
               if (ok) onFinalized?.();
             }}
             disabled={data.selectedCourses.length === 0}
-            className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-bold uppercase rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95"
+            className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-bold  rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95"
           >
             {data.isFinalizing ? (
               <>

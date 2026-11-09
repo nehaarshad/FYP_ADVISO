@@ -81,7 +81,7 @@
 //             {profileData.name}
 //           </h2>
 //           <div className="flex flex-wrap justify-center md:justify-start gap-4 items-center">
-//             <span className="px-3 py-1 bg-[#1e3a5f] text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded-full">
+//             <span className="px-3 py-1 bg-[#1e3a5f] text-white text-[10px] font-bold  tracking-[0.2em] rounded-full">
 //               {profileData.role}
 //             </span>
 //             <span className="flex items-center gap-1.5 text-slate-400 text-xs font-medium">
@@ -93,7 +93,7 @@
 
 //       {/* Profile Details Grid */}
 //       <div className="mt-12">
-//         <h3 className="text-[10px] font-bold uppercase text-slate-400 tracking-[0.3em] mb-8">
+//         <h3 className="text-[10px] font-bold  text-slate-400 tracking-[0.3em] mb-8">
 //           Account Information
 //         </h3>
         
@@ -153,7 +153,7 @@
 
 //       {/* Footer */}
 //       <div className="mt-20 pt-8 border-t border-slate-50 text-center">
-//         <p className="text-[10px] text-slate-300 font-medium uppercase tracking-[0.2em]">
+//         <p className="text-[10px] text-slate-300 font-medium  tracking-[0.2em]">
 //           Adviso Academic Management System • 2026
 //         </p>
 //       </div>
@@ -168,7 +168,7 @@
 //         {icon}
 //       </div>
 //       <div>
-//         <p className="text-[9px] font-bold uppercase text-slate-400 tracking-wider mb-1.5">
+//         <p className="text-[9px] font-bold  text-slate-400 tracking-wider mb-1.5">
 //           {label}
 //         </p>
 //         <p className="text-slate-700 font-semibold tracking-tight">
@@ -257,7 +257,7 @@ export function ProfileView() {
           
           {/* Main User Details */}
           <div className="text-center md:text-left space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-wider text-amber-300">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold  tracking-wider text-amber-300">
               <ShieldCheck size={14} />
               <span>{profileData.role}</span>
             </div>
@@ -281,7 +281,7 @@ export function ProfileView() {
       {/* Profile Details Grid */}
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+          <h3 className="text-xs font-bold  tracking-widest text-slate-400">
             Account & Academic Details
           </h3>
           <span className="text-xs font-medium text-slate-400">Official Record</span>
@@ -364,7 +364,7 @@ function DetailCard({ icon, label, value }: DetailCardProps) {
         {icon}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">
+        <p className="text-[10px] font-bold  tracking-wider text-slate-400 mb-0.5">
           {label}
         </p>
         <p className="text-slate-800 font-semibold text-sm truncate">

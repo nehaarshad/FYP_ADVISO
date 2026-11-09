@@ -185,10 +185,10 @@ const ChatArea: React.FC<
             className="text-amber-500"
           />
         </div>
-        <h3 className="text-[#1e3a5f] font-bold text-sm uppercase tracking-tight mb-1">
+        <h3 className="text-[#1e3a5f] font-bold text-sm  tracking-tight mb-1">
           No Conversation Selected
         </h3>
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest max-w-xs">
+        <p className="text-[10px] font-semibold text-slate-400 tracking-widest max-w-xs">
           Choose a student from the inbox list to start or view messages
         </p>
       </div>
@@ -219,10 +219,10 @@ const ChatArea: React.FC<
           </div>
 
           <div>
-            <h2 className="text-[#1e3a5f] font-bold text-[13.5px] uppercase tracking-tight">
+            <h2 className="text-[#1e3a5f] font-bold text-[13.5px]  tracking-tight">
               {chat.name}
             </h2>
-            <p className="text-slate-400 text-[9px] font-bold uppercase tracking-widest mt-0.5">
+            <p className="text-slate-500 text-[10px] font-bold  tracking-widest mt-0.5">
               Semester {chat.semester || "N/A"}
             </p>
           </div>
@@ -243,7 +243,7 @@ const ChatArea: React.FC<
           </div>
         ) : messages.length === 0 ? (
           <div className="h-full flex items-center justify-center">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-white/80 backdrop-blur-sm px-5 py-2.5 rounded-2xl shadow-xs border border-slate-200/60">
+            <p className="text-[12px] font-bold tracking-widest text-slate-500 bg-white/80 backdrop-blur-sm px-5 py-2.5 rounded-2xl shadow-xs border border-slate-200/60">
               No messages yet. Send a message to start conversation!
             </p>
           </div>
@@ -300,7 +300,7 @@ const ChatArea: React.FC<
                   {/* TIME */}
                   <div className="flex justify-end mt-1">
                     <span
-                      className={`text-[8px] font-bold uppercase tracking-wider ${
+                      className={`text-[8px] font-bold tracking-wider ${
                         isMine ? "text-amber-300/80" : "text-slate-400"
                       }`}
                     >

@@ -23,11 +23,11 @@ export const TimetableErrorState: React.FC<Props> = ({ message, onRetry }) => (
         />
       </svg>
     </div>
-    <p className="text-xs font-bold text-slate-600 mb-4 max-w-sm uppercase tracking-wider">{message}</p>
+    <p className="text-xs font-bold text-slate-600 mb-4 max-w-sm  tracking-wider">{message}</p>
     {onRetry && (
       <button
         onClick={onRetry}
-        className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl transition-all shadow-md shadow-[#FDB813]/20"
+        className="px-5 py-2.5 text-xs font-bold  tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl transition-all shadow-md shadow-[#FDB813]/20"
       >
         Try again
       </button>

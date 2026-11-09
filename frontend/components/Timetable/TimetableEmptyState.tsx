@@ -30,12 +30,12 @@ export const TimetableEmptyState: React.FC<Props> = ({
         />
       </svg>
     </div>
-    <h3 className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tight mb-1">{title}</h3>
-    <p className="text-xs font-medium text-slate-400 mb-6 max-w-sm leading-relaxed uppercase tracking-wider">{description}</p>
+    <h3 className="text-lg font-bold text-[#1e3a5f]  tracking-tight mb-1">{title}</h3>
+    <p className="text-xs font-medium text-slate-400 mb-6 max-w-sm leading-relaxed  tracking-wider">{description}</p>
     {actionLabel && onAction && (
       <button
         onClick={onAction}
-        className="px-6 py-3 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 flex items-center gap-2"
+        className="px-6 py-3 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-xs font-bold  tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 flex items-center gap-2"
       >
         <span className="text-sm font-bold">+</span> {actionLabel}
       </button>

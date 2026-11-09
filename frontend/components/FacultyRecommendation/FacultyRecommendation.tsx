@@ -256,7 +256,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
             <ArrowLeft size={20} />
           </button>
           {viewMode === 'detail' && (
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <span className="text-[10px] font-bold text-slate-400  tracking-widest">
               Recommendation Detail
             </span>
           )}
@@ -275,7 +275,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
           <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center mb-6">
             <p className="text-red-600 font-semibold">{error}</p>
             <button
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold uppercase"
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold "
               onClick={() => {
                 clearError();
                 refreshRecommendations(true);
@@ -295,7 +295,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
   <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200 shrink-0">
     <Lightbulb size={24} />
   </div>
-  <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">
+  <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">
     Faculty Feed
   </h2>
 </div>
@@ -309,7 +309,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
               {/* Actions: Filter & New Button */}
               <div className="flex items-center gap-3">
                 <button
-                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
+                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest transition-all ${
                     showFilterMenu || selectedStatus || selectedPostingAdvisor || showMyIssues
                       ? 'bg-[#1e3a5f] text-white shadow-md'
                       : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
@@ -329,7 +329,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
 
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -358,7 +358,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
             {(selectedStatus || selectedPostingAdvisor || showMyIssues) && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {selectedStatus && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold uppercase">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold ">
                     Status: {selectedStatus}
                     <button
                       onClick={() => {
@@ -372,7 +372,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
                   </span>
                 )}
                 {showMyIssues && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-bold uppercase">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-bold ">
                     My Issues
                     <button
                       onClick={() => {
@@ -387,7 +387,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
                 )}
                 <button
                   onClick={handleClearFilters}
-                  className="text-[10px] font-bold text-slate-400 uppercase hover:text-slate-600"
+                  className="text-[10px] font-bold text-slate-400  hover:text-slate-600"
                 >
                   Clear All
                 </button>

@@ -159,7 +159,7 @@ export default function AdvisoryNotes({ onBack, batchId }: AdvisoryNotesProps) {
               <StickyNote size={24} />
             </div>
             <div>
-              <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">
+              <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">
                 Advisor Notes
               </h2>
               <p className="text-xs font-medium text-slate-400 mt-0.5">
@@ -170,7 +170,7 @@ export default function AdvisoryNotes({ onBack, batchId }: AdvisoryNotesProps) {
 
           <button
             onClick={handleAddNote}
-            className="bg-[#1e3a5f] text-white px-4 md:px-6 py-2.5 rounded-xl font-bold text-[10px] md:text-[12px] uppercase tracking-widest flex items-center gap-2 hover:bg-[#2a4a6f] transition-colors shadow-lg"
+            className="bg-[#1e3a5f] text-white px-4 md:px-6 py-2.5 rounded-xl font-bold text-[10px] md:text-[12px]  tracking-widest flex items-center gap-2 hover:bg-[#2a4a6f] transition-colors shadow-lg"
           >
             <Plus size={16} strokeWidth={3} />
             New Note

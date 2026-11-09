@@ -134,7 +134,7 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
 </p>
 
     <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-      <span className="text-[10px] font-bold text-slate-400 uppercase">
+      <span className="text-[10px] font-bold text-slate-400 ">
         {getProgramName(guideline.programId)}
       </span>
       <span className="text-[10px] text-slate-400">

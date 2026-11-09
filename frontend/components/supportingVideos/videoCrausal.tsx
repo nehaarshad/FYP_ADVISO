@@ -199,7 +199,7 @@ export default function VideoCarousel({ onVideoUpdate }: VideoCarouselProps) {
                   <div className="flex items-center justify-between">
                     <div>
                       
-                      <h3 className="text-lg font-bold text-white uppercase">
+                      <h3 className="text-lg font-bold text-white ">
                         {videoGuides[currentVideo]?.title || "Video Guide"}
                       </h3>
                       <p className="text-slate-400 text-sm mt-2 leading-relaxed">

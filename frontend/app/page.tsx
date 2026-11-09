@@ -79,7 +79,7 @@ export default function LandingPage() {
       <section id="about" className="bg-[#1e3a5f] text-white py-32 px-6 md:px-24">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div className="text-left">
-            <h2 className="text-3xl font-bold mb-24 tracking-wide text-[#FDB813] uppercase">About Us</h2>
+            <h2 className="text-3xl font-bold mb-24 tracking-wide text-[#FDB813] ">About Us</h2>
             <h3 className="text-4xl font-bold mb-7 leading-tight">Making academic guidance smarter, <br /> simpler, and more reliable.</h3>
             <p className="text-white/70 leading-[2] text-lg font-normal">Adviso is a smart academic advising platform that connects students and advisors, streamlining guidance, course recommendations, meetings, and academic decisions.</p>
           </div>

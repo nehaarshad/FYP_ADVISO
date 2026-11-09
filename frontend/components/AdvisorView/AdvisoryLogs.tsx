@@ -297,7 +297,7 @@ function CourseDetailCard({
       {/* UPDATED: Faculty / Instructors UI Section */}
       {course.instructors.length > 0 && (
         <div className="pt-2 border-t border-slate-100 flex flex-col gap-1.5">
-          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+          <p className="text-[11px] font-semibold text-slate-400  tracking-wider">
             Assigned Faculty
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -668,7 +668,7 @@ if (isProfileLoading || isLoadingLogs) {
               <div className="h-12 w-12 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[#1e3a5f] to-[#2c5282] text-[#FDB813] shadow-md shadow-slate-200 shrink-0">
                 <FileText size={24} />
               </div>
-              <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">
+              <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">
                 Advisory Logs
               </h2>
             </div>
