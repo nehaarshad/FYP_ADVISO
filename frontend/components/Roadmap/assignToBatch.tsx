@@ -113,7 +113,7 @@ export function AssignBatchModal({
             >
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h3 className="text-xl font-bold uppercase  text-[#1e3a5f]">
+                  <h3 className="text-xl font-bold   text-[#1e3a5f]">
                     Assign to Batch
                   </h3>
                   <p className="text-xs text-slate-500 mt-1">
@@ -132,7 +132,7 @@ export function AssignBatchModal({
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-[10px] font-bold uppercase text-slate-400 ml-2">
+                  <label className="text-[10px] font-bold  text-slate-400 ml-2">
                     Batch Name *
                   </label>
                   <select
@@ -151,7 +151,7 @@ export function AssignBatchModal({
                 </div>
                 
                 <div>
-                  <label className="text-[10px] font-bold uppercase text-slate-400 ml-2">
+                  <label className="text-[10px] font-bold  text-slate-400 ml-2">
                     Batch Year *
                   </label>
                   <input
@@ -178,7 +178,7 @@ export function AssignBatchModal({
                   <button
                     onClick={handleAssign}
                     disabled={isDisabled || !assignBatchName || !assignBatchYear}
-                    className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs  tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {(isAssigning || isProcessing) ? (
                       <>
@@ -195,7 +195,7 @@ export function AssignBatchModal({
                   <button
                     onClick={handleClose}
                     disabled={isDisabled}
-                    className="px-6 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all disabled:opacity-50"
+                    className="px-6 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs  tracking-wider hover:bg-slate-200 transition-all disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -238,7 +238,7 @@ export function AssignBatchModal({
                   setShowSuccess(false);
                   onClose();
                 }}
-                className="mt-6 px-8 py-3 bg-green-500 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-green-600 transition-all"
+                className="mt-6 px-8 py-3 bg-green-500 text-white rounded-xl font-bold text-xs  tracking-wider hover:bg-green-600 transition-all"
               >
                 Done
               </button>
@@ -278,7 +278,7 @@ export function AssignBatchModal({
                 onClick={() => {
                   setShowError(false);
                 }}
-                className="mt-6 px-8 py-3 bg-red-500 text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-red-600 transition-all"
+                className="mt-6 px-8 py-3 bg-red-500 text-white rounded-xl font-bold text-xs  tracking-wider hover:bg-red-600 transition-all"
               >
                 Try Again
               </button>

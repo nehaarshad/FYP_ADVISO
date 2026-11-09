@@ -287,11 +287,11 @@ const StudentChat: React.FC<
 
           <div>
 
-            <h3 className="font-bold uppercase tracking-tight text-[12px] md:text-[14px]">
+            <h3 className="font-bold  tracking-tight text-[12px] md:text-[14px]">
               INBOX
             </h3>
 
-            <p className="text-[8px] md:text-[10px] font-bold text-blue-300 uppercase tracking-widest leading-none">
+            <p className="text-[8px] md:text-[10px] font-bold text-blue-300  tracking-widest leading-none">
               Academic Advisor
             </p>
 
@@ -301,11 +301,11 @@ const StudentChat: React.FC<
         <div className="flex items-center gap-3">
 
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-[9px] font-bold uppercase text-blue-200">
+            <span className="text-[9px] font-bold  text-blue-200">
               Status
             </span>
 
-            <span className="text-[8px] font-bold text-green-400 uppercase">
+            <span className="text-[8px] font-bold text-green-400 ">
               Connected
             </span>
           </div>
@@ -333,7 +333,7 @@ const StudentChat: React.FC<
           </div>
         ) : messages.length === 0 ?  (
                   <div className="h-full flex items-center justify-center">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">
+                    <p className="text-[10px] font-bold  tracking-widest text-slate-300">
                       {selectedChat?.isReadOnly 
                         ? "No messages with this advisor" 
                         : "Start a conversation with your advisor"}
@@ -376,7 +376,7 @@ const StudentChat: React.FC<
 
 
 <span
-  className={`text-[8px] font-bold uppercase opacity-60 mt-2 self-start text-[#1e3a5f]`}
+  className={`text-[8px] font-bold  opacity-60 mt-2 self-start text-[#1e3a5f]`}
 >
   {isMine
     ? null
@@ -423,7 +423,7 @@ const StudentChat: React.FC<
 
                     {/* TIME */}
                     <span
-                      className={`text-[8px] font-bold uppercase mt-2 self-end opacity-60 ${
+                      className={`text-[8px] font-bold  mt-2 self-end opacity-60 ${
                         isMine
                           ? "text-blue-100"
                           : "text-slate-400"
@@ -530,7 +530,7 @@ const StudentChat: React.FC<
 
         </form>
 
-        <p className="text-[8px] text-center text-slate-400 mt-3 uppercase font-bold tracking-widest">
+        <p className="text-[8px] text-center text-slate-400 mt-3  font-bold tracking-widest">
           Academic Office Chat
         </p>
 

@@ -42,10 +42,10 @@ export const CommentItem: React.FC<CommentItemProps> = ({
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-bold text-[#1e3a5f] uppercase">
+            <span className="text-xs font-bold text-[#1e3a5f] ">
               {comment.commentingAdvisor?.advisorName || 'Unknown'}
             </span>
-            <span className="text-[8px] font-bold text-slate-400 uppercase">
+            <span className="text-[8px] font-bold text-slate-400 ">
               {new Date(comment.createdAt).toLocaleDateString('en-GB', {
                 day: '2-digit',
                 month: 'short',
@@ -53,7 +53,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               })}
             </span>
             {comment.isAccepted && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase bg-emerald-100 text-emerald-700">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-bold  bg-emerald-100 text-emerald-700">
                 <CheckCircle size={10} /> Accepted
               </span>
             )}

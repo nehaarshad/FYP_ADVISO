@@ -68,7 +68,7 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
                 <div className="flex gap-2">
                   <button
                     onClick={handleEditSubmit}
-                    className="px-4 py-2 bg-emerald-500 text-white rounded-lg text-xs font-bold uppercase hover:bg-emerald-600 transition-colors flex items-center gap-1"
+                    className="px-4 py-2 bg-emerald-500 text-white rounded-lg text-xs font-bold  hover:bg-emerald-600 transition-colors flex items-center gap-1"
                   >
                     <Check size={14} /> Save
                   </button>
@@ -78,7 +78,7 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
                       setEditSubject(recommendation.subject);
                       setEditDescription(recommendation.issueDescription);
                     }}
-                    className="px-4 py-2 bg-slate-200 text-slate-600 rounded-lg text-xs font-bold uppercase hover:bg-slate-300 transition-colors flex items-center gap-1"
+                    className="px-4 py-2 bg-slate-200 text-slate-600 rounded-lg text-xs font-bold  hover:bg-slate-300 transition-colors flex items-center gap-1"
                   >
                     <X size={14} /> Cancel
                   </button>
@@ -124,7 +124,7 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
         {!isEditing && (
           <div className="mt-6 space-y-4">
             <div>
-              <span className="flex items-center gap-1.5 text-[10px] font-bold text-rose-600 uppercase tracking-widest">
+              <span className="flex items-center gap-1.5 text-[10px] font-bold text-rose-600  tracking-widest">
                 <AlertCircle size={14} /> Issue Description
               </span>
               <p className="text-sm md:text-base font-medium leading-relaxed text-slate-700 mt-1">
@@ -134,13 +134,13 @@ export const RecommendationDetail: React.FC<RecommendationDetailProps> = ({
 
             {acceptedSolution && (
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-                <span className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-700 uppercase tracking-widest">
+                <span className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-700  tracking-widest">
                   <CheckCircle size={14} /> Accepted Solution
                 </span>
                 <p className="text-sm font-medium leading-relaxed text-emerald-800 mt-1">
                   {acceptedSolution.suggestedSolution}
                 </p>
-                <div className="text-[9px] font-bold text-emerald-600 mt-2 uppercase">
+                <div className="text-[9px] font-bold text-emerald-600 mt-2 ">
                   By {acceptedSolution.commentingAdvisor?.advisorName || 'Unknown'}
                 </div>
               </div>

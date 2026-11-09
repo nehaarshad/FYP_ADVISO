@@ -439,7 +439,7 @@ const ReadOnlyCourseCard: React.FC<{
 
       {lectureSlots.length > 0 && (
         <div className="space-y-1">
-          <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">Lecture</p>
+          <p className="text-[10px] font-bold text-slate-600  tracking-wider">Lecture</p>
           {lectureSlots.map((l, i) => (
             <div key={i} className="flex items-center gap-1.5 text-xs text-slate-800 font-semibold">
               <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
@@ -454,7 +454,7 @@ const ReadOnlyCourseCard: React.FC<{
 
       {labSlots.length > 0 && (
         <div className="bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-slate-800 space-y-1">
-          <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">Lab</span>
+          <span className="text-[10px] font-bold text-slate-600  tracking-wider block">Lab</span>
           {labSlots.map((l, i) => (
             <div key={i} className="flex items-center gap-1.5 text-xs font-semibold">
               <Clock className="w-3.5 h-3.5 shrink-0 text-slate-500" />

@@ -71,7 +71,7 @@ export default function SmartAdvisory({
         </div>
 
         {/* Heading */}
-        <p className="text-lg font-bold text-[#1e3a5f] uppercase tracking-tight mb-2">
+        <p className="text-lg font-bold text-[#1e3a5f]  tracking-tight mb-2">
           Generation Failed
         </p>
 
@@ -83,7 +83,7 @@ export default function SmartAdvisory({
         {/* Action Button */}
         <button 
           onClick={onBack} 
-          className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e3a5f] text-white text-xs font-bold uppercase tracking-wider rounded-2xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-md shadow-[#1e3a5f]/10 active:scale-95"
+          className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e3a5f] text-white text-xs font-bold  tracking-wider rounded-2xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-md shadow-[#1e3a5f]/10 active:scale-95"
         >
           <ArrowLeft size={16} /> Go Back
         </button>
@@ -138,10 +138,10 @@ export default function SmartAdvisory({
             <button onClick={onBack} className="p-2 hover:bg-slate-100 bg-white shadow-sm rounded-full text-black w-fit mb-3 border border-gray-200">
               <ArrowLeft size={20} />
             </button>
-            <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2 uppercase tracking-tighter">
+            <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2  tracking-tighter">
               <BookOpen className="text-blue-600" /> System <span className="text-amber-500">Recommendations</span>
             </h1>
-            <p className="text-sm text-gray-500 mt-1 font-medium uppercase tracking-widest">
+            <p className="text-sm text-gray-500 mt-1 font-medium  tracking-widest">
               {studentName} · Batch: {selectedBatch}
             </p>
           </div>
@@ -154,7 +154,7 @@ export default function SmartAdvisory({
               isOverAllowed={isOverAllowed}
               isOverRequired={isOverRequired}
             />
-            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold uppercase">
+            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold ">
               {selectedCourses.length} course{selectedCourses.length !== 1 ? 's' : ''} selected
             </div>
           </div>
@@ -198,11 +198,11 @@ export default function SmartAdvisory({
 
       {llmRecommendations.specialRequests?.length > 0 && (
         <div className="bg-amber-50 rounded-2xl p-6 border border-amber-200">
-          <p className="text-xs font-bold text-amber-800 uppercase tracking-widest mb-3">Special Offering Requests</p>
+          <p className="text-xs font-bold text-amber-800  tracking-widest mb-3">Special Offering Requests</p>
           <div className="space-y-3">
             {llmRecommendations.specialRequests.map((req: any, i: number) => (
               <div key={i} className="bg-white rounded-xl p-4 border border-amber-200">
-                <p className="text-xs font-bold text-[#1e3a5f] uppercase">{req.courseName}</p>
+                <p className="text-xs font-bold text-[#1e3a5f] ">{req.courseName}</p>
                 <p className="text-xs text-slate-600 font-medium mt-1">{req.message}</p>
               </div>
             ))}
@@ -219,15 +219,15 @@ export default function SmartAdvisory({
 
       <div className="bg-[#1e3a5f] p-6 md:p-8 rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border-b-4 border-amber-400">
         <div className="text-center md:text-left">
-          <h3 className="text-lg md:text-xl uppercase tracking-tighter font-bold">Finalize Recommendation</h3>
-          <p className="text-slate-300 text-xs font-bold uppercase tracking-widest mt-1">
+          <h3 className="text-lg md:text-xl  tracking-tighter font-bold">Finalize Recommendation</h3>
+          <p className="text-slate-300 text-xs font-bold  tracking-widest mt-1">
             {selectedCourses.length === 0
               ? 'Select courses above to continue'
               : `Sending ${selectedCourses.length} course${selectedCourses.length !== 1 ? 's' : ''} · ${totalSelectedCredits} credit hrs`}
           </p>
         </div>
         <button onClick={handleSend} disabled={selectedCourses.length === 0 || isFinalizing || isOverAllowed}
-          className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-bold uppercase rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95">
+          className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-bold  rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95">
           {isFinalizing ? <><Loader2 size={14} className="animate-spin" /> Sending...</> : 'Send Advice to Student'}
         </button>
       </div>
@@ -244,7 +244,7 @@ function CreditBadge({ label, current, allowed, required, isOverAllowed, isOverR
   return (
     <div className={`flex items-center gap-2 px-4 py-3 rounded-xl border ${tone}`}>
       <div>
-        <p className="text-xs font-medium uppercase tracking-wider opacity-80">{label}</p>
+        <p className="text-xs font-medium  tracking-wider opacity-80">{label}</p>
         <p className="text-lg font-bold">
           {current} / <span className="opacity-70">{allowed ?? '—'} Allowed</span>
           {required != null && <span className="text-xs ml-2 opacity-70">· req {required}</span>}
@@ -276,7 +276,7 @@ function Stat({ label, value, tone }: any) {
   };
   return (
     <div className={`${map[tone]} border p-4 rounded-xl text-center`}>
-      <span className="text-xs font-semibold uppercase">{label}</span>
+      <span className="text-xs font-semibold ">{label}</span>
       <p className="text-2xl font-bold mt-1">{value}</p>
     </div>
   );
@@ -301,14 +301,14 @@ function DeferredPanel({ raw }: { raw: any }) {
     <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-3">
         <ListChecks size={16} className="text-slate-500" />
-        <h3 className="text-sm font-bold uppercase tracking-tight text-slate-700">
+        <h3 className="text-sm font-bold  tracking-tight text-slate-700">
           Deferred / All-Eligible (advisor reference)
         </h3>
       </div>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {deferred.map((c, i) => (
           <li key={i} className="border border-slate-200 rounded-xl p-3 text-xs">
-            <p className="font-bold text-slate-800 uppercase">{c.courseName}</p>
+            <p className="font-bold text-slate-800 ">{c.courseName}</p>
             <p className="text-slate-500">{c.credits} credits · {c.category}</p>
           </li>
         ))}

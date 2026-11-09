@@ -1,5 +1,6 @@
 
-// components/AddFaculty.tsx
+/* components/AddFaculty.tsx */
+
 'use client';
 
 import React, { useState } from 'react';
@@ -20,7 +21,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
     contactNumber: '',
     password: ''
   });
-  
+
   const { addAdvisor, isLoading, error, success } = useAddAdvisor();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -29,12 +30,12 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const result = await addAdvisor({
       ...formData,
       password: formData.password || `sap${formData.sapid}`
     });
-    
+
     if (result.success) {
       setFormData({
         advisorName: '',
@@ -49,7 +50,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto px-4 sm:px-6 pb-10 -mt-6">
-      
+
       {/* Top Header Section */}
       <div className="flex items-center justify-between mb-6 px-1">
         <div className="flex items-center gap-4">
@@ -86,8 +87,8 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
               <UserPlus size={26} />
             </div>
             <div>
-              <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">Faculty Registration</h2>
-              <p className="text-xs font-medium text-slate-400 mt-0.5">Register a new faculty or advisor account</p>
+              <h2 className="text-2xl font-black tracking-tight text-[#1e3a5f]">Faculty Registration</h2>
+              <p className="text-xs font-medium text-[#8293AA] mt-0.5">Register a new faculty or advisor account</p>
             </div>
           </div>
         </div>
@@ -147,14 +148,16 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
             />
 
             <div className="space-y-2 group">
-              <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">Gender *</label>
+              <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+                Gender <span className="text-[#1B4B82]">*</span>
+              </label>
               <select
                 title="gender" 
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1e3a5f]"
+                className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
               >
                 <option value="" disabled className="text-slate-400 font-normal">Select Gender</option>
                 <option value="Male">Male</option>
@@ -193,7 +196,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
             <button 
               type="submit"
               disabled={isLoading}
-              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? 'Creating...' : 'Create Advisor Profile'} <UserPlus size={16} />
             </button>
@@ -207,8 +210,15 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
 function InputField({ label, name, placeholder, icon, type = "text", value, onChange, required = false }: any) {
   return (
     <div className="space-y-2 group">
-      <label className="text-[10px] font-bold uppercase text-slate-400 ml-4 tracking-widest">
-        {label}
+      <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+        {label.endsWith(' *') ? (
+          <>
+            {label.slice(0, -1)}
+            <span className="text-[#1B4B82]">*</span>
+          </>
+        ) : (
+          label
+        )}
       </label>
       <div className="relative">
         <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FDB813]">
@@ -221,7 +231,7 @@ function InputField({ label, name, placeholder, icon, type = "text", value, onCh
           value={value}
           onChange={onChange}
           required={required}
-          className="w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1e3a5f]" 
+          className="w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1B3555] placeholder:text-[#91A1B7]" 
         />
       </div>
     </div>

@@ -82,7 +82,7 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
             <KeyRound size={26} />
           </div>
           <div>
-            <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">Manage & Reset Password</h2>
+            <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">Manage & Reset Password</h2>
             <p className="text-xs font-medium text-slate-400 mt-0.5">Update user credentials directly via SAP ID</p>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
                   setNewPassword("");
                   setConfirmPassword("");
                 }}
-                className="flex-1 py-4 bg-slate-100 text-slate-700 rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-slate-200 transition-all cursor-pointer"
+                className="flex-1 py-4 bg-slate-100 text-slate-700 rounded-[2rem] font-bold text-xs  tracking-[0.2em] hover:bg-slate-200 transition-all cursor-pointer"
               >
                 Reset Another Password
               </button>
@@ -128,7 +128,7 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
                 <button
                   type="button"
                   onClick={onBack}
-                  className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-xl cursor-pointer"
+                  className="flex-1 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs  tracking-[0.2em] hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-xl cursor-pointer"
                 >
                   Back to Overview
                 </button>
@@ -184,7 +184,7 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
                 <button
                   type="button"
                   onClick={onBack}
-                  className="w-full sm:w-auto px-10 py-4 bg-slate-100 text-slate-600 rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] hover:bg-slate-200 transition-all text-center cursor-pointer"
+                  className="w-full sm:w-auto px-10 py-4 bg-slate-100 text-slate-600 rounded-[2rem] font-bold text-xs  tracking-[0.2em] hover:bg-slate-200 transition-all text-center cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -193,7 +193,7 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full sm:w-auto px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full sm:w-auto px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs  tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isLoading ? "Updating..." : "Update Password"}
               </button>

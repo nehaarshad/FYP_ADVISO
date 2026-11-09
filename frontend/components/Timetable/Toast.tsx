@@ -32,7 +32,7 @@ export const Toast: React.FC<Props> = ({
       <div
         className={`${styles[type]} px-4.5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3.5 min-w-[260px] border border-white/10`}
       >
-        <span className="text-xs font-bold uppercase tracking-wider flex-1">
+        <span className="text-xs font-bold  tracking-wider flex-1">
           {message}
         </span>
         <button

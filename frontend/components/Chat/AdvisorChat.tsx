@@ -106,7 +106,7 @@ const AdvisorChat: React.FC<AdvisorChatProps> = ({ onBack }) => {
               <MessageSquare size={20} />
             </div>
             <div>
-            <h2 className="text-2xl font-black uppercase tracking-tight text-[#1e3a5f]">
+            <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">
                 Inbox 
               </h2>
               <p className="text-xs text-slate-400">

@@ -86,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div key={group} className="py-2.5">
 
             {/* Group Heading */}
-            <p className="px-5 text-[11.5px] font-semibold uppercase tracking-[0.18em] text-[#FDB813] mb-2.5">
+            <p className="px-5 text-[11.5px] font-semibold  tracking-[0.18em] text-[#FDB813] mb-2.5">
               {group}
             </p>
 
@@ -129,7 +129,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => setActiveTab("profile")}
             className="flex items-center gap-3 mb-3 cursor-pointer"
           >
-            <div className="h-10 w-10 rounded-full bg-[#FDB813] border-2 border-[#1e3a5f] flex items-center justify-center font-black text-[#1e3a5f] text-sm uppercase shrink-0">
+            <div className="h-10 w-10 rounded-full bg-[#FDB813] border-2 border-[#1e3a5f] flex items-center justify-center font-black text-[#1e3a5f] text-sm  shrink-0">
               {userInitial}
             </div>
 
@@ -138,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {getDisplayName()}
               </p>
 
-              <p className="text-[9px] opacity-75 font-bold uppercase tracking-tighter">
+              <p className="text-[9px] opacity-75 font-bold  tracking-tighter">
                 {userRole}
               </p>
             </div>
@@ -147,7 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Sign Out */}
           <button
             onClick={handleLogout}
-            className="w-full py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[10px] font-black  tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
           >
             <LogOut size={14} />
             Sign Out

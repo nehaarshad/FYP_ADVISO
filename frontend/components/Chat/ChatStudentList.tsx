@@ -35,11 +35,11 @@ const ChatStudentList: React.FC<
       <div className="flex items-center justify-between px-2 pb-4">
 
         <div>
-          <h2 className="text-[#1e3a5f] text-sm font-bold uppercase tracking-tight">
+          <h2 className="text-[#1e3a5f] text-sx font-bold tracking-tight">
             Inbox 
           </h2>
 
-          <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">
+          <p className="text-[9px] text-slate-500 font-bold  tracking-widest">
             Your conversations
           </p>
         </div>
@@ -71,7 +71,7 @@ const ChatStudentList: React.FC<
               className="text-slate-200 mb-3"
             />
 
-            <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400">
+            <p className="text-[9px] font-bold  tracking-widest text-slate-400">
              No Batch Assigned
             </p>
 
@@ -129,7 +129,7 @@ const ChatStudentList: React.FC<
                   </div>
 
                   {/* SEMESTER */}
-                  <p className="text-[9px] text-slate-400 truncate">
+                  <p className="text-[10px] text-slate-550 truncate">
                     Semester: {chat.semester || "N/A"}
                   </p>
 

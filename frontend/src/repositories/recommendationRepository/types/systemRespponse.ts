@@ -84,7 +84,7 @@ export interface SavedSuggestedCourse {
   credits: number; 
   category: string; 
   sessionalRecommendationId: number; 
-  priority: CoursePriority | Uppercase<CoursePriority>; 
+  priority: CoursePriority | <CoursePriority>; 
   reason: string | null; 
   isOffered: boolean; 
   offeredProgram: string | null; 

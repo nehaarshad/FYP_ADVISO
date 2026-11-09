@@ -204,7 +204,7 @@ export default function AdvisorDashboard() {
                                 <Calendar size={13} className="text-amber-500 shrink-0" />
                                 <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
                               </div>
-                              <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-bold shrink-0 ${
+                              <span className={`text-[9px] px-1.5 py-0.5 rounded  font-bold shrink-0 ${
                                 upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-50 text-blue-600' :
                                 upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-50 text-emerald-600' :
                                 upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-50 text-red-600' :
@@ -224,7 +224,7 @@ export default function AdvisorDashboard() {
                         ) : (
                           <div className="flex items-center gap-1.5 py-1">
                             <Clock size={12} className="text-amber-500 shrink-0" />
-                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">No active meeting</span>
+                            <span className="text-xs font-bold text-slate-400 tracking-wide">No active meeting</span>
                           </div>
                         )}
                       </div>
@@ -244,7 +244,7 @@ export default function AdvisorDashboard() {
                     }
                 {assignedBatches.length > 0 && ( 
                   <div> 
-                    <h3 className="text-sm font-bold text-[#1e3a5f]  uppercase tracking-wider mb-3">Assigned Batches</h3> 
+                    <h3 className="text-sm font-bold text-[#1e3a5f]   tracking-wider mb-3">Assigned Batches</h3> 
                     <div className="flex flex-wrap gap-2 md:gap-3"> 
                       {assignedBatches.toReversed().map((batch: any) => ( 
                         <button 
@@ -253,7 +253,7 @@ export default function AdvisorDashboard() {
                             setSelectedBatch(batch); 
                             setActiveTab("Total"); 
                           }} 
-                          className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border font-bold text-[10px] md:text-[12px] uppercase transition-all ${
+                          className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border font-bold text-[10px] md:text-[12px]  transition-all ${
                             selectedBatch?.batchName === batch.batchName ? 'bg-[#1e3a5f] text-white' : 'bg-white text-slate-400'
                           }`}
                         > 
@@ -267,14 +267,14 @@ export default function AdvisorDashboard() {
                 {selectedBatch && ( 
                   <div> 
                     <div className="flex justify-between items-center mb-6"> 
-                      <h3 className="text-lg md:text-xl font-bold text-[#1e3a5f] uppercase tracking-tighter">
+                      <h3 className="text-lg md:text-xl font-bold text-[#1e3a5f]  tracking-tighter">
                         {selectedBatch.programName}: <span className="text-amber-500">{selectedBatch.batchName} {selectedBatch.batchYear}</span>
                       </h3> 
                       
                       <div className="relative"> 
                         <button 
                           onClick={() => setIsFilterOpen(!isFilterOpen)} 
-                          className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase text-[#1e3a5f]"
+                          className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-bold  text-[#1e3a5f]"
                         > 
                           <Filter size={14} className="text-amber-500" /> 
                           Filter: <span className="text-slate-400">{activeTab}</span> 
@@ -290,7 +290,7 @@ export default function AdvisorDashboard() {
                                   setActiveTab(type); 
                                   setIsFilterOpen(false); 
                                 }} 
-                                className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-bold uppercase ${activeTab === type ? 'bg-amber-50 text-amber-600' : 'text-slate-500'}`}
+                                className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-bold  ${activeTab === type ? 'bg-amber-50 text-amber-600' : 'text-slate-500'}`}
                               > 
                                 {type} Students 
                               </button> 
@@ -336,7 +336,9 @@ function StatCard({ icon, label, value, color, textColor = "text-[#1e3a5f]" }: a
     <div className="bg-white rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between min-h-[135px]"> 
       <div className={`w-12 h-12 ${color} rounded-2xl flex items-center justify-center mb-2`}>{icon}</div> 
       <div>
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{label}</p> 
+        <p className="text-sm font-bold text-[#526782] tracking-wide mb-1">
+  {label}
+</p>
         <div className={`text-base md:text-lg font-bold ${textColor}`}>{value}</div> 
       </div>
     </div> 

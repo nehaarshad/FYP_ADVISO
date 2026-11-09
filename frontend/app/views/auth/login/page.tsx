@@ -1,4 +1,6 @@
 
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use client';
@@ -10,7 +12,7 @@ import Link from 'next/link';
 import { Mail, Lock, ChevronLeft, AlertCircle } from "lucide-react";
 import UniversalInput from "@/components/textsComponents/universalInput";
 import BlueFilledButton from '@/components/buttons/FilledButton/blueFilledButton';
-import { authRepository } from '@/src/repositories/authRepository/authRepository'
+import { authRepository } from '@/src/repositories/authRepository/authRepository';
 import { LoginCredentials } from '@/src/credentials/authCred/loginCred';
 import Image from 'next/image';
 
@@ -47,37 +49,37 @@ export default function LoginPage() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Clear previous error
     setError(null);
-    
+
     // Validate inputs
     if (!sapId.trim()) {
       setError("SAP ID is required");
       return;
     }
-    
+
     if (!password.trim()) {
       setError("Password is required");
       return;
     }
-    
+
     // Set loading state
     setIsLoading(true);
-    
+
     try {
       // Prepare credentials
       const credentials: LoginCredentials = {
         sapid: sapId,
         password: password
       };
-      
+
       // Call login API through repository
       const user = await authRepository.login(credentials);
-      
+
       // Redirect based on user role
       redirectBasedOnRole(user.data!.role, router);
-      
+
     } catch (err: any) {
       // Handle error
       setError(err.message || "Login failed. Please try again.");
@@ -87,13 +89,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen bg-cover bg-center bg-no-repeat selection:bg-[#FDB813]/30 flex items-center justify-center p-4 md:p-6 relative overflow-hidden font-sans"
       style={{ backgroundImage: "url('/backgroundLanding.png')" }}
     >
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-[3px] pointer-events-none" />
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -101,59 +103,85 @@ export default function LoginPage() {
       >
         {/* LEFT SIDE: BRANDING - Solid #1e3a5f color */}
         <div className="bg-[#1e3a5f] p-12 text-white flex flex-col justify-between relative overflow-hidden">
+
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-400/10 to-transparent pointer-events-none" />
+
           <div className="relative z-10">
-            <motion.div custom={0} initial="hidden" animate="visible" variants={fadeUp}>
-              <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold group transition-all">
-                <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" /> Back
+
+            {/* Back Navigation */}
+            <motion.div
+              custom={0}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+            >
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold group transition-all"
+              >
+                <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                Back
               </Link>
             </motion.div>
-            
-            <motion.div 
-              custom={1} initial="hidden" animate="visible" variants={fadeUp} 
-              className="mb-8"
+
+            {/* Centered Logo */}
+            <motion.div
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="mb-4 flex justify-center"
             >
-              <Image 
-                 width={154} 
-                 height={184}  
-               src="/lightLogo.png"
-                alt="Riphah Logo" 
-                className="w-32 h-32 object-contain drop-shadow-2xl" 
+              <Image
+                width={200}
+                height={200}
+                src="/lightLogo.png"
+                alt="Riphah Logo"
+                priority
+                className="w-44 h-44 object-contain drop-shadow-2xl"
               />
             </motion.div>
 
-            <motion.h1 
-              custom={2} initial="hidden" animate="visible" variants={fadeUp}
-              className="text-3xl font-black tracking-tighter mb-4 leading-[1.1]"
+            {/* Centered Welcome Message */}
+            <motion.h1
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="text-3xl md:text-4xl font-black tracking-tight mb-4 leading-tight text-center"
             >
-              Welcome back <br /> 
+              Welcome back
+              <br />
               to <span className="text-[#FDB813]">ADVISO.</span>
             </motion.h1>
+
           </div>
         </div>
 
         {/* RIGHT SIDE: FORM */}
         <div className="p-10 md:p-16 flex flex-col justify-center bg-white relative">
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }} 
-            animate={{ opacity: 1, x: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
           >
             <div className="mb-10 text-left">
-              <h2 className="text-4xl font-black text-[#1e3a5f] mb-2 tracking-tight">Login</h2>
+              <h2 className="text-4xl font-black text-[#1e3a5f] mb-2 tracking-tight">
+                Login
+              </h2>
               <div className="h-1.5 w-12 bg-[#FDB813] rounded-full"></div>
             </div>
-            
+
             {/* Error Display */}
             {error && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-[1.2rem]">
                 <p className="text-red-600 text-sm font-medium">{error}</p>
               </div>
             )}
-            
+
             {/* Form tag */}
             <form className="space-y-6" onSubmit={handleLogin}>
-              <UniversalInput 
+              <UniversalInput
                 label="SAP ID"
                 type="text"
                 placeholder="******"
@@ -163,7 +191,7 @@ export default function LoginPage() {
                 disabled={isLoading}
               />
 
-              <UniversalInput 
+              <UniversalInput
                 label="Password"
                 type="password"
                 placeholder="••••••••"
@@ -174,13 +202,13 @@ export default function LoginPage() {
               />
 
               <BlueFilledButton text={isLoading ? "Signing In..." : "Sign In"} />
-           
             </form>
 
             <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50/50 rounded-[1.2rem] border border-blue-100/50">
               <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
                 <AlertCircle size={15} className="text-blue-600" />
               </div>
+
               <p className="text-[11px] text-slate-600 font-bold leading-snug">
                 Issues logging in? Reach out to your <span className="text-[#1e3a5f]">Coordinator</span> for support.
               </p>

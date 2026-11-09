@@ -1,3 +1,4 @@
+
 /* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useState } from 'react';
 import { formatTime12, formatDate } from './types';
@@ -51,14 +52,14 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
     }
 
     await onUpdate(meeting.id, patch);
-    
+
     // Save hone ke baad dropdown close ho kar wapis normal view show ho jayega
     setIsOpen(false);
   };
 
   return (
     <div className="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden transition-all">
-      <div 
+      <div
         onClick={() => setIsOpen(!isOpen)}
         className="p-5 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/50 transition"
       >
@@ -66,7 +67,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
           <div className="flex items-center gap-2.5 mb-1.5">
             <MeetingStatusBadge status={meeting.status} />
           </div>
-          <h3 className="text-sm text-[#1e3a5f] uppercase tracking-tight">
+          <h3 className="text-sm text-[#1e3a5f] tracking-tight">
             {meeting.day} · {formatTime12(meeting.startTime)} — {formatTime12(meeting.endTime)}
           </h3>
           <p className="text-[11px] text-slate-500 mt-1">
@@ -75,13 +76,13 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
         </div>
 
         <div className="flex items-center gap-2 text-slate-400">
-          <span className="text-[10px] uppercase tracking-wider font-medium">
+          <span className="text-[10px] tracking-wider font-medium">
             {isOpen ? 'Close' : 'Edit'}
           </span>
-          <svg 
-            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
-            fill="none" 
-            stroke="currentColor" 
+          <svg
+            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -100,7 +101,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
             />
 
             <div>
-              <label className="block text-[10.5px] uppercase tracking-wider text-slate-500 mb-1.5">
+              <label className="block text-[11px] tracking-wider text-slate-550 mb-1.5">
                 Select Status
               </label>
               <select
@@ -119,7 +120,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
           </div>
 
           <div>
-            <label className="block text-[10.5px] uppercase tracking-wider text-slate-500 mb-1.5">
+            <label className="block text-[12px] tracking-wider text-slate-550 mb-1.5">
               Meeting summary / notes
             </label>
             <textarea
@@ -136,7 +137,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
             <button
               disabled={!dirty || saving}
               onClick={handleSave}
-              className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-[11px] uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-[11px] tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2 cursor-pointer"
             >
               {saving && (
                 <span className="w-3.5 h-3.5 border-2 border-[#1e3a5f]/30 border-t-[#1e3a5f] rounded-full animate-spin" />

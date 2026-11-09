@@ -183,7 +183,7 @@ export interface SuggestedCourse {
   offeredProgram: string | null; 
   timeSlot: string | null; 
   actionRequired: string; 
-  priority?: CoursePriority | Uppercase<CoursePriority>; 
+  priority?: CoursePriority | <CoursePriority>; 
   substituteCourses?: SubstituteCourse[]; 
   clashRecord?: ClashRecord; 
   alternative?: AlternativeCourse; 

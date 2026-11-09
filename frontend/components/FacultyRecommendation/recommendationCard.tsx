@@ -52,13 +52,13 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 text-slate-500">
             <User size={14} className="text-slate-400" />
-            <span className="text-[10px] font-bold uppercase">
+            <span className="text-[10px] font-bold ">
               {recommendation.postingAdvisor.advisorName || 'Unknown'}
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-slate-500">
             <Calendar size={14} className="text-slate-500" />
-            <span className="text-[9px] font-medium uppercase">
+            <span className="text-[9px] font-medium ">
               {new Date(recommendation.createdAt).toLocaleDateString('en-GB', {
                 day: '2-digit',
                 month: 'short',
@@ -68,7 +68,7 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-1">
+          <span className="text-[10px] font-bold text-slate-500  flex items-center gap-1">
             <MessageCircle size={14} /> {commentCount}
           </span>
           <ChevronRight size={16} className="text-slate-500" />

@@ -1,3 +1,6 @@
+
+// export default UniversalInput;
+
 import React from "react";
 import type { LucideIcon } from "lucide-react";
 
@@ -8,29 +11,39 @@ interface InputParams {
   placeholder: string;
   value: string;
   disabled?: boolean;
-  onChange: (val: string) => void; // fix typing
+  onChange: (val: string) => void;
 }
 
-const UniversalInput: React.FC<InputParams> = ({ Icon, label, type="text", placeholder, value, disabled, onChange }) => {
-  return ( // ✅ added return
+const UniversalInput: React.FC<InputParams> = ({
+  Icon,
+  label,
+  type = "text",
+  placeholder,
+  value,
+  disabled,
+  onChange,
+}) => {
+  return (
     <div className="space-y-2 text-left">
-      <label className="text-[11px] font-bold uppercase text-slate-400 tracking-[0.15em] ml-1">
+      <label className="ml-1 text-sm font-medium text-[#526782]">
         {label}
       </label>
+
       <div className="relative group">
         {Icon && (
           <Icon
-            className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#1e3a5f] transition-colors"
+            className="absolute left-5 top-1/2 -translate-y-1/2 text-[#91A1B7] group-focus-within:text-[#1B4B82] transition-colors"
             size={20}
           />
         )}
+
         <input
           type={type}
           placeholder={placeholder}
           value={value}
           disabled={disabled}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-200 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-blue-900/5 focus:border-[#1e3a5f] transition-all font-bold text-[#1e3a5f] placeholder:text-slate-300"
+          className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-200 rounded-[1.5rem] outline-none focus:ring-4 focus:ring-blue-900/5 focus:border-[#1B4B82] transition-all font-medium text-[#1B3555] placeholder:text-[#91A1B7] placeholder:font-normal disabled:opacity-60"
         />
       </div>
     </div>
