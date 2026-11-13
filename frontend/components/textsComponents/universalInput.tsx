@@ -25,7 +25,7 @@ const UniversalInput: React.FC<InputParams> = ({
 }) => {
   return (
     <div className="space-y-2 text-left">
-      <label className="ml-1 text-sm font-medium text-[#526782]">
+      <label className="ml-1 text-medium font-medium text-[#152336]">
         {label}
       </label>
 

@@ -7,7 +7,8 @@ import YellowFilledButtonProps from "@/components/buttons/FilledButton/yellowFil
 import { 
   BookOpen, Users, Calendar, 
   ShieldCheck, History, Send, 
-  CheckCircle2, Lightbulb, Search 
+  CheckCircle2, Lightbulb, Search, 
+  MessageSquare
 } from "lucide-react";
 import LandingFooter from "@/components/footer/route";
 import SmallFeature from "@/components/cards/featureCards";
@@ -47,7 +48,7 @@ export default function LandingPage() {
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl text-[#FDB813] md:text-6xl font-bold tracking-tight mb-10 mt-20"
+            className="text-6xl text-[#FDB813] md:text-6xl font-bold tracking-tight mb-10 mt-20"
           >
             Adviso - <br />
             <span className="text-[#FDB813]">An Academic Batch Advisor System</span>
@@ -56,7 +57,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-white text-lg md:text-2xl font-normal tracking-wide mb-16 leading-relaxed">
+              className="text-white text-8xl md:text-2xl font-normal tracking-wide mb-16 leading-relaxed">
               Smart Guidance, Simple Solution
           </motion.h2>
           <div className="mt-8">
@@ -65,7 +66,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ---- WHY CHOOSE US / SERVICES (Added id="services") ---- */}
       <section id="services" className="py-32 px-6 md:px-12 text-center max-w-7xl mx-auto">
             <OutlinedTextHeading text="Why Choose Us" hasDot={true} />
         <div className="grid md:grid-cols-3 gap-12">
@@ -75,13 +75,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ---- ABOUT US SECTION (id="about" yahan hai) --- */}
-      <section id="about" className="bg-[#1e3a5f] text-white py-32 px-6 md:px-24">
+      <section id="about" className="bg-[#1e3a5f] text-white py-32 px-4 md:px-18">
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div className="text-left">
-            <h2 className="text-3xl font-bold mb-24 tracking-wide text-[#FDB813] ">About Us</h2>
-            <h3 className="text-4xl font-bold mb-7 leading-tight">Making academic guidance smarter, <br /> simpler, and more reliable.</h3>
-            <p className="text-white/70 leading-[2] text-lg font-normal">Adviso is a smart academic advising platform that connects students and advisors, streamlining guidance, course recommendations, meetings, and academic decisions.</p>
+            <h2 className="text-4xl font-black mb-20 tracking-wide text-[#FDB813] ">About Us</h2>
+            <h3 className="text-3xl font-bold mb-7 leading-tight">Making academic guidance smarter, <br /> simpler, and more reliable.</h3>
+            <p className="text-white/75 leading-[1.7] text-normal font-semibold">Adviso is a smart academic advising platform that connects students and advisors, streamlining guidance, course recommendations, meetings, and academic decisions.</p>
           </div>
           <motion.div className="rounded-[3rem] overflow-hidden shadow-2xl border-[12px] border-white/5">
             <img src="/Image.png" alt="About" className="w-full h-[450px] object-cover" />
@@ -98,6 +97,7 @@ export default function LandingPage() {
               <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
               <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
               <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
+              <SmallFeature Icon={MessageSquare} title="Faculty Hub & Real-Time Chat" desc="Collaborate with peers on the faculty board and instantly message students or advisors for quick guidance." />
             </div>
       </section>
     </div>

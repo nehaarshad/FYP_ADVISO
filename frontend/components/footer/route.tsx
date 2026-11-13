@@ -48,25 +48,25 @@ const LandingFooter = () => {
               />
             </div>
 
-            <p className="text-sm opacity-80 leading-relaxed mb-1">
+            <p className="text-lg leading-relaxed mb-1">
               Riphah International University Gulberg Green Campus Islamabad
             </p>
 
             {/* Row 3 - Navigation Links with Pipe Separator */}
-            <div className="text-sm">
-              <Link href="#home" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+            <div className="text-medium">
+              <Link href="#home" className="cursor-pointer hover:text-[#FDB813] transition-colors">
                 Home
               </Link>
               <span className="mx-2 opacity-80">|</span>
-              <Link href="#services" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+              <Link href="#services" className="cursor-pointer hover:text-[#FDB813] transition-colors">
                 Services
               </Link>
               <span className="mx-2 opacity-80">|</span>
-              <Link href="#about" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+              <Link href="#about" className="cursor-pointer hover:text-[#FDB813] transition-colors">
                 About Us
               </Link>
               <span className="mx-2 opacity-80">|</span>
-              <Link href="#features" className="cursor-pointer opacity-80 hover:text-[#FDB813] transition-colors">
+              <Link href="#features" className="cursor-pointer hover:text-[#FDB813] transition-colors">
                 Features
               </Link>
             </div>
@@ -74,8 +74,10 @@ const LandingFooter = () => {
         </div>
 
         {/* Dotted Divider */}
-        <div className="border-t border-dotted border-white/30 mt-5 pt-4 text-xs opacity-80 px-20">
+        <div className="border-t border-dotted border-white/30 mt-5 pt-4 text-sm ">
+        <div className=" text-medium px-20">
           © 2026 Adviso. Academic Batch Advisor System.
+        </div>
         </div>
       </div>
     </footer>

@@ -14,8 +14,8 @@ import {
   User,
   Phone,
   GraduationCap,
-  Eye,      // <-- Added for show password
-  EyeOff    // <-- Added for hide password
+  Eye,     
+  EyeOff    
 } from "lucide-react";
 import Image from 'next/image';
 import { authRepository } from '@/src/repositories/authRepository/authRepository';
@@ -28,7 +28,7 @@ export default function SignupPage() {
   const [sapId, setSapId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState(""); // <-- Added Confirm Password state
-  const [role, setRole] = useState<"advisor" | "coordinator" | "admin">("coordinator");
+  const [role, setRole] = useState("");
   const [department, setDepartment] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [gender, setGender] = useState("");
@@ -138,9 +138,11 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex items-center justify-center p-4 md:p-6 relative overflow-hidden font-sans">
+    <div   style={{ backgroundImage: "url('/backgroundLanding.png')" }}
+     className="min-h-screen bg-cover bg-center bg-no-repeat selection:bg-[#FDB813]/30 flex items-center justify-center p-4 md:p-6 relative overflow-hidden font-sans"
+     >
       {/* Background */}
-      <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-50 rounded-full blur-[120px] opacity-60" />
+      <div  className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-50 rounded-full blur-[120px] opacity-60" />
       <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#FDB813]/10 rounded-full blur-[100px] opacity-40" />
 
       <motion.div 
@@ -149,31 +151,33 @@ export default function SignupPage() {
         className="max-w-5xl w-full grid md:grid-cols-2 bg-white rounded-[2.5rem] shadow-[0_40px_100px_-15px_rgba(30,58,95,0.15)] overflow-hidden border border-slate-100 z-10"
       >
         {/* LEFT SIDE */}
-       <div className="bg-[#1e3a5f] p-6 sm:p-8 md:p-12 text-white flex flex-col justify-between">
-          <div>
-            <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold">
-              <ChevronLeft size={18} /> Back 
-            </Link>
+     <div className="bg-[#1e3a5f] p-6 sm:p-8 md:p-12 text-white flex flex-col justify-center items-center text-center">
+  <div className="flex flex-col items-center">
 
-            <div className="p-3 mb-10 sm:mb-14 md:mb-20 rounded-full w-max">
-              <Image 
-                width={154} 
-                height={184} 
-                alt='logo' 
-                src="/lightLogo.png" 
-              />
-            </div>
+    {/* Logo */}
+    <div className="p-3 mb-8 rounded-full w-max">
+      <Image 
+        width={154} 
+        height={184} 
+        alt='logo' 
+        src="/logo(1).png" 
+        priority
+      />
+    </div>
 
-            <h1 className="text-4xl font-bold mb-6 mt-10 leading-[1.1]">
-              Join <br />
-              <span className="text-[#FDB813]">ADVISO.</span>
-            </h1>
+    {/* Heading */}
+    <h1 className="text-3xl sm:text-4xl font-bold mb-4 leading-[1.3]">
+      Join <br />
+      <span className="text-[#FDB813]">ADVISO.</span>
+    </h1>
 
-            <p className="text-white/70 font-medium text-1xl max-w-[280px]">
-              Empower academic decisions with structured advising and course guidance.
-            </p>
-          </div>
-        </div>
+    {/* Description */}
+    <p className="text-gray-300 font-semibold text-base sm:text-lg max-w-[300px] leading-relaxed">
+      Empower academic decisions with structured advising and course guidance.
+    </p>
+    
+  </div>
+</div>
 
         {/* RIGHT SIDE */}
         <div className="p-5 md:p-10 flex flex-col justify-center bg-white overflow-y-auto max-h-screen">
@@ -190,10 +194,10 @@ export default function SignupPage() {
             {/* Name */}
             <div>
               <div className="relative">
-                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                 <input 
                   type="text"
-                  placeholder="Your full name"
+                  placeholder="Full Name"
                   className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -205,10 +209,10 @@ export default function SignupPage() {
             {/* SAP ID */}
             <div>
               <div className="relative">
-                <GraduationCap className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <GraduationCap className="absolute left-5 top-1/2 -translate-y-1/2  text-slate-500 pointer-events-none" />
                 <input 
                   type="text"
-                  placeholder="sap ID"
+                  placeholder="SAP ID"
                   className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
                   value={sapId}
                   onChange={(e) => setSapId(e.target.value)}
@@ -220,10 +224,10 @@ export default function SignupPage() {
             {/* Email */}
             <div>
               <div className="relative">
-                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                 <input 
                   type="email"
-                  placeholder="example@riphah.edu.pk"
+                  placeholder="user@riphah.edu.pk"
                   className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -235,7 +239,7 @@ export default function SignupPage() {
             {/* Contact Number */}
             <div>
               <div className="relative">
-                <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                 <input 
                   type="tel"
                   placeholder="0300xxxxxxx"
@@ -248,37 +252,48 @@ export default function SignupPage() {
             </div>
 
             {/* Department (for coordinators) */}
-            <div>
-             <div className="relative">
-                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
-                <select
-                  title='department'
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
-                  disabled={isLoading}
-                >
-                  <option value="" disabled>---Select Department---</option>
-                  <option value="COMPUTING">COMPUTING</option>
-                  <option value="SOCIAL SCIENCES">SOCIAL SCIENCES</option>
-                </select>
-              </div>
-            </div>
+           <div>
+  <div className="relative">
+    <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+    
+    <select
+      title='department'
+      value={department}
+      onChange={(e) => setDepartment(e.target.value)}
+      disabled={isLoading}
+      className={`w-full pl-14 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors appearance-none cursor-pointer ${
+        department === "" ? "text-slate-500" : "text-slate-500 font-medium"
+      }`}
+    >
+      <option value="" disabled className="text-slate-500">
+        ---Select Department---
+      </option>
+      <option value="COMPUTING" className="text-slate-500">
+        Computing
+      </option>
+      <option value="SOCIAL SCIENCES" className="text-slate-500">
+        Social Sciences
+      </option>
+    </select>
+
+  </div>
+</div>
           
             {/* role (for coordinators) */}
             <div>
              <div className="relative">
-                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                 <select
                   title='role'
                   value={role}
                   onChange={(e) => setRole(e.target.value as "advisor" | "coordinator" | "admin")}
-                  className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
-                  disabled={isLoading}
+                  className={`w-full pl-14 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors appearance-none cursor-pointer ${
+        role === "" ? "text-slate-500" : "text-slate-500 font-medium"
+      }`}  disabled={isLoading}
                 >
                   <option value="" disabled>---Select Role---</option>
-                  <option value="coordinator">COORDINATOR</option>
-                  <option value="advisor" >ADVISOR</option>
+                  <option value="coordinator">Coordinator</option>
+                  <option value="advisor" >Faculty Member</option>
                 </select>
               </div>
             </div>
@@ -286,15 +301,16 @@ export default function SignupPage() {
             {/* Gender (for advisors) */}
             <div>
              <div className="relative">
-                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                 <select
                   title='gender'
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors"
-                  disabled={isLoading}
+                  className={`w-full pl-14 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-[1.2rem] focus:outline-none focus:border-[#FDB813] transition-colors appearance-none cursor-pointer ${
+        gender === "" ? "text-slate-500" : "text-slate-500 font-medium"
+      }`}disabled={isLoading}
                 >
-                  <option value="">Select Gender</option>
+                  <option value="" disabled>---Select Gender---</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
@@ -304,7 +320,7 @@ export default function SignupPage() {
             {/* Password */}
             <div>
              <div className="relative">
-                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                 <input 
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
@@ -327,7 +343,7 @@ export default function SignupPage() {
             {/* Confirm Password */}
             <div>
              <div className="relative">
-                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
                 <input 
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm Password"

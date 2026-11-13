@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, Variants, TargetAndTransition } from "framer-motion";
 import Link from 'next/link';
-import { Mail, Lock, ChevronLeft, AlertCircle } from "lucide-react";
+import { Mail, Lock, ChevronLeft, AlertCircle, User } from "lucide-react";
 import UniversalInput from "@/components/textsComponents/universalInput";
 import BlueFilledButton from '@/components/buttons/FilledButton/blueFilledButton';
 import { authRepository } from '@/src/repositories/authRepository/authRepository';
@@ -117,7 +117,7 @@ export default function LoginPage() {
             >
               <Link
                 href="/"
-                className="flex items-center gap-2 text-white/60 hover:text-[#FDB813] mb-12 text-sm font-bold group transition-all"
+                className="flex items-center gap-2 text-gray-300 hover:text-[#FDB813] mb-12 text-medium font-bold group transition-all"
               >
                 <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
                 Back
@@ -135,7 +135,7 @@ export default function LoginPage() {
               <Image
                 width={200}
                 height={200}
-                src="/lightLogo.png"
+                src="/logo(1).png"
                 alt="Riphah Logo"
                 priority
                 className="w-44 h-44 object-contain drop-shadow-2xl"
@@ -150,9 +150,9 @@ export default function LoginPage() {
               variants={fadeUp}
               className="text-3xl md:text-4xl font-black tracking-tight mb-4 leading-tight text-center"
             >
-              Welcome back
+              Welcome to
               <br />
-              to <span className="text-[#FDB813]">ADVISO.</span>
+               <span className="text-[#FDB813] text-4xl md:text-5xl">ADVISO</span>
             </motion.h1>
 
           </div>
@@ -182,12 +182,12 @@ export default function LoginPage() {
             {/* Form tag */}
             <form className="space-y-6" onSubmit={handleLogin}>
               <UniversalInput
-                label="SAP ID"
+                label="User"
                 type="text"
                 placeholder="******"
                 value={sapId}
                 onChange={setSapId}
-                Icon={Mail}
+                Icon={User}
                 disabled={isLoading}
               />
 
@@ -209,8 +209,8 @@ export default function LoginPage() {
                 <AlertCircle size={15} className="text-blue-600" />
               </div>
 
-              <p className="text-[11px] text-slate-600 font-bold leading-snug">
-                Issues logging in? Reach out to your <span className="text-[#1e3a5f]">Coordinator</span> for support.
+              <p className="text-[12px] text-slate-500 font-semibold leading-tight">
+                Issues logging in? Reach out to your <span className="text-[#1e3a5f] font-bold">Coordinator</span> for support.
               </p>
             </div>
           </motion.div>
