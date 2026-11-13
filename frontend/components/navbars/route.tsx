@@ -138,7 +138,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {getDisplayName()}
               </p>
 
-              <p className="text-[9px] opacity-75 font-bold  tracking-tighter">
+              <p className="text-[15px] opacity-75 font-bold  tracking-normal capitalize">
                 {userRole}
               </p>
             </div>
