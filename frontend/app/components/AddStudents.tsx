@@ -25,7 +25,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
     registrationNumber: '',
     dateOfBirth: '',
     cnic: '',
-    currentStatus: 'Promoted',
+    currentStatus: 'New Admission',
     reason: '',
     fullName: '',
     guardianemail: '',
@@ -86,7 +86,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
           </div>
           <div>
             <h2 className="text-2xl font-black tracking-tight text-[#1e3a5f]">Enroll Student</h2>
-            <p className="text-xs font-medium text-[#8293AA] mt-0.5">Register a new student account and profile</p>
+            <p className="text-sm font-semibold text-[#64758d] mt-0.5">Register a new student account and profile</p>
           </div>
         </div>
       </div>
@@ -259,7 +259,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
 
           {/* Guardian Information */}
           <div className="border-t border-slate-100 pt-6 mt-4">
-            <h3 className="text-sm font-bold text-[#1B4B82] mb-4">Guardian Information (Optional)</h3>
+            <h3 className="text-bold font-bold text-[#1B4B82] mb-4">Guardian Information (Optional)</h3>
             <div className="grid grid-cols-2 gap-6">
               <InputField 
                 label="Guardian Name" 
@@ -294,7 +294,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
             <button 
               type="submit"
               disabled={isLoading}
-              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 cursor-pointer"
+              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.1em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? 'Registering...' : 'Register Student'}
             </button>
@@ -305,10 +305,10 @@ export function AddStudent({ onBack }: AddStudentProps) {
   );
 }
 
-function InputField({ label, name, placeholder, icon, type = "text", value, onChange, required = false }: any) {
+export default function InputField({ label, name, placeholder, icon, type = "text", value, onChange, required = false }: any) {
   return (
     <div className="space-y-2 group">
-      <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+      <label className="text-[12px] font-bold text-[#364a64] ml-4 tracking-widest">
         {label.endsWith(' *') ? (
           <>
             {label.slice(0, -1)}
@@ -329,7 +329,7 @@ function InputField({ label, name, placeholder, icon, type = "text", value, onCh
           value={value}
           onChange={onChange}
           required={required}
-          className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1B3555] placeholder:text-[#91A1B7]" 
+          className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border-none rounded-2xl font-semibold text-sm outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1B3555] placeholder:text-[#91A1B7]" 
         />
       </div>
     </div>

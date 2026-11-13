@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { UserPlus, User, Fingerprint, Mail, ShieldCheck, Phone, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useAddAdvisor } from '@/src/hooks/advisorHooks/addAdvisor';
+import InputField from './AddStudents';
 
 interface AddFacultyProps {
   onBack?: () => void;
@@ -88,7 +89,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
             </div>
             <div>
               <h2 className="text-2xl font-black tracking-tight text-[#1e3a5f]">Faculty Registration</h2>
-              <p className="text-xs font-medium text-[#8293AA] mt-0.5">Register a new faculty or advisor account</p>
+              <p className="text-sm font-semibold text-[#64758d] mt-0.5">Register a new faculty or advisor account</p>
             </div>
           </div>
         </div>
@@ -107,7 +108,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
         {success && (
           <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-[1.5rem] flex items-center gap-3">
             <AlertCircle className="text-green-500" size={20} />
-            <p className="text-green-600 text-sm">Advisor added successfully!</p>
+            <p className="text-green-600 text-sm">Faculty added successfully!</p>
           </div>
         )}
 
@@ -116,7 +117,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
           <div className="grid grid-cols-2 gap-8">
             <InputField 
               label="Full Name *" 
-              name="advisorName"
+              name="facultyName"
               placeholder="Full Name" 
               icon={<User size={16}/>}
               value={formData.advisorName}
@@ -198,42 +199,11 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
               disabled={isLoading}
               className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
-              {isLoading ? 'Creating...' : 'Create Advisor Profile'} <UserPlus size={16} />
+              {isLoading ? 'Adding...' : 'Add Faculty'} <UserPlus size={16} />
             </button>
           </div>
         </form>
       </div>
     </motion.div>
-  );
-}
-
-function InputField({ label, name, placeholder, icon, type = "text", value, onChange, required = false }: any) {
-  return (
-    <div className="space-y-2 group">
-      <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
-        {label.endsWith(' *') ? (
-          <>
-            {label.slice(0, -1)}
-            <span className="text-[#1B4B82]">*</span>
-          </>
-        ) : (
-          label
-        )}
-      </label>
-      <div className="relative">
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FDB813]">
-          {icon}
-        </div>
-        <input 
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          required={required}
-          className="w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1B3555] placeholder:text-[#91A1B7]" 
-        />
-      </div>
-    </div>
   );
 }

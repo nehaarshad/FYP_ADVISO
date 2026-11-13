@@ -166,19 +166,19 @@ export function AdvisorsList() {
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#526782] tracking-wider">
-                  Advisor
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                  Faculty Name
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#526782] tracking-wider">
-                  Contact
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                  Contact Info
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#526782] tracking-wider">
-                  Batch Assignment
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                  Batch Assigned
                 </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#526782] tracking-wider">
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
                   Status
                 </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#526782] tracking-wider">
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
                   Actions
                 </th>
               </tr>
@@ -215,8 +215,8 @@ export function AdvisorsList() {
                           <p className="font-bold text-[#1e3a5f] text-sm tracking-tight">
                             {advisor.advisorName}
                           </p>
-                          <p className="text-xs text-[#8293AA] tracking-wider">
-                            SAP ID: {advisor.User?.sapid}
+                          <p className="text-[13px] font-semibold text-[#5e6d83]">
+                            Sap id: {advisor.User?.sapid}
                           </p>
                         </div>
                       </div>
@@ -226,12 +226,12 @@ export function AdvisorsList() {
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <Mail size={12} className="text-slate-400" />
-                          <p className="text-xs text-[#526782]">{advisor.email}</p>
+                          <p className="text-[13px] font-semibold text-[#5e6d83]">{advisor.email}</p>
                         </div>
 
                         <div className="flex items-center gap-2">
                           <Phone size={12} className="text-slate-400" />
-                          <p className="text-xs text-[#526782]">{advisor.contactNumber}</p>
+                          <p className="text-[13px] font-semibold text-[#5e6d83]">{advisor.contactNumber}</p>
                         </div>
                       </div>
                     </td>
@@ -249,12 +249,12 @@ export function AdvisorsList() {
                             <div className="space-y-1">
                               <div className="flex items-center gap-2">
                                 <Layers size={12} className="text-slate-400" />
-                                <p className="text-xs font-bold text-[#1e3a5f]">
+                                <p className="text-[14px] font-bold text-[#1B3555]">
                                   {displayAssignment.BatchModel?.batchName} {displayAssignment.BatchModel?.batchYear}
                                 </p>
                               </div>
 
-                              <p className="text-xs text-[#8293AA]">
+                              <p className="text-[13px] font-semibold text-[#5e6d83]">
                                 {displayAssignment.BatchModel?.ProgramModel?.programName}
                               </p>
 
@@ -268,7 +268,7 @@ export function AdvisorsList() {
                           );
                         } else {
                           return (
-                            <p className="text-xs text-[#8293AA]">
+                            <p className="text-[14px] font-bold text-[#1B3555]">
                               Not Assigned
                             </p>
                           );
@@ -299,7 +299,7 @@ export function AdvisorsList() {
                         {/* View Details Button */}
                         <button
                           onClick={() => handleViewDetails(advisor)}
-                          className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
+                          className="p-2 rounded-lg text-slate-500 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="View Details"
                         >
                           <Eye size={16} />
@@ -308,7 +308,7 @@ export function AdvisorsList() {
                         {/* Edit Button */}
                         <button
                           onClick={() => editAdvisor(advisor)}
-                          className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
+                          className="p-2 rounded-lg text-slate-500 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="Edit"
                         >
                           <Edit size={16} />

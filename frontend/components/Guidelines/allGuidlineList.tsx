@@ -99,10 +99,10 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
     <div className="flex items-start justify-between mb-3">
       <div className="flex items-center gap-3 overflow-hidden">
         <div className="p-2 bg-slate-50 rounded-xl shrink-0">
-          <GraduationCap size={18} className="text-[#1e3a5f]" />
+          <GraduationCap size={20} className="text-[#1e3a5f]" />
         </div>
        <h3 
-  className="font-bold text-[#1e3a5f] text-sm"
+  className="font-bold text-[#1e3a5f] text-medium"
   style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
 >
   {guideline.title}
@@ -114,30 +114,30 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
           className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
           title="Edit"
         >
-          <Edit size={16} className="text-slate-500" />
+          <Edit size={18} className="text-slate-500" />
         </button>
         <button
           onClick={() => onDelete(guideline.id)}
           className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
           title="Delete"
         >
-          <Trash2 size={16} className="text-red-400 hover:text-red-600" />
+          <Trash2 size={18} className="text-red-400 hover:text-red-600" />
         </button>
       </div>
     </div>
 
     <p 
-  className="text-slate-600 text-sm mb-3"
+  className="text-slate-700 font-medium text-[15px] mb-3"
   style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
 >
   {guideline.description}
 </p>
 
     <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-      <span className="text-[10px] font-bold text-slate-400 ">
+      <span className="text-[13px] font-bold text-slate-700 ">
         {getProgramName(guideline.programId)}
       </span>
-      <span className="text-[10px] text-slate-400">
+      <span className="text-[13px] text-slate-500">
         {new Date(guideline.createdAt!).toLocaleDateString()}
       </span>
     </div>

@@ -77,13 +77,6 @@ export default function VideoCarousel({ onVideoUpdate }: VideoCarouselProps) {
           videoUrl: null,
           id: null
         },
-        {
-          title: "Transcript & Degree Collection",
-          desc: "Step-by-step process of clearance from different departments before the final award.",
-          tag: "Clearance Guide",
-          videoUrl: null,
-          id: null
-        }
       ];
     }
 
@@ -202,7 +195,7 @@ export default function VideoCarousel({ onVideoUpdate }: VideoCarouselProps) {
                       <h3 className="text-lg font-bold text-white ">
                         {videoGuides[currentVideo]?.title || "Video Guide"}
                       </h3>
-                      <p className="text-slate-400 text-sm mt-2 leading-relaxed">
+                      <p className="text-white/70 text-medium mt-2 leading-relaxed">
                         {videoGuides[currentVideo]?.desc || "Watch this video guide for more information."}
                       </p>
                     </div>

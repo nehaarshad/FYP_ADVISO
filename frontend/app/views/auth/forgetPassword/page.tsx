@@ -140,7 +140,7 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
           <form className="space-y-8" onSubmit={handleUpdatePassword}>
             <div className="space-y-6">
               <UniversalInput
-                label="User SAP ID"
+                label="User"
                 type="text"
                 placeholder="xxxxx"
                 value={sapId}

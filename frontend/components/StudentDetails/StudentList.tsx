@@ -221,19 +221,19 @@ export function StudentList({
           <table className="w-full">
             <thead className="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#526782]">
-                  Student
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                  Student Name
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#526782]">
-                  Contact
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                  Contact Info
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-[#526782]">
-                  Academic Info
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                  Batch Info
                 </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#526782]">
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
                   Status
                 </th>
-                <th className="px-6 py-4 text-center text-xs font-bold text-[#526782]">
+                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
                   Actions
                 </th>
               </tr>
@@ -278,8 +278,8 @@ export function StudentList({
                           <p className="font-bold text-[#1B3555] text-sm tracking-tight">
                             {student.studentName}
                           </p>
-                          <p className="text-xs font-medium text-[#8293AA]">
-                            SAP ID: {student.User?.sapid}
+                          <p className="text-[13px] font-semibold text-[#5e6d83]">
+                            Sap id: {student.User?.sapid}
                           </p>
                         </div>
                       </div>
@@ -290,14 +290,14 @@ export function StudentList({
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <Mail size={12} className="text-slate-400" />
-                          <p className="text-xs text-[#526782]">
+                          <p className="text-[13px] font-semibold text-[#5e6d83]">
                             {student.email}
                           </p>
                         </div>
 
                         <div className="flex items-center gap-2">
                           <Phone size={12} className="text-slate-400" />
-                          <p className="text-xs text-[#526782]">
+                          <p className="text-[13px] font-semibold text-[#5e6d83]">
                             {student.contactNumber || 'N/A'}
                           </p>
                         </div>
@@ -309,14 +309,14 @@ export function StudentList({
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <GraduationCap size={12} className="text-slate-400" />
-                          <p className="text-xs font-bold text-[#1B3555]">
+                          <p className="text-[14px] font-bold text-[#1B3555]">
                             {student.BatchModel?.ProgramModel?.programName}
                           </p>
                         </div>
 
                         <div className="flex items-center gap-2">
                           <Calendar size={12} className="text-slate-400" />
-                          <p className="text-xs text-[#8293AA]">
+                          <p className="text-[13px] font-semibold text-[#5e6d83]">
                             {student.BatchModel?.batchName} {student.BatchModel?.batchYear} | Sem {student.currentSemester}
                           </p>
                         </div>
@@ -341,7 +341,7 @@ export function StudentList({
                       <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleViewDetails(student)}
-                          className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
+                          className="p-2 rounded-lg text-slate-500 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="View Details"
                         >
                           <Eye size={16} />
@@ -349,7 +349,7 @@ export function StudentList({
 
                         <button
                           onClick={() => editStudent(student)}
-                          className="p-2 rounded-lg text-slate-400 hover:text-[#FDB813] hover:bg-slate-100 transition-all"
+                          className="p-2 rounded-lg text-slate-500 hover:text-[#FDB813] hover:bg-slate-100 transition-all"
                           title="Edit"
                         >
                           <Edit size={16} />

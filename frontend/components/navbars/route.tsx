@@ -86,7 +86,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div key={group} className="py-2.5">
 
             {/* Group Heading */}
-            <p className="px-5 text-[11.5px] font-semibold  tracking-[0.18em] text-[#FDB813] mb-2.5">
+            <p className="px-5 text-[13px] font-semibold  tracking-[0.1em] text-[#FDB813] mb-2.5">
               {group}
             </p>
 
@@ -134,11 +134,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-black italic truncate">
+              <p className="text-medium font-black tracking-[0.1em] truncate capitalize">
                 {getDisplayName()}
               </p>
 
-              <p className="text-[15px] opacity-75 font-bold  tracking-normal capitalize">
+              <p className="text-[13px] opacity-75 font-bold  tracking-[0.1em] capitalize">
                 {userRole}
               </p>
             </div>
@@ -147,9 +147,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Sign Out */}
           <button
             onClick={handleLogout}
-            className="w-full py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[10px] font-black  tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
+            className="w-full py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-400 rounded-xl text-[12px] font-black  tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2"
           >
-            <LogOut size={14} />
+            <LogOut size={16} />
             Sign Out
           </button>
         </div>
@@ -177,7 +177,7 @@ function ExpandableItem({
     <div>
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`w-full flex items-center gap-4 px-5 py-[13.2px] rounded-xl transition-all ${
+        className={`w-full flex items-center gap-4 px-5 py-[13.2px] tracking-[0.1em] rounded-xl transition-all ${
           open
             ? "bg-white/10"
             : "hover:bg-white/5 opacity-80 hover:opacity-100"
@@ -211,10 +211,10 @@ function ExpandableItem({
               <div
                 key={sub.key}
                 onClick={() => setActiveTab(sub.key)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all text-[10px] font-bold italic ${
+                className={`flex items-center gap-3 px-4 py-3  cursor-pointer transition-all rounded-lg text-[12px] tracking-[0.12em] font-semibold ${
                   activeTab === sub.key
                     ? "text-[#FDB813] bg-white/10 opacity-100"
-                    : "opacity-75 hover:opacity-100 hover:bg-white/10"
+                    : "opacity-85 hover:opacity-100 hover:bg-gray-700/10 transition-all"
                 }`}
               >
                 {sub.icon}
@@ -240,7 +240,7 @@ function SidebarItem({
   return (
     <div
       onClick={onClick}
-      className={`flex items-center gap-4 px-5 py-[13.2px] rounded-xl cursor-pointer transition-all ${
+      className={`flex items-center gap-4 px-5 py-[13.2px] rounded-xl cursor-pointer tracking-[0.12em]  transition-all ${
         active
           ? "bg-[#FDB813] text-[#1e3a5f] font-black shadow-xl scale-[1.01]"
           : "opacity-80 hover:opacity-100 hover:bg-white/5 font-bold"
@@ -250,7 +250,7 @@ function SidebarItem({
         {icon}
       </span>
 
-      <span className="text-sm tracking-tight truncate">
+      <span className="text-sm tracking-[0.1em] ">
         {label}
       </span>
     </div>

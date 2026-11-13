@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
 
@@ -100,7 +101,7 @@ export function ProfileView() {
       {/* Profile Details Grid */}
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-          <h3 className="text-sm font-bold  tracking-widest text-slate-500">
+          <h3 className="text-medium font-bold  tracking-widest text-slate-600">
             Account & Academic Details
           </h3>
           <span className="text-sm font-medium text-slate-500">Official Record</span>
@@ -146,7 +147,7 @@ export function ProfileView() {
             <DetailCard 
               icon={<Phone className="text-[#1e3a5f]" size={20} />} 
               label="Contact Number" 
-              value={profileData.contactNumber.toString()} 
+              value={`+92 ${profileData.contactNumber.toString()}`} 
             />
           )}
 

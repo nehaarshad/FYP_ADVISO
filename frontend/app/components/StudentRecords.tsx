@@ -77,7 +77,7 @@ export function StudentRecords() {
             <h2 className="text-2xl font-black tracking-tight text-[#1e3a5f]">
               Upload Student Records
             </h2>
-            <p className="text-xs font-medium text-slate-400 mt-0.5">
+            <p className="text-sm font-semibold text-[#64758d] mt-0.5">
               Bulk upload students via Excel spreadsheet
             </p>
           </div>
@@ -253,7 +253,7 @@ export function StudentRecords() {
             <button
               type="submit"
               disabled={isLoading || !selectedFile}
-              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.1em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isLoading ? 'Processing...' : 'Process Records'} <Upload size={16} />
             </button>

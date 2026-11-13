@@ -123,22 +123,22 @@ export default function CoordinatorDashboard() {
               
               {/* SECTION 1: SYSTEM STATISTICS */}
               <div className="space-y-3">
-                <h2 className="text-sm font-extrabold tracking-wider text-slate-800 capitalize">System statistics</h2>
+                <h2 className="text-medium font-extrabold tracking-wider text-slate-800 capitalize">Departmental Analytics</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <StatCard 
-                    label="Total students" 
+                    label="Students" 
                     value={totalStudentsCount.toLocaleString()} 
                     icon={<Users/>} 
                     trend={`${activeStudentsCount} active`} 
                   />
                   <StatCard 
-                    label="Batch advisors" 
+                    label="Faculty Members" 
                     value={totalAdvisorsCount.toLocaleString()} 
                     icon={<ShieldCheck/>} 
                     trend={`${activeAdvisorCount} active`} 
                   />
                   <StatCard 
-                    label="Active programs" 
+                    label="Programs" 
                     value={activeProgramsCount.toLocaleString()} 
                     icon={<GraduationCap/>} 
                     trend="Currently running" 
@@ -147,8 +147,8 @@ export default function CoordinatorDashboard() {
               </div>
 
               {/* SECTION 2: MANAGEMENT MODULES */}
-              <div className="space-y-3">
-                <h2 className="text-sm font-extrabold tracking-wider text-slate-800 capitalize">Management modules</h2>
+              <div className="space-y-3 mt-10">
+                <h2 className="text-medium font-extrabold tracking-wider text-slate-800 capitalize">Department Management</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   <ActionCard icon={<GraduationCap/>} label="Programs" onClick={() => navigateTo("programs")} />
                   <ActionCard icon={<SearchCheck/>} label="Results" onClick={() => navigateTo("results")} />
@@ -228,7 +228,7 @@ function ActionCard({ icon, label, onClick }: any) {
       onClick={onClick} 
       className="bg-white p-8 rounded-[1.8rem] border-2 border-slate-50 shadow-sm flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#1e3a5f] hover:shadow-md transition-all min-h-[165px] group"
     >
-      <div className="h-14 w-14 rounded-2xl bg-[#1e3a5f]/5 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#1e3a5f] group-hover:text-white transition-colors">
+      <div className="h-14 w-14 rounded-2xl bg-gray-300/70 flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#1e3a5f] group-hover:text-white transition-colors">
         {React.cloneElement(icon, { size: 28 })}
       </div>
       <p className="text-sm font-extrabold capitalize text-[#1e3a5f] text-center tracking-wide">{label}</p>
@@ -239,12 +239,11 @@ function ActionCard({ icon, label, onClick }: any) {
 function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) {
   return (
     <div className="bg-white p-6 rounded-[1.8rem] shadow-sm border border-slate-100">
-      <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-4 text-[#1e3a5f]">
-        {React.cloneElement(icon, { size: 20 })}
+      <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-5 text-[#FDB813]">
+        {React.cloneElement(icon, { size: 28 })}
       </div>
-      <p className="text-slate-800 text-sm font-extrabold capitalize tracking-wide mb-1">{label}</p>
-      <h3 className={`text-3xl font-extrabold ${color}`}>{value}</h3>
-      <p className="text-[10px] font-bold text-emerald-600 mt-1 capitalize">{trend}</p>
+      <h3 className={`text-3xl font-extrabold ${color}`}>{value} <span className="text-slate-800 text-sm font-extrabold capitalize tracking-wide mb-1">{label}</span></h3>
+      <p className="text-[12px] font-bold text-emerald-600 mt-1 capitalize">{trend}</p>
     </div>
   );
 }
