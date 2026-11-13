@@ -194,7 +194,7 @@ export const SearchableMultiSelectCategories: React.FC<SearchableMultiSelectCate
         </div>
       )}
 
-      <p className="text-[9px] text-slate-400 mt-1">
+      <p className="text-[12px] text-slate-600 font-medium mt-1">
         Type to search and select multiple categories
       </p>
     </div>

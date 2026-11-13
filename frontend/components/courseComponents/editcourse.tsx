@@ -206,7 +206,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Course Code */}
           <div>
-            <label className="text-[10px] font-bold text-slate-400  block mb-1">
+            <label className="text-[13px] font-bold text-slate-600  block mb-1">
               Course Code
             </label>
             <input
@@ -221,8 +221,8 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
           {/* Course Name */}
           <div>
-            <label className="text-[10px] font-bold text-slate-400  block mb-1">
-              Course Name <span className="text-red-500">*</span>
+            <label className="text-[13px] font-bold text-slate-600  block mb-1">
+              Course Name 
             </label>
             <input
               type="text"
@@ -237,7 +237,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
           {/* Credits */}
           <div>
-            <label className="text-[10px] font-bold text-slate-400  block mb-1">
+            <label className="text-[13px] font-bold text-slate-600  block mb-1">
               Credit Hours
             </label>
             <input
@@ -248,7 +248,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-[#1e3a5f] transition-colors"
               placeholder="e.g., 3 or 3+1"
             />
-            <p className="text-[9px] text-slate-400 mt-1">
+            <p className="text-[12px] text-slate-600 font-medium mt-1">
               Enter number (e.g., 3) or format like 3+1
             </p>
           </div>
@@ -256,10 +256,10 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
           {/* Categories - Add-Only Mode */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[10px] font-bold text-slate-400 ">
+              <label className="text-[13px] font-bold text-slate-600 ">
                 Categories
               </label>
-              <span className="text-[9px] text-blue-600 font-medium">
+              <span className="text-[12px] text-blue-600 font-medium">
                 {existingCategoryIds.length} assigned
               </span>
             </div>
@@ -274,18 +274,17 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                   return (
                     <span
                       key={id}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 text-white text-[10px] font-medium rounded"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 text-black text-[10px] font-medium rounded tracking-[0.1rem] border border-slate-300"
                       style={{ backgroundColor: color }}
                     >
                       {category.categoryName}
-                      <span className="text-[8px] opacity-70">✓</span>
+                      <span className="text-[11px]">✓</span>
                     </span>
                   );
                 })}
               </div>
             )}
 
-            {/* Add new categories - FIXED: Properly handle the onChange */}
             <SearchableMultiSelectCategories
               options={availableCategories}
               selectedIds={[]} // Always empty because we handle merging in parent
@@ -310,7 +309,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               placeholder={availableCategories.length > 0 ? "Search and add new categories..." : "No categories available to add"}
               disabled={isLoading || availableCategories.length === 0}
             />
-            <p className="text-[9px] text-slate-400 mt-1">
+            <p className="text-[12px] text-slate-600 font-medium mt-1">
               {availableCategories.length > 0 
                 ? "Search and select categories to add. Existing categories cannot be removed."
                 : "All available categories are already assigned to this course."}

@@ -90,7 +90,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
     <div className="relative" ref={wrapperRef}>
       {/* Label */}
       {label && (
-        <label className="text-[10px] font-bold text-slate-400  block mb-1">
+        <label className="text-[13px] font-bold text-slate-600  block mb-1">
           {label}
         </label>
       )}
@@ -158,7 +158,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
                     <span className="font-medium text-slate-900">
                       {option.courseCode}
                     </span>
-                    <span className="text-xs text-slate-500">
+                    <span className="text-sm text-slate-700">
                       {option.courseName}
                     </span>
                   </div>
@@ -173,7 +173,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
       )}
 
       {/* Helper Text */}
-      <p className="text-[9px] text-slate-400 mt-1">
+      <p className="text-[12px] text-slate-600 font-medium mt-1">
         Type to search and select multiple courses
       </p>
     </div>

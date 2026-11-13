@@ -100,29 +100,22 @@ export const Timetable = () => {
     return Array.from(years).sort().reverse();
   };
 
-  const handleViewSchedule = (timetable: any) => {
-    setSelectedTimetable(timetable);
-    setShowDetailModal(true);
-  };
-
-  const sessionYears = getUniqueSessionYears();
-
   return (
     <>
-      <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100">
+      <div className="bg-white p-8 rounded-[2rem] border border-slate-300 shadow-sm">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-2xl font-bold text-[#1e3a5f]   tracking-tighter">
               Class Timetables
             </h2>
-            <p className="text-[10px] text-slate-400 font-bold mt-1  tracking-widest">
+            <p className="text-[13px] font-bold text-slate-600 mt-2">
               {filteredByDay.length} schedules found
             </p>
           </div>
           <button 
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[10px]  tracking-widest hover:bg-[#FDB813] transition-all"
-          >
+            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-[12px]  tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
+            >
             Upload Timetable
           </button>
         </div>
@@ -130,15 +123,15 @@ export const Timetable = () => {
         {/* Session Filter Section */}
         <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
           <div className="flex items-center gap-2 mb-3">
-            <Filter size={16} className="text-[#1e3a5f]" />
-            <h3 className="text-xs font-bold text-[#1e3a5f]  tracking-wider">Filter by Session</h3>
+            <Filter size={18} className="text-[#1e3a5f]" />
+            <h3 className="text-sm font-bold text-[#1e3a5f]  tracking-wider">Filter by Session</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <select
               title="Session Type"
               value={selectedSessionType}
               onChange={(e) => setSelectedSessionType(e.target.value)}
-              className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
             >
               <option value="">All Session Types</option>
               <option value="FALL">Fall</option>
@@ -151,14 +144,14 @@ export const Timetable = () => {
               placeholder="Session Year (e.g., 2024)"
               value={selectedSessionYear}
               onChange={(e) => setSelectedSessionYear(e.target.value)}
-              className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
             />
 
             <select
               title="Program"
               value={selectedProgram}
               onChange={(e) => setSelectedProgram(e.target.value)}
-              className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
             >
               <option value="">All Programs</option>
               {programs.map((p: any) => (
@@ -169,7 +162,7 @@ export const Timetable = () => {
             {(selectedSessionType || selectedSessionYear || selectedProgram) && (
               <button
                 onClick={handleResetFilters}
-                className="px-4 py-2 bg-slate-200 text-slate-600 rounded-xl text-xs font-bold hover:bg-slate-300 transition-all"
+                className="px-4 py-2 bg-slate-300 text-slate-800 rounded-xl text-xs font-bold hover:bg-slate-300 transition-all"
               >
                 Clear Filters
               </button>
@@ -181,19 +174,19 @@ export const Timetable = () => {
             <div className="flex flex-wrap gap-2 mt-3">
               {selectedSessionType && (
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
-                  Session: {selectedSessionType}
+                  {selectedSessionType}
                   <button onClick={() => setSelectedSessionType('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedSessionYear && (
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
-                  Year: {selectedSessionYear}
+                   {selectedSessionYear}
                   <button onClick={() => setSelectedSessionYear('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedProgram && (
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
-                  Program: {selectedProgram}
+                   {selectedProgram}
                   <button onClick={() => setSelectedProgram('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
@@ -206,18 +199,18 @@ export const Timetable = () => {
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setSelectedDay('all')}
-              className={`px-3 py-1.5 rounded-lg text-[9px] font-bold  transition-all ${
-                selectedDay === 'all' ? 'bg-[#1e3a5f] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold truncate-[0.1rem] transition-all ${
+                selectedDay === 'all' ? 'bg-[#1a3457] text-white' : 'bg-slate-300 text-slate-600 hover:bg-slate-200'
               }`}
             >
               All Days
             </button>
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
               <button
                 key={day}
                 onClick={() => setSelectedDay(day)}
-                className={`px-3 py-1.5 rounded-lg text-[9px] font-bold  transition-all ${
-                  selectedDay === day ? 'bg-[#1e3a5f] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold truncate-[0.1rem] transition-all ${
+                  selectedDay === day ? 'bg-[#1a3457] text-white' : 'bg-slate-300 text-slate-600 hover:bg-slate-200'
                 }`}
               >
                 {day}
@@ -242,69 +235,77 @@ export const Timetable = () => {
           <>
             {/* Summary */}
             <div className="mb-4 text-right">
-              <span className="text-xs text-slate-500">
+              <span className="text-sm text-slate-600">
                 Showing {filteredByDay.length} of {filteredTimetables.length} schedules
               </span>
             </div>
             
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-slate-50 border-b border-slate-200">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400  tracking-wider">Day</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400  tracking-wider">Course</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400  tracking-wider">Time</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400  tracking-wider">Venue</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400  tracking-wider">Instructor</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400  tracking-wider">Batch</th>
-                    <th className="px-4 py-3 text-left text-[10px] font-bold text-slate-400  tracking-wider">Session</th>
-                    <th className="px-4 py-3 text-center text-[10px] font-bold text-slate-400  tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {filteredByDay.map((timetable: any) => (
-                    <tr key={timetable.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-4 py-4">
-                        <span className="font-bold text-[#1e3a5f] text-sm">{timetable.day}</span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <p className="font-bold text-sm text-slate-700">{timetable.CourseOfferingModel?.courseName}</p>
-                      </td>
-                      <td className="px-4 py-4">
-                        <span className="text-xs font-medium text-slate-600">
-                          {timetable.startTime} - {timetable.endTime}
-                        </span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <span className="text-xs text-slate-500">{timetable.venue}</span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <span className="text-xs text-slate-500">{timetable.instructor}</span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <span className="text-xs font-bold text-slate-600">
-                          {timetable.CourseOfferingModel?.BatchModel?.batchName} {timetable.CourseOfferingModel?.BatchModel?.batchYear}
-                        </span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <span className="text-xs font-medium text-slate-600">
-                          {timetable.CourseOfferingModel?.SessionModel?.sessionType} {timetable.CourseOfferingModel?.SessionModel?.sessionYear}
-                        </span>
-                      </td>
-                      <td className="px-4 py-4 text-center">
-                        <button 
-                          onClick={() => handleViewSchedule(timetable)}
-                          className="p-2 rounded-lg text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
-                          title="View Schedule"
-                        >
-                          <Eye size={16}/>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+           <div className="overflow-x-auto rounded-xl border border-slate-300">
+  <table className="w-full border-collapse">
+    {/* HEADER */}
+    <thead className="bg-slate-50">
+      <tr>
+        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+          Day
+        </th>
+        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+          Course
+        </th>
+        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+          Time
+        </th>
+        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+          Venue
+        </th>
+        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+          Instructor
+        </th>
+        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+          Batch
+        </th>
+        {/* Note: Added border-r to the last header so it matches the rows below */}
+        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+          Session
+        </th>
+      </tr>
+    </thead>
+
+    {/* BODY */}
+    <tbody>
+      {filteredByDay.map((timetable: any) => (
+        <tr key={timetable.id} className="hover:bg-slate-50/50 transition-colors">
+          <td className="px-4 py-4 border-b border-r border-slate-300">
+            <span className="font-bold text-[#1e3a5f] text-sm">{timetable.day}</span>
+          </td>
+          <td className="px-4 py-4 border-b border-r border-slate-300">
+            <p className="font-bold text-sm text-slate-700">{timetable.CourseOfferingModel?.courseName}</p>
+          </td>
+          <td className="px-4 py-4 border-b border-r border-slate-300">
+            <span className="text-sm font-medium text-slate-600">
+              {timetable.startTime} - {timetable.endTime}
+            </span>
+          </td>
+          <td className="px-4 py-4 border-b border-r border-slate-300">
+            <span className="text-sm font-medium text-slate-600">{timetable.venue}</span>
+          </td>
+          <td className="px-4 py-4 border-b border-r border-slate-300">
+            <span className="text-sm font-medium text-slate-600">{timetable.instructor}</span>
+          </td>
+          <td className="px-4 py-4 border-b border-r border-slate-300">
+            <span className="text-sm font-bold text-slate-600">
+              {timetable.CourseOfferingModel?.BatchModel?.batchName} {timetable.CourseOfferingModel?.BatchModel?.batchYear}
+            </span>
+          </td>
+          <td className="px-4 py-4 border-b border-r border-slate-300">
+            <span className="text-sm font-medium text-slate-600">
+              {timetable.CourseOfferingModel?.SessionModel?.sessionType} {timetable.CourseOfferingModel?.SessionModel?.sessionYear}
+            </span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
           </>
         )}
       </div>
@@ -320,7 +321,7 @@ export const Timetable = () => {
       </div>
       <form onSubmit={handleUpload} className="space-y-4">
         <div>
-          <label className="text-[10px] font-bold text-slate-400 ">Session Type *</label>
+          <label className="text-[13px] font-bold text-slate-600 ">Session Type *</label>
           <select
             title='Session Type'
             value={selectedSessionType}
@@ -336,7 +337,7 @@ export const Timetable = () => {
         </div>
 
         <div>
-          <label className="text-[10px] font-bold text-slate-400 ">Session Year *</label>
+          <label className="text-[13px] font-bold text-slate-600 ">Session Year *</label>
           <input
             type="text"
             placeholder="e.g., 2024"
@@ -348,7 +349,7 @@ export const Timetable = () => {
         </div>
 
         <div>
-          <label className="text-[10px] font-bold text-slate-400 ">Program Name *</label>
+          <label className="text-[13px] font-bold text-slate-600 ">Program Name *</label>
           <select
             title='Program'
             value={selectedProgram}
@@ -364,7 +365,7 @@ export const Timetable = () => {
         </div>
 
         <div>
-          <label className="text-[10px] font-bold text-slate-400 ">Excel File *</label>
+          <label className="text-[13px] font-bold text-slate-600 ">Excel File *</label>
           <div className="relative mt-1">
             <input
               title='upload file'
@@ -408,49 +409,6 @@ export const Timetable = () => {
   </div>
 )}
 
-
-
-
-
-
-
-
-
-      {/* Schedule Detail Modal */}
-      {showDetailModal && selectedTimetable && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-[#1e3a5f] ">Schedule Details</h3>
-              <button title='btn' onClick={() => setShowDetailModal(false)} className="p-1 hover:bg-slate-100 rounded">
-                <X size={20} />
-              </button>
-            </div>
-            <div className="space-y-3">
-              <InfoRow icon={<CalendarDays size={14} />} label="Day" value={selectedTimetable.day} />
-              <InfoRow icon={<Clock size={14} />} label="Time" value={`${selectedTimetable.startTime} - ${selectedTimetable.endTime}`} />
-              <InfoRow icon={<MapPin size={14} />} label="Venue" value={selectedTimetable.venue} />
-              <InfoRow icon={<User size={14} />} label="Instructor" value={selectedTimetable.instructor} />
-              <InfoRow label="Course" value={selectedTimetable.CourseOfferingModel?.courseName} />
-              <InfoRow label="Credits" value={selectedTimetable.CourseOfferingModel?.credits} />
-              <InfoRow label="Batch" value={`${selectedTimetable.CourseOfferingModel?.BatchModel?.batchName} ${selectedTimetable.CourseOfferingModel?.BatchModel?.batchYear}`} />
-              <InfoRow label="Session" value={`${selectedTimetable.CourseOfferingModel?.SessionModel?.sessionType} ${selectedTimetable.CourseOfferingModel?.SessionModel?.sessionYear}`} />
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
-
-function InfoRow({ icon, label, value }: { icon?: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      {icon && <div className="text-slate-400">{icon}</div>}
-      <div>
-        <p className="text-[9px] font-bold text-slate-400 ">{label}</p>
-        <p className="text-sm font-bold text-[#1e3a5f]">{value || 'N/A'}</p>
-      </div>
-    </div>
-  );
-}
