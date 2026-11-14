@@ -115,59 +115,59 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
       <div className="flex-1 overflow-y-auto px-4 md:px-6">
         <div className="max-w-6xl mx-auto space-y-6 md:space-y-8 pb-20">
           {/* Header Card */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.2rem] border border-slate-100 shadow-sm items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.2rem] border border-slate-300 shadow-sm items-center">
             <div className="flex flex-col justify-center text-center sm:text-left">
               <p className="text-xl md:text-2xl font-bold text-[#1e3a5f] leading-tight">
                 {student?.studentName || "N/A"}
               </p>
-              <p className="text-[10px] font-bold text-slate-400 mt-1 tracking-widest">
+              <p className="text-[12px] font-bold text-slate-600 mt-1 tracking-widest">
                 SAP ID: {student?.User?.sapid || "N/A"}
               </p>
             </div>
 
             <div className="flex flex-col justify-center items-center sm:items-start md:border-l md:border-slate-100 md:pl-8">
-              <p className="text-[10px] font-bold text-slate-400 mb-1 tracking-widest">Cumulative GPA</p>
+              
               <p className="text-3xl font-bold text-amber-500 leading-none">
-                {getCGPA()}
+                {getCGPA()} <span className="text-[12px] text-slate-600 ml-1">Cumulative GPA</span>
               </p>
             </div>
 
             <div className="text-center md:text-right flex flex-col justify-center sm:col-span-2 md:col-span-1">
-              <p className="text-[10px] font-bold text-slate-400 tracking-widest mb-1">Degree Progress</p>
               <p className="text-xl font-bold text-[#1e3a5f]">
-                {getTotalEarnedCredits()} <span className="text-slate-400">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span>
-                <span className="text-[10px] text-slate-400 ml-1">Credits</span>
+                {getTotalEarnedCredits()} <span className="text-slate-500">/ {student?.BatchModel?.RoadmapModel?.totalCreditHours || "N/A"}</span>
+                <span className="text-[12px] text-slate-500 ml-1">Credits</span>
               </p>
             </div>
           </div>
 
           {/* Semester Sections */}
           {getSemesterData().map((sem: any, idx: number) => (
-            <div key={idx} className="bg-white rounded-[1.2rem] md:rounded-[1.5rem] overflow-hidden border border-slate-100 shadow-sm">
+            <div key={idx} className="bg-white rounded-[1.2rem] md:rounded-[1.5rem] overflow-hidden border border-slate-300 shadow-sm">
               <div className="bg-slate-50/50 px-6 md:px-8 py-4 md:py-5 border-b border-slate-100 flex flex-row justify-between items-center flex-wrap gap-2">
                 <div className="flex flex-col">
-                  <h3 className="text-s md:text-sm font-bold text-[#1e3a5f] tracking-widest">{sem.semester}</h3>
-                  <span className="text-[10px] text-slate-700 mt-0.5">
+                  <h3 className="text-s md:text-medium font-extrabold text-[#1e3a5f] tracking-widest">{sem.semester}</h3>
+                  <span className="text-[13px] font-bold text-slate-700 mt-0.5">
                     Earned: {sem.earnedCredits} / {sem.totalCredits} Credits
                   </span>
                 </div>
-                <span className="px-3 py-1 md:px-4 md:py-1.5 bg-white rounded-xl border border-slate-200 text-[10px] md:text-xs font-bold text-amber-600 whitespace-nowrap">
+                <span className="px-3 py-1 md:px-4 md:py-1.5 bg-amber-100 rounded-xl border border-orange text-[12px] md:text-sm font-bold text-amber-600 whitespace-nowrap">
                   SGPA: {sem.sgpa}
                 </span>
               </div>
+              <hr className=' border-gray-300'></hr>
 
               {/* Desktop Table View */}
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left">
                   <thead>
-                    <tr className="text-[10px] font-bold text-slate-600 tracking-widest border-b border-slate-50">
+                    <tr className="text-[14px] font-extrabold text-black tracking-normal border-b border-slate-50">
                       <th className="px-8 py-4 w-[40%]">Course Title</th>
                       <th className="px-4 py-4 w-[30%]">Category</th>
                       <th className="px-4 py-4 text-center">Credits</th>
                       <th className="px-8 py-4 text-center">Grade</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-50">
+                  <tbody className="divide-y divide-slate-100">
                     {sem.courses.map((course: any, cIdx: number) => {
                       const categoryStyle = getCategoryStyle(course.courseCategory);
                       const gradeStyle = getGradeStyle(course.grade);
@@ -176,11 +176,11 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                         <tr key={cIdx} className="hover:bg-slate-50/30 transition-colors">
                           <td className="px-8 py-4">
                             <div>
-                              <p className="font-bold text-[#1e3a5f] text-xs tracking-tight">
+                              <p className="font-bold text-[#1e3a5f] text-[13px] tracking-tight">
                                 {course.courseName}
                               </p>
                               <p
-                                className="text-[9px] mt-0.5"
+                                className="text-[12px] font-semibold mt-0.5"
                                 style={{ color: '#1B3555' }}
                               >
                                 {course.courseCode}
@@ -191,7 +191,7 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                             <ul className="list-disc pl-4">
                               <li style={{ color: categoryStyle.color }}>
                                 <span
-                                  className="inline-block text-[9px] font-bold px-2 py-1 rounded-md"
+                                  className="inline-block text-[12px] font-bold px-2 py-1 rounded-md"
                                   style={{
                                     backgroundColor: categoryStyle.color,
                                     color: '#000',
@@ -202,12 +202,12 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                               </li>
                             </ul>
                           </td>
-                          <td className="px-4 py-4 text-center font-bold text-slate-500 text-xs">
+                          <td className="px-4 py-4 text-center font-bold text-slate-600 text-sm">
                             {course.earnedCreditHours}/{course.totalCreditHours}
                           </td>
                           <td className="px-8 py-4 text-center">
                             <span
-                              className="text-xs font-bold px-3 py-1 rounded-lg"
+                              className="text-sm font-bold px-3 py-1 rounded-lg"
                               style={{
                                 backgroundColor: gradeStyle.bg,
                                 color: gradeStyle.text
@@ -233,18 +233,18 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                     <div key={cIdx} className="p-5 flex flex-col gap-2">
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex-1">
-                          <p className="font-bold text-[#1e3a5f] text-xs leading-tight">
+                          <p className="font-bold text-[#1e3a5f] text-sm leading-tight">
                             {course.courseName}
                           </p>
                           <p
-                            className="text-[10px] mt-0.5"
+                            className="text-[12px] font-semibold mt-0.5"
                             style={{ color: '#1B3555' }}
                           >
                             {course.courseCode}
                           </p>
                         </div>
                         <span
-                          className="text-xs font-bold px-2 py-1 rounded-lg shrink-0"
+                          className="text-sm font-bold px-2 py-1 rounded-lg shrink-0"
                           style={{
                             backgroundColor: gradeStyle.bg,
                             color: gradeStyle.text
@@ -255,14 +255,14 @@ export const StudentTranscript = ({ student, onBack }: TranscriptProps) => {
                       </div>
                       <div className="flex justify-between items-end">
                         <span
-                          className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                          className="text-[12px] font-bold px-2 py-0.5 rounded-full"
                           style={{
                             color: categoryStyle.color
                           }}
                         >
                           {course.courseCategory || 'N/A'}
                         </span>
-                        <span className="text-[9px] font-bold text-slate-400">
+                        <span className="text-[12px] font-bold text-slate-400">
                           {course.earnedCreditHours}/{course.totalCreditHours} Credits
                         </span>
                       </div>

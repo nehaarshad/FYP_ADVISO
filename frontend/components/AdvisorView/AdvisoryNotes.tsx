@@ -162,7 +162,7 @@ export default function AdvisoryNotes({ onBack, batchId }: AdvisoryNotesProps) {
               <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">
                 Advisor Notes
               </h2>
-              <p className="text-xs font-medium text-slate-400 mt-0.5">
+              <p className="text-sm font-semibold text-slate-500 mt-0.5">
                 {batchId ? `Filtering by batch: ${batchId}` : "Advisor add their notes here"}
               </p>
             </div>

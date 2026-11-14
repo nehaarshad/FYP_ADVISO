@@ -129,7 +129,7 @@ export default function AdvisorDashboard() {
       <div className="flex items-center justify-center min-h-screen bg-white"> 
         <div className="text-center"> 
           <Loader2 size={48} className="animate-spin text-[#1e3a5f] mx-auto mb-4" /> 
-          <p className="text-gray-600 font-medium">Loading dashboard...</p> 
+          <p className="text-gray-800 font-medium">Loading dashboard...</p> 
         </div> 
       </div> 
     ); 
@@ -183,14 +183,14 @@ export default function AdvisorDashboard() {
                     icon={<Users size={22} />} 
                     label="Total Students" 
                     value={selectedBatch ? stats.total.toString() : "0"} 
-                    color="bg-indigo-50" 
+                    color="bg-indigo-600/25" 
                   /> 
                   <StatCard 
                     icon={<UserMinus size={22} />} 
-                    label="Irregular List" 
+                    label="Irregular Students" 
                     value={selectedBatch ? stats.irregular.toString() : "0"} 
-                    color="bg-red-50" 
-                    textColor="text-red-500" 
+                    color="bg-red-600/15" 
+                    textColor="text-red-600" 
                   /> 
                   <StatCard 
                     icon={<Clock size={22} />} 
@@ -200,11 +200,11 @@ export default function AdvisorDashboard() {
                         {upcomingMeeting ? (
                           <>
                             <div className="flex items-center justify-between gap-1">
-                              <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e3a5f] truncate">
-                                <Calendar size={13} className="text-amber-500 shrink-0" />
+                              <div className="flex items-center gap-1.5 text-sm font-bold text-[#1e3a5f] truncate">
+                                <Calendar size={15} className="text-amber-500 shrink-0" />
                                 <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
                               </div>
-                              <span className={`text-[9px] px-1.5 py-0.5 rounded  font-bold shrink-0 ${
+                              <span className={`text-[13px] px-1.5 py-0.5 rounded  font-bold shrink-0 ${
                                 upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-50 text-blue-600' :
                                 upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-50 text-emerald-600' :
                                 upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-50 text-red-600' :
@@ -213,8 +213,8 @@ export default function AdvisorDashboard() {
                                 {upcomingMeeting.status || 'Scheduled'}
                               </span>
                             </div>
-                            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 truncate">
-                              <Clock size={12} className="text-amber-500 shrink-0" />
+                            <div className="flex items-center gap-1.5 text-[13px] text-slate-600 truncate">
+                              <Clock size={15} className="text-amber-500 shrink-0" />
                               <span className="truncate">
                                 {upcomingMeeting.day ? `${upcomingMeeting.day} ` : ''} 
                                 {upcomingMeeting.startTime ? `(${formatTimeTo12Hour(upcomingMeeting.startTime)} - ${formatTimeTo12Hour(upcomingMeeting.endTime)})` : ''}
@@ -223,13 +223,13 @@ export default function AdvisorDashboard() {
                           </>
                         ) : (
                           <div className="flex items-center gap-1.5 py-1">
-                            <Clock size={12} className="text-amber-500 shrink-0" />
-                            <span className="text-xs font-bold text-slate-400 tracking-wide">No active meeting</span>
+                            <Clock size={15} className="text-amber-500 shrink-0" />
+                            <span className="text-sm font-bold text-slate-600 tracking-wide">No active meeting</span>
                           </div>
                         )}
                       </div>
                     } 
-                    color="bg-green-50" 
+                    color="bg-green-600/25" 
                     textColor="text-green-500" 
                   /> 
                 </div> 
@@ -242,27 +242,8 @@ export default function AdvisorDashboard() {
                     )
 
                     }
-                {assignedBatches.length > 0 && ( 
-                  <div> 
-                    <h3 className="text-sm font-bold text-[#1e3a5f]   tracking-wider mb-3">Assigned Batches</h3> 
-                    <div className="flex flex-wrap gap-2 md:gap-3"> 
-                      {assignedBatches.toReversed().map((batch: any) => ( 
-                        <button 
-                          key={`${batch.batchName}-${batch.batchYear}`} 
-                          onClick={() => { 
-                            setSelectedBatch(batch); 
-                            setActiveTab("Total"); 
-                          }} 
-                          className={`px-4 md:px-6 py-2.5 md:py-3 rounded-xl border font-bold text-[10px] md:text-[12px]  transition-all ${
-                            selectedBatch?.batchName === batch.batchName ? 'bg-[#1e3a5f] text-white' : 'bg-white text-slate-400'
-                          }`}
-                        > 
-                          {batch.batchName} {batch.batchYear} {batch.programName} 
-                        </button> 
-                      ))} 
-                    </div> 
-                  </div> 
-                )} 
+                 <h3 className="text-2xl font-extrabold text-[#1e3a5f] mb-3">Assigned Batch</h3> 
+                    
  
                 {selectedBatch && ( 
                   <div> 
@@ -274,11 +255,11 @@ export default function AdvisorDashboard() {
                       <div className="relative"> 
                         <button 
                           onClick={() => setIsFilterOpen(!isFilterOpen)} 
-                          className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[10px] font-bold  text-[#1e3a5f]"
+                          className="flex items-center gap-3 bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-[12px] font-bold  text-[#1e3a5f]"
                         > 
-                          <Filter size={14} className="text-amber-500" /> 
-                          Filter: <span className="text-slate-400">{activeTab}</span> 
-                          <ChevronDown size={14} className={`transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} /> 
+                          <Filter size={16} className="text-amber-500" /> 
+                          Filter: <span className="text-slate-600">{activeTab}</span> 
+                          <ChevronDown size={16} className={`transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} /> 
                         </button> 
                         
                         {isFilterOpen && ( 
@@ -290,7 +271,7 @@ export default function AdvisorDashboard() {
                                   setActiveTab(type); 
                                   setIsFilterOpen(false); 
                                 }} 
-                                className={`w-full text-left px-4 py-3 rounded-xl text-[10px] font-bold  ${activeTab === type ? 'bg-amber-50 text-amber-600' : 'text-slate-500'}`}
+                                className={`w-full text-left px-4 py-3 rounded-xl text-[13px] font-bold  ${activeTab === type ? 'bg-amber-50 text-amber-600' : 'text-slate-500'}`}
                               > 
                                 {type} Students 
                               </button> 
@@ -336,7 +317,7 @@ function StatCard({ icon, label, value, color, textColor = "text-[#1e3a5f]" }: a
     <div className="bg-white rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between min-h-[135px]"> 
       <div className={`w-12 h-12 ${color} rounded-2xl flex items-center justify-center mb-2`}>{icon}</div> 
       <div>
-        <p className="text-sm font-bold text-[#526782] tracking-wide mb-1">
+        <p className="text-medium font-bold text-[#364b68] tracking-wide mb-1">
   {label}
 </p>
         <div className={`text-base md:text-lg font-bold ${textColor}`}>{value}</div> 

@@ -28,28 +28,6 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
     }
   }, [note.noteContent]);
 
-  const getCategoryStyles = (category: string) => {
-    switch (category) {
-      case 'URGENT':
-        return 'bg-red-500 text-white border-red-600';
-      case 'OFFICE':
-        return 'bg-blue-500 text-white border-blue-600';
-      default:
-        return 'bg-gray-800 text-white border-gray-900';
-    }
-  };
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'URGENT':
-        return '⚡';
-      case 'OFFICE':
-        return '🏢';
-      default:
-        return '📝';
-    }
-  };
-
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -67,7 +45,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
 
   return (
     <div 
-      className={`${color.bg} border-2 ${color.border} rounded-[1.5rem] p-5 md:p-6 flex flex-col shadow-md hover:shadow-xl transition-all duration-300 relative group ${color.shadow} ${color.hoverShadow}`}
+      className={`${color.bg} border-3 ${color.border} rounded-[1.5rem] p-5 md:p-6 flex flex-col shadow-md hover:shadow-xl transition-all duration-300 relative group ${color.shadow} ${color.hoverShadow}`}
       style={{
         transform: `rotate(${rotation}deg)`,
         transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -80,12 +58,6 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
         e.currentTarget.style.transform = `rotate(${rotation}deg) scale(1)`;
       }}
     >
-      {/* Paper texture overlay */}
-      <div className="absolute inset-0 rounded-[1.5rem] opacity-10 pointer-events-none" 
-           style={{
-             backgroundImage: 'url("data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23000000" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-           }}
-      />
 
       {/* Action Buttons */}
       <div className="absolute top-4 left-4 flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10">
@@ -94,14 +66,14 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
           className="p-1.5 bg-white/90 backdrop-blur-sm rounded-lg text-[#1e3a5f] border border-slate-200 hover:bg-white transition-colors shadow-md"
           title="Edit note"
         >
-          <Edit2 size={14} />
+          <Edit2 size={16} />
         </button>
         <button
           onClick={() => onDelete(note)}
           className="p-1.5 bg-white/90 backdrop-blur-sm rounded-lg text-red-500 border border-slate-200 hover:bg-red-50 transition-colors shadow-md"
           title="Delete note"
         >
-          <Trash2 size={14} />
+          <Trash2 size={16} />
         </button>
       </div>
 
@@ -114,7 +86,7 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
         <div className="relative">
           <p 
             ref={contentRef}
-            className={`text-[12px] md:text-[13px] font-sans ${color.text} leading-relaxed opacity-80 whitespace-pre-wrap break-words ${
+            className={`text-[13px] md:text-[14px] font-medium ${color.text} leading-relaxed opacity-90 whitespace-pre-wrap break-words ${
               !isExpanded ? 'line-clamp-6' : ''
             }`}
           >
@@ -129,15 +101,15 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
         {needsExpand && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-2 text-[10px] font-bold  tracking-widest text-slate-600 hover:text-slate-900 flex items-center gap-1 transition-colors"
+            className="mt-2 text-[12px] font-bold  tracking-widest text-slate-600 hover:text-slate-900 flex items-center gap-1 transition-colors"
           >
             {isExpanded ? (
               <>
-                Show Less <ChevronUp size={14} />
+                Show Less <ChevronUp size={16} />
               </>
             ) : (
               <>
-                Read More <ChevronDown size={14} />
+                Read More <ChevronDown size={16} />
               </>
             )}
           </button>
@@ -145,19 +117,14 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) =>
       </div>
 
       {/* Footer */}
-      <div className={`flex items-center justify-between mt-4 pt-4 border-t ${color.border} relative z-10`}>
+      <div className={`flex items-center justify-end mt-4 pt-4 border-t ${color.border} relative z-10`}>
         <div className="flex items-center gap-1.5 text-slate-600">
-          <Clock size={12} />
-          <span className="text-[10px] font-bold  tracking-widest opacity-70">
+          <Clock size={16} />
+          <span className="text-[12px] font-bold  tracking-widest opacity-70">
             {formatDate(note.updatedAt || note.createdAt)}
           </span>
         </div>
-        <div className="flex items-center gap-2 text-slate-500/30">
-          <FileText size={14} />
-          <span className="text-[8px] font-bold">
-            {note.noteContent?.length || 0} chars
-          </span>
-        </div>
+       
       </div>
     </div>
   );

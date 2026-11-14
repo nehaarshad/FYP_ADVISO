@@ -236,7 +236,7 @@ function ActionCard({ icon, label, onClick }: any) {
   );
 }
 
-function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) {
+export function StatCard({ label, value, icon, trend, color = "text-[#1e3a5f]" }: any) {
   return (
     <div className="bg-white p-6 rounded-[1.8rem] shadow-sm border border-slate-100">
       <div className="h-10 w-10 bg-slate-50 rounded-xl flex items-center justify-center mb-5 text-[#FDB813]">

@@ -116,7 +116,7 @@ export function AssignBatchModal({
                   <h3 className="text-xl font-bold   text-[#1e3a5f]">
                     Assign to Batch
                   </h3>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-sm font-semibold text-slate-600 mt-1">
                     {roadmap.versionName}
                   </p>
                 </div>
@@ -132,7 +132,7 @@ export function AssignBatchModal({
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-[10px] font-bold  text-slate-400 ml-2">
+                  <label className="text-[13px] font-bold  text-slate-600 ml-2">
                     Batch Name *
                   </label>
                   <select
@@ -151,7 +151,7 @@ export function AssignBatchModal({
                 </div>
                 
                 <div>
-                  <label className="text-[10px] font-bold  text-slate-400 ml-2">
+                  <label className="text-[13px] font-bold  text-slate-600 ml-2">
                     Batch Year *
                   </label>
                   <input
@@ -166,10 +166,10 @@ export function AssignBatchModal({
                 </div>
 
                 <div className="bg-slate-50 rounded-xl p-4 mt-4">
-                  <p className="text-xs text-slate-600">
+                  <p className="text-sm font-semibold text-slate-600">
                     <span className="font-bold">Program:</span> {programName}
                   </p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-sm font-semibold text-slate-600">
                     <span className="font-bold">Roadmap:</span> {roadmap.versionName}
                   </p>
                 </div>

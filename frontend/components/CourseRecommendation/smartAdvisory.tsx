@@ -76,16 +76,16 @@ export default function SmartAdvisory({
         </p>
 
         {/* Error Message */}
-        <p className="text-xs text-slate-600 font-medium leading-relaxed max-w-sm mb-8">
+        <p className="text-sm text-slate-600 font-medium leading-relaxed max-w-sm mb-8">
           {generateError}
         </p>
 
         {/* Action Button */}
         <button 
           onClick={onBack} 
-          className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e3a5f] text-white text-xs font-bold  tracking-wider rounded-2xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-md shadow-[#1e3a5f]/10 active:scale-95"
+          className="flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e3a5f] text-white text-sm font-bold  tracking-wider rounded-2xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all shadow-md shadow-[#1e3a5f]/10 active:scale-95"
         >
-          <ArrowLeft size={16} /> Go Back
+          <ArrowLeft size={18} /> Go Back
         </button>
 
       </div>
@@ -96,7 +96,7 @@ export default function SmartAdvisory({
   if (!llmRecommendations || allRecommendedCourses.length === 0) {
     return (
       <div className="w-full flex items-center justify-center py-24">
-        <Loader2 size={24} className="animate-spin text-amber-400" />
+        <Loader2 size={30} className="animate-spin text-amber-400" />
       </div>
     );
   }
@@ -131,7 +131,7 @@ export default function SmartAdvisory({
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-2 sm:p-6 space-y-8 bg-gray-50 min-h-screen rounded-2xl shadow-sm">
+    <div className="max-w-6xl mx-auto p-2 sm:p-6 space-y-8 bg-gray-100 min-h-screen rounded-2xl shadow-sm">
       <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -141,7 +141,7 @@ export default function SmartAdvisory({
             <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2  tracking-tighter">
               <BookOpen className="text-blue-600" /> System <span className="text-amber-500">Recommendations</span>
             </h1>
-            <p className="text-sm text-gray-500 mt-1 font-medium  tracking-widest">
+            <p className="text-sm text-gray-600 mt-1 font-semibold  tracking-widest">
               {studentName} · Batch: {selectedBatch}
             </p>
           </div>
@@ -154,7 +154,7 @@ export default function SmartAdvisory({
               isOverAllowed={isOverAllowed}
               isOverRequired={isOverRequired}
             />
-            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold ">
+            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold ">
               {selectedCourses.length} course{selectedCourses.length !== 1 ? 's' : ''} selected
             </div>
           </div>
@@ -163,14 +163,14 @@ export default function SmartAdvisory({
         {llmRecommendations.detailedExplanation && (
           <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-800 text-sm">
             <Info className="w-5 h-5 shrink-0 mt-0.5 text-amber-600" />
-            <p className="font-bold text-xs md:text-sm leading-relaxed">{llmRecommendations.detailedExplanation}</p>
+            <p className="font-bold text-sm md:text-sm leading-relaxed">{llmRecommendations.detailedExplanation}</p>
           </div>
         )}
 
         {(isOverAllowed || isOverRequired) && (
           <div className="flex items-start gap-2 bg-red-50 border border-red-200 p-3 rounded-xl text-red-700">
             <AlertCircle size={16} className="shrink-0 mt-0.5" />
-            <p className="text-xs font-bold">
+            <p className="text-sm font-bold">
               {isOverAllowed
                 ? `Exceeds allowed credit cap (${allowedCreditHours}). Deselect courses before sending.`
                 : `Above required semester load (${requiredCreditHours}). Verify with the advisor — sending still possible under cap of ${allowedCreditHours}.`}
@@ -213,21 +213,21 @@ export default function SmartAdvisory({
       {(finalizeError || localError) && (
         <div className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl">
           <AlertCircle size={14} className="text-red-500 shrink-0" />
-          <p className="text-xs font-bold text-red-600">{finalizeError || localError}</p>
+          <p className="text-sm font-bold text-red-600">{finalizeError || localError}</p>
         </div>
       )}
 
       <div className="bg-[#1e3a5f] p-6 md:p-8 rounded-2xl text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl border-b-4 border-amber-400">
         <div className="text-center md:text-left">
-          <h3 className="text-lg md:text-xl  tracking-tighter font-bold">Finalize Recommendation</h3>
-          <p className="text-slate-300 text-xs font-bold  tracking-widest mt-1">
+          <h3 className="text-lg md:text-xl  tracking-lighter font-bold">Finalize Recommendation</h3>
+          <p className="text-slate-300 text-sm font-bold  tracking-widest mt-1">
             {selectedCourses.length === 0
               ? 'Select courses above to continue'
               : `Sending ${selectedCourses.length} course${selectedCourses.length !== 1 ? 's' : ''} · ${totalSelectedCredits} credit hrs`}
           </p>
         </div>
         <button onClick={handleSend} disabled={selectedCourses.length === 0 || isFinalizing || isOverAllowed}
-          className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-bold  rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95">
+          className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-medium font-bold  rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95">
           {isFinalizing ? <><Loader2 size={14} className="animate-spin" /> Sending...</> : 'Send Advice to Student'}
         </button>
       </div>
@@ -244,7 +244,7 @@ function CreditBadge({ label, current, allowed, required, isOverAllowed, isOverR
   return (
     <div className={`flex items-center gap-2 px-4 py-3 rounded-xl border ${tone}`}>
       <div>
-        <p className="text-xs font-medium  tracking-wider opacity-80">{label}</p>
+        <p className="text-[12px] font-semibold  tracking-wider opacity-80">{label}</p>
         <p className="text-lg font-bold">
           {current} / <span className="opacity-70">{allowed ?? '—'} Allowed</span>
           {required != null && <span className="text-xs ml-2 opacity-70">· req {required}</span>}
@@ -276,7 +276,7 @@ function Stat({ label, value, tone }: any) {
   };
   return (
     <div className={`${map[tone]} border p-4 rounded-xl text-center`}>
-      <span className="text-xs font-semibold ">{label}</span>
+      <span className="text-sm font-semibold ">{label}</span>
       <p className="text-2xl font-bold mt-1">{value}</p>
     </div>
   );

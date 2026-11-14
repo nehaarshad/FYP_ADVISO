@@ -14,13 +14,6 @@ export interface Program {
   programName: string;
 }
 
-export interface UploadData {
-  file: File;
-  programName: string;
-  batchName?: string;
-  batchYear?: string;
-}
-
 export interface AssignData {
   roadmapId: number;
   batchName: string;

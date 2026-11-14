@@ -13,7 +13,8 @@ import { RoadmapUploadForm } from './uploadRoadmap';
 import { RoadmapCard } from './roadmapCard';
 import { AssignBatchModal } from './assignToBatch';
 import { LoadingState } from '../states/loadingState';
-import { Roadmap, UploadData, AssignData } from './types';
+import { Roadmap, AssignData } from './types';
+import { UploadRoadmapData } from '@/src/repositories/sessionContentManagement/types/uploadRoadmap';
 
 export function RoadmapSection() {
   const [selectedProgram, setSelectedProgram] = useState<string>('');
@@ -75,7 +76,7 @@ export function RoadmapSection() {
     setSelectedProgram(programName);
   }, [selectedProgram]);
 
-  const handleUpload = async (data: UploadData) => {
+  const handleUpload = async (data: UploadRoadmapData) => {
     const result = await uploadRoadmap(data);
     if (result.success) {
       setShowUploadForm(false);
@@ -127,17 +128,17 @@ export function RoadmapSection() {
           <div className="flex justify-between items-center mb-6">
             <div>
               {/* Heading */}
-              <h2 className="text-xl font-bold text-[#1e3a5f]">
+              <h2 className="text-3xl font-bold text-[#1e3a5f]">
                 Roadmap Management
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-medium text-slate-600 font-medium mt-1">
                 View, filter and manage academic roadmaps
               </p>
             </div>
 
             <button
               onClick={() => setShowUploadForm(!showUploadForm)}
-              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[10px] tracking-widest hover:bg-[#FDB813] transition-all"
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[13px] tracking-widest hover:bg-[#FDB813] transition-all"
             >
               Upload New Roadmap
             </button>
@@ -161,8 +162,8 @@ export function RoadmapSection() {
           {/* FILTER SECTION */}
           <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
             <div className="flex items-center gap-2 mb-3">
-              <Filter size={16} className="text-[#1e3a5f]" />
-              <h3 className="text-xs font-bold text-[#1e3a5f] tracking-wider">
+              <Filter size={18} className="text-[#1e3a5f]" />
+              <h3 className="text-sm font-bold text-[#1e3a5f] tracking-wider">
                 Filter Roadmaps
               </h3>
             </div>
@@ -183,14 +184,14 @@ export function RoadmapSection() {
             </div>
 
             {error && (
-              <p className="text-red-500 text-xs mt-2">{error}</p>
+              <p className="text-red-500 text-sm mt-2">{error}</p>
             )}
           </div>
 
           {/* CONTENT AREA */}
           <div className="flex-1 mt-2">
             {!selectedProgram && programs.length === 0 && (
-              <div className="text-center py-12 text-slate-400">
+              <div className="text-center py-12 text-slate-600">
                 No programs available. Please add a program first.
               </div>
             )}
@@ -199,14 +200,14 @@ export function RoadmapSection() {
               <div>
                 {/* List Heading */}
                 <div className="mb-4">
-                  <h3 className="text-sm font-bold text-[#1e3a5f] tracking-wider">
+                  <h3 className="text-medium font-bold text-[#1e3a5f] tracking-wider">
                     {selectedProgram} Roadmaps ({uniqueRoadmaps.length})
                   </h3>
                 </div>
 
                 {/* Empty State or Cards */}
                 {uniqueRoadmaps.length === 0 && !isLoading && !isSwitchingProgram ? (
-                  <div className="text-center py-12 text-slate-400">
+                  <div className="text-center py-12 text-slate-600">
                     No roadmaps found for {selectedProgram.toLowerCase()}
                   </div>
                 ) : (

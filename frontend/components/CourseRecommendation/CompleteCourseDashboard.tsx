@@ -147,7 +147,7 @@ function DashboardHeader({
   return (
     <div className="bg-white border border-gray-200/80 rounded-3xl p-6 md:p-8 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div className="space-y-1">
-        <div className="flex items-center gap-2 text-indigo-600 text-xs font-bold  tracking-wider">
+        <div className="flex items-center gap-2 text-indigo-600 text-sm font-bold  tracking-wider">
           <Layers size={14} />
           <span>Academic Advising Portal</span>
         </div>
@@ -163,7 +163,7 @@ function DashboardHeader({
         <button
           onClick={onRegenerate}
           disabled={isGenerating}
-          className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold  hover:bg-indigo-100 disabled:opacity-50 transition-colors"
+          className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-700 text-sm font-bold  hover:bg-indigo-100 disabled:opacity-50 transition-colors"
         >
           {isGenerating ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
           {isGenerating ? "Regenerating…" : "Regenerate"}
@@ -177,7 +177,7 @@ function DashboardHeader({
             <p className="text-lg font-bold text-gray-900">
               {summary.creditLimits.allowed} Allowed
               {summary.creditLimits.required != null && (
-                <span className="text-xs font-bold text-gray-500 ml-1">
+                <span className="text-sm font-bold text-gray-500 ml-1">
                   / {summary.creditLimits.required} req.
                 </span>
               )}
@@ -228,7 +228,7 @@ export function CourseSection({
     <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-4">
       <div className="flex items-center justify-between border-b border-gray-100 pb-3">
         <h2 className="text-lg font-bold text-gray-800  tracking-tight">{title}</h2>
-        <span className={`text-xs px-3 py-1 rounded-full font-semibold border ${badgeColor}`}>
+        <span className={`text-sm px-3 py-1 rounded-full font-semibold border ${badgeColor}`}>
           {courses.length} Course{courses.length > 1 ? 's' : ''}
         </span>
       </div>
@@ -516,16 +516,16 @@ function ClashCourseCard({
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-md text-[9px] font-bold ">
+            <span className="px-2 py-0.5 bg-red-100 text-red-700 rounded-md text-[12px] font-bold ">
               {course.notSuggestedReason === 'LAB_CLASH_UNRESOLVED'
                 ? 'Lab Clash Unresolved'
                 : 'Time Clash / Not Suggested'}
             </span>
-            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md text-[9px] font-bold ">
-              {course.priority ?? "CRITICAL"}
+            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-md text-[12px] font-bold ">
+              {String(course.priority ?? "CRITICAL")}
             </span>
             {hasSubstitute && (
-              <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md text-[9px] font-bold  border border-blue-100">
+              <span className="px-2 py-0.5 bg-blue-50 text-blue-900 rounded-md text-[12px] mb-2 truncate-[0.15rem] font-bold  border border-blue-100">
                 Substitute Available
               </span>
             )}
@@ -534,21 +534,21 @@ function ClashCourseCard({
             {courseName}
           </h3>
         </div>
-        <span className="text-xs font-bold px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg shrink-0">
+        <span className="text-sm font-bold px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg shrink-0">
           {credits} Credits
         </span>
       </div>
 
       {/* Clash reason */}
-      <div className="text-xs bg-white p-3 rounded-xl border border-red-100 text-red-700 space-y-1 shadow-xs">
+      <div className="text-sm bg-white p-3 rounded-xl border border-red-100 text-red-700 space-y-1 shadow-xs">
         <div className="flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-          <p className="font-medium leading-relaxed">
+          <p className="font-bold leading-relaxed">
             {course.reason || course.notSuggestedReason || "Schedule conflict detected."}
           </p>
         </div>
         {course.clashRecord?.clashesWith && (
-          <p className="text-[11px] font-semibold text-red-800 pl-6 pt-1 border-t border-red-100">
+          <p className="text-[13px] font-semibold text-red-800 pl-6 pt-1 border-t border-red-100">
             Conflicting with:{" "}
             <span className="font-bold">{course.clashRecord.clashesWith}</span>
           </p>
@@ -570,11 +570,11 @@ function ClashCourseCard({
       >
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 text-amber-900 font-bold text-xs">
+            <div className="flex items-center gap-1.5 text-amber-900 font-bold text-sm">
               <Target size={13} className="text-amber-600" />
               <span>Select Anyway (Advisor Override)</span>
             </div>
-            <p className="text-xs text-gray-900 font-medium mt-1.5 leading-snug">
+            <p className="text-sm text-gray-900 font-medium mt-1.5 leading-snug">
               Adds {course.originalCourseName ?? course.courseName} to the final
               recommendation despite the clash.
             </p>
@@ -587,7 +587,7 @@ function ClashCourseCard({
 
       {/* Substitute */}
       {hasSubstitute && (
-        <div className="bg-blue-50/80 border border-blue-200 rounded-xl p-3 space-y-2 text-xs">
+        <div className="bg-blue-50/80 border border-blue-200 rounded-xl p-3 space-y-2 text-sm">
           <div className="flex items-center gap-1.5 text-blue-800 font-bold">
             <Split size={14} className="text-blue-600" />
             <span>Or Use Suggested Substitute:</span>
@@ -609,27 +609,27 @@ function ClashCourseCard({
               <div className="flex-1 min-w-0">
                 <p className="font-bold text-gray-900  truncate">{subName}</p>
                 <div className="flex flex-wrap gap-1 mt-1.5">
-                  <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-bold ">
+                  <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[13px] font-bold ">
                     {subCredits} cr
                   </span>
                   {subCategory && (
-                    <span className="px-1.5 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[9px] font-bold ">
+                    <span className="px-1.5 py-0.5 bg-indigo-50 text-slate-600 rounded text-[13px] font-bold ">
                       {subCategory}
                     </span>
                   )}
                   {subSemester != null && (
-                    <span className="px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded text-[9px] font-bold ">
+                    <span className="px-1.5 py-0.5 bg-purple-50 text-purple-700 rounded text-[13px] font-bold ">
                       Sem {subSemester}
                     </span>
                   )}
                 </div>
 
                 {subSlots.length > 0 && (
-                  <div className="mt-2 pt-2 border-t border-blue-100 space-y-0.5">
+                  <div className="mt-2 pt-2 border-t border-slate-400 space-y-0.5">
                     {subSlots.map((s: any, i: number) => (
                       <div
                         key={i}
-                        className="flex items-center gap-1 text-[10px] text-gray-600 font-medium"
+                        className="fle items-center gap-1 text-[12px] text-gray-600 font-semibold"
                       >
                         <Clock size={10} className="text-blue-600 shrink-0" />
                         <span className="truncate">
@@ -644,7 +644,7 @@ function ClashCourseCard({
 
                 {subLab.length > 0 && (
                   <div className="mt-1.5 pt-1.5 border-t border-blue-100 space-y-0.5">
-                    <p className="text-[9px] font-bold  text-purple-700">Lab</p>
+                    <p className="text-[10px] font-bold  text-purple-700">Lab</p>
                     {subLab.map((s, i) => (
                       <div
                         key={i}
@@ -661,7 +661,7 @@ function ClashCourseCard({
                 )}
 
                 {subReason && (
-                  <p className="text-xs text-gray-900 font-medium mt-2 leading-relaxed">
+                  <p className="text-sm text-gray-900 font-medium mt-2 leading-relaxed">
                     {subReason}
                   </p>
                 )}
@@ -680,7 +680,7 @@ function ClashCourseCard({
           <button
             type="button"
             onClick={onToggle}
-            className="w-full flex items-center justify-between text-xs bg-white border border-red-200 text-red-800 px-3 py-2 rounded-xl font-semibold hover:bg-red-50 transition-colors"
+            className="w-full flex items-center justify-between text-sm bg-white border border-red-200 text-red-800 px-3 py-2 rounded-xl font-semibold hover:bg-red-50 transition-colors"
           >
             <span>
               {isExpanded ? "Hide" : "View"} clash details ({clashArray.length})
@@ -689,13 +689,13 @@ function ClashCourseCard({
           </button>
 
           {isExpanded && (
-            <div className="mt-2 p-3 bg-white border border-red-200 rounded-xl text-xs space-y-1 text-gray-700">
-              <p className="font-bold text-red-900 text-[10px] ">
+            <div className="mt-2 p-3 bg-white border border-red-200 rounded-xl text-sm space-y-1 text-gray-700">
+              <p className="font-bold text-red-900 text-[14px] ">
                 Conflicting with: {course.clashRecord?.clashesWith ?? "—"}
               </p>
               {clashArray.map((c: any, i: number) => (
-                <div key={i} className="flex items-center gap-1 text-gray-600">
-                  <Clock size={12} className="text-red-500" />
+                <div key={i} className="flex font-semibold items-center gap-1 text-gray-700">
+                  <Clock size={14} className="text-red-500" />
                   <span>
                     {c.day}{" "}
                     {c.startTime && c.endTime ? `${c.startTime}–${c.endTime}` : c.time}
@@ -777,16 +777,16 @@ function RegularCourseCard({
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md text-[9px] font-bold  border border-emerald-100">
+            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md text-[12px] font-bold  border border-emerald-100">
               {course.category || course.actionRequired || "ELIGIBLE"}
             </span>
             {course.actionRequired && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 rounded-md text-[9px] font-bold text-blue-600  border border-blue-100">
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-blue-50 rounded-md text-[12px] font-bold text-blue-600  border border-blue-100">
                 <Target size={10} /> {String(course.actionRequired).replace(/_/g, " ")}
               </span>
             )}
             {isElective && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-purple-50 rounded-md text-[9px] font-bold text-purple-600  border border-purple-100">
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-purple-50 rounded-md text-[12px] font-bold text-purple-600  border border-purple-100">
                 <Sparkles size={10} /> {electives.length || course.totalOptions || 0} options
               </span>
             )}
@@ -795,25 +795,25 @@ function RegularCourseCard({
             {courseName}
           </h3>
           {course.originalCourseName && course.originalCourseName !== course.courseName && (
-            <p className="text-[10px] text-gray-600 font-bold ">
+            <p className="text-[12px] text-gray-800 font-bold ">
               replaces: {course.originalCourseName}
             </p>
           )}
         </div>
-        <span className="text-xs font-bold px-2.5 py-1 bg-gray-100 text-gray-900 rounded-lg shrink-0">
+        <span className="text-sm font-bold px-2.5 py-1 bg-gray-100 text-gray-900 rounded-lg shrink-0">
           {credits} Credits
         </span>
       </div>
 
       {course.reason && (
-        <div className="text-xs bg-gray-50 p-3 rounded-xl border border-gray-200 text-gray-900 flex items-start gap-2">
+        <div className="text-sm bg-gray-50 p-3 rounded-xl border border-gray-200 text-gray-900 flex items-start gap-2">
           <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
           <p className="font-medium">{course.reason}</p>
         </div>
       )}
 
       {lectureSlots.length > 0 && (
-        <div className="text-xs text-gray-900 space-y-1">
+        <div className="text-sm text-gray-900 space-y-1">
           <p className="font-bold text-gray-900">Schedule:</p>
           {lectureSlots.map((l, i) => (
             <div key={i} className="flex items-center gap-1 text-gray-900 font-medium">
@@ -828,7 +828,7 @@ function RegularCourseCard({
       )}
 
       {labSlots.length > 0 && (
-        <div className="text-xs bg-purple-50 border border-purple-200 p-2.5 rounded-xl text-gray-900 font-medium space-y-1">
+        <div className="text-sm bg-purple-50 border border-purple-200 p-2.5 rounded-xl text-gray-900 font-medium space-y-1">
           <span className="font-bold block text-purple-900">Lab</span>
           {labSlots.map((l, i) => (
             <div key={i} className="flex items-center gap-1">
@@ -846,11 +846,11 @@ function RegularCourseCard({
           className="relative pt-2 border-t border-gray-200"
           onClick={e => e.stopPropagation()}
         >
-          <p className="text-xs font-bold text-gray-900 mb-1">Selected Elective Option:</p>
+          <p className="text-sm font-bold text-gray-900 mb-1">Selected Elective Option:</p>
           <button
             type="button"
             onClick={onToggleDropdown}
-            className="w-full flex items-center justify-between text-xs bg-blue-50 border border-blue-200 text-gray-900 px-3 py-2 rounded-xl font-medium hover:bg-blue-100 transition-colors"
+            className="w-full flex items-center justify-between text-sm bg-blue-50 border border-blue-200 text-gray-900 px-3 py-2 rounded-xl font-medium hover:bg-blue-100 transition-colors"
           >
             <span className="truncate font-bold">
               {chosenElective?.courseName ?? "Select an elective option"}
@@ -868,18 +868,18 @@ function RegularCourseCard({
                 <div
                   key={i}
                   onClick={() => onSelectElective(opt)}
-                  className="p-3 text-xs hover:bg-gray-50 cursor-pointer border-b border-gray-200 last:border-none"
+                  className="p-3 text-sm hover:bg-gray-50 cursor-pointer border-b border-gray-200 last:border-none"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <p className="font-bold text-gray-900">{opt.courseName}</p>
-                    <span className="text-[10px] font-bold bg-gray-100 text-gray-900 px-1.5 py-0.5 rounded">
+                    <p className="font-bold text-black">{opt.courseName}</p>
+                    <span className="text-[12px] font-bold bg-gray-300 text-gray-900 px-1.5 py-0.5 rounded">
                       {opt.credits}cr
                     </span>
                   </div>
-                  <p className="text-gray-900 text-[11px] font-medium mt-0.5">{opt.matchReason}</p>
+                  <p className="text-gray-900 text-[13px] font-semibold mt-0.5">{opt.matchReason}</p>
                   {opt.timeSlot && (
-                    <p className="text-gray-900 text-[10px] font-semibold mt-0.5 flex items-center gap-1">
-                      <Clock size={10} /> {opt.timeSlot}
+                    <p className="text-gray-900 text-[12px] font-bold mt-0.5 flex items-center gap-1">
+                      <Clock size={15} /> {opt.timeSlot}
                     </p>
                   )}
                 </div>
@@ -890,7 +890,7 @@ function RegularCourseCard({
       )}
 
       <div className="pt-2 flex justify-end">
-        <div className="text-green-800 font-bold text-[10px]  bg-green-50 px-3 py-1.5 rounded-lg border border-green-300">
+        <div className="text-green-800 font-bold text-[12px]  bg-green-50 px-3 py-1.5 rounded-lg border border-green-300">
           Eligible
         </div>
       </div>
@@ -920,7 +920,7 @@ function DeferredPanel({ raw }: { raw: any }) {
       </div>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {deferred.map((c, i) => (
-          <li key={i} className="border border-slate-200 rounded-xl p-3 text-xs">
+          <li key={i} className="border border-slate-200 rounded-xl p-3 text-sm">
             <p className="font-bold text-slate-800 ">{c.courseName}</p>
             <p className="text-slate-500">
               {c.credits} credits · {c.category}
@@ -963,7 +963,7 @@ export function CompleteCourseDashboard({
       <div className="min-h-screen bg-gray-50/50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <Loader2 size={28} className="animate-spin text-indigo-500" />
-          <p className="text-xs font-bold  tracking-widest text-gray-500">
+          <p className="text-sm font-bold  tracking-widest text-gray-500">
             Generating recommendations…
           </p>
         </div>
@@ -981,10 +981,10 @@ export function CompleteCourseDashboard({
           <p className="text-sm font-bold text-gray-800  tracking-tight">
             Generation Failed
           </p>
-          <p className="text-xs text-gray-500">{data.generateError}</p>
+          <p className="text-sm text-gray-500">{data.generateError}</p>
           <button
             onClick={data.resetRecommendations}
-            className="px-6 py-3 bg-indigo-600 text-white text-xs font-bold  rounded-xl hover:bg-indigo-500"
+            className="px-6 py-3 bg-indigo-600 text-white text-sm font-bold  rounded-xl hover:bg-indigo-500"
           >
             Try Again
           </button>
@@ -1020,11 +1020,11 @@ export function CompleteCourseDashboard({
         />
 
         <div className="flex items-center justify-between bg-white border border-gray-200 rounded-2xl px-5 py-3">
-          <div className="text-xs font-bold  text-gray-500">
+          <div className="text-sm font-bold  text-gray-500">
             {studentName} · Batch {selectedBatch} · {sessionType} {sessionYear}
           </div>
           <div
-            className={`text-xs font-bold  px-3 py-1 rounded-lg ${
+            className={`text-sm font-bold  px-3 py-1 rounded-lg ${
               isOverAllowed
                 ? "bg-red-50 text-red-600 border border-red-200"
                 : "bg-amber-50 text-amber-700 border border-amber-200"
@@ -1066,13 +1066,13 @@ export function CompleteCourseDashboard({
             <h3 className="text-lg md:text-xl  tracking-tighter font-bold">
               Finalize Recommendation
             </h3>
-            <p className="text-slate-300 text-xs font-bold  tracking-widest mt-1">
+            <p className="text-slate-300 text-sm font-bold  tracking-widest mt-1">
               {data.selectedCourses.length === 0
                 ? "Select courses above to continue"
                 : `Sending ${data.selectedCourses.length} course${data.selectedCourses.length !== 1 ? "s" : ""} · ${data.totalSelectedCredits} credit hrs`}
             </p>
             {isOverAllowed && (
-              <p className="text-red-400 text-xs font-bold  mt-1">
+              <p className="text-red-400 text-sm font-bold  mt-1">
                 ⚠ Over allowed credit limit
               </p>
             )}
@@ -1084,7 +1084,7 @@ export function CompleteCourseDashboard({
               if (ok) onFinalized?.();
             }}
             disabled={data.selectedCourses.length === 0}
-            className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-xs font-bold  rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95"
+            className="w-full md:w-auto flex items-center justify-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-amber-500 text-slate-900 text-sm font-bold  rounded-xl hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95"
           >
             {data.isFinalizing ? (
               <>
@@ -1099,7 +1099,7 @@ export function CompleteCourseDashboard({
         {data.finalizeError && (
           <div className="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-xl">
             <AlertCircle size={14} className="text-red-500 shrink-0" />
-            <p className="text-xs font-bold text-red-600">{data.finalizeError}</p>
+            <p className="text-sm font-bold text-red-600">{data.finalizeError}</p>
           </div>
         )}
       </div>

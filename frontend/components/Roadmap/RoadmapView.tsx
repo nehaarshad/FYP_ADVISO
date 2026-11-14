@@ -300,7 +300,7 @@ export function RoadmapDetailView({
                     {roadmap.versionName}
                   </h2>
 
-                  <p className="text-xs text-gray-400">
+                  <p className="text-sm text-gray-600 font-semibold">
                     Total Credits: {roadmap.totalCreditHours}
                   </p>
                 </div>
@@ -332,7 +332,7 @@ export function RoadmapDetailView({
                         >
                           Semester {sem.semesterNo}
 
-                          <div className="text-[10px] opacity-70">
+                          <div className="text-[12px] opacity-80">
                             {sem.totalCreditHours} Credit Hrs.
                           </div>
                         </th>

@@ -48,7 +48,7 @@ export const NoteFormModal: React.FC<NoteFormProps> = ({
       <div className="animate-in zoom-in-95 fade-in duration-300 w-full max-w-md bg-white rounded-[2.5rem] p-6 md:p-8 shadow-2xl relative">
         <button 
           onClick={handleClose} 
-          className="absolute top-6 right-6 text-slate-300 hover:text-red-500 transition-colors"
+          className="absolute top-6 right-6 text-slate-500 hover:text-red-500 transition-colors"
           disabled={isSaving}
         >
           <X size={20} />
@@ -62,51 +62,52 @@ export const NoteFormModal: React.FC<NoteFormProps> = ({
 
           {/* Title Input */}
           <div className="space-y-1">
-            <label className="text-[9px] font-bold text-[#1e3a5f]  tracking-widest">
+            <label className="text-sm font-bold text-[#1e3a5f]  tracking-widest">
               Title <span className="text-red-500">*</span>
             </label>
             <input 
               type="text" 
               value={formData.title} 
               onChange={(e) => updateField('title', e.target.value)}
-              className="w-full bg-slate-50 border-2 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:border-amber-400 outline-none transition-all"
+              className="w-full bg-slate-200 border-2 border-transparent rounded-xl px-4 py-3 text-sm font-medium focus:bg-white focus:border-amber-400 outline-none transition-all"
               placeholder="Enter note title..."
               disabled={isSaving}
               maxLength={100}
               autoFocus={isOpen}
             />
-            <p className="text-[8px] text-slate-400 text-right">
-              {formData.title.length}/100
-            </p>
+           
           </div>
 
           {/* Content Textarea */}
           <div className="space-y-1">
-            <label className="text-[9px] font-bold text-[#1e3a5f]  tracking-widest">
+            <label className="text-sm font-bold text-[#1e3a5f]  tracking-widest">
               Content <span className="text-red-500">*</span>
             </label>
             <textarea 
               rows={4} 
               value={formData.content} 
               onChange={(e) => updateField('content', e.target.value)}
-              className="w-full bg-slate-50 border-2 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:bg-white focus:border-amber-400 outline-none resize-none transition-all"
+              className="w-full bg-slate-200 border-2 border-transparent rounded-xl px-4 py-3 text-sm font-medium focus:bg-white focus:border-amber-400 outline-none resize-none transition-all"
               placeholder="Write your note details..."
               disabled={isSaving}
             />
           </div>
+           <p className="text-[12px] text-slate-800 text-right">
+              {formData.content.length}/500
+            </p>
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-2">
             <button 
               onClick={handleClose}
-              className="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold text-[10px]  tracking-widest hover:bg-slate-200 transition-colors"
+              className="flex-1 bg-slate-200 text-slate-600 py-3 rounded-xl font-bold text-[12px]  tracking-widest hover:bg-slate-200 transition-colors"
               disabled={isSaving}
             >
               Cancel
             </button>
             <button 
               onClick={handleSubmit} 
-              className="flex-1 bg-[#1e3a5f] text-white py-3 rounded-xl font-bold text-[10px]  tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg hover:bg-[#2a4a6f] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#1e3a5f] text-white py-3 rounded-xl font-bold text-[12px]  tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg hover:bg-[#2a4a6f] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSaving || !isFormValid}
             >
               {isSaving ? (
