@@ -80,7 +80,7 @@ export default function LandingPage() {
           <div className="text-left">
             <h2 className="text-4xl font-black mb-20 tracking-wide text-[#FDB813] ">About Us</h2>
             <h3 className="text-3xl font-bold mb-7 leading-tight">Making academic guidance smarter, <br /> simpler, and more reliable.</h3>
-            <p className="text-white/75 leading-[1.7] text-normal font-semibold">Adviso is a smart academic advising platform that connects students and advisors, streamlining guidance, course recommendations, meetings, and academic decisions.</p>
+            <p className="text-white/75 leading-[1.7] text-normal font-semibold">Adviso is a smart academic advising platform that brings students and advisors together for better guidance, course planning, meetings, and decisions..</p>
           </div>
           <motion.div className="rounded-[3rem] overflow-hidden shadow-2xl border-[12px] border-white/5">
             <img src="/Image.png" alt="About" className="w-full h-[450px] object-cover" />
@@ -94,10 +94,10 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
               <SmallFeature Icon={CheckCircle2} title="Smart Course Advising" desc="Automatically suggests eligible courses along with the specific reasons." />
               <SmallFeature Icon={Calendar} title="Meeting Scheduling" desc="Schedule and track advisory sessions easily, Smarter advising starts here." />
-              <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Keep student records, transcripts, and decisions secure in one place." />
+              <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
               <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
               <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
-              <SmallFeature Icon={MessageSquare} title="Faculty Hub & Real-Time Chat" desc="Work with fellow faculty board members and message students or advisors instantly." />
+              <SmallFeature Icon={MessageSquare} title="Faculty Hub & Real-Time Chat" desc="Collaborate with peers on the faculty board and instantly message students or advisors for quick guidance." />
             </div>
       </section>
     </div>
