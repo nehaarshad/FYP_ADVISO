@@ -204,7 +204,7 @@ export default function LoginPage() {
                 disabled={isLoading}
               />
 
-              <BlueFilledButton text={isLoading ? "Signing In..." : "Sign In"} />
+              <BlueFilledButton text={isLoading ? "Signing In...." : "Sign In"} />
             </form>
 
             <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50/50 rounded-[1.2rem] border border-blue-100/50">
@@ -213,7 +213,7 @@ export default function LoginPage() {
               </div>
 
               <p className="text-[12px] text-slate-500 font-semibold leading-tight">
-                Issues logging in? Reach out to your <span className="text-[#1e3a5f] font-bold">Coordinator</span> for support.
+                Issues logging in? Please reach out to your <span className="text-[#1e3a5f] font-bold">Coordinator</span> for support.
               </p>
             </div>
           </motion.div>
