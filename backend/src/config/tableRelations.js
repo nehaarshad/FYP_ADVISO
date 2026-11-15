@@ -236,7 +236,7 @@ export default function relations() {
 
   // ✅ FIXED: The main culprit! Explicitly link Student.id to BatchTimetable.userId
   Student.hasMany(BatchTimetableModel, { foreignKey: 'userId', sourceKey: 'id' });
-  BatchTimetableModel.belongsTo(Student, { foreignKey: 'userId', targetKey: 'id' });
+  BatchTimetableModel.belongsTo(Student, { foreignKey: 'userId', targetKey: 'userId' });
 
   BatchModel.hasMany(BatchTimetableModel, { foreignKey: "batchId" });
   BatchTimetableModel.belongsTo(BatchModel, { foreignKey: "batchId" });
