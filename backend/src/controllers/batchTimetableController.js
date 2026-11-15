@@ -169,7 +169,7 @@ const getBatchTimetable = async (req, res) => {
     const { userId } = req.params;
     const numericUserId = Number(userId);
 
-    const student = await Student.findOne({ where: { userId: numericUserId } });
+    const student = await Student.findByPk(numericUserId);
     if (!student) {
       return res.status(404).json({ success: false, error: 'Student not found' });
     }
