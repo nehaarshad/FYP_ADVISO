@@ -65,10 +65,10 @@ export const TimetableList: React.FC<Props> = ({
       {DAYS.filter((d) => grouped[d]?.length).map((day) => (
         <div key={day}>
           <div className="flex items-center gap-3 mb-3">
-            <h3 className="text-xs font-bold text-[#1e3a5f]  tracking-wider">
+            <h3 className="text-medium font-bold text-[#1e3a5f]  tracking-wider">
               {day}
             </h3>
-            <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full  tracking-wider">
+            <span className="text-[12px] font-bold text-slate-600 bg-slate-300 px-2.5 py-0.5 rounded-full  tracking-wider">
               {grouped[day].length}
             </span>
           </div>

@@ -58,7 +58,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
   };
 
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden transition-all">
+    <div className="rounded-2xl border border-slate-300 bg-white shadow-sm overflow-hidden transition-all">
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="p-5 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-50/50 transition"
@@ -67,20 +67,20 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
           <div className="flex items-center gap-2.5 mb-1.5">
             <MeetingStatusBadge status={meeting.status} />
           </div>
-          <h3 className="text-sm text-[#1e3a5f] tracking-tight">
+          <h3 className="text-medium text-[#1e3a5f] tracking-tight font-bold">
             {meeting.day} · {formatTime12(meeting.startTime)} — {formatTime12(meeting.endTime)}
           </h3>
-          <p className="text-[11px] text-slate-500 mt-1">
+          <p className="text-[13px] text-slate-500 mt-1 font-semibold">
             Scheduled for: <span className="text-[#1e3a5f]">{formatDate(meeting.date)}</span>
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-slate-400">
-          <span className="text-[10px] tracking-wider font-medium">
+        <div className="flex items-center gap-2 text-slate-600">
+          <span className="text-[14px] tracking-wider font-medium">
             {isOpen ? 'Close' : 'Edit'}
           </span>
           <svg
-            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -91,7 +91,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
       </div>
 
       {isOpen && (
-        <div className="p-6 pt-2 border-t border-slate-100 space-y-5 bg-slate-50/30">
+        <div className="p-6 pt-2 border-t border-slate-300 space-y-5 bg-slate-50/30">
           <div className="grid sm:grid-cols-2 gap-4">
             <MeetingDatePicker
               meetingDay={meeting.day}
@@ -101,14 +101,14 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
             />
 
             <div>
-              <label className="block text-[11px] tracking-wider text-slate-550 mb-1.5">
+              <label className="block text-[13px] tracking-wider font-bold text-slate-600 mb-1.5">
                 Select Status
               </label>
               <select
                 value={status}
                 disabled={saving}
                 onChange={(e) => setStatus(e.target.value as MeetingStatus)}
-                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-[11px] text-[#1e3a5f] bg-white focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f] outline-none disabled:bg-slate-50 transition cursor-pointer"
+                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-[13px]  font-semibold text-[#1e3a5f] bg-white focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f] outline-none disabled:bg-slate-50 transition cursor-pointer"
               >
                 {STATUS_OPTIONS.map((s) => (
                   <option key={s} value={s}>
@@ -120,7 +120,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
           </div>
 
           <div>
-            <label className="block text-[12px] tracking-wider text-slate-550 mb-1.5">
+            <label className="block text-[14px] tracking-wider text-slate-600 font-bold mb-1.5">
               Meeting summary / notes
             </label>
             <textarea
@@ -129,7 +129,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
               rows={3}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="Add notes, decisions, and follow-ups…"
-              className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-[11px] text-slate-700 bg-white focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f] outline-none resize-y disabled:bg-slate-50 transition placeholder:text-slate-400"
+              className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-[13px] text-slate-700 bg-white focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f] outline-none resize-y disabled:bg-slate-50 transition placeholder:text-slate-500"
             />
           </div>
 
@@ -137,7 +137,7 @@ export const MeetingCard: React.FC<Props> = ({ meeting, saving, onUpdate }) => {
             <button
               disabled={!dirty || saving}
               onClick={handleSave}
-              className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-[11px] tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2.5 bg-[#FDB813] hover:bg-[#e5a40f] text-[#1e3a5f] text-medium font-semibold tracking-wider rounded-xl transition-all shadow-md shadow-[#FDB813]/20 disabled:opacity-50 disabled:shadow-none flex items-center gap-2 cursor-pointer"
             >
               {saving && (
                 <span className="w-3.5 h-3.5 border-2 border-[#1e3a5f]/30 border-t-[#1e3a5f] rounded-full animate-spin" />

@@ -37,15 +37,15 @@ export const AdvisorTimetablePage: React.FC<AdvisorTimetablePageProps> = ({ onBa
     remove,
   } = useAdvisorTimetable(userId);
 
-  // 🔒 Guarantee array — fixes "entries is not iterable"
   const safeTimetables: TimetableEntry[] = useMemo(() => {
+    console.log('timetables:', timetables);
     if (Array.isArray(timetables)) return timetables;
     const nested = (timetables as any)?.data;
     if (Array.isArray(nested)) return nested;
     return [];
   }, [timetables]);
 
-  const [view, setView] = useState<'list' | 'grid'>('list');
+  const [view, setView] = useState<'list'>('list');
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add');
   const [editing, setEditing] = useState<TimetableEntry[] | null>(null);
@@ -154,8 +154,6 @@ export const AdvisorTimetablePage: React.FC<AdvisorTimetablePageProps> = ({ onBa
           actionLabel="Add slot"
           onAction={openAdd}
         />
-      ) : view === 'grid' ? (
-        <TimetableGrid entries={safeTimetables} onEntryClick={openEdit} />
       ) : (
         <TimetableList
           entries={safeTimetables}
@@ -237,7 +235,7 @@ export const Header: React.FC<{
           <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">
             {title}
           </h2>
-          <p className="text-xs font-medium text-slate-400 mt-0.5">
+          <p className="text-sm font-medium text-slate-600 mt-0.5">
             {subtitle ? `${subtitle}` : "Manage your schedule"}
           </p>
         </div>
@@ -245,23 +243,7 @@ export const Header: React.FC<{
 
             {/* Right controls moved to md:mr-20 */}
       <div className="flex items-center gap-3 self-start md:self-auto md:mr-20">
-        {onViewChange && (
-         <div className="inline-flex p-1 bg-white rounded-xl border border-slate-200 shadow-sm">
-  {(['grid', 'list'] as const).map((v) => (
-    <button
-      key={v}
-      onClick={() => onViewChange(v)}
-      className={`px-4 py-2 text-[10px] md:text-[12px] font-bold tracking-wider rounded-lg transition-all ${
-        view === v
-          ? 'bg-[#1e3a5f] text-white shadow-sm'
-          : 'text-slate-500 hover:text-[#1e3a5f]'
-      }`}
-    >
-      {v.charAt(0).toUpperCase() + v.slice(1)}
-    </button>
-  ))}
-</div>
-        )}
+        
 
         {onAdd && (
           <button

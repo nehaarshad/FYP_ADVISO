@@ -12,10 +12,10 @@ interface Props {
 }
 
 const makeRow = (): TimetableEntryInput => ({
-  day: 'Monday',
+  day: '',
   course: '',
-  startTime: '09:00',
-  endTime: '10:00',
+  startTime: '',
+  endTime: '',
 });
 
 export const BulkTimetableModal: React.FC<Props> = ({
@@ -71,26 +71,26 @@ export const BulkTimetableModal: React.FC<Props> = ({
         className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden"
       >
         <div className="p-6 border-b border-slate-100 bg-white">
-          <h3 className="text-lg font-bold text-[#1e3a5f] tracking-tight">
+          <h3 className="text-2xl font-bold text-[#1e3a5f] tracking-tight">
             {mode === 'add' ? 'Add Timetable Entries' : 'Update Timetable Entries'}
           </h3>
-          <p className="text-xs font-medium text-slate-400 mt-1 tracking-wider">
+          <p className="text-medium font-semibold text-slate-500 mt-1 tracking-wider">
             Add one or more class slots at once.
           </p>
         </div>
 
-        <div className="p-6 overflow-y-auto flex-1 space-y-3 bg-slate-50/50">
+        <div className="p-6 overflow-y-auto flex-1 space-y-3 bg-slate-200/60">
           {rows.map((row, idx) => (
             <div
               key={idx}
-              className="grid grid-cols-12 gap-3 items-end bg-white p-4 rounded-2xl border border-slate-100 shadow-sm"
+              className="grid grid-cols-15 gap-3 items-end bg-white p-4 rounded-2xl border border-slate-400 shadow-sm"
             >
               <div className="col-span-3">
-                <label className="block text-[10px] font-bold text-slate-400 mb-1 ml-1 tracking-wider">Day</label>
+                <label className="block text-[13px] font-bold text-slate-600 mb-1 ml-1 tracking-wider">Day</label>
                 <select
                   value={row.day}
                   onChange={(e) => updateRow(idx, { day: e.target.value })}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
+                  className="w-full px-3 py-2.5 bg-slate-100 border border-slate-300 rounded-xl text-sm font-medium text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
                 >
                   {DAYS.map((d) => (
                     <option key={d} value={d}>{d}</option>
@@ -98,34 +98,34 @@ export const BulkTimetableModal: React.FC<Props> = ({
                 </select>
               </div>
 
-              <div className="col-span-4">
-                <label className="block text-[10px] font-bold text-slate-400 mb-1 ml-1 tracking-wider">Course</label>
+              <div className="col-span-5">
+                <label className="block text-[13px] font-bold text-slate-600 mb-1 ml-1 tracking-wider">Course</label>
                 <input
                   type="text"
                   value={row.course}
                   onChange={(e) => updateRow(idx, { course: e.target.value })}
                   placeholder="Course name"
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
+                  className="w-full px-3 py-2.5 bg-slate-100 border border-slate-300 rounded-xl text-sm font-medium text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
                 />
               </div>
 
-              <div className="col-span-2">
-                <label className="block text-[10px] font-bold text-slate-400 mb-1 ml-1 tracking-wider">Start</label>
+              <div className="col-span-3">
+                <label className="block text-[13px] font-bold text-slate-600 mb-1 ml-1 tracking-wider">Start At</label>
                 <input
                   type="time"
                   value={row.startTime}
                   onChange={(e) => updateRow(idx, { startTime: e.target.value })}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
                 />
               </div>
 
-              <div className="col-span-2">
-                <label className="block text-[10px] font-bold text-slate-400 mb-1 ml-1 tracking-wider">End</label>
+              <div className="col-span-3">
+                <label className="block text-[13px] font-bold text-slate-600 mb-1 ml-1 tracking-wider">End At</label>
                 <input
                   type="time"
                   value={row.endTime}
                   onChange={(e) => updateRow(idx, { endTime: e.target.value })}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-[#1e3a5f] outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]"
                 />
               </div>
 
@@ -136,7 +136,7 @@ export const BulkTimetableModal: React.FC<Props> = ({
                   disabled={rows.length === 1}
                   className="p-2.5 text-red-500 hover:bg-red-50 rounded-xl disabled:opacity-30 transition-colors"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
                   </svg>
                 </button>
@@ -147,13 +147,13 @@ export const BulkTimetableModal: React.FC<Props> = ({
           <button
             type="button"
             onClick={addRow}
-            className="w-full py-3 border-2 border-dashed border-slate-200 text-xs font-bold tracking-wider text-[#1e3a5f] bg-white rounded-2xl hover:border-[#1e3a5f]/40 hover:bg-slate-50 transition-all"
+            className="w-full py-3 border-2 border-dashed border-slate-400 text-sm font-bold tracking-wider text-[#1e3a5f] bg-slate-300/50 rounded-2xl hover:border-[#1e3a5f]/40 hover:bg-slate-50 transition-all"
           >
             + Add another entry
           </button>
 
           {error && (
-            <div className="text-xs font-bold text-red-600 bg-red-50 border border-red-200 px-4 py-3 rounded-xl">
+            <div className="text-sm font-bold text-red-600 bg-red-50 border border-red-200 px-4 py-3 rounded-xl">
               {error}
             </div>
           )}
@@ -164,14 +164,14 @@ export const BulkTimetableModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="px-6 py-3 text-xs font-bold tracking-wider text-slate-600 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors disabled:opacity-50"
+            className="px-6 py-3 text-sm font-bold tracking-wider text-slate-600 bg-slate-300/80 rounded-xl hover:bg-slate-200 transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-3 text-xs font-bold tracking-wider text-white bg-[#1e3a5f] rounded-xl hover:bg-[#15304a] transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-[#1e3a5f]/15"
+            className="px-6 py-3 text-sm font-bold tracking-wider text-white bg-[#1e3a5f] rounded-xl hover:bg-[#15304a] transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-[#1e3a5f]/15"
           >
             {submitting && (
               <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />

@@ -13,10 +13,10 @@ interface Props {
 }
 
 const empty: TimetableEntryInput = {
-  day: 'Monday',
+  day: '',
   course: '',
-  startTime: '09:00',
-  endTime: '10:00',
+  startTime: '',
+  endTime: '',
 };
 
 export const TimetableFormModal: React.FC<Props> = ({
@@ -65,9 +65,9 @@ export const TimetableFormModal: React.FC<Props> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-3xl shadow-xl w-full max-w-md p-6 border border-slate-100"
+        className="bg-white rounded-3xl shadow-xl w-full max-w-md p-6 border border-slate-300"
       >
-        <h3 className="text-base font-bold text-[#1e3a5f]  tracking-tight mb-5">
+        <h3 className="text-xl font-bold text-[#1e3a5f]  tracking-tight mb-5">
           {mode === 'add' ? 'Add Timetable Entry' : 'Edit Timetable Entry'}
         </h3>
 
@@ -98,7 +98,7 @@ export const TimetableFormModal: React.FC<Props> = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-bold text-slate-400  tracking-widest mb-1.5">Start Time</label>
+              <label className="block text-[13px] font-bold text-slate-600  tracking-wider mb-1.5">Start At</label>
               <input
                 type="time"
                 value={form.startTime}
@@ -107,7 +107,7 @@ export const TimetableFormModal: React.FC<Props> = ({
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-400  tracking-widest mb-1.5">End Time</label>
+              <label className="block text-[13px] font-bold text-slate-600  tracking-wider mb-1.5">End At</label>
               <input
                 type="time"
                 value={form.endTime}
@@ -118,7 +118,7 @@ export const TimetableFormModal: React.FC<Props> = ({
           </div>
 
           {error && (
-            <div className="text-xs font-bold text-red-600 bg-red-50 border border-red-100 px-3.5 py-2.5 rounded-xl  tracking-wider">
+            <div className="text-sm font-bold text-red-600 bg-red-50 border border-red-100 px-3.5 py-2.5 rounded-xl  tracking-wider">
               {error}
             </div>
           )}
@@ -129,19 +129,19 @@ export const TimetableFormModal: React.FC<Props> = ({
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="px-5 py-2.5 text-xs font-bold  tracking-wider text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 transition"
+            className="px-5 py-2.5 text-[14px] font-bold  tracking-wider text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 transition"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-2.5 text-xs font-bold  tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl shadow-md shadow-[#FDB813]/20 disabled:opacity-50 transition flex items-center gap-2"
+            className="px-6 py-2.5 text-[14px] font-bold  tracking-wider text-[#1e3a5f] bg-[#FDB813] hover:bg-[#e5a40f] rounded-xl shadow-md shadow-[#FDB813]/20 disabled:opacity-50 transition flex items-center gap-2"
           >
             {submitting && (
               <span className="w-3.5 h-3.5 border-2 border-[#1e3a5f]/40 border-t-[#1e3a5f] rounded-full animate-spin" />
             )}
-            {mode === 'add' ? 'Add Entry' : 'Save Changes'}
+            {mode === 'add' ? 'Add Slot' : 'Save Changes'}
           </button>
         </div>
       </form>

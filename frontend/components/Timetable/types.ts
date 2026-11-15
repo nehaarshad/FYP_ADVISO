@@ -30,6 +30,7 @@ export interface TimetableEntryUpdate extends Partial<TimetableEntryInput> {
 }
 
 export const DAYS = [
+  '-- Day --',
   'Monday',
   'Tuesday',
   'Wednesday',

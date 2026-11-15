@@ -178,17 +178,17 @@ const ChatArea: React.FC<
   /* NO CHAT SELECTED */
   if (!chat) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-white rounded-3xl border border-slate-100 shadow-sm p-6 text-center">
-        <div className="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
+      <div className="h-full flex flex-col items-center justify-center bg-white rounded-3xl border border-slate-300 shadow-sm p-6 text-center">
+        <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
           <User
             size={28}
             className="text-amber-500"
           />
         </div>
-        <h3 className="text-[#1e3a5f] font-bold text-sm  tracking-tight mb-1">
+        <h3 className="text-[#1e3a5f] font-bold text-medium  tracking-tight mb-1">
           No Conversation Selected
         </h3>
-        <p className="text-[10px] font-semibold text-slate-400 tracking-widest max-w-xs">
+        <p className="text-[12px] font-semibold mt-3 text-slate-500 tracking-normal max-w-xs">
           Choose a student from the inbox list to start or view messages
         </p>
       </div>
@@ -219,10 +219,10 @@ const ChatArea: React.FC<
           </div>
 
           <div>
-            <h2 className="text-[#1e3a5f] font-bold text-[13.5px]  tracking-tight">
+            <h2 className="text-[#1e3a5f] font-bold text-[14px]  tracking-tight">
               {chat.name}
             </h2>
-            <p className="text-slate-500 text-[10px] font-bold  tracking-widest mt-0.5">
+            <p className="text-slate-500 text-[12px] font-bold  tracking-normal mt-0.5">
               Semester {chat.semester || "N/A"}
             </p>
           </div>
@@ -232,7 +232,7 @@ const ChatArea: React.FC<
       {/* MESSAGES CONTAINER */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-6 space-y-3 bg-gradient-to-b from-slate-100/60 via-slate-50 to-slate-100/60 custom-scrollbar"
+        className="flex-1 bg-slate-200 overflow-y-auto p-6 space-y-3 bg-gradient-to-b  custom-scrollbar"
       >
         {loading ? (
           <div className="h-full flex items-center justify-center">
@@ -243,7 +243,7 @@ const ChatArea: React.FC<
           </div>
         ) : messages.length === 0 ? (
           <div className="h-full flex items-center justify-center">
-            <p className="text-[12px] font-bold tracking-widest text-slate-500 bg-white/80 backdrop-blur-sm px-5 py-2.5 rounded-2xl shadow-xs border border-slate-200/60">
+            <p className="text-[13px] font-bold tracking-normaml text-slate-600 backdrop-blur-sm px-5 py-2.5 rounded-2xl shadow-xs border border-slate-200/60">
               No messages yet. Send a message to start conversation!
             </p>
           </div>
@@ -267,12 +267,12 @@ const ChatArea: React.FC<
                   className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl shadow-sm transition-all ${
                     isMine
                       ? "bg-[#1e3a5f] text-white rounded-br-xs" // Advisor (Blue)
-                      : "bg-white text-[#1e3a5f] border border-slate-200/80 rounded-bl-xs" // Student (White)
+                      : "bg-white text-[#1e3a5f] border border-slate-200/80 rounded-bl-xs font-medium" // Student (White)
                   }`}
                 >
                   {/* TEXT */}
                   {message.text && (
-                    <p className="text-[13px] font-medium leading-snug break-words">
+                    <p className="text-[13px] font-medium leading-snug">
                       {message.text}
                     </p>
                   )}
@@ -289,19 +289,18 @@ const ChatArea: React.FC<
                           : "border-slate-200 bg-slate-50 hover:bg-slate-100 text-[#1e3a5f]"
                       }`}
                     >
-                      <FileText size={15} className="shrink-0" />
-                      <span className="text-[10px] font-bold truncate flex-1">
-                        Attachment File
+                      <FileText size={18} className="shrink-0" />
+                      <span className="text-[12px] font-bold truncate flex-1">
+                        Attachment 
                       </span>
-                      <Download size={12} className="shrink-0 opacity-80" />
-                    </a>
+                      </a>
                   )}
 
                   {/* TIME */}
                   <div className="flex justify-end mt-1">
                     <span
-                      className={`text-[8px] font-bold tracking-wider ${
-                        isMine ? "text-amber-300/80" : "text-slate-400"
+                      className={`text-[11px] font-bold tracking-wider ${
+                        isMine ? "text-amber-300/80" : "text-slate-500"
                       }`}
                     >
                       {formatTime(message.createdAt)}
@@ -331,11 +330,11 @@ const ChatArea: React.FC<
       <div className="p-4 bg-white border-t border-slate-100 shrink-0 z-10 shadow-sm">
         <div className="flex gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200/80 items-center focus-within:border-amber-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-amber-50/50 transition-all shadow-xs">
           
-          <label className="p-2 cursor-pointer text-slate-400 hover:text-[#1e3a5f] transition-colors rounded-xl hover:bg-slate-200/50">
+          <label className="p-2 cursor-pointer text-slate-500 hover:text-[#1e3a5f] transition-colors rounded-xl hover:bg-slate-200/50">
             {uploading ? (
-              <Loader2 size={18} className="animate-spin text-amber-500" />
+              <Loader2 size={20} className="animate-spin text-amber-500" />
             ) : (
-              <Paperclip size={18} />
+              <Paperclip size={20} />
             )}
             <input
               type="file"
@@ -356,7 +355,7 @@ const ChatArea: React.FC<
                 handleSend();
               }
             }}
-            className="flex-1 bg-transparent text-[#1e3a5f] px-2 py-1.5 outline-none placeholder:text-slate-400 text-[13px] font-medium"
+            className="flex-1 border border-slate-300 rounded bg-gray-200 text-[#1e3a5f] px-2 py-1.5 outline-none placeholder:text-slate-500 text-[13px] font-medium"
           />
 
           <button

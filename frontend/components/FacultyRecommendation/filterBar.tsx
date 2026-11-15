@@ -37,11 +37,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <div className="flex flex-wrap gap-4">
         {/* Status Filter */}
         <div className="flex-1 min-w-[150px]">
-          <label className="text-[9px] font-bold text-slate-400  tracking-widest block mb-1">
+          <label className="text-[12px] font-extrabold text-slate-600  tracking-widest block mb-1">
             Status
           </label>
           <select
-            className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 ring-blue-500/50"
+            className="w-full p-2 bg-slate-200 border border-slate-300 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-blue-500/50"
             value={selectedStatus}
             onChange={(e) => onStatusChange(e.target.value)}
           >
@@ -57,14 +57,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         {currentUserId && (
           <div className="flex-1 min-w-[150px] flex items-end">
             <button
-              className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold  tracking-widest transition-all ${
+              className={`w-full  flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[14px] font-bold  tracking-normal transition-all ${
                 showMyIssues
                   ? 'bg-[#1e3a5f] text-white shadow-md'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-slate-400 text-slate-900 hover:bg-slate-500 hover:text-white'
               }`}
               onClick={onMyIssuesToggle}
             >
-              <User size={14} />
+              <User size={18} />
               My Issues
             </button>
           </div>

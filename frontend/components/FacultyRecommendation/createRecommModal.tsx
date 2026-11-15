@@ -42,7 +42,7 @@ export const CreateRecommendationModal: React.FC<CreateRecommendationModalProps>
           <input
             required
             placeholder="Subject Name"
-            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none focus:ring-2 ring-blue-500/50"
+            className="w-full p-3 bg-slate-200 border border-slate-300 rounded-xl text-sm font-medium outline-none focus:ring-2 ring-blue-500/50"
             value={formData.subject}
             onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           />
@@ -50,7 +50,7 @@ export const CreateRecommendationModal: React.FC<CreateRecommendationModalProps>
             required
             placeholder="Issue Description"
             rows={4}
-            className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold outline-none resize-none focus:ring-2 ring-blue-500/50"
+            className="w-full p-3 bg-slate-200 border border-slate-300 rounded-xl text-sm font-medium outline-none resize-none focus:ring-2 ring-blue-500/50"
             value={formData.issueDescription}
             onChange={(e) => setFormData({ ...formData, issueDescription: e.target.value })}
           />
@@ -66,7 +66,7 @@ export const CreateRecommendationModal: React.FC<CreateRecommendationModalProps>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-[#1e3a5f] text-white py-4 rounded-xl font-bold  text-[10px] tracking-widest shadow-lg active:scale-95 transition-all hover:bg-[#2a5285] disabled:opacity-50"
+            className="w-full bg-[#1e3a5f] text-white py-4 rounded-xl font-bold  text-[14px] tracking-[0.1rem] shadow-lg active:scale-95 transition-all hover:bg-[#2a5285] disabled:opacity-50"
           >
             {isSubmitting ? <Loader2 size={20} className="animate-spin mx-auto" /> : 'Submit Recommendation'}
           </button>

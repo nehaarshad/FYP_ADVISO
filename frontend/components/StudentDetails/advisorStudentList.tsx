@@ -105,7 +105,7 @@ export function AdvisorStudentList({
                   Contact Details
                 </th>
                 <th className="p-4 text-[17px] text-center font-bold text-[#1e3a5f] border-b border-r border-slate-300 last:border-r-0">
-                  Semester No.
+                  Degree & Batch
                 </th>
                 <th className="p-4 text-[17px] text-center font-bold text-[#1e3a5f] border-b border-r border-slate-300 last:border-r-0">
                   Status

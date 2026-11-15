@@ -39,12 +39,7 @@ export const SuggestionList: React.FC<Props> = ({ suggestions, onSchedule }) => 
     <div className="space-y-6">
       {DAY_ORDER.filter((d) => grouped[d]?.length).map((day) => (
         <div key={day}>
-          <div className="flex items-center gap-2 mb-2.5">
-            <h3 className="text-[13px] text-[#1B3555] tracking-wider">{day}</h3>
-            <span className="text-[12px] text-[#1e3a5f] bg-slate-100 px-2 py-0.5 rounded-md">
-              {grouped[day].length}
-            </span>
-          </div>
+          
           <div className="space-y-2.5">
             {grouped[day].map((s) => {
               const key = `${s.day}-${s.startTime}-${s.endTime}`;

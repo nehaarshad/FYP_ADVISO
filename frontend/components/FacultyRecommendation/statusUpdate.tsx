@@ -15,10 +15,10 @@ export const StatusUpdate: React.FC<StatusUpdateProps> = ({
       {statuses.map((status) => (
         <button
           key={status}
-          className={`px-3 py-1 rounded-full text-[9px] font-bold  border transition-all ${
+          className={`px-4 py-2 rounded-full text-[13px] font-bold  border transition-all ${
             currentStatus === status
               ? 'bg-[#1e3a5f] text-white border-[#1e3a5f]'
-              : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+              : 'bg-slate-300 text-slate-600 border-slate-200 hover:bg-slate-400'
           }`}
           onClick={() => onStatusChange(status)}
         >

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 
 // export default FacultyRecommendation;
 
@@ -251,12 +252,12 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
           <button
             title="Back"
             onClick={handleBackAction}
-            className="p-2 hover:bg-slate-200 bg-white shadow-sm rounded-full text-black transition-colors w-fit border border-slate-100"
+            className="p-2 hover:bg-slate-300 bg-slate-100 shadow-sm rounded-full text-black transition-colors w-fit border border-slate-100"
           >
             <ArrowLeft size={20} />
           </button>
           {viewMode === 'detail' && (
-            <span className="text-[10px] font-bold text-slate-400  tracking-widest">
+            <span className="text-2xl font-bold tracking-tight text-[#1e3a5f]">
               Recommendation Detail
             </span>
           )}
@@ -275,7 +276,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
           <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center mb-6">
             <p className="text-red-600 font-semibold">{error}</p>
             <button
-              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold "
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-xl text-sm font-bold "
               onClick={() => {
                 clearError();
                 refreshRecommendations(true);
@@ -300,7 +301,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
   </h2>
 </div>
 
-                <p className="text-xs text-slate-500 font-medium mt-1 pl-20 md:pl-23">
+                <p className="text-sm text-slate-500 font-medium mt-1 pl-30 md:pl-29">
                   {openCount} Open • {totalCount} Total
                   {showMyIssues && ' • Showing My Issues'}
                 </p>
@@ -309,14 +310,14 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
               {/* Actions: Filter & New Button */}
               <div className="flex items-center gap-3">
                 <button
-                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest transition-all ${
+                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[14px] font-bold  tracking-widest transition-all ${
                     showFilterMenu || selectedStatus || selectedPostingAdvisor || showMyIssues
                       ? 'bg-[#1e3a5f] text-white shadow-md'
                       : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                   }`}
                   onClick={() => setShowFilterMenu(!showFilterMenu)}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                   </svg>
                   Filter
@@ -329,9 +330,9 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
 
                 <button
                   onClick={() => setShowAddModal(true)}
-                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[14px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                   New
@@ -358,38 +359,22 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
             {(selectedStatus || selectedPostingAdvisor || showMyIssues) && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {selectedStatus && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold ">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-200 text-[#1e3a5f] rounded-full text-[13px] font-bold ">
                     Status: {selectedStatus}
-                    <button
-                      onClick={() => {
-                        setSelectedStatus('');
-                        handleApplyFilters();
-                      }}
-                      className="hover:text-blue-800"
-                    >
-                      ×
-                    </button>
+                    
                   </span>
                 )}
                 {showMyIssues && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-bold ">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-200 text-green-700 rounded-full text-[13px] font-bold ">
                     My Issues
-                    <button
-                      onClick={() => {
-                        setShowMyIssues(false);
-                        handleApplyFilters();
-                      }}
-                      className="hover:text-green-800"
-                    >
-                      ×
-                    </button>
+                    
                   </span>
                 )}
                 <button
                   onClick={handleClearFilters}
-                  className="text-[10px] font-bold text-slate-400  hover:text-slate-600"
+                  className="text-[14px] font-bold inline-flex items-center gap-1 px-3 py-1 text-slate-500 rounded-full bg-slate-300 hover:text-slate-600"
                 >
-                  Clear All
+                  Clear Filter
                 </button>
               </div>
             )}

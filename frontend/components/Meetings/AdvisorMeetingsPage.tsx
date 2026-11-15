@@ -204,22 +204,22 @@ export const Header: React.FC<{
           <h2 className="text-2xl font-black tracking-tight text-[#1e3a5f]">
             {title}
           </h2>
-          <p className="text-xs font-medium text-slate-400 mt-0.5">
+          <p className="text-sm font-semibold text-slate-500 mt-0.5">
             {subtitle ? `${subtitle}` : "Manage batch meetings"}
           </p>
         </div>
       </div>
 
       {/* Tab Switcher */}
-      <div className="inline-flex p-1 bg-white rounded-xl border border-slate-200 shadow-sm self-start md:self-auto md:mr-7">
+      <div className="inline-flex p-1 bg-white rounded-xl border border-slate-400 shadow-sm self-start md:self-auto md:mr-7">
         {(['suggestions', 'meetings'] as const).map((t) => (
           <button
             key={t}
             onClick={() => onTabChange(t)}
-            className={`px-4 py-2 text-[10px] md:text-[12px] font-bold tracking-wider rounded-lg transition-all ${
+            className={`px-4 py-2 text-[12px] md:text-[14px] font-semibold tracking-wider rounded-lg transition-all ${
               tab === t 
                 ? 'bg-[#1e3a5f] text-white shadow-sm' 
-                : 'text-slate-500 hover:text-[#1e3a5f]'
+                : 'text-slate-600 hover:text-[#1e3a5f]'
             }`}
           >
             {t === 'suggestions' ? 'Available Slots' : 'My Meetings'}

@@ -129,15 +129,15 @@ function SourceBadge({
   };
 
   const icons: Record<string, React.ReactNode> = {
-    RECOMMENDED: <Target size={12} />,
-    ALTERNATIVE_FOR_CLASH: <Split size={12} />,
-    ELECTIVE_OPTION: <Sparkles size={12} />,
-    MANUAL_ADD: <GraduationCap size={12} />,
+    RECOMMENDED: <Target size={14} />,
+    ALTERNATIVE_FOR_CLASH: <Split size={14} />,
+    ELECTIVE_OPTION: <Sparkles size={14} />,
+    MANUAL_ADD: <GraduationCap size={14} />,
   };
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold border ${styles[source]}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[12px] font-bold border ${styles[source]}`}
     >
       {icons[source]}
       {source.replace(/_/g, " ")}
@@ -157,10 +157,10 @@ function CourseDetailCard({
   return (
     <div
       className="
-        border border-slate-200 
+        border border-slate-300 
         rounded-2xl 
         p-5 
-        bg-white 
+        bg-slate-50/50 
         shadow-sm
         hover:shadow-md
         hover:border-slate-300 
@@ -181,9 +181,9 @@ function CourseDetailCard({
           {(course.substituteFor || course.originalCourseName) &&
             (course.substituteFor ?? course.originalCourseName) !==
               course.courseName && (
-              <p className="text-xs text-slate-500 font-medium mt-1">
+              <p className="text-sm text-amber-700 font-semibold mt-1">
                 Replaces:{" "}
-                <span className="font-semibold text-slate-700">
+                <span className="font-semibold text-amber-700">
                   {course.substituteFor ?? course.originalCourseName}
                 </span>
               </p>
@@ -192,10 +192,10 @@ function CourseDetailCard({
 
         <span
           className="
-            text-xs
+            text-sm
             font-bold
             text-[#1e3a5f]
-            bg-slate-100
+            bg-slate-200
             px-3
             py-1.5
             rounded-lg
@@ -211,25 +211,19 @@ function CourseDetailCard({
         <SourceBadge source={course.selectionSource} />
 
         {course.category && (
-          <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-[11px] font-medium">
+          <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md text-[12px] font-bold">
             {course.category}
           </span>
         )}
 
-        {course.program && (
-          <span className="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md text-[11px] font-medium">
-            {course.program}
-          </span>
-        )}
-
         {course.semester != null && (
-          <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-md text-[11px] font-medium">
+          <span className="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-md text-[12px] font-bold">
             Semester {course.semester}
           </span>
         )}
 
         {course.hasLab && (
-          <span className="px-2.5 py-1 bg-fuchsia-50 text-fuchsia-700 rounded-md text-[11px] font-medium">
+          <span className="px-2.5 py-1 bg-fuchsia-50 text-fuchsia-700 rounded-md text-[12px] font-bold">
             Lab Included
           </span>
         )}
@@ -240,14 +234,14 @@ function CourseDetailCard({
       {/* Schedules — lecture */}
       {course.lectureSlots.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-slate-500 tracking-wider">
-            LECTURE SCHEDULE
+          <p className="text-sm font-semibold text-slate-600 tracking-wider">
+            Lecture Schedule
           </p>
 
           {course.lectureSlots.map((s: any, i: number) => (
             <div
               key={i}
-              className="flex items-start gap-2.5 text-xs text-slate-700 font-medium"
+              className="flex items-start gap-2.5 text-sm text-slate-700 font-medium"
             >
               <Clock
                 size={14}
@@ -266,14 +260,14 @@ function CourseDetailCard({
       {/* Schedules — lab */}
       {course.labSlots.length > 0 && (
         <div className="space-y-2 pt-2 border-t border-slate-100">
-          <p className="text-xs font-semibold text-fuchsia-700 tracking-wider">
-            LAB SCHEDULE
+          <p className="text-sm font-semibold text-fuchsia-700 tracking-wider">
+            Lab Schedule
           </p>
 
           {course.labSlots.map((s: any, i: number) => (
             <div
               key={i}
-              className="flex items-start gap-2.5 text-xs text-fuchsia-800 font-medium"
+              className="flex items-start gap-2.5 text-sm text-fuchsia-800 font-medium"
             >
               <Clock size={14} className="shrink-0 mt-0.5" />
               <span>
@@ -289,7 +283,7 @@ function CourseDetailCard({
       {/* No timetable */}
       {course.lectureSlots.length === 0 &&
         course.labSlots.length === 0 && (
-          <p className="text-xs text-slate-700 font-medium not-italic">
+          <p className="text-sm text-slate-700 font-medium not-italic">
             No timetable slots published for this offering yet.
           </p>
         )}
@@ -297,16 +291,16 @@ function CourseDetailCard({
       {/* UPDATED: Faculty / Instructors UI Section */}
       {course.instructors.length > 0 && (
         <div className="pt-2 border-t border-slate-100 flex flex-col gap-1.5">
-          <p className="text-[11px] font-semibold text-slate-400  tracking-wider">
+          <p className="text-sm font-bold text-slate-500  tracking-wider">
             Assigned Faculty
           </p>
           <div className="flex flex-wrap gap-1.5">
             {course.instructors.map((instructorName, idx) => (
               <span
                 key={idx}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-sky-50 text-sky-800 border border-sky-200/60 rounded-lg text-xs font-semibold"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-sky-50 text-sky-800 border border-sky-200/60 rounded-lg text-sm font-bold"
               >
-                <Users size={12} className="text-sky-600 shrink-0" />
+                <Users size={14} className="text-sky-600 shrink-0" />
                 {instructorName}
               </span>
             ))}
@@ -322,7 +316,7 @@ function CourseDetailCard({
             onClick={() => setExpanded((v) => !v)}
             className="w-full flex items-center justify-between text-left gap-2"
           >
-            <span className="text-xs font-bold text-amber-900">
+            <span className="text-sm font-bold text-amber-900">
               Why this was selected
             </span>
             {expanded ? (
@@ -333,7 +327,7 @@ function CourseDetailCard({
           </button>
 
           <p
-            className={`text-xs text-amber-900/90 mt-2 leading-relaxed whitespace-pre-line ${
+            className={`text-sm font-medium text-amber-900/90 mt-2 leading-relaxed whitespace-pre-line ${
               expanded ? "" : "line-clamp-2"
             }`}
           >
@@ -343,7 +337,7 @@ function CourseDetailCard({
           {course.systemReason &&
             course.systemReason !== course.selectionReason &&
             course.selectionSource === "RECOMMENDED" && (
-              <p className="text-xs text-slate-600 mt-2.5 pt-2.5 border-t border-amber-200/50">
+              <p className="text-sm font-medium text-slate-500 mt-2.5 pt-2.5 border-t border-amber-200/50">
                 <span className="font-semibold text-slate-700">System:</span> {course.systemReason}
               </p>
             )}
@@ -369,7 +363,7 @@ function StudentBlock({ log }: { log: any }) {
   const program = batch?.ProgramModel?.programName ?? "—";
 
   return (
-    <div className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm transition-all w-full">
+    <div className="border border-slate-300 rounded-2xl overflow-hidden bg-white shadow-sm transition-all w-full">
       {/* Student header */}
       <button
         type="button"
@@ -392,7 +386,7 @@ function StudentBlock({ log }: { log: any }) {
             className="
               w-11 h-11 
               rounded-xl 
-              bg-[#1e3a5f]/10 
+              bg-[#1e3a5f]/30 
               flex 
               items-center 
               justify-center 
@@ -410,23 +404,23 @@ function StudentBlock({ log }: { log: any }) {
               {student?.studentName ?? "—"}
             </h4>
 
-            <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
-              SAP: <strong className="text-slate-700">{sapid}</strong> · Semester {student?.currentSemester ?? "—"} · {program}
+            <p className="text-sm text-slate-500 font-medium truncate mt-0.5">
+             <strong className="text-slate-700"> Sapid:</strong> <strong >{sapid}</strong> · <strong className="text-slate-700">Semester:</strong> {student?.currentSemester ?? "—"}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-4 shrink-0">
           <div className="flex flex-col items-end">
-            <span className="text-xs font-bold text-[#1e3a5f]">
+            <span className="text-sm font-bold text-[#1e3a5f]">
               {courses.length} Course{courses.length !== 1 ? "s" : ""}
             </span>
-            <span className="text-xs font-medium text-amber-600">
+            <span className="text-sm font-semibold text-amber-600">
               {log.totalCredits ?? 0} Credits
             </span>
           </div>
 
-          <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
+          <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
             {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </div>
         </div>
@@ -445,7 +439,7 @@ function StudentBlock({ log }: { log: any }) {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-4 mt-4 border-t border-slate-200 px-1">
-            <p className="text-xs text-slate-500 font-medium">
+            <p className="text-sm text-slate-600 font-semibold">
               Finalized on{" "}
               {new Date(
                 log.updatedAt ?? log.createdAt
@@ -459,7 +453,7 @@ function StudentBlock({ log }: { log: any }) {
             </p>
 
             {log.notes && (
-              <p className="text-xs text-slate-700">
+              <p className="text-sm text-slate-700">
                 <strong className="text-slate-900">Note:</strong> {log.notes}
               </p>
             )}
@@ -673,7 +667,7 @@ if (isProfileLoading || isLoadingLogs) {
               </h2>
             </div>
 
-            <p className="text-xs text-slate-500 font-medium mt-1 pl-16">
+            <p className="text-[13px] text-slate-500 font-medium mt-1 pl-16">
               Grouped by Session · {groupedBySession.length}{" "}
               session{groupedBySession.length !== 1 ? "s" : ""} ·{" "}
               {filteredLogs.length} total record
@@ -686,7 +680,7 @@ if (isProfileLoading || isLoadingLogs) {
             <div className="relative w-full lg:w-[320px]">
               <Search
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
-                size={16}
+                size={18}
               />
 
               <input
@@ -722,7 +716,7 @@ if (isProfileLoading || isLoadingLogs) {
             <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={onOpenStudentRecommendations}
-                className="px-5 py-2.5 bg-[#1e3a5f] text-white text-xs font-bold rounded-xl transition-all hover:bg-amber-500 shadow-sm"
+                className="px-5 py-2.5 bg-[#1e3a5f] text-white text-sm font-bold rounded-xl transition-all hover:bg-amber-500 shadow-sm"
               >
                 System Generated Recommendations
               </button>
@@ -758,8 +752,8 @@ if (isProfileLoading || isLoadingLogs) {
               "
             >
               <div className="flex items-center gap-2 px-3 py-1.5 bg-[#1e3a5f] text-white rounded-lg shadow-sm">
-                <Calendar size={13} />
-                <span className="text-xs font-bold tracking-wide">
+                <Calendar size={16} />
+                <span className="text-sm font-bold tracking-wide">
                   {session.sessionLabel}
                 </span>
               </div>

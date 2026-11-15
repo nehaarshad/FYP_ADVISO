@@ -37,10 +37,10 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
             isUrgent={recommendation.isUrgent} 
             id={recommendation.id}
           />
-          <h3 className="text-base md:text-lg font-bold text-[#1e3a5f] mt-2 leading-tight line-clamp-2">
+          <h3 className="text-base md:text-xl font-bold text-[#1e3a5f] mt-4 leading-tight line-clamp-2">
             {recommendation.subject}
           </h3>
-          <p className="text-xs md:text-sm font-medium text-slate-500 mt-1 line-clamp-2">
+          <p className="text-medium md:text-medium font-medium text-slate-600 mt-1 line-clamp-2">
             {recommendation.issueDescription}
           </p>
         </div>
@@ -51,14 +51,14 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
       <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 text-slate-500">
-            <User size={14} className="text-slate-400" />
-            <span className="text-[10px] font-bold ">
-              {recommendation.postingAdvisor.advisorName || 'Unknown'}
+            <User size={18} className="text-slate-600" />
+            <span className="text-[13px] font-bold ">
+              {recommendation.postingAdvisor.advisorName || 'Faculty Member'}
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-slate-500">
-            <Calendar size={14} className="text-slate-500" />
-            <span className="text-[9px] font-medium ">
+            <Calendar size={18} className="text-slate-500" />
+            <span className="text-[13px] font-semibold text-slate-500">
               {new Date(recommendation.createdAt).toLocaleDateString('en-GB', {
                 day: '2-digit',
                 month: 'short',
@@ -68,10 +68,10 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold text-slate-500  flex items-center gap-1">
-            <MessageCircle size={14} /> {commentCount}
+          <span className="text-[13px] font-bold text-slate-500  flex items-center gap-1">
+            <MessageCircle size={16} /> {commentCount}
           </span>
-          <ChevronRight size={16} className="text-slate-500" />
+          <ChevronRight size={18} className="text-slate-500" />
         </div>
       </div>
     </div>

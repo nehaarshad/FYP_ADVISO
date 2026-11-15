@@ -36,16 +36,16 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   return (
     <div
       className={`p-3 rounded-xl border ${
-        comment.isAccepted ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-50 border-slate-200'
+        comment.isAccepted ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-100 border-slate-300'
       }`}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-bold text-[#1e3a5f] ">
+            <span className="text-sm font-bold text-[#1e3a5f] ">
               {comment.commentingAdvisor?.advisorName || 'Unknown'}
             </span>
-            <span className="text-[8px] font-bold text-slate-400 ">
+            <span className="text-[12px] ml-3 font-bold text-slate-600 ">
               {new Date(comment.createdAt).toLocaleDateString('en-GB', {
                 day: '2-digit',
                 month: 'short',
@@ -53,8 +53,8 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               })}
             </span>
             {comment.isAccepted && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-bold  bg-emerald-100 text-emerald-700">
-                <CheckCircle size={10} /> Accepted
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-bold  bg-emerald-100 text-emerald-700">
+                <CheckCircle size={12} /> Accepted
               </span>
             )}
           </div>
@@ -87,7 +87,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
               </div>
             </div>
           ) : (
-            <p className="text-sm font-medium text-slate-700 mt-1">
+            <p className="text-sm font-semibold text-slate-600 mt-1">
               {comment.suggestedSolution}
             </p>
           )}
@@ -98,63 +98,72 @@ export const CommentItem: React.FC<CommentItemProps> = ({
             className="p-1 hover:bg-slate-200 rounded-full transition-colors"
             onClick={() => onVote(comment.id, 'upvote')}
           >
-            <ThumbsUp size={14} className="text-slate-400" />
+            <ThumbsUp size={16} className="text-slate-500" />
           </button>
-          <span className="text-xs font-bold text-slate-600 min-w-[16px] text-center">
+          <span className="text-sm font-bold text-slate-600 min-w-[16px] text-center">
             {comment.voteCount}
           </span>
           <button
             className="p-1 hover:bg-slate-200 rounded-full transition-colors"
             onClick={() => onVote(comment.id, 'downvote')}
           >
-            <ThumbsDown size={14} className="text-slate-400" />
+            <ThumbsDown size={16} className="text-slate-500" />
           </button>
           
           {(isCommentOwner || canAccept) && (
-            <div className="relative">
-              <button
-                className="p-1 hover:bg-slate-200 rounded-full transition-colors"
-                onClick={() => setShowMenu(!showMenu)}
-              >
-                <MoreVertical size={14} className="text-slate-400" />
-              </button>
-              
-              {showMenu && (
-                <div className="absolute right-0 top-6 bg-white border grid-cols-2 border-slate-200 rounded-lg shadow-lg py-1 z-10 min-w-[120px]">
-                  {isCommentOwner && (
-                    <>
-                      <button
-                        className="w-full px-3 py-1.5 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center gap-2"
-                        onClick={() => {
-                          setIsEditing(true);
-                          setShowMenu(false);
-                        }}
-                      >
-                        <Edit2 size={12} /> Edit
-                      </button>
-                      <button
-                        className="w-full px-3 py-1.5 text-left text-xs font-semibold text-red-600 hover:bg-red-50 flex items-center gap-2"
-                        onClick={handleDelete}
-                      >
-                        <Trash2 size={12} /> Delete
-                      </button>
-                    </>
-                  )}
-                  {canAccept && !comment.isAccepted && (
-                    <button
-                      className="w-full px-3 py-1.5 text-left text-xs font-semibold text-emerald-600 hover:bg-emerald-50 flex items-center gap-2"
-                      onClick={() => {
-                        onAccept(comment.id);
-                        setShowMenu(false);
-                      }}
-                    >
-                      <CheckCircle size={12} /> Accept Solution
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+  <div className="relative">
+    <button
+      className="p-1 hover:bg-slate-300 rounded-full transition-colors"
+      onClick={() => setShowMenu(!showMenu)}
+    >
+      <MoreVertical size={16} className="text-slate-800" />
+    </button>
+    
+    {showMenu && (
+      <div className="absolute right-6 top-0 bg-white border border-slate-300 rounded-lg shadow-lg p-1 z-10 grid grid-cols-3 gap-1 min-w-[280px]">
+        
+        {/* Accept Solution Button */}
+        {canAccept && !comment.isAccepted && (
+          <button
+            className="flex flex-col items-center justify-center px-2 py-2 text-xs font-semibold text-emerald-600 hover:bg-emerald-50 rounded-md transition-colors gap-1"
+            onClick={() => {
+              onAccept(comment.id);
+              setShowMenu(false);
+            }}
+          >
+            <CheckCircle size={18} /> 
+            <span>Accept</span>
+          </button>
+        )}
+        
+        {/* Edit & Delete Buttons (Only show if owner) */}
+        {isCommentOwner && (
+          <>
+            <button
+              className="flex flex-col items-center justify-center px-2 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 rounded-md transition-colors gap-1"
+              onClick={() => {
+                setIsEditing(true);
+                setShowMenu(false);
+              }}
+            >
+              <Edit2 size={18} /> 
+              <span>Edit</span>
+            </button>
+            
+            <button
+              className="flex flex-col items-center justify-center px-2 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-md transition-colors gap-1"
+              onClick={handleDelete}
+            >
+              <Trash2 size={18} /> 
+              <span>Delete</span>
+            </button>
+          </>
+        )}
+        
+      </div>
+    )}
+  </div>
+)}
         </div>
       </div>
     </div>

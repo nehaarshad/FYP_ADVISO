@@ -109,7 +109,7 @@ const AdvisorChat: React.FC<AdvisorChatProps> = ({ onBack }) => {
             <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">
                 Inbox 
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm text-slate-500">
                 Manage student conversations
               </p>
             </div>

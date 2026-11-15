@@ -51,7 +51,7 @@ export const MeetingDatePicker: React.FC<Props> = ({
 
   return (
     <div>
-      <label className="block text-sm font-bold tracking-wider text-slate-500 mb-1.5">
+      <label className="block text-sm font-bold tracking-wider text-gray-600 mb-1.5">
         Meeting date ({meetingDay} Only)
       </label>
       <input
@@ -60,7 +60,7 @@ export const MeetingDatePicker: React.FC<Props> = ({
         min={min}
         disabled={disabled}
         onChange={handleChange}
-        className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs font-bold text-[#1e3a5f] bg-white focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f] outline-none disabled:bg-slate-50 transition"
+        className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-bold text-[#1e3a5f] bg-white focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f] outline-none disabled:bg-slate-50 transition"
       />
     </div>
   );

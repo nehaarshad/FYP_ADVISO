@@ -29,19 +29,16 @@ const ChatStudentList: React.FC<
 }) => {
   
   return (
-    <div className="h-full bg-white rounded-3xl p-4 flex flex-col border border-slate-100 shadow-sm overflow-hidden">
+    <div className="h-full bg-white rounded-3xl p-4 flex flex-col border border-slate-300 shadow-sm overflow-hidden">
 
       {/* HEADER */}
       <div className="flex items-center justify-between px-2 pb-4">
 
         <div>
-          <h2 className="text-[#1e3a5f] text-sx font-bold tracking-tight">
-            Inbox 
+          <h2 className="text-[#1e3a5f] text-[16px] font-bold tracking-tight">
+            Student List 
           </h2>
 
-          <p className="text-[9px] text-slate-500 font-bold  tracking-widest">
-            Your conversations
-          </p>
         </div>
 
         <MessageCircle
@@ -109,19 +106,19 @@ const ChatStudentList: React.FC<
                   className={`p-3 rounded-xl bg-white flex flex-col gap-1 border ${
                     isActive
                       ? "border-amber-100"
-                      : "border-slate-50"
+                      : "border-slate-300"
                   }`}
                 >
 
                   {/* NAME + UNREAD */}
                   <div className="flex items-center justify-between gap-2">
 
-                    <p className="font-bold text-[12.5px] text-[#1e3a5f] leading-tight truncate">
+                    <p className="font-bold text-[14px] text-[#1e3a5f] leading-tight truncate">
                       {chat.name || "Student"}
                     </p>
 
                     {!!chat.unreadCount && (
-                      <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-white text-[8px] font-bold">
+                      <span className="min-w-5 h-5 px-1.5 flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold">
                         {chat.unreadCount}
                       </span>
                     )}
@@ -129,7 +126,7 @@ const ChatStudentList: React.FC<
                   </div>
 
                   {/* SEMESTER */}
-                  <p className="text-[10px] text-slate-550 truncate">
+                  <p className="text-[12px] text-slate-500 font-semibold truncate">
                     Semester: {chat.semester || "N/A"}
                   </p>
 

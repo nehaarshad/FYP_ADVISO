@@ -41,8 +41,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
   return (
     <div className="mt-6 pt-4 border-t border-slate-100">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-xs font-bold text-slate-600  tracking-wider flex items-center gap-2">
-          <MessageCircle size={16} /> Comments ({comments.length})
+        <span className="text-medium font-bold text-slate-600  tracking-wider flex items-center gap-2">
+          <MessageCircle size={18} /> Comments ({comments.length})
         </span>
       </div>
 
@@ -55,7 +55,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
             onChange={(e) => setCommentText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Suggest a solution..."
-            className="flex-1 p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 ring-blue-500/50 resize-none min-h-[50px] max-h-[100px]"
+            className="flex-1 font-medium p-2.5 bg-slate-200 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 ring-blue-500/50 resize-none min-h-[50px] max-h-[100px]"
             rows={2}
             disabled={isCommenting}
           />
@@ -64,13 +64,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
             onClick={handleSubmit}
             disabled={!commentText.trim() || isCommenting}
           >
-            {isCommenting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+            {isCommenting ? <Loader2 size={16} className="animate-spin" /> : <Send size={20} />}
           </button>
         </div>
       )}
 
       {/* Comments List */}
-      <div className="space-y-3 max-h-[400px] overflow-y-auto">
+      <div className="space-y-3 max-h-[600px] overflow-y-auto">
         {sortedComments.map((comment) => {
           const canAccept =
             isOwner &&
@@ -93,8 +93,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
         })}
         {comments.length === 0 && (
           <div className="text-center py-8 text-slate-400">
-            <p className="text-sm font-medium">No comments yet</p>
-            <p className="text-xs">Be the first to suggest a solution</p>
+            <p className="text-medium font-medium">No comments yet</p>
+            <p className="text-sm">Be the first to suggest a solution</p>
           </div>
         )}
       </div>

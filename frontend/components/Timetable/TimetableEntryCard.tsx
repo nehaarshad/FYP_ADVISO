@@ -22,7 +22,7 @@ export const TimetableEntryCard: React.FC<Props> = ({
   const variantStyles =
     variant === 'personal'
       ? 'bg-amber-50/60 border-amber-200/80 shadow-xs'
-      : 'bg-white border-slate-100 hover:border-slate-200';
+      : 'bg-white border-slate-400 hover:border-slate-600';
 
   const showEdit = canEdit && !!onEdit;
   const showDelete = canDelete && !!onDelete;
@@ -34,24 +34,24 @@ export const TimetableEntryCard: React.FC<Props> = ({
       className={`flex items-center gap-4 p-4 rounded-2xl border ${variantStyles} transition-all`}
     >
       <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-[#1e3a5f] text-white shrink-0 shadow-sm">
-  <span className="text-[10px] font-bold  tracking-wider text-white">
+  <span className="text-[14px] font-bold  tracking-wider text-white">
     {DAY_SHORT[entry.day] || entry.day.slice(0, 3)}
   </span>
 </div>
 
       <div className="flex-1 min-w-0">
-        <h4 className="font-bold text-[#1e3a5f]  tracking-tight truncate text-sm">
+        <h4 className="font-bold text-[#1e3a5f]  tracking-tight truncate text-[14px]">
           {entry.course}
         </h4>
-        <p className="text-xs font-bold text-slate-600 mt-0.5 tracking-wide">
+        <p className="text-sm font-bold text-slate-600 mt-0.5 tracking-wide">
           {formatTime(entry.startTime)} — {formatTime(entry.endTime)}
         </p>
 
         {/* Creator attribution */}
         {variant === 'personal' ? (
-          <p className="text-[10px] font-bold text-amber-600  tracking-widest mt-1">You</p>
+          <p className="text-[12px] font-bold text-amber-600  tracking-widest mt-1">You</p>
         ) : creatorName ? (
-          <p className="text-[10px] font-medium text-slate-800  tracking-wider mt-1">
+          <p className="text-[12px] font-medium text-slate-800  tracking-wider mt-1">
             Added by <span className=" text-amber-600 font-bold">{creatorName}</span>
           </p>
         ) : null}
@@ -62,10 +62,10 @@ export const TimetableEntryCard: React.FC<Props> = ({
           {showEdit && (
             <button
               onClick={() => onEdit!(entry)}
-              className="p-2 text-slate-400 hover:text-[#1e3a5f] hover:bg-slate-100 rounded-xl transition"
+              className="p-2 text-slate-500 hover:text-[#1e3a5f] hover:bg-slate-300 rounded-xl transition"
               aria-label="Edit"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -78,10 +78,10 @@ export const TimetableEntryCard: React.FC<Props> = ({
           {showDelete && (
             <button
               onClick={() => onDelete!(entry)}
-              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition"
+              className="p-2 text-slate-500 hover:text-red-600 hover:bg-red-200 rounded-xl transition"
               aria-label="Delete"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

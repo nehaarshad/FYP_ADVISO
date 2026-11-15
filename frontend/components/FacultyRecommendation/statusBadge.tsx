@@ -23,13 +23,13 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, isUrgent, id }
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'Open':
-        return <AlertCircle size={14} />;
+        return <AlertCircle size={15} />;
       case 'In Progress':
-        return <ClockIcon size={14} />;
+        return <ClockIcon size={15} />;
       case 'Resolved':
-        return <CheckCircle size={14} />;
+        return <CheckCircle size={15} />;
       case 'Closed':
-        return <XCircle size={14} />;
+        return <XCircle size={15} />;
       default:
         return null;
     }
@@ -38,15 +38,15 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, isUrgent, id }
   return (
     <div className="flex items-center gap-2 flex-wrap">
       <span
-        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-bold  border ${getStatusColor(
+        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-bold  border ${getStatusColor(
           status
         )}`}
       >
         {getStatusIcon(status)} {status}
       </span>
       {isUrgent && (
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-bold  border bg-red-50 text-red-600 border-red-200">
-          <AlertCircle size={12} /> Urgent
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[13px] font-bold  border bg-red-50 text-red-600 border-red-200">
+          <AlertCircle size={16} /> Urgent
         </span>
       )}
     </div>
