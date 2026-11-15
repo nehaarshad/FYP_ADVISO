@@ -10,7 +10,7 @@ export const useAuthGuard = () => {
     const  token =sessionManager.getSessionToken() || '';
 
     if (!token) {
-      router.push('/session-expired');
+      router.push('/views/auth/login');
     }
   }, [router]);
 };
