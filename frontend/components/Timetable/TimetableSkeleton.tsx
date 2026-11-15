@@ -4,7 +4,7 @@ import React from 'react';
 export const TimetableSkeleton: React.FC = () => (
   <div className="space-y-3 animate-pulse">
     {[1, 2, 3, 4].map((i) => (
-      <div key={i} className="flex items-center gap-4 p-4 bg-white border border-slate-100 rounded-2xl shadow-xs">
+      <div key={i} className="flex items-center gap-4 p-4 bg-white border border-slate-300 rounded-2xl shadow-xs">
         <div className="w-14 h-14 bg-slate-200 rounded-xl shrink-0" />
         <div className="flex-1 space-y-2.5">
           <div className="h-4 bg-slate-200 rounded-lg w-1/3" />

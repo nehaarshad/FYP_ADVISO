@@ -88,7 +88,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-200 mb-6 hover:bg-slate-50 transition-colors"
+            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-300 mb-6 hover:bg-slate-200 transition-colors"
           >
             <ArrowLeft size={18} />
           </button>
@@ -109,7 +109,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-200 mb-6 hover:bg-slate-50 transition-colors"
+            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-300 mb-6 hover:bg-slate-200 transition-colors"
           >
             <ArrowLeft size={18} />
           </button>
@@ -118,13 +118,13 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
           <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-4 border border-rose-100">
             <AlertCircle size={26} className="text-rose-500" />
           </div>
-          <p className="text-xs font-semibold text-slate-900 tracking-tight mb-1">
+          <p className="text-sm font-semibold text-slate-900 tracking-light mb-1">
             Failed to Load Recommendations
           </p>
-          <p className="text-xs text-slate-700 text-center max-w-xs mb-6">{error}</p>
+          <p className="text-sm text-slate-700 text-center max-w-xs mb-6">{error}</p>
           <button
             onClick={fetchStudentRecommendations}
-            className="px-5 py-2 bg-[#1e3a5f] text-white text-xs font-medium rounded-xl hover:bg-[#152a47] transition-all shadow-xs"
+            className="px-5 py-2 bg-[#1e3a5f] text-white text-sm font-medium rounded-xl hover:bg-[#152a47] transition-all shadow-xs"
           >
             Retry
           </button>
@@ -140,16 +140,16 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-200 mb-6 hover:bg-slate-50 transition-colors"
+            className="p-2 bg-white shadow-xs rounded-xl text-slate-800 border border-slate-300 mb-6 hover:bg-slate-200 transition-colors"
           >
             <ArrowLeft size={18} />
           </button>
         )}
         <div className="bg-white border border-slate-200 rounded-2xl shadow-xs p-12 text-center">
-          <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-slate-100">
+          <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-slate-300">
             <BookOpen size={20} className="text-[#1e3a5f]" />
           </div>
-          <p className="text-slate-800 font-semibold text-xs">
+          <p className="text-slate-800 font-semibold text-sm">
             {searchTerm ? "No matching courses found" : "No recommendations yet"}
           </p>
         </div>
@@ -183,7 +183,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
       <h2 className="text-xl sm:text-2xl font-extrabold text-[#1e3a5f] tracking-tight ">
         System Recommendations
       </h2>
-      <p className="text-xs text-slate-700 font-medium mt-0.5">
+      <p className="text-medium text-slate-700 font-medium mt-0.5">
         {groupedBySession.length} session{groupedBySession.length !== 1 ? "s" : ""} available
       </p>
     </div>
@@ -212,7 +212,7 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
           return (
             <div
               key={session.key}
-              className="border border-slate-200/90 rounded-2xl overflow-hidden bg-white shadow-xs w-full block transition-all"
+              className="border border-slate-300/90 rounded-2xl overflow-hidden bg-white shadow-xs w-full block transition-all"
             >
               {/* Session header */}
               <button
@@ -223,13 +223,13 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
                 <div className="flex items-center gap-3.5 min-w-0 flex-1">
                   {/* Small cylinder icon container updated with #1e3a5f */}
                   <div className="w-9 h-9 rounded-xl bg-[#1e3a5f] flex items-center justify-center text-white shrink-0 shadow-xs">
-                    <Calendar size={16} />
+                    <Calendar size={18} />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-s md:text-sm font-bold text-[#1e3a5f] tracking-tight truncate">
+                    <p className="text-s md:text-medium font-bold text-[#1e3a5f] tracking-tight truncate">
                       {session.label}
                     </p>
-                    <p className="text-[11px] font-semibold text-slate-700 truncate mt-0.5">
+                    <p className="text-[14px] font-semibold text-slate-700 truncate mt-0.5">
                       {totals.courses} course{totals.courses !== 1 ? "s" : ""} recommended
                       {firstRec?.summary.totalCreditsAllowed != null &&
                         ` · Cap: ${firstRec.summary.totalCreditsAllowed} cr`}
@@ -239,19 +239,19 @@ export const StudentRecommendationView: React.FC<StudentRecommendationViewProps>
 
                 <div className="flex items-center gap-2.5 shrink-0">
                   {firstRec?.summary.hasWarnings && (
-                    <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200/80 rounded-lg text-[10px] font-semibold">
+                    <span className="hidden sm:flex items-center gap-1 px-2.5 py-1 bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-[12px] font-semibold">
                       <AlertCircle size={12} /> Warnings
                     </span>
                   )}
                   <div className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
-                    {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                   </div>
                 </div>
               </button>
 
               {/* Session body */}
               {isOpen && (
-                <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-5 space-y-5 w-full">
+                <div className="border-t border-slate-300 bg-slate-50/50 p-4 sm:p-5 space-y-5 w-full">
                   {session.records.map(rec => (
                     <SessionRecord
                       key={rec.id ?? Math.random()}
@@ -287,9 +287,9 @@ const SessionRecord: React.FC<{
   return (
     <div className="space-y-5 w-full">
       {record.detailedExplanation && (
-        <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-200 rounded-xl p-3.5 text-slate-900 w-full shadow-2xs">
-          <Info size={16} className="shrink-0 mt-0.5 text-[#1e3a5f]" />
-          <p className="text-xs font-semibold leading-relaxed">{record.detailedExplanation}</p>
+        <div className="flex items-start gap-2.5 bg-blue-50/60 border border-blue-300/80 rounded-xl p-3.5 text-slate-900 w-full shadow-2xs">
+          <Info size={18} className="shrink-0 mt-0.5 text-[#1e3a5f]" />
+          <p className="text-sm font-semibold leading-relaxed">{record.detailedExplanation}</p>
         </div>
       )}
 
@@ -301,9 +301,9 @@ const SessionRecord: React.FC<{
           return (
             <span
               key={p}
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] ${meta.badge}`}
+              className={`inline-flex font-semibold items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[12px] ${meta.badge}`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${meta.dot}`} />
+              <span className={`w-2 h-2 rounded-full ${meta.dot}`} />
               {meta.title} · {count}
             </span>
           );
@@ -319,7 +319,7 @@ const SessionRecord: React.FC<{
           <div key={p} className="space-y-3 w-full">
             <div className="flex items-center gap-2 w-full">
               <span className={`w-2 h-2 rounded-full ${meta.dot}`} />
-              <h3 className="text-xs font-bold text-slate-900 tracking-wide">
+              <h3 className="text-sm font-bold text-slate-900 tracking-wide">
                 {meta.title} ({courses.length})
               </h3>
               <div className="flex-1 h-px bg-slate-300" />
@@ -354,8 +354,8 @@ const SessionRecord: React.FC<{
         );
       })}
 
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-200 w-full">
-        <p className="text-[11px] text-slate-700 font-semibold">
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-400 w-full">
+        <p className="text-[14px] text-slate-700 font-semibold">
           {record.sentAt
             ? `Sent: ${new Date(record.sentAt).toLocaleString("en-GB", {
                 day: "2-digit", month: "short", year: "numeric",
@@ -364,7 +364,7 @@ const SessionRecord: React.FC<{
             : "—"}
         </p>
         {record.notes && (
-          <p className="text-[11px] text-slate-800 font-semibold italic">Note: {record.notes}</p>
+          <p className="text-[14px] text-slate-800 font-semibold italic">Note: {record.notes}</p>
         )}
       </div>
     </div>
@@ -394,55 +394,55 @@ const ReadOnlyCourseCard: React.FC<{
        []);
 
   return (
-    <div className="border border-slate-300 rounded-2xl p-4 bg-white shadow-2xs space-y-3 w-full hover:border-[#1e3a5f] transition-all">
+    <div className="border border-slate-400 rounded-2xl p-4 bg-white shadow-2xs space-y-3 w-full hover:border-[#1e3a5f] transition-all">
       <div className="flex items-start justify-between gap-3">
         <div className="h-9 w-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#1e3a5f] shrink-0">
-          <CheckCircle2 size={18} />
+          <CheckCircle2 size={20} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded-md text-[10px] font-semibold border border-slate-200">
+            <span className="px-2 py-0.5 bg-slate-300 text-slate-900 rounded-md text-[12px] font-semibold border border-slate-400">
               {course.category || "ELIGIBLE"}
             </span>
             {isElective && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-indigo-50/80 rounded-md text-[10px] font-semibold text-indigo-900 border border-indigo-200">
-                <Sparkles size={11} className="text-indigo-600" /> {electives.length || (course as any).totalOptions || 0} options
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-indigo-100 rounded-md text-[12px] font-semibold text-indigo-900 border border-indigo-200">
+                <Sparkles size={13} className="text-indigo-600" /> {electives.length || (course as any).totalOptions || 0} options
               </span>
             )}
             {course.actionRequired && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-sky-50 rounded-md text-[10px] font-semibold text-sky-900 border border-sky-200">
-                <Target size={11} className="text-sky-600" /> {String(course.actionRequired).replace(/_/g, " ")}
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-sky-50 rounded-md text-[12px] font-semibold text-sky-900 border border-sky-300">
+                <Target size={13} className="text-sky-500" /> {String(course.actionRequired).replace(/_/g, " ").toLowerCase()}
               </span>
             )}
           </div>
-          <h4 className="font-bold text-slate-900 text-xs sm:text-[13px] leading-snug break-words">
+          <h4 className="font-bold text-slate-900 text-[13px] sm:text-[16px] leading-snug break-words">
             {courseName}
           </h4>
           {course.originalCourseName && course.originalCourseName !== course.courseName && (
-            <p className="text-[11px] text-slate-700 font-medium mt-0.5">
+            <p className="text-[12px] text-slate-800 font-semibold mt-0.5">
               Replaces: {course.originalCourseName}
             </p>
           )}
         </div>
         
-        <span className="text-xs font-bold px-3 py-1 bg-slate-100 text-[#1e3a5f] rounded-xl shrink-0 border border-slate-300">
+        <span className="text-sm font-bold px-3 py-1 bg-slate-100 text-[#1e3a5f] rounded-xl shrink-0 border border-slate-400">
           {credits} CR
         </span>
       </div>
 
       {course.reason && (
-        <div className="text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-slate-800 flex items-start gap-2">
-          <Info className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
+        <div className="text-sm bg-slate-100 p-2.5 rounded-xl border border-slate-300 text-slate-800 flex items-start gap-2">
+          <Info className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
           <p className="font-medium">{course.reason}</p>
         </div>
       )}
 
       {lectureSlots.length > 0 && (
         <div className="space-y-1">
-          <p className="text-[10px] font-bold text-slate-600  tracking-wider">Lecture</p>
+          <p className="text-[14px] font-bold text-slate-600  tracking-wider">Lecture</p>
           {lectureSlots.map((l, i) => (
-            <div key={i} className="flex items-center gap-1.5 text-xs text-slate-800 font-semibold">
-              <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+            <div key={i} className="flex items-center gap-1.5 text-sm text-slate-800 font-semibold">
+              <Clock className="w-5 h-5 text-slate-500 shrink-0" />
               <span className="break-words">
                 {l.day}: {l.startTime}–{l.endTime} ({l.room ?? l.venue ?? "—"})
                 {l.instructor ? ` · ${l.instructor}` : ""}
@@ -453,11 +453,11 @@ const ReadOnlyCourseCard: React.FC<{
       )}
 
       {labSlots.length > 0 && (
-        <div className="bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-slate-800 space-y-1">
-          <span className="text-[10px] font-bold text-slate-600  tracking-wider block">Lab</span>
+        <div className="bg-slate-50 border border-slate-300 p-3 rounded-xl text-slate-800 space-y-1">
+          <span className="text-[14px] font-bold text-slate-600  tracking-wider block">Lab</span>
           {labSlots.map((l, i) => (
-            <div key={i} className="flex items-center gap-1.5 text-xs font-semibold">
-              <Clock className="w-3.5 h-3.5 shrink-0 text-slate-500" />
+            <div key={i} className="flex items-center gap-1.5 text-sm font-semibold">
+              <Clock className="w-5 h-5 text-slate-500 shrink-0" />
               <span className="break-words">
                 {l.day}: {l.startTime}–{l.endTime} ({l.room ?? l.venue})
                 {l.instructor ? ` · ${l.instructor}` : ""}
@@ -468,30 +468,30 @@ const ReadOnlyCourseCard: React.FC<{
       )}
 
       {electives.length > 0 && (
-        <div className="pt-2 border-t border-slate-200 space-y-2">
+        <div className="pt-2 border-t border-slate-400 space-y-2">
           <button
             type="button"
             onClick={onToggle}
-            className="w-full flex items-center justify-between text-xs font-bold text-[#1e3a5f] hover:text-[#152a47] py-1 px-1 rounded transition-colors"
+            className="w-full flex items-center justify-between text-sm font-bold text-[#1e3a5f] hover:text-[#152a47] py-1 px-1 rounded transition-colors"
           >
             <span className="flex items-center gap-1">
-              <Sparkles size={12} className="text-[#1e3a5f]" /> Elective options ({electives.length})
+              <Sparkles size={15} className="text-[#1e3a5f]" /> Elective options ({electives.length})
             </span>
-            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            {isExpanded ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
           </button>
 
           {isExpanded && (
             <div className="space-y-1.5">
               {electives.map((opt: ElectiveOption, i: number) => (
-                <div key={i} className="bg-white border border-slate-200 rounded-xl p-2.5 text-xs space-y-1 shadow-2xs">
+                <div key={i} className="bg-white border border-slate-400 rounded-xl p-2.5 text-xs space-y-1 shadow-2xs">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="font-bold text-slate-900 break-words">{opt.courseName}</p>
-                    <span className="text-[10px] font-semibold bg-slate-100 text-slate-800 px-2 py-0.5 rounded shrink-0 border border-slate-200">
+                    <p className="font-bold text-[12px] text-slate-900 break-words">{opt.courseName}</p>
+                    <span className="text-[13px] font-semibold bg-slate-100 text-slate-800 px-2 py-0.5 rounded shrink-0 border border-slate-200">
                       {opt.credits} CR
                     </span>
                   </div>
                   {opt.matchReason && (
-                    <p className="text-slate-700 font-medium text-[11px]">{opt.matchReason}</p>
+                    <p className="text-slate-700 font-medium text-[14px]">{opt.matchReason}</p>
                   )}
                 </div>
               ))}
@@ -518,66 +518,61 @@ const ReadOnlyClashCard: React.FC<{
   return (
     <div className="border border-rose-300 bg-rose-50/30 rounded-2xl p-4 space-y-3 w-full">
       <div className="flex items-start justify-between gap-3">
-        <div className="h-9 w-9 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-600 shrink-0">
+        <div className="h-9 w-9 rounded-xl bg-rose-100 border border-rose-300 flex items-center justify-center text-rose-600 shrink-0">
           <ShieldAlert size={18} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap gap-1.5 mb-1">
-            <span className="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md text-[10px] font-semibold border border-rose-200">
+            <span className="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md text-[12px] font-semibold border border-rose-300">
               {(course as any).notSuggestedReason === "LAB_CLASH_UNRESOLVED"
                 ? "Lab Clash"
                 : "Time Clash"}
             </span>
-            <span className="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md text-[10px] font-semibold border border-rose-200">
+            <span className="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-md text-[12px] font-semibold border border-rose-300">
               {((course as any).priority ?? "CRITICAL").toUpperCase()}
             </span>
           </div>
-          <h4 className="font-bold text-slate-900 text-xs sm:text-[13px] leading-snug break-words">
+          <h4 className="font-bold text-slate-900 text-[13px] sm:text-[16px] leading-snug break-words">
             {courseName}
           </h4>
         </div>
         
-        <span className="text-xs font-bold px-3 py-1 bg-rose-100 text-rose-900 rounded-xl shrink-0 border border-rose-200">
+        <span className="text-sm font-bold px-3 py-1 bg-rose-100 text-rose-900 rounded-xl shrink-0 border border-rose-300">
           {credits} CR
         </span>
       </div>
 
-      <div className="text-xs bg-white p-2.5 rounded-xl border border-rose-200 text-slate-900 flex items-start gap-2 shadow-2xs">
-        <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0 mt-0.5" />
+      <div className="text-sm bg-rose-100 p-2.5 rounded-xl border border-rose-300 text-slate-900 flex items-start gap-2 shadow-2xs">
+        <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
         <p className="font-medium leading-relaxed">
           {course.reason || (course as any).notSuggestedReason || "Schedule conflict detected."}
         </p>
       </div>
 
       {alt && (
-        <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-3 space-y-2">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e3a5f]">
-            <Split size={13} className="text-[#1e3a5f]" />
+        <div className="bg-blue-50 border border-blue-300 rounded-xl p-3 space-y-2">
+          <div className="flex items-center gap-1.5 text-sm font-bold text-[#1e3a5f]">
+            <Split size={15} className="text-[#1e3a5f]" />
             Suggested Alternative
           </div>
-          <div className="bg-white border border-blue-200 rounded-xl p-2.5 space-y-1.5 shadow-2xs">
+          <div className="bg-white border border-blue-300 rounded-xl p-2.5 space-y-1.5 shadow-2xs">
             <div className="flex items-center justify-between gap-2">
-              <p className="font-bold text-slate-900 text-xs break-words">
+              <p className="font-bold text-slate-900 text-[13px] sm:text-[16px] leading-snug break-words">
                 {alt.courseName}
               </p>
-              <span className="text-[10px] font-semibold bg-blue-50 text-[#1e3a5f] px-2.5 py-0.5 rounded-full shrink-0 border border-blue-200">
+              <span className="text-[13px] font-semibold bg-blue-50 text-[#1e3a5f] px-2.5 py-0.5 rounded-full shrink-0 border border-blue-300">
                 {alt.credits} CR
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {alt.bestMatchDetails?.semester != null && (
-                <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[10px] font-medium border border-slate-200">
+                <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[12px] font-medium border border-slate-400">
                   Sem {alt.bestMatchDetails.semester}
-                </span>
-              )}
-              {alt.score != null && (
-                <span className="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[10px] font-medium border border-slate-200">
-                  Score {alt.score}
                 </span>
               )}
             </div>
             {alt.reason && (
-              <p className="text-[11px] text-slate-700 font-medium leading-snug">{alt.reason}</p>
+              <p className="text-[13px] text-slate-600 font-semibold leading-snug">{alt.reason}</p>
             )}
           </div>
         </div>
@@ -588,7 +583,7 @@ const ReadOnlyClashCard: React.FC<{
           <button
             type="button"
             onClick={onToggle}
-            className="w-full flex items-center justify-between text-xs bg-white border border-rose-200 text-rose-900 px-3 py-2 rounded-xl font-semibold hover:bg-rose-50/50 transition-colors shadow-2xs"
+            className="w-full flex items-center justify-between text-sm bg-white border border-rose-300 text-rose-900 px-3 py-2 rounded-xl font-semibold hover:bg-rose-50/50 transition-colors shadow-2xs"
           >
             <span>
               {isExpanded ? "Hide" : "View"} clash details ({clashArray.length})
@@ -597,13 +592,13 @@ const ReadOnlyClashCard: React.FC<{
           </button>
 
           {isExpanded && (
-            <div className="mt-2 p-2.5 bg-white border border-rose-200 rounded-xl text-xs space-y-1 text-slate-800 shadow-2xs">
+            <div className="mt-2 p-2.5 bg-white border border-rose-300 rounded-xl text-sm space-y-1 text-slate-800 shadow-2xs">
               <p className="font-bold text-rose-950">
                 Conflicting with: {(course as any).clashRecord?.clashesWith ?? "—"}
               </p>
               {clashArray.map((c: any, i: number) => (
-                <div key={i} className="flex items-center gap-1.5 text-slate-800 font-semibold text-[11px]">
-                  <Clock size={11} className="text-rose-500" />
+                <div key={i} className="flex items-center gap-1.5 text-slate-800 font-semibold text-[13px]">
+                  <Clock size={13} className="text-rose-500" />
                   <span className="break-words">
                     {c.day} {c.startTime && c.endTime ? `${c.startTime}–${c.endTime}` : c.time}
                     {c.venue ? ` (${c.venue})` : ""}

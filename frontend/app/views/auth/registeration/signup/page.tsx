@@ -112,10 +112,10 @@ export default function SignupPage() {
     try {
       // Prepare signup credentials (we don't send confirmPassword to backend)
       const credentials: SignupCredentials = {
-        sapid: sapId,
-        password: password,
-        name: name,
-        email: email,
+        sapid: sapId.trim(),
+        password: password.trim(),
+        name: name.trim(),
+        email: email.trim(),
         role: role,
         ...(department && { department }),
         ...(contactNumber && { contactNumber }),

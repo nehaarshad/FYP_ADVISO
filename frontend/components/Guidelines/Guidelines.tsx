@@ -149,79 +149,11 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
   };
 
   const renderGuidelineContent = (guideline: any) => {
-    if (guideline.renderType === "table" && guideline.tableData) {
-      return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
-          {guideline.tableData.map((row: any, i: number) => (
-            <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-              <p className="text-[10px] font-bold text-slate-400 ">{row.category}</p>
-              <p className="text-lg font-bold text-[#1e3a5f]">{row.credits} Credits</p>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    if (guideline.renderType === "list" && guideline.items) {
-      return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {guideline.items.map((item: string, i: number) => (
-            <div key={i} className="flex items-start gap-3 text-xs font-bold text-slate-600 bg-slate-50/50 p-3 rounded-xl">
-              <CheckCircle2 size={14} className="text-green-500 shrink-0 mt-0.5" />
-              <span className="break-words">{item}</span>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    if (guideline.renderType === "policy") {
-      return (
-        <div className="space-y-5 text-slate-600 border-t border-slate-100 pt-5">
-          {guideline.enrollmentLimits && (
-            <div>
-              <h4 className="text-[10px] font-bold text-[#1e3a5f]  mb-3 tracking-widest">Enrollment Limits:</h4>
-              <div className="text-xs leading-relaxed space-y-2">
-                {guideline.enrollmentLimits.map((row: any, i: number) => (
-                  <div key={i} className="flex justify-between p-2 border-b border-slate-50">
-                    <span>{row.label}</span>
-                    <span className="font-bold">{row.credits}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {guideline.requiredProcessText && (
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <h4 className="text-[10px] font-bold text-[#1e3a5f]  mb-2 tracking-widest flex items-center gap-2">
-                <FileStack size={14} /> Required Process:
-              </h4>
-              <p className="text-xs leading-relaxed">{guideline.requiredProcessText}</p>
-            </div>
-          )}
-        </div>
-      );
-    }
+    
     const rawText = guideline.description || guideline.content || "";
     const parsed = parseGuidelineDescription(rawText);
-    if (parsed.type === "empty") return null;
-    if (parsed.type === "numbered") {
-      return (
-        <ol className="list-decimal pl-5 text-slate-600 text-sm leading-7 space-y-1">
-          {parsed.items.map((item: string, index: number) => (
-            <li key={index} className="pl-1">{item}</li>
-          ))}
-        </ol>
-      );
-    }
-    if (parsed.type === "bullet") {
-      return (
-        <ul className="list-disc pl-5 text-slate-600 text-sm leading-7 space-y-1">
-          {parsed.items.map((item: string, index: number) => (
-            <li key={index} className="pl-1">{item}</li>
-          ))}
-        </ul>
-      );
-    }
-    return <p className="text-slate-600 text-sm leading-7 whitespace-pre-line">{parsed.items[0]}</p>;
+  
+    return <p className="text-slate-600 text-[17px] leading-7 whitespace-pre-line">{parsed.items[0]}</p>;
   };
 
   const renderContent = () => (
@@ -238,15 +170,15 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
               <button
                 onClick={handlePrevVideo}
                 title="Previous Video"
-                className="absolute -left-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-l-full flex items-center justify-center shadow-xl border-y border-l border-white/20 transition-all active:scale-90"
+                className="absolute -left-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-l-full flex items-center justify-center shadow-xl border-y border-l border-white/40 transition-all active:scale-90"
               >
                 <ChevronLeft size={30} className="-ml-0.5" />
               </button>
             )}
 
             {/* Video Card */}
-            <div className="bg-[#1e3a5f] rounded-[2rem] p-5 md:p-6 flex flex-col md:flex-row items-center gap-6 shadow-xl w-full border border-slate-700/50 relative z-10">
-              <div className="w-full md:w-[280px] h-[160px] bg-black rounded-2xl overflow-hidden shrink-0 border border-white/10">
+            <div className="bg-[#1e3a5f] rounded-[2rem] p-5 md:p-6 flex flex-col md:flex-row items-center gap-6 shadow-xl w-full border border-white/40 relative z-10">
+              <div className="w-full md:w-[280px] h-[160px] bg-black rounded-2xl overflow-hidden shrink-0 border border-white/60">
                 {activeVideo.videoUrl ? (
                   <VideoPlayer 
                     videoUrl={activeVideo.videoUrl} 
@@ -263,10 +195,10 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
               </div>
 
               <div className="flex-1 text-white text-center md:text-left">
-                <h3 className="text-base md:text-lg font-bold mb-2 leading-snug">
+                <h3 className="text-lg md:text-xl font-bold mb-2 leading-snug">
                   {activeVideo.title}
                 </h3>
-                <p className="text-white/70 text-xs md:text-sm leading-relaxed line-clamp-3">
+                <p className="text-white/70 text-sm md:text-base leading-relaxed line-clamp-3">
                   {activeVideo.desc}
                 </p>
               </div>
@@ -277,7 +209,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
               <button
                 onClick={handleNextVideo}
                 title="Next Video"
-                className="absolute -right-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-r-full flex items-center justify-center shadow-xl border-y border-r border-white/20 transition-all active:scale-90"
+                className="absolute -right-7 top-1/2 -translate-y-1/2 z-30 w-8 h-16 bg-[#1e3a5f] text-[#FDB813] hover:bg-[#152a45] rounded-r-full flex items-center justify-center shadow-xl border-y border-r border-white/40 transition-all active:scale-90"
               >
                 <ChevronRight size={30} className="-mr-0.5" />
               </button>
@@ -292,10 +224,10 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
                 <button
                   key={idx}
                   onClick={() => setCurrentVideo(idx)}
-                  className={`h-2 rounded-full transition-all ${
+                  className={`h-3 w-3 rounded-full transition-all ${
                     currentVideo === idx
                       ? "w-6 bg-[#1e3a5f]"
-                      : "w-2 bg-slate-300 hover:bg-slate-400"
+                      : "w-2 bg-slate-400 hover:bg-slate-400"
                   }`}
                   title={`Go to video ${idx + 1}`}
                 />
@@ -307,20 +239,18 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
 
       {/* WIDER GUIDELINES LIST SECTION */}
       {visibleGuidelines.length === 0 ? (
-        <div className="text-center py-12 text-slate-400 bg-white rounded-2xl border border-slate-100 shadow-sm w-full max-w-5xl">
+        <div className="text-center py-12 text-slate-600 bg-white rounded-2xl border border-slate-300 shadow-sm w-full max-w-5xl">
           No guidelines found.
         </div>
       ) : (
-        <div className="space-y-3 w-full max-w-5xl">
+        <div className="space-y-4 w-full max-w-5xl">
           {visibleGuidelines.map((guideline: any) => (
-            <div key={guideline.id} className="border border-slate-200 bg-white rounded-xl overflow-hidden shadow-sm">
-              <button onClick={() => setActiveSection(activeSection === String(guideline.id) ? null : String(guideline.id))} className="w-full flex items-center justify-between p-4 text-left">
-                <h3 className="font-bold text-[#1e3a5f] text-sm">{guideline.title}</h3>
-                <ChevronDown size={20} className={`transition-transform ${activeSection === String(guideline.id) ? "rotate-180" : ""}`} />
-              </button>
-              {activeSection === String(guideline.id) && (
-                <div className="px-4 pb-4 border-t border-slate-100 pt-4">{renderGuidelineContent(guideline)}</div>
-              )}
+            <div key={guideline.id} className="border border-slate-300/80 bg-white rounded-xl overflow-hidden shadow-sm">
+              <button onClick={() => setActiveSection(activeSection === String(guideline.id) ? null : String(guideline.id))} className="w-full flex items-center justify-between p-6 text-left">
+                <h3 className="font-bold text-[#1e3a5f] text-[18px]">{guideline.title}</h3>
+                </button>
+              <div className="px-7 pb-4 pt-0">{renderGuidelineContent(guideline)}</div>
+              
             </div>
           ))}
         </div>
@@ -356,7 +286,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
                   <h2 className="text-2xl font-bold text-[#1e3a5f]">
                     Degree Guidelines
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-sm text-slate-600 mt-1">
                     Manage academic guidelines and requirements
                   </p>
                 </div>
@@ -365,13 +295,13 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
               <div className="flex items-center gap-3">
                 <button 
                   onClick={() => console.log("Add Guideline clicked")}
-                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[12px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
                 >
                   <Plus size={16} /> Add Guideline
                 </button>
                 <button 
                   onClick={() => console.log("Upload Video clicked")}
-                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
+                  className="flex items-center justify-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[12px] font-bold  tracking-widest shadow-md active:scale-95 transition-all hover:bg-amber-500"
                 >
                   <Upload size={16} /> Upload Video
                 </button>
@@ -379,10 +309,10 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
             </div>
 
             {/* Filter Section (Admin) */}
-            <div className="mb-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+            <div className="mb-6 p-4 bg-slate-100 rounded-2xl border border-slate-300">
               <div className="flex items-center gap-2 mb-3">
                 <Filter size={16} className="text-[#1e3a5f]" />
-                <h3 className="text-xs font-bold text-[#1e3a5f]  tracking-wider">
+                <h3 className="text-sm font-bold text-[#1e3a5f]  tracking-wider">
                   Filter Guidelines
                 </h3>
               </div>
@@ -394,12 +324,12 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
                     placeholder="Search guidelines..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+                    className="w-full pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
                   />
                 </div>
                 <select
                   title="Filter Program"
-                  className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
+                  className="p-2 bg-white border border-slate-300 rounded-xl text-[12px] focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
                 >
                   <option>All Programs</option>
                 </select>
@@ -408,9 +338,9 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
 
             {/* Content Area */}
             {(isVideosLoading || profileLoading || guidelinesLoading) ? (
-              <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-                <Loader2 className="animate-spin mb-4 text-[#1e3a5f]" size={32} />
-                <p className="text-sm font-bold">Loading...</p>
+              <div className="flex flex-col items-center justify-center py-20 text-slate-600">
+                <Loader2 className="animate-spin mb-4 text-[#1e3a5f]" size={35} />
+                <p className="text-medium font-bold">Loading...</p>
               </div>
             ) : guidelinesError ? (
               <div className="text-center py-12 text-red-500 font-bold">{guidelinesError}</div>
@@ -431,7 +361,7 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
                   <h2 className="text-2xl font-bold text-[#1e3a5f]">
                     Degree Guidelines
                   </h2>
-                  <p className="text-xs text-slate-500 font-medium mt-1">
+                  <p className="text-sm text-slate-600 font-medium mt-1">
                     {isStudent ? programName : `Advisor View - ${programName}`}
                   </p>
                 </div>
@@ -440,9 +370,9 @@ export default function Guidelines({ onBack }: GuidelinesProps) {
 
             {/* Content Area */}
             {(isVideosLoading || profileLoading || guidelinesLoading) ? (
-              <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-                <Loader2 className="animate-spin mb-4 text-[#1e3a5f]" size={32} />
-                <p className="text-sm font-bold">Loading...</p>
+              <div className="flex flex-col items-center justify-center py-20 text-slate-600">
+                <Loader2 className="animate-spin mb-4 text-[#1e3a5f]" size={35} />
+                <p className="text-medium font-bold">Loading...</p>
               </div>
             ) : guidelinesError ? (
               <div className="text-center py-12 text-red-500 font-bold">{guidelinesError}</div>

@@ -298,15 +298,15 @@ export const Header: React.FC<{
       {/* Right controls matching Advisor layout with md:mr-20 */}
       <div className="flex items-center gap-3 self-start md:self-auto md:mr-20">
         {onViewChange && (
-          <div className="inline-flex p-1 bg-white rounded-xl border border-slate-200 shadow-sm">
+          <div className="inline-flex p-1 bg-white rounded-xl border border-slate-400 shadow-sm">
             {(['grid', 'list'] as const).map((v) => (
               <button
                 key={v}
                 onClick={() => onViewChange(v)}
-                className={`px-4 py-2 text-[10px] md:text-[12px] font-bold  tracking-wider rounded-lg transition-all ${
+                className={`px-4 py-2 text-[12px] md:text-[14px] font-bold  tracking-wider rounded-lg transition-all ${
                   view === v 
                     ? 'bg-[#1e3a5f] text-white shadow-sm' 
-                    : 'text-slate-500 hover:text-[#1e3a5f]'
+                    : 'text-slate-600 hover:text-[#1e3a5f]'
                 }`}
               >
                 {v}

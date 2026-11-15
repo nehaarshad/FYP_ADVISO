@@ -230,7 +230,7 @@ const StudentChat: React.FC<
     return (
       <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-[2rem] items-center justify-center">
         <Loader2
-          size={25}
+          size={28}
           className="animate-spin text-[#1e3a5f]"
         />
       </div>
@@ -239,7 +239,7 @@ const StudentChat: React.FC<
 
   if (error) {
     return (
-      <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-xl items-center justify-center p-6">
+      <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white/10 rounded-[2rem] border border-slate-200 shadow-xl items-center justify-center p-6">
 
         <p className="text-sm text-red-500 text-center">
           {error}
@@ -258,7 +258,7 @@ const StudentChat: React.FC<
 
 
   return (
-    <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-white rounded-t-[2rem] md:rounded-[2rem] border border-slate-100 shadow-xl overflow-hidden">
+    <div className="flex flex-col h-[85vh] md:h-[80vh] w-full max-w-3xl mx-auto bg-gray-200 rounded-t-[2rem] md:rounded-[2rem] border border-slate-300 shadow-xl overflow-hidden">
 
       {/* HEADER */}
       <div className="bg-[#1e3a5f] p-4 md:p-5 flex items-center justify-between text-white shrink-0">
@@ -276,7 +276,7 @@ const StudentChat: React.FC<
 
             <div className="h-10 w-10 md:h-12 md:w-12 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
               <User
-                size={22}
+                size={28}
                 className="text-blue-100"
               />
             </div>
@@ -287,33 +287,29 @@ const StudentChat: React.FC<
 
           <div>
 
-            <h3 className="font-bold  tracking-tight text-[12px] md:text-[14px]">
+            <h3 className="font-bold  tracking-light text-lg md:text-xl">
               INBOX
             </h3>
 
-            <p className="text-[8px] md:text-[10px] font-bold text-blue-300  tracking-widest leading-none">
+            <p className="text-[10px] md:text-[13px] font-semibold text-blue-300  tracking-widest leading-none">
               Academic Advisor
             </p>
 
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 pr-3">
 
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-[9px] font-bold  text-blue-200">
+            <span className="text-[14px] font-bold  text-blue-200">
               Status
             </span>
 
-            <span className="text-[8px] font-bold text-green-400 ">
-              Connected
+            <span className="text-[13px] font-bold text-green-400 ">
+              Online
             </span>
           </div>
 
-          <HelpCircle
-            size={20}
-            className="text-amber-400 opacity-80"
-          />
 
         </div>
       </div>
@@ -367,16 +363,16 @@ const StudentChat: React.FC<
                 <div className="max-w-[85%] md:max-w-[75%] relative">
 
                   <div
-                    className={`px-4 md:px-5 py-3 rounded-[1.5rem] text-[12px] md:text-[13px] font-medium shadow-sm flex flex-col ${
+                    className={`px-4 md:px-5 py-3 rounded-[1.5rem] text-[13px] md:text-[14px] font-medium shadow-sm flex flex-col ${
                       isMine
                         ? "bg-[#1e3a5f] text-white rounded-tr-none"
-                        : "bg-white text-slate-700 border border-slate-100 rounded-tl-none border-l-4 border-l-amber-400"
+                        : "bg-white text-slate-700 border border-slate-300 rounded-tl-none border-l-4 border-l-amber-400"
                     }`}
                   >
 
 
 <span
-  className={`text-[8px] font-bold  opacity-60 mt-2 self-start text-[#1e3a5f]`}
+  className={`text-[13px] font-bold  opacity-80 mt-2 self-start text-[#1e3a5f]`}
 >
   {isMine
     ? null
@@ -400,8 +396,8 @@ const StudentChat: React.FC<
                         rel="noopener noreferrer"
                         className={`flex items-center gap-3 mt-2 p-2 rounded-xl border ${
                           isMine
-                            ? "border-white/20 bg-white/10"
-                            : "border-slate-100 bg-slate-50"
+                            ? "border-white/60 bg-white/10"
+                            : "border-slate-300 bg-slate-100"
                         }`}
                       >
 
@@ -409,24 +405,18 @@ const StudentChat: React.FC<
                           size={18}
                         />
 
-                        <span className="text-[10px] font-bold truncate">
+                        <span className="text-[13px] font-bold truncate">
                           Attachment
                         </span>
-
-                        <Download
-                          size={14}
-                          className="ml-auto"
-                        />
-
                       </a>
                     )}
 
                     {/* TIME */}
                     <span
-                      className={`text-[8px] font-bold  mt-2 self-end opacity-60 ${
+                      className={`text-[12px] font-bold  mt-2 self-end opacity-80 ${
                         isMine
-                          ? "text-blue-100"
-                          : "text-slate-400"
+                          ? "text-blue-200"
+                          : "text-slate-800"
                       }`}
                     >
                       {formatTime(
@@ -447,7 +437,7 @@ const StudentChat: React.FC<
         {typingUserId && (
           <div className="flex justify-start">
 
-            <div className="bg-white border border-slate-100 rounded-2xl rounded-tl-none px-4 py-3">
+            <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-none px-4 py-3">
 
               <div className="flex gap-1">
 
@@ -467,7 +457,7 @@ const StudentChat: React.FC<
       </div>
 
       {/* INPUT */}
-      <div className="p-4 md:p-6 bg-white border-t border-slate-100 shrink-0">
+      <div className="p-4 md:p-6 bg-white border-t border-slate-300 shrink-0">
 
         <form
           onSubmit={
@@ -477,15 +467,15 @@ const StudentChat: React.FC<
         >
 
           {/* FILE */}
-          <label className="cursor-pointer text-slate-400 hover:text-[#1e3a5f]">
+          <label className="cursor-pointer bg-slate-300 p-2 rounded-full text-slate-500 hover:text-[#1e3a5f]">
 
             {uploading ? (
               <Loader2
-                size={19}
+                size={21}
                 className="animate-spin"
               />
             ) : (
-              <Paperclip size={19} />
+              <Paperclip size={20} />
             )}
 
             <input
@@ -511,7 +501,7 @@ const StudentChat: React.FC<
                 )
               }
               placeholder="Type your message here..."
-              className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3 px-5 text-[12px] md:text-[13px] font-bold text-[#1e3a5f] outline-none focus:border-amber-400 focus:bg-white focus:ring-4 focus:ring-amber-400/10 transition-all placeholder:text-slate-300"
+              className="w-full bg-slate-100 border border-slate-300 rounded-2xl py-3 px-5 text-[13px] md:text-[14px] font-semibold text-[#1e3a5f] outline-none focus:border-amber-400 focus:bg-white focus:ring-4 focus:ring-amber-400/10 transition-all placeholder:text-slate-400"
             />
 
           </div>
@@ -525,12 +515,12 @@ const StudentChat: React.FC<
             }
             className="h-10 w-10 md:h-12 md:w-12 bg-amber-500 hover:bg-[#1e3a5f] text-white rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20 transition-all active:scale-90 disabled:opacity-30 disabled:shadow-none shrink-0"
           >
-            <Send size={20} />
+            <Send size={22} />
           </button>
 
         </form>
 
-        <p className="text-[8px] text-center text-slate-400 mt-3  font-bold tracking-widest">
+        <p className="text-[12px] text-center text-slate-500 mt-3  font-extrabold tracking-lighter">
           Academic Office Chat
         </p>
 

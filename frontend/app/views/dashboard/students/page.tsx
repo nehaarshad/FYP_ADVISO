@@ -278,78 +278,81 @@ export default function StudentDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
                   <StatCard 
                     label="Batch" 
+                    color="bg-[#1e3a5f]/30 text-[#1e3a5f]"
                     value={`${studentData.batch} ${studentData.batchYear}`}
                     icon={<GraduationCap size={25}/>} 
                   />
 
                   <StatCard 
                     label="Status" 
+                    color="bg-green-200 text-green-600"
                     value={`${studentData.status}`} 
                     icon={<CheckCircle2 size={25}/>} 
                   />
                   
                   <StatCard 
                     label="Current CGPA" 
+                    color="bg-red-200 text-red-600"
                     value={studentData.cgpa || "0.00"} 
                     icon={<Target size={25}/>} 
                   />
                   
                   <StatCard 
                     label="Upcoming Meeting" 
-                    value={(
-                      <div className="flex flex-col gap-1.5 w-full overflow-hidden">
-                        {upcomingMeeting ? (
-                          <>
-                            <div className="flex items-center justify-between gap-1">
-                              <div className="flex items-center gap-1.5 text-xs font-bold text-[#1e3a5f] truncate">
-                                <Calendar size={14} className="text-amber-600 shrink-0" />
-                                <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
-                              </div>
-                              <span className={`text-[10px] px-2 py-0.5 rounded font-bold capitalize shrink-0 ${
-                                upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-100 text-blue-800' :
-                                upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-100 text-emerald-800' :
-                                upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-100 text-red-800' :
-                                'bg-amber-100 text-amber-900'
-                              }`}>
-                                {upcomingMeeting.status || 'Scheduled'}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 truncate">
-                              <Clock size={13} className="text-amber-600 shrink-0" />
-                              <span className="truncate">
-                                {upcomingMeeting.day ? `${upcomingMeeting.day} ` : ''} 
-                                {upcomingMeeting.startTime ? `(${formatTimeTo12Hour(upcomingMeeting.startTime)} - ${formatTimeTo12Hour(upcomingMeeting.endTime)})` : ''}
-                              </span>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex items-center gap-1.5 py-1">
-                            <Clock size={14} className="text-amber-600 shrink-0" />
-                            <span className="text-xs font-semibold text-slate-500">To be scheduled</span>
-                          </div>
-                        )}
-                      </div>
-                    )} 
+                    value={
+                                          <div className="flex flex-col gap-1 w-full overflow-hidden">
+                                            {upcomingMeeting ? (
+                                              <>
+                                                <div className="flex items-center justify-between gap-1">
+                                                  <div className="flex items-center gap-1.5 text-sm font-bold text-[#1e3a5f] truncate">
+                                                    <Calendar size={15} className="text-amber-500 shrink-0" />
+                                                    <span className="truncate">{upcomingMeeting.date || 'Date TBD'}</span>
+                                                  </div>
+                                                  <span className={`text-[13px] px-1.5 py-0.5 rounded  font-bold shrink-0 ${
+                                                    upcomingMeeting.status?.toLowerCase() === 'scheduled' ? 'bg-blue-50 text-blue-600' :
+                                                    upcomingMeeting.status?.toLowerCase() === 'completed' ? 'bg-emerald-50 text-emerald-600' :
+                                                    upcomingMeeting.status?.toLowerCase() === 'cancelled' ? 'bg-red-50 text-red-600' :
+                                                    'bg-amber-50 text-amber-600'
+                                                  }`}>
+                                                    {upcomingMeeting.status || 'Scheduled'}
+                                                  </span>
+                                                </div>
+                                                <div className="flex items-center gap-1.5 text-[13px] text-slate-600 truncate">
+                                                  <Clock size={15} className="text-amber-500 shrink-0" />
+                                                  <span className="truncate">
+                                                    {upcomingMeeting.day ? `${upcomingMeeting.day} ` : ''} 
+                                                    {upcomingMeeting.startTime ? `(${formatTimeTo12Hour(upcomingMeeting.startTime)} - ${formatTimeTo12Hour(upcomingMeeting.endTime)})` : ''}
+                                                  </span>
+                                                </div>
+                                              </>
+                                            ) : (
+                                              <div className="flex items-center gap-1.5 py-1">
+                                                <Clock size={15} className="text-amber-500 shrink-0" />
+                                                <span className="text-sm font-bold text-slate-600 tracking-wide">No active meeting</span>
+                                              </div>
+                                            )}
+                                          </div>
+                                        }
                     icon={<Clock size={25}/>} 
-                    color="text-orange-600"
+                    color="text-orange-600 bg-orange-100"
                   />
                 </div>
 
                 {/* DEGREE COMPLETION SECTION */}
-                <div className="bg-white p-8 md:p-10 rounded-[2.2rem] border border-slate-200/80 shadow-xs">
-                  <h3 className="text-sm md:text-base font-extrabold text-[#1e3a5f] mb-6 border-l-4 border-[#FDB813] pl-3">
+                <div className="bg-white p-8 md:p-10 rounded-[2.2rem] border border-slate-300 shadow-xs">
+                  <h3 className="text-[14px] md:text-[18px] font-extrabold text-[#1e3a5f] mb-6 border-l-6 border-[#FDB813] pl-3">
                     Degree Completion - {studentData.department}
                   </h3>
                   <div className="space-y-6">
                     <div className="flex justify-between items-end gap-3 flex-wrap">
-                      <span className="text-sm md:text-base font-semibold text-slate-700 truncate">
+                      <span className="text-[15px] md:text-[18px] font-semibold text-slate-700 truncate">
                         {studentData.completedCredits} of {studentData.totalCredits} credits completed
                       </span>
                       <span className="text-3xl md:text-4xl font-black text-[#1e3a5f] tracking-tight">
                         {Math.round(completionPercentage)}%
                       </span>
                     </div>
-                    <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden border border-slate-200/60 p-0.5">
+                    <div className="w-full h-4 bg-slate-300 rounded-full overflow-hidden border border-slate-400 p-0.5">
                       <motion.div 
                         initial={{ width: 0 }} 
                         animate={{ width: `${completionPercentage}%` }} 
@@ -427,27 +430,18 @@ export default function StudentDashboard() {
   );
 }
 
-// STATIC STAT CARD COMPONENT
-function StatCard({ icon, label, value, trend, color = "text-[#1e3a5f]" }: any) {
-  return (
-    <div className="bg-white rounded-[2.2rem] p-6 md:p-7 border border-slate-200/80 shadow-xs select-none flex flex-col justify-between min-h-[155px]">
-      <div className="flex items-center justify-between w-full">
-        <div className="w-12 h-12 bg-slate-100/80 rounded-2xl flex items-center justify-center text-[#1e3a5f] shrink-0">
-          {icon}
-        </div>
-        {trend && (
-          <span className="text-[11px] font-semibold text-slate-500 capitalize">{trend}</span>
-        )}
+function StatCard({ icon, label, value, color, textColor = "text-[#1e3a5f]" }: any) { 
+  return ( 
+    <div className="bg-white rounded-[1.5rem] p-6 shadow-sm flex flex-col justify-between min-h-[135px]"> 
+      <div className={`w-12 h-12 ${color} rounded-2xl flex items-center justify-center mb-2`}>{icon}</div> 
+      <div>
+        <p className="text-medium font-bold text-[#364b68] tracking-wide mb-1">
+  {label}
+</p>
+        <div className={`text-base md:text-lg font-bold ${textColor}`}>{value}</div> 
       </div>
-      
-      <div className="mt-3.5">
-        <p className="text-xs font-semibold text-slate-500 mb-1.5 truncate capitalize">{label}</p>
-        <div className={`text-base md:text-xl font-extrabold tracking-tight capitalize ${color}`}>
-          {value}
-        </div>
-      </div>
-    </div>
-  );
+    </div> 
+  ); 
 }
 
 // ACTION CARD COMPONENT
@@ -455,12 +449,12 @@ function ActionCard({ icon, label, onClick }: any) {
   return (
     <div 
       onClick={onClick} 
-      className="bg-white p-6 md:p-8 rounded-[2.2rem] border border-slate-200/80 shadow-xs flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#1e3a5f] hover:shadow-md transition-all group active:scale-95 outline-none focus:outline-none focus:ring-0 select-none min-h-[155px]"
+      className="bg-white p-6 md:p-8 rounded-[2.2rem] border border-slate-400 shadow-xs flex flex-col items-center justify-center gap-4 cursor-pointer hover:border-[#1e3a5f] hover:shadow-md transition-all group active:scale-95 outline-none focus:outline-none focus:ring-0 select-none min-h-[155px]"
     >
-      <div className="h-13 w-13 md:h-14 md:w-14 bg-slate-100/80 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#1e3a5f] group-hover:text-white transition-colors duration-300 shrink-0">
+      <div className="h-13 w-13 md:h-14 md:w-14 bg-slate-300 rounded-2xl flex items-center justify-center text-[#1e3a5f] group-hover:bg-[#1e3a5f] group-hover:text-white transition-colors duration-300 shrink-0">
         {icon}
       </div>
-      <p className="text-xs md:text-sm font-bold text-[#1e3a5f] text-center tracking-wide truncate w-full">
+      <p className="text-sm md:text-base font-bold text-[#1e3a5f] text-center tracking-wide truncate w-full">
         {label}
       </p>
     </div>

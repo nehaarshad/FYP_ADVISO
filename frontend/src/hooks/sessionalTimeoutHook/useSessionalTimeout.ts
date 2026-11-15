@@ -1,10 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { sessionManager } from '@/src/services/sessionManagement/sessionManager';
+import { useAuth } from '../authHook/useAuth';
+
 
 export const useSessionTimeout = (timeoutMinutes = 30) => {
   const router = useRouter();
   // Get the current URL path to check if the user is on a public page
+
+    const { logout } = useAuth();
+   const handleLogout = async () => {
+      try {
+        const currentUser = sessionManager.getCurrentUser<any>();
+  
+        if (currentUser?.id) {
+          await logout(currentUser.id);
+        } else {
+          sessionManager.destroySession();
+        }
+  
+        router.push("/views/auth/login");
+      } catch (error) {
+        console.error("Logout error:", error);
+        sessionManager.destroySession();
+        router.push("/views/auth/login");
+      }
+    };
   const pathname = usePathname(); 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -18,9 +41,10 @@ export const useSessionTimeout = (timeoutMinutes = 30) => {
     if (typeof window === 'undefined') return;
 
     // Function to clear local storage and redirect when the session expires
-    const logoutUser = () => {
+    const logoutUser = async () => {
       localStorage.removeItem('user');
       localStorage.removeItem('token');
+      await handleLogout();
       router.push('/session-expired');
     };
 

@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { TimetableEntry, WORK_DAYS, timeToMinutes, formatTime } from './types';
 
@@ -35,73 +34,78 @@ export const TimetableGrid: React.FC<Props> = ({ entries, onEntryClick }) => {
   }, [entries]);
 
   const pixelsPerMinute = 1.2;
-  const totalHeight = (latest - earliest) * pixelsPerMinute;
+  // Add extra height for top and bottom padding
+  const totalHeight = (latest - earliest) * pixelsPerMinute + 40; 
 
   return (
-    <div className="overflow-x-auto bg-white border border-slate-100 rounded-3xl shadow-sm">
+    <div className="overflow-x-auto bg-white rounded-3xl p-2 shadow-sm">
       <div className="min-w-[900px]">
         {/* Header row */}
-        <div className="grid grid-cols-[80px_repeat(6,1fr)] border-b border-slate-100 bg-slate-50/60">
-          <div className="p-3 text-[11px] font-bold text-slate-400  tracking-widest text-center">
+        <div className="grid grid-cols-[80px_repeat(6,1fr)] border-b border-slate-300 bg-slate-200 rounded-t-3xl overflow-hidden">
+          <div className="p-3 text-[15px] font-extrabold text-slate-900 tracking-widest text-center">
             Time
           </div>
           {WORK_DAYS.map((day) => (
             <div
               key={day}
-              className="p-3 text-[11px] font-bold text-[#1e3a5f]  tracking-widest text-center border-l border-slate-100"
+              className="p-3 text-[13px] font-bold text-[#1e3a5f] tracking-widest text-center border-l border-slate-300"
             >
               {day}
             </div>
           ))}
         </div>
 
-        {/* Body */}
         <div className="grid grid-cols-[80px_repeat(6,1fr)]">
-          {/* Hour column */}
-          <div className="relative" style={{ height: totalHeight }}>
-            {hourMarkers.map((h) => (
-              <div
-                key={h}
-                className="absolute right-0 -translate-y-1/2 pr-3 text-[10px] font-bold text-slate-400"
-                style={{ top: (h * 60 - earliest) * pixelsPerMinute }}
-              >
-                {formatTime(`${String(h).padStart(2, '0')}:00`)}
-              </div>
-            ))}
+          <div className="relative pt-6 pb-6" style={{ height: totalHeight }}>
+            {hourMarkers.map((h) => {
+              const top = (h * 60 - earliest) * pixelsPerMinute;
+              return (
+                <div
+                  key={h}
+                  className="absolute right-0 -translate-y-1/2 pr-3 text-[13px] font-bold text-slate-600"
+                  style={{ top: top + 20 }}
+                >
+                  {formatTime(`${String(h).padStart(2, '0')}:00`)}
+                </div>
+              );
+            })}
           </div>
 
           {/* Day columns */}
           {WORK_DAYS.map((day) => (
             <div
               key={day}
-              className="relative border-l border-slate-100"
+              className="relative border-l border-r border-slate-300 pt-6 pb-6"
               style={{ height: totalHeight }}
             >
               {/* hour gridlines */}
-              {hourMarkers.map((h) => (
-                <div
-                  key={h}
-                  className="absolute left-0 right-0 border-t border-slate-100/60"
-                  style={{ top: (h * 60 - earliest) * pixelsPerMinute }}
-                />
-              ))}
+              {hourMarkers.map((h) => {
+                const top = (h * 60 - earliest) * pixelsPerMinute;
+                return (
+                  <div
+                    key={h}
+                    className="absolute left-0 right-0 border-t border-slate-300"
+                    style={{ top: top + 20 }}
+                  />
+                );
+              })}
 
               {/* entries */}
               {byDay[day].map((e) => {
-                const top = (timeToMinutes(e.startTime) - earliest) * pixelsPerMinute;
+                const top = (timeToMinutes(e.startTime) - earliest) * pixelsPerMinute + 20;
                 const height = (timeToMinutes(e.endTime) - timeToMinutes(e.startTime)) * pixelsPerMinute;
                 return (
                   <button
                     key={e.id}
                     onClick={() => onEntryClick?.(e)}
-                    className="absolute left-1 right-1 rounded-xl bg-[#1e3a5f] hover:bg-[#15304a] text-white text-left p-2.5 shadow-sm hover:shadow-md transition-all overflow-hidden border border-white/10 group"
+                    className="absolute left-1 right-1 rounded-xl bg-[#1e3a5f] hover:bg-[#15304a] text-white text-left p-2.5 shadow-sm hover:shadow-md transition-all overflow-hidden border border-white/10 group z-10"
                     style={{ top, height }}
                     title={`${e.course}\n${formatTime(e.startTime)} — ${formatTime(e.endTime)}`}
                   >
-                    <div className="text-xs font-bold  tracking-tight truncate text-white group-hover:text-[#FDB813] transition-colors">
+                    <div className="text-xs font-bold tracking-tight truncate text-white group-hover:text-[#FDB813] transition-colors">
                       {e.course}
                     </div>
-                    <div className="text-[10px] font-bold text-white/80  tracking-wider mt-0.5 truncate">
+                    <div className="text-[10px] font-bold text-white/80 tracking-wider mt-0.5 truncate">
                       {formatTime(e.startTime)}
                     </div>
                   </button>

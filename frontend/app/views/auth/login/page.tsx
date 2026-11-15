@@ -42,7 +42,9 @@ export default function LoginPage() {
       const user = authRepository.getCurrentUser();
       console.log("Already authenticated user:", user);
       if (user && user.data) {
-        redirectBasedOnRole(user.data.role, router);
+        setTimeout(() => {
+          redirectBasedOnRole(user.data!.role, router);
+        }, 100);
       }
     }
   }, [router]);
@@ -70,15 +72,16 @@ export default function LoginPage() {
     try {
       // Prepare credentials
       const credentials: LoginCredentials = {
-        sapid: sapId,
-        password: password
+        sapid: sapId.trim(),
+        password: password.trim()
       };
 
       // Call login API through repository
       const user = await authRepository.login(credentials);
 
-      // Redirect based on user role
-      redirectBasedOnRole(user.data!.role, router);
+     setTimeout(() => {
+        redirectBasedOnRole(user.data!.role, router);
+      }, 100);
 
     } catch (err: any) {
       // Handle error
