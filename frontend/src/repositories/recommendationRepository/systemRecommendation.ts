@@ -45,9 +45,9 @@ class RecommendationRepository extends BaseApiService {
       throw error;
     }
   }
-  async getAdvisoryLogs(advisorId: number): Promise<ApiResponse<any>> {
+  async getAdvisoryLogs(advisorId: number,role:string): Promise<ApiResponse<any>> {
     try {
-      const url = AppApis.getAdvisoryLogsUrl.replace(':advisorId', advisorId.toString());
+      const url = AppApis.getAdvisoryLogsUrl.replace(':advisorId', advisorId.toString()).replace(':role', role);
       console.log("getting advisory log, ", url,)
       const response = await this.getApiResponse<any>(url);
       console.log (response.data)

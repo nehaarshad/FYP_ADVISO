@@ -529,7 +529,7 @@ console.log('='.repeat(80) + '\n');
 
  const getAdvisoryLogs = async (req, res) => {
     try {
-        const { advisorId } = req.params;
+        const { advisorId, role } = req.params;
  
         if (!advisorId) {
             return res.status(400).json({ success: false, message: 'advisorId is required' });
@@ -540,12 +540,18 @@ console.log('='.repeat(80) + '\n');
                  return res.status(400).json({ success: false, message: 'Invalid advisorId provided' });
             }
 
-            const where = {
-            [Op.or]: [
-                { advisorId: id },
-                { studentId: id },
-            ],
-            }; 
+            let where = {};
+        
+        if (role === 'advisor') {
+            where = { advisorId: id };
+        } else if (role === 'student') {
+            where = { studentId: id };
+        } else {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Role is required. Must be either "student" or "advisor".' 
+            });
+        } 
  
         const data = await AdvisorFinalRecommendation.findAll({
             where,

@@ -321,13 +321,14 @@ export const useRecommendations = () => {
   );
 
   const advisorId = userProfile?.profile?.id ?? null;
+  const role = userProfile?.role ?? 'advisor';
 
   const fetchAdvisoryLogs = useCallback(async () => {
     if (!advisorId) return;
     console.log('[fetchAdvisoryLogs] called, advisorId =', userProfile?.profile?.id);
     patch({ isLoadingLogs: true, logsError: null });
     try {
-      const response = await recommendationRepository.getAdvisoryLogs(advisorId);
+      const response = await recommendationRepository.getAdvisoryLogs(advisorId, role);
       if (response.success && response.data) {
         patch({ advisoryLogs: response.data, logsError: null ,isFinalizing: false});
       } else {

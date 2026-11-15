@@ -77,7 +77,7 @@ export default class APIs{
         // recommendCourses
        static recommendSessionalCoursesUrl = `${APIs.BASE_URL}/suggestCourses/:id`;
        static finalizeSessionalCourseRecommendationUrl = `${APIs.BASE_URL}/finalize`;
-       static getAdvisoryLogsUrl = `${APIs.BASE_URL}/advisor/:advisorId`;
+       static getAdvisoryLogsUrl = `${APIs.BASE_URL}/advisor/:advisorId/:role`;
        static getRecommendationByIdUrl = `${APIs.BASE_URL}/getRecommendation/:id`;
        static getStudentRecommendationsUrl = `${APIs.BASE_URL}/student/:studentId`;
 
