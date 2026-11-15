@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // components/navbars/route.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, LogOut } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -27,10 +28,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setActiveTab,
 }) => {
   const router = useRouter();
-  const [userInitial] = useState<string>("A");
+  const [userInitial,setUserInitial] = useState<string>("U");
 
   const { logout } = useAuth();
   const { getDisplayName } = useUserProfile();
+
+  useEffect(() => {
+    const displayName = getDisplayName();
+    if (displayName) {
+      setUserInitial(displayName.charAt(0).toUpperCase());
+    }
+  }, [getDisplayName]);
 
   const navItems = NAV_CONFIG[userRole] ?? [];
 
