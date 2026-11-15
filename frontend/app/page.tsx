@@ -35,7 +35,7 @@ export default function LandingPage() {
 
   return (
     <>
-       {/* Yahan id="home" add ki hai */}
+       {/* home id added here */}
        <div id="home" className="min-h-screen bg-white font-sans selection:bg-[#FDB813]/30 overflow-x-hidden scroll-smooth">
       
       {/* ---- HERO SECTION (Added id="home") ----*/}
@@ -92,12 +92,12 @@ export default function LandingPage() {
       <section id="features" className="py-32 px-6 md:px-12 text-center bg-white">
             <OutlinedTextHeading text="Features" hasDot={true} />
             <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
-              <SmallFeature Icon={CheckCircle2} title="Smart Course Advising" desc="Automatically suggests eligible courses along with specific reasons." />
-              <SmallFeature Icon={Calendar} title="Meeting Scheduling" desc="Schedule and track advisory sessions easily." />
-              <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
+              <SmallFeature Icon={CheckCircle2} title="Smart Course Advising" desc="Automatically suggests eligible courses along with the specific reasons." />
+              <SmallFeature Icon={Calendar} title="Meeting Scheduling" desc="Schedule and track advisory sessions easily, Smarter advising starts here." />
+              <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Keep student records, transcripts, and decisions secure in one place." />
               <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
               <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
-              <SmallFeature Icon={MessageSquare} title="Faculty Hub & Real-Time Chat" desc="Collaborate with peers on the faculty board and instantly message students or advisors for quick guidance." />
+              <SmallFeature Icon={MessageSquare} title="Faculty Hub & Real-Time Chat" desc="Work with fellow faculty board members and message students or advisors instantly." />
             </div>
       </section>
     </div>
