@@ -33,7 +33,7 @@ export const useSessionTimeout = (timeoutMinutes = 30) => {
 
   useEffect(() => {
     // 1. Do not start the timer if the user is on a public page (Login, Signup, Expired, Landing)
-    if (pathname === '/views/auth/login' || pathname === '/views/auth/registeration/signup' || pathname === '/session-expired' || pathname === '/') {
+    if (pathname === '/views/auth/login' || pathname === '/views/auth/registeration/signup' || pathname === '/dashboard' || pathname === '/session-expired' || pathname === '/') {
       return;
     }
     
