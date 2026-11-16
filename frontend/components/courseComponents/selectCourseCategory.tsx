@@ -180,7 +180,7 @@ export const SearchableMultiSelectCategories: React.FC<SearchableMultiSelectCate
                       className="w-3 h-3 rounded-full flex-shrink-0"
                       style={{ backgroundColor: parsedColor }}
                     />
-                    <span className="font-medium text-slate-900">
+                    <span className="font-semibold text-[14px] text-slate-900">
                       {option.categoryName}
                     </span>
                   </div>
@@ -194,7 +194,7 @@ export const SearchableMultiSelectCategories: React.FC<SearchableMultiSelectCate
         </div>
       )}
 
-      <p className="text-[12px] text-slate-600 font-medium mt-1">
+      <p className="text-[14px] text-slate-700 font-semibold mt-1">
         Type to search and select multiple categories
       </p>
     </div>

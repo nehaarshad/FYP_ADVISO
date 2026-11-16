@@ -114,7 +114,7 @@ export const CourseCatalog = () => {
     
     if (categories.length === 0) {
       return (
-        <span className="text-xs font-bold  text-slate-900">
+        <span className="text-sm font-bold  text-slate-900">
           Uncategorized
         </span>
       );
@@ -125,7 +125,7 @@ export const CourseCatalog = () => {
         {categories.map((cat:any, index:any) => (
           <span 
             key={index}
-            className="px-2 py-0.5  text-slate-900 rounded text-xs font-bold  whitespace-nowrap"
+            className="px-2 py-0.5  text-slate-900 rounded text-sm font-bold  whitespace-nowrap"
             style={{
               backgroundColor: parseColorScheme(cat.colorScheme),
               color: '#000000'
@@ -174,9 +174,9 @@ export const CourseCatalog = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900  tracking-tighter">Course Catalog</h2>
+            <h2 className="text-3xl font-bold text-slate-900  tracking-tighter">Course Catalog</h2>
             <div className="h-1 w-12 bg-slate-900 mt-1"></div>
-            <p className="text-[13px] font-bold text-slate-600 mt-2">{courses.length} courses available</p>
+            <p className="text-[14px] font-bold text-slate-600 mt-2">{courses.length} courses available</p>
           </div>
           
           <div className="flex gap-2 w-full md:w-auto">
@@ -187,12 +187,12 @@ export const CourseCatalog = () => {
                 value={searchTerm}
                 onChange={handleSearch}
                 placeholder="SEARCH COURSES..." 
-                className="w-full pl-10 pr-4 py-3 bg-white border border-slate-300 text-[13px] font-bold text-slate-900 outline-none focus:border-slate-900 transition-all " 
+                className="w-full pl-10 pr-4 py-3 bg-white border border-slate-300 text-[14px] font-bold text-slate-900 outline-none focus:border-slate-900 transition-all " 
               />
             </div>
             <button 
               onClick={() => setShowUploadModal(true)}
-              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-[12px]  tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-[14px]  tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
             >
               <Upload size={16} /> Upload
             </button>
@@ -204,7 +204,7 @@ export const CourseCatalog = () => {
           <div className="flex flex-wrap gap-2 mb-6 pb-4 border-b border-slate-100">
             <button
               onClick={() => handleCategoryFilter('')}
-              className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold  transition-all truncate-[0.5rem] ${
+              className={`px-3 py-1.5 rounded-lg text-[14px] font-semibold  transition-all truncate-[0.5rem] ${
                 !selectedCategory ? 'bg-[#1e3a5f] text-white' : 'bg-slate-200 text-slate-900 hover:bg-slate-200'
               }`}
             >
@@ -214,7 +214,7 @@ export const CourseCatalog = () => {
               <button
                 key={cat}
                 onClick={() => handleCategoryFilter(cat)}
-                className={`px-3 py-1.5 rounded-lg text-[12px] font-semibold  transition-all truncate-[0.5rem] ${
+                className={`px-3 py-1.5 rounded-lg text-[14px] font-semibold  transition-all truncate-[0.5rem] ${
                   selectedCategory === cat ? 'bg-[#1e3a5f] text-white' : 'bg-slate-200 text-slate-900 hover:bg-slate-200'
                 }`}
               >
@@ -262,13 +262,13 @@ export const CourseCatalog = () => {
                     
                     return (
                       <tr key={course.id} className="hover:bg-slate-50 transition-colors group">
-                        <td className="p-4 text-[14px] font-bold text-slate-900 border-r border-slate-400 ">
+                        <td className="p-4 text-[15px] font-bold text-slate-900 border-r border-slate-400 ">
                           {courseData?.courseCode || '-----'}
                         </td>
                         <td className="p-4 border-r border-slate-400">
-                          <p className="text-[14px] text-slate-900 font-bold ">{courseData?.courseName || 'N/A'}</p>
+                          <p className="text-[15px] text-slate-900 font-bold ">{courseData?.courseName || 'N/A'}</p>
                         </td>
-                        <td className="p-4 text-[14px] font-bold text-slate-900 border-r border-slate-400">
+                        <td className="p-4 text-[15px] font-bold text-slate-900 border-r border-slate-400">
                           {getCreditDisplay(courseData?.courseCredits)}
                         </td>
                         <td className="p-4 border-r border-slate-400">
@@ -281,14 +281,14 @@ export const CourseCatalog = () => {
                               className="text-slate-600 hover:text-[#FDB813] transition-colors"
                               title="View Details"
                             >
-                              <Eye size={16} />
+                              <Eye size={18} />
                             </button>
                             <button 
                               onClick={() => handleEditCourse(course)}
                               className="text-slate-600 hover:text-[#FDB813] transition-colors"
                               title="Edit Course"
                             >
-                              <Edit2 size={16} />
+                              <Edit2 size={18} />
                             </button>
                           </div>
                         </td>
@@ -309,14 +309,14 @@ export const CourseCatalog = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-md w-full p-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-[#1e3a5f] ">Upload Course Details</h3>
+              <h3 className="text-xl font-bold text-[#1e3a5f] ">Upload Course Details</h3>
               <button title='btn' onClick={() => setShowUploadModal(false)} className="p-1 hover:bg-slate-100 rounded">
                 <X size={20} />
               </button>
             </div>
             <form onSubmit={handleUpload} className="space-y-4">
               <div>
-                <label className="text-[13px] font-bold text-slate-600 ">Excel File</label>
+                <label className="text-[15px] font-bold text-slate-600 ">Excel File</label>
                 <div className="relative">
                   <input
                     title='upload file'
@@ -330,13 +330,13 @@ export const CourseCatalog = () => {
                     <span className="text-slate-600">
                       {selectedFile ? selectedFile.name : 'No file chosen'}
                     </span>
-                    <span className="px-4 py-1.5 bg-[#1e3a5f] text-white rounded-lg text-xs font-medium">
+                    <span className="px-4 py-1.5 bg-[#1e3a5f] text-white rounded-lg text-sm font-medium">
                       Choose File
                     </span>
                   </div>
                 </div>
-                <p className="text-[12px] text-slate-500 mt-1">
-                  Format: <span className="text-[12px] text-red-500 mt-1"> Course Code | Prerequisite | Course Name | Credit Hours
+                <p className="text-[14px] font-bold text-slate-700 mt-1">
+                  Format: <span className="text-[12px] text-red-500 mt-1 font-semibold"> Course Code | Prerequisite | Course Name | Credit Hours
               </span>  </p>
               </div>
               {uploadProgress > 0 && uploadProgress < 100 && (
@@ -348,19 +348,19 @@ export const CourseCatalog = () => {
                 </div>
               )}
               {error && (
-                <div className="flex items-center gap-2 text-red-600 text-xs p-2 bg-red-50 rounded">
+                <div className="flex items-center gap-2 text-red-600 text-sm p-2 bg-red-50 rounded">
                   <AlertCircle size={14} /> {error}
                 </div>
               )}
               {uploadSuccess && (
-                <div className="flex items-center gap-2 text-green-600 text-xs p-2 bg-green-50 rounded">
+                <div className="flex items-center gap-2 text-green-600 text-sm p-2 bg-green-50 rounded">
                   <CheckCircle size={14} /> Course details uploaded successfully!
                 </div>
               )}
               <button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs  tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-sm  tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isLoading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
                 {isLoading ? 'Uploading...' : 'Upload'}
@@ -375,7 +375,7 @@ export const CourseCatalog = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-              <h3 className="text-lg font-bold text-[#1e3a5f] ">Course Details</h3>
+              <h3 className="text-xl font-bold text-[#1e3a5f] ">Course Details</h3>
               <button title='Close' onClick={() => setShowDetailModal(false)} className="p-1 hover:bg-slate-100 rounded">
                 <X size={20} />
               </button>
@@ -410,8 +410,8 @@ export const CourseCatalog = () => {
 export default function InfoRow({ label, value }: { label: string; value: any }) {
   return (
     <div>
-      <p className="text-[15px] font-bold text-slate-700 ">{label}</p>
-      <p className=" text-[12px] font-semibold text-slate-600 mb-2">{value || 'N/A'}</p>
+      <p className="text-[18px] font-bold text-slate-700 ">{label}</p>
+      <p className=" text-[14px] font-semibold text-slate-600 mb-2">{value || 'N/A'}</p>
     </div>
   );
 }

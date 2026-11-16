@@ -95,11 +95,11 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
   getProgramName,
 }) => {
   return (
-  <div className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-lg transition-all group">
+  <div className="bg-white mt-4 rounded-2xl border border-slate-400/60 p-5 hover:shadow-lg transition-all group">
     <div className="flex items-start justify-between mb-3">
       <div className="flex items-center gap-3 overflow-hidden">
-        <div className="p-2 bg-slate-50 rounded-xl shrink-0">
-          <GraduationCap size={20} className="text-[#1e3a5f]" />
+        <div className="p-2 bg-slate-300 rounded-xl shrink-0">
+          <GraduationCap size={24} className="text-[#1e3a5f]" />
         </div>
        <h3 
   className="font-bold text-[#1e3a5f] text-medium"
@@ -127,17 +127,17 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
     </div>
 
     <p 
-  className="text-slate-700 font-medium text-[15px] mb-3"
+  className="text-slate-800 leading-6 font-medium text-[16px] mb-3"
   style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
 >
   {guideline.description}
 </p>
 
     <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-      <span className="text-[13px] font-bold text-slate-700 ">
+      <span className="text-[14px] font-bold text-slate-700 ">
         {getProgramName(guideline.programId)}
       </span>
-      <span className="text-[13px] text-slate-500">
+      <span className="text-[13px] text-slate-600">
         {new Date(guideline.createdAt!).toLocaleDateString()}
       </span>
     </div>

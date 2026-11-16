@@ -149,7 +149,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
             />
 
             <div className="space-y-2 group">
-              <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+              <label className="text-sm font-bold text-[#526782] ml-4 tracking-widest">
                 Gender <span className="text-[#1B4B82]">*</span>
               </label>
               <select
@@ -158,7 +158,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
                 value={formData.gender}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
+                className="w-full px-4 py-4 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
               >
                 <option value="" disabled className="text-slate-400 font-normal">Select Gender</option>
                 <option value="Male">Male</option>
@@ -197,7 +197,7 @@ export function AddFaculty({ onBack }: AddFacultyProps) {
             <button 
               type="submit"
               disabled={isLoading}
-              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-sm tracking-[0.1em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? 'Adding...' : 'Add Faculty'} <UserPlus size={16} />
             </button>

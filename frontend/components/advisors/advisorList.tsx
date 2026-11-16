@@ -116,13 +116,13 @@ export function AdvisorsList() {
     <div className="space-y-6 animate-in fade-in duration-500">
 
       {/* Search and Filter Bar */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
+      <div className="bg-white rounded-2xl border border-slate-300 shadow-sm p-4">
         <div className="flex flex-col md:flex-row gap-4">
 
           {/* Search Input */}
           <div className="flex-1 relative">
             <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"
               size={18}
             />
             <input
@@ -131,14 +131,14 @@ export function AdvisorsList() {
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="Search by name, SAP ID, or email..."
-              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-[#1B3555] placeholder:text-[#91A1B7] focus:ring-2 focus:ring-[#FDB813] outline-none transition-all"
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-[#1B3555] placeholder:text-[#91A1B7] focus:ring-2 focus:ring-[#FDB813] outline-none transition-all"
             />
           </div>
 
           <div className="flex gap-3">
             <button
               onClick={handleSearch}
-              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs tracking-wider hover:bg-[#FDB813] transition-all"
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-sm tracking-wider hover:bg-[#FDB813] transition-all"
             >
               Search
             </button>
@@ -161,30 +161,30 @@ export function AdvisorsList() {
       )}
 
       {/* Advisors Table */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-300 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-slate-50 border-b border-slate-100">
+            <thead className="bg-slate-50 border-b border-slate-300">
               <tr>
-                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                <th className="px-6 py-4 text-center text-[17px] font-bold text-[#1e3a5f]">
                   Faculty Name
                 </th>
-                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                <th className="px-6 py-4 text-center text-[17px] font-bold text-[#1e3a5f]">
                   Contact Info
                 </th>
-                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                <th className="px-6 py-4 text-center text-[17px] font-bold text-[#1e3a5f]">
                   Batch Assigned
                 </th>
-                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                <th className="px-6 py-4 text-center text-[17px] font-bold text-[#1e3a5f]">
                   Status
                 </th>
-                <th className="px-6 py-4 text-center text-[14px] font-bold text-[#1e3a5f]">
+                <th className="px-6 py-4 text-center text-[17px] font-bold text-[#1e3a5f]">
                   Actions
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-slate-300">
               {advisors.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center">
@@ -212,10 +212,10 @@ export function AdvisorsList() {
                         </div>
 
                         <div>
-                          <p className="font-bold text-[#1e3a5f] text-sm tracking-tight">
+                          <p className="font-bold text-[#1e3a5f] text-[16px] tracking-tight">
                             {advisor.advisorName}
                           </p>
-                          <p className="text-[13px] font-semibold text-[#5e6d83]">
+                          <p className="text-[14px] font-semibold text-[#5e6d83]">
                             Sap id: {advisor.User?.sapid}
                           </p>
                         </div>
@@ -225,13 +225,13 @@ export function AdvisorsList() {
                     <td className="px-6 py-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <Mail size={12} className="text-slate-400" />
-                          <p className="text-[13px] font-semibold text-[#5e6d83]">{advisor.email}</p>
+                          <Mail size={16} className="text-slate-600" />
+                          <p className="text-[14px] font-semibold text-[#5e6d83]">{advisor.email}</p>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Phone size={12} className="text-slate-400" />
-                          <p className="text-[13px] font-semibold text-[#5e6d83]">{advisor.contactNumber}</p>
+                          <Phone size={16} className="text-slate-600" />
+                          <p className="text-[14px] font-semibold text-[#5e6d83]">{advisor.contactNumber}</p>
                         </div>
                       </div>
                     </td>
@@ -278,16 +278,16 @@ export function AdvisorsList() {
 
                     <td className="px-6 py-4 text-center">
                       <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-bold ${
                           advisor.User?.isActive
                             ? 'bg-green-100 text-green-700'
                             : 'bg-red-100 text-red-700'
                         }`}
                       >
                         {advisor.User?.isActive ? (
-                          <CheckCircle size={10} />
+                          <CheckCircle size={14} />
                         ) : (
-                          <XCircle size={10} />
+                          <XCircle size={14} />
                         )}
                         {advisor.User?.isActive ? 'Active' : 'Inactive'}
                       </span>
@@ -302,7 +302,7 @@ export function AdvisorsList() {
                           className="p-2 rounded-lg text-slate-500 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="View Details"
                         >
-                          <Eye size={16} />
+                          <Eye size={18} />
                         </button>
 
                         {/* Edit Button */}
@@ -311,7 +311,7 @@ export function AdvisorsList() {
                           className="p-2 rounded-lg text-slate-500 hover:text-[#1e3a5f] hover:bg-slate-100 transition-all"
                           title="Edit"
                         >
-                          <Edit size={16} />
+                          <Edit size={18} />
                         </button>
 
                         {/* Toggle Status Button */}

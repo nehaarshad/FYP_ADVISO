@@ -89,32 +89,22 @@ export const Timetable = () => {
     setSelectedDay('all');
   };
 
-  // Get unique session years from timetables
-  const getUniqueSessionYears = () => {
-    if (!timetables || timetables.length === 0) return [];
-    const years = new Set(
-      timetables.map((t: any) => t.CourseOfferingModel?.SessionModel?.sessionYear)
-        .filter(Boolean)
-        .map(String)
-    );
-    return Array.from(years).sort().reverse();
-  };
 
   return (
     <>
       <div className="bg-white p-8 rounded-[2rem] border border-slate-300 shadow-sm">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-[#1e3a5f]   tracking-tighter">
+            <h2 className="text-3xl font-bold text-[#1e3a5f]   tracking-tighter">
               Class Timetables
             </h2>
-            <p className="text-[13px] font-bold text-slate-600 mt-2">
+            <p className="text-[15px] font-bold text-slate-600 mt-2">
               {filteredByDay.length} schedules found
             </p>
           </div>
           <button 
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-[12px]  tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
+            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-sm  tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
             >
             Upload Timetable
           </button>
@@ -124,14 +114,14 @@ export const Timetable = () => {
         <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
           <div className="flex items-center gap-2 mb-3">
             <Filter size={18} className="text-[#1e3a5f]" />
-            <h3 className="text-sm font-bold text-[#1e3a5f]  tracking-wider">Filter by Session</h3>
+            <h3 className="text-[16px] font-bold text-[#1e3a5f]  tracking-wider">Filter by Session</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <select
               title="Session Type"
               value={selectedSessionType}
               onChange={(e) => setSelectedSessionType(e.target.value)}
-              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-[14px] focus:ring-2 focus:ring-[#FDB813] outline-none"
             >
               <option value="">All Session Types</option>
               <option value="FALL">Fall</option>
@@ -144,14 +134,14 @@ export const Timetable = () => {
               placeholder="Session Year (e.g., 2024)"
               value={selectedSessionYear}
               onChange={(e) => setSelectedSessionYear(e.target.value)}
-              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-[14px] focus:ring-2 focus:ring-[#FDB813] outline-none"
             />
 
             <select
               title="Program"
               value={selectedProgram}
               onChange={(e) => setSelectedProgram(e.target.value)}
-              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-sm focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="p-2 bg-white border border-slate-300 rounded-xl font-medium text-[14px] focus:ring-2 focus:ring-[#FDB813] outline-none"
             >
               <option value="">All Programs</option>
               {programs.map((p: any) => (
@@ -162,7 +152,7 @@ export const Timetable = () => {
             {(selectedSessionType || selectedSessionYear || selectedProgram) && (
               <button
                 onClick={handleResetFilters}
-                className="px-4 py-2 bg-slate-300 text-slate-800 rounded-xl text-xs font-bold hover:bg-slate-300 transition-all"
+                className="px-4 py-2 bg-slate-300 text-slate-800 rounded-xl text-sm font-bold hover:bg-slate-300 transition-all"
               >
                 Clear Filters
               </button>
@@ -173,19 +163,19 @@ export const Timetable = () => {
           {(selectedSessionType || selectedSessionYear || selectedProgram) && (
             <div className="flex flex-wrap gap-2 mt-3">
               {selectedSessionType && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                   {selectedSessionType}
                   <button onClick={() => setSelectedSessionType('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedSessionYear && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                    {selectedSessionYear}
                   <button onClick={() => setSelectedSessionYear('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedProgram && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                    {selectedProgram}
                   <button onClick={() => setSelectedProgram('')} className="hover:text-[#FDB813]">×</button>
                 </span>
@@ -199,7 +189,7 @@ export const Timetable = () => {
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setSelectedDay('all')}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-bold truncate-[0.1rem] transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-[14px] font-bold truncate-[0.1rem] transition-all ${
                 selectedDay === 'all' ? 'bg-[#1a3457] text-white' : 'bg-slate-300 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -209,7 +199,7 @@ export const Timetable = () => {
               <button
                 key={day}
                 onClick={() => setSelectedDay(day)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold truncate-[0.1rem] transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-[14px] font-bold truncate-[0.1rem] transition-all ${
                   selectedDay === day ? 'bg-[#1a3457] text-white' : 'bg-slate-300 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -235,7 +225,7 @@ export const Timetable = () => {
           <>
             {/* Summary */}
             <div className="mb-4 text-right">
-              <span className="text-sm text-slate-600">
+              <span className="text-sm font-medium text-slate-700">
                 Showing {filteredByDay.length} of {filteredTimetables.length} schedules
               </span>
             </div>
@@ -245,26 +235,26 @@ export const Timetable = () => {
     {/* HEADER */}
     <thead className="bg-slate-50">
       <tr>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
           Day
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
           Course
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
           Time
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
           Venue
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
           Instructor
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
           Batch
         </th>
         {/* Note: Added border-r to the last header so it matches the rows below */}
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left">
           Session
         </th>
       </tr>
@@ -275,29 +265,29 @@ export const Timetable = () => {
       {filteredByDay.map((timetable: any) => (
         <tr key={timetable.id} className="hover:bg-slate-50/50 transition-colors">
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="font-bold text-[#1e3a5f] text-sm">{timetable.day}</span>
+            <span className="font-bold text-[#1e3a5f] text-[16px]">{timetable.day}</span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <p className="font-bold text-sm text-slate-700">{timetable.CourseOfferingModel?.courseName}</p>
+            <p className="font-bold text-[16px] text-[#1e3a5f]">{timetable.CourseOfferingModel?.courseName}</p>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-medium text-slate-600">
+            <span className="text-[16px] font-medium text-slate-700">
               {timetable.startTime} - {timetable.endTime}
             </span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-medium text-slate-600">{timetable.venue}</span>
+            <span className="text-[16px] font-medium text-slate-700">{timetable.venue}</span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-medium text-slate-600">{timetable.instructor}</span>
+            <span className="text-[16px] font-medium text-slate-700">{timetable.instructor}</span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-bold text-slate-600">
+            <span className="text-[16px] font-bold text-slate-700">
               {timetable.CourseOfferingModel?.BatchModel?.batchName} {timetable.CourseOfferingModel?.BatchModel?.batchYear}
             </span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-medium text-slate-600">
+            <span className="text-[16px] font-medium text-slate-700">
               {timetable.CourseOfferingModel?.SessionModel?.sessionType} {timetable.CourseOfferingModel?.SessionModel?.sessionYear}
             </span>
           </td>

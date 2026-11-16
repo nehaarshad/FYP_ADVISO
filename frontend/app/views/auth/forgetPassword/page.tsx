@@ -82,8 +82,8 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
             <KeyRound size={26} />
           </div>
           <div>
-            <h2 className="text-2xl font-black  tracking-tight text-[#1e3a5f]">Manage & Reset Password</h2>
-            <p className="text-xs font-medium text-slate-400 mt-0.5">Update user credentials directly via SAP ID</p>
+            <h2 className="text-3xl font-black  tracking-tight text-[#1e3a5f]">Manage & Reset Password</h2>
+            <p className="text-sm font-semibold text-slate-600 mt-1">Update user credentials directly via SAP ID</p>
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default function ForgetPasswordPage({ onBack }: ForgetPasswordPageProps) 
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full sm:w-auto px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs  tracking-[0.2em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className="w-full sm:w-auto px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-sm  tracking-[0.1em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isLoading ? "Updating..." : "Update Password"}
               </button>

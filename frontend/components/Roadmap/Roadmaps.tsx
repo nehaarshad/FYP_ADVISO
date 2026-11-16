@@ -131,14 +131,14 @@ export function RoadmapSection() {
               <h2 className="text-3xl font-bold text-[#1e3a5f]">
                 Roadmap Management
               </h2>
-              <p className="text-medium text-slate-600 font-medium mt-1">
+              <p className="text-medium text-slate-600 font-semibold mt-1">
                 View, filter and manage academic roadmaps
               </p>
             </div>
 
             <button
               onClick={() => setShowUploadForm(!showUploadForm)}
-              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-[13px] tracking-widest hover:bg-[#FDB813] transition-all"
+              className="px-6 py-3 bg-[#1e3a5f] text-white rounded-2xl font-bold text-sm tracking-widest hover:bg-[#FDB813] transition-all"
             >
               Upload New Roadmap
             </button>
@@ -163,7 +163,7 @@ export function RoadmapSection() {
           <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
             <div className="flex items-center gap-2 mb-3">
               <Filter size={18} className="text-[#1e3a5f]" />
-              <h3 className="text-sm font-bold text-[#1e3a5f] tracking-wider">
+              <h3 className="text-[15px] font-bold text-[#1e3a5f] tracking-wider">
                 Filter Roadmaps
               </h3>
             </div>
@@ -173,7 +173,7 @@ export function RoadmapSection() {
                 title="Select Program"
                 value={selectedProgram}
                 onChange={(e) => handleProgramChange(e.target.value)}
-                className="p-2 bg-white border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
+                className="p-2 font-semibold bg-white border border-slate-400 rounded-xl text-sm focus:ring-2 focus:ring-[#FDB813] outline-none min-w-[200px]"
               >
                 {programs.map((p: any) => (
                   <option key={p.id} value={p.programName}>
@@ -200,14 +200,14 @@ export function RoadmapSection() {
               <div>
                 {/* List Heading */}
                 <div className="mb-4">
-                  <h3 className="text-medium font-bold text-[#1e3a5f] tracking-wider">
+                  <h3 className="text-lg font-bold text-[#1e3a5f] tracking-wider">
                     {selectedProgram} Roadmaps ({uniqueRoadmaps.length})
                   </h3>
                 </div>
 
                 {/* Empty State or Cards */}
                 {uniqueRoadmaps.length === 0 && !isLoading && !isSwitchingProgram ? (
-                  <div className="text-center py-12 text-slate-600">
+                  <div className="text-center py-12 text-slate-700">
                     No roadmaps found for {selectedProgram.toLowerCase()}
                   </div>
                 ) : (

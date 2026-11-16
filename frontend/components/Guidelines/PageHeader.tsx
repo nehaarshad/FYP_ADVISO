@@ -22,11 +22,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       
       {/* Title Section */}
       <div>
-        <h2 className="text-2xl font-bold text-[#1e3a5f] flex items-center gap-2">
-          <FileText className="text-[#1e3a5f]" size={24} />
+        <h2 className="text-3xl font-bold text-[#1e3a5f] flex items-center gap-2">
+          <FileText className="text-[#1e3a5f]" size={26} />
           Degree Guidelines
         </h2>
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-sm font-semibold text-slate-600 mt-1">
           Manage academic guidelines and requirements
         </p>
       </div>
@@ -35,16 +35,16 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onCreate}
-          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
+          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-sm font-bold  tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
         >
-          <Plus size={16} />
+          <Plus size={18} />
           Add Guideline
         </button>
         <button
           onClick={onUploadVideo}
-          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-[10px] font-bold  tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
+          className="flex items-center gap-2 bg-[#1e3a5f] text-white px-5 py-2.5 rounded-xl text-sm font-bold  tracking-widest hover:bg-[#152a45] transition-all shadow-sm"
         >
-          <Upload size={16} />
+          <Upload size={18} />
           Upload Video
         </button>
       </div>

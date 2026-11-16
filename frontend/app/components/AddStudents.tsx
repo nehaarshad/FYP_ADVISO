@@ -85,8 +85,8 @@ export function AddStudent({ onBack }: AddStudentProps) {
             <GraduationCap size={26} />
           </div>
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-[#1e3a5f]">Enroll Student</h2>
-            <p className="text-sm font-semibold text-[#64758d] mt-0.5">Register a new student account and profile</p>
+            <h2 className="text-3xl font-black tracking-tight text-[#1e3a5f]">Enroll Student</h2>
+            <p className="text-[15px] font-semibold text-[#64758d] mt-0.5">Register a new student account and profile</p>
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
           
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2 group">
-              <label className="text-xs font-bold text-[#526782] ml-4">
+              <label className="text-sm font-bold text-[#526782] ml-4">
                 Status <span className="text-[#1B4B82]">*</span>
               </label>
               <select 
@@ -162,7 +162,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
                 name="currentStatus"
                 value={formData.currentStatus}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
+                className="w-full px-4 py-3.5 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
                 required
               >
                 <option value="">Select Status</option>
@@ -187,7 +187,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
           {/* Program & Semester Row */}
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2 group">
-              <label className="text-xs font-bold text-[#526782] ml-4">
+              <label className="text-sm font-bold text-[#526782] ml-4">
                 Program <span className="text-[#1B4B82]">*</span>
               </label>
               <select 
@@ -195,7 +195,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
                 name="programName"
                 value={formData.programName}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
+                className="w-full px-4 py-3.5 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
                 required
               >
                 <option value="" disabled>Select Program</option>
@@ -206,7 +206,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
             </div>
             
             <div className="space-y-2 group">
-              <label className="text-xs font-bold text-[#526782] ml-4">
+              <label className="text-sm font-bold text-[#526782] ml-4">
                 Semester <span className="text-[#1B4B82]">*</span>
               </label>
               <select 
@@ -214,7 +214,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
                 name="currentSemester"
                 value={formData.currentSemester}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
+                className="w-full px-4 py-3.5 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
                 required
               >
                 <option value="">Select Semester</option>
@@ -228,7 +228,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
           {/* Batch & Batch Year Row */}
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2 group">
-              <label className="text-xs font-bold text-[#526782] ml-4">
+              <label className="text-sm font-bold text-[#526782] ml-4">
                 Batch <span className="text-[#1B4B82]">*</span>
               </label>
               <select 
@@ -236,7 +236,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
                 name="batchName"
                 value={formData.batchName}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
+                className="w-full px-4 py-3.5 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1B3555]"
                 required
               >
                 <option value="">Select Batch</option>
@@ -259,7 +259,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
 
           {/* Guardian Information */}
           <div className="border-t border-slate-100 pt-6 mt-4">
-            <h3 className="text-bold font-bold text-[#1B4B82] mb-4">Guardian Information (Optional)</h3>
+            <h3 className="text-bold text-lg font-bold text-[#1B4B82] mb-4">Guardian Information (Optional)</h3>
             <div className="grid grid-cols-2 gap-6">
               <InputField 
                 label="Guardian Name" 
@@ -294,7 +294,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
             <button 
               type="submit"
               disabled={isLoading}
-              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-xs tracking-[0.1em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 cursor-pointer"
+              className="px-12 py-4 bg-[#1e3a5f] text-white rounded-[2rem] font-bold text-sm tracking-[0.1em] shadow-xl hover:bg-[#FDB813] hover:text-[#1e3a5f] transition-all flex items-center justify-center disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? 'Registering...' : 'Register Student'}
             </button>
@@ -308,7 +308,7 @@ export function AddStudent({ onBack }: AddStudentProps) {
 export default function InputField({ label, name, placeholder, icon, type = "text", value, onChange, required = false }: any) {
   return (
     <div className="space-y-2 group">
-      <label className="text-[12px] font-bold text-[#364a64] ml-4 tracking-widest">
+      <label className="text-sm font-bold text-[#364a64] ml-4 tracking-widest">
         {label.endsWith(' *') ? (
           <>
             {label.slice(0, -1)}
@@ -319,7 +319,7 @@ export default function InputField({ label, name, placeholder, icon, type = "tex
         )}
       </label>
       <div className="relative">
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#91A1B7] group-focus-within:text-[#FDB813]">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-700 group-focus-within:text-[#FDB813]">
           {icon}
         </div>
         <input 
@@ -329,7 +329,7 @@ export default function InputField({ label, name, placeholder, icon, type = "tex
           value={value}
           onChange={onChange}
           required={required}
-          className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border-none rounded-2xl font-semibold text-sm outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1B3555] placeholder:text-[#91A1B7]" 
+          className="w-full pl-11 pr-4 py-3.5 bg-slate-200 border-none rounded-2xl font-semibold text-sm outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1B3555] placeholder:text-[#91A1B7]" 
         />
       </div>
     </div>

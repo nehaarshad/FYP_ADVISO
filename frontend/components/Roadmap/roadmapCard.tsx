@@ -15,22 +15,22 @@ export function RoadmapCard({ roadmap, onView, onAssign }: RoadmapCardProps) {
     <div className="p-6 hover:bg-slate-50/50 transition-all group">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="h-12 w-12 bg-[#1e3a5f]/10 rounded-xl flex items-center justify-center group-hover:bg-[#1e3a5f] transition-colors">
+          <div className="h-12 w-12 bg-[#1e3a5f]/30 rounded-xl flex items-center justify-center group-hover:bg-[#1e3a5f] transition-colors">
             <BookOpen size={22} className="text-[#1e3a5f] group-hover:text-white" />
           </div>
           <div>
-            <h4 className="font-bold text-[#1e3a5f] text-base  tracking-tight">
+            <h4 className="font-bold text-[#1e3a5f] text-[18px]  tracking-tight">
               {roadmap.versionName}
             </h4>
             <div className="flex items-center gap-4 mt-1">
-              <span className="text-[12px] font-bold text-slate-600  flex items-center gap-1">
-                <GraduationCap size={12} /> {roadmap.totalCreditHours} Credits
+              <span className="text-[14px] font-bold text-slate-600  flex items-center gap-1">
+                <GraduationCap size={14} /> {roadmap.totalCreditHours} Credits
               </span>
-              <span className="text-[12px] font-bold text-slate-600  flex items-center gap-1">
-                <Layers size={12} /> {categories.length} Categories
+              <span className="text-[14px] font-bold text-slate-600  flex items-center gap-1">
+                <Layers size={14} /> {categories.length} Categories
               </span>
-              <span className="text-[12px] font-bold text-slate-600  flex items-center gap-1">
-                <Calendar size={12} /> {semesters.length} Semesters
+              <span className="text-[14px] font-bold text-slate-600  flex items-center gap-1">
+                <Calendar size={14} /> {semesters.length} Semesters
               </span>
             </div>
           </div>
@@ -38,13 +38,13 @@ export function RoadmapCard({ roadmap, onView, onAssign }: RoadmapCardProps) {
         <div className="flex gap-2">
           <button
             onClick={onAssign}
-            className="px-4 py-2 bg-[#FDB813]/40 text-[#1e3a5f] rounded-xl text-[12px] font-bold  tracking-wider hover:bg-[#1e3a5f] hover:text-white transition-all flex items-center gap-2"
+            className="px-4 py-2 bg-[#FDB813]/40 text-[#1e3a5f] rounded-xl text-[14px] font-bold  tracking-wider hover:bg-[#1e3a5f] hover:text-white transition-all flex items-center gap-2"
           >
             <Link2 size={14} /> Assign to Batch
           </button>
           <button
             onClick={onView}
-            className="px-4 py-2 bg-[#1e3a5f]/20 text-slate-600 rounded-xl text-[12px] font-bold  tracking-wider hover:bg-[#1e3a5f] hover:text-white transition-all flex items-center gap-2"
+            className="px-4 py-2 bg-[#1e3a5f]/20 text-slate-600 rounded-xl text-[14px] font-bold  tracking-wider hover:bg-[#1e3a5f] hover:text-white transition-all flex items-center gap-2"
           >
             <Eye size={14} /> View Details
           </button>

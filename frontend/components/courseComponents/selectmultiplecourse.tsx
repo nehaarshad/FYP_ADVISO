@@ -90,7 +90,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
     <div className="relative" ref={wrapperRef}>
       {/* Label */}
       {label && (
-        <label className="text-[13px] font-bold text-slate-600  block mb-1">
+        <label className="text-[16px] font-bold text-slate-600  block mb-1">
           {label}
         </label>
       )}
@@ -106,7 +106,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
         {selectedIds.map(id => (
           <span
             key={id}
-            className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#1e3a5f] text-white text-[10px] font-medium rounded whitespace-nowrap"
+            className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#1e3a5f] text-white text-[14px] font-medium rounded whitespace-nowrap"
           >
             {getSelectedLabel(id)}
             {!disabled && (
@@ -116,7 +116,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
                 onClick={(e) => removeOption(id, e)}
                 className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
               >
-                <X size={12} />
+                <X size={16} />
               </button>
             )}
           </span>
@@ -155,15 +155,15 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
                   }`}
                 >
                   <div className="flex flex-col">
-                    <span className="font-medium text-slate-900">
+                    <span className="font-bold text-slate-900">
                       {option.courseCode}
                     </span>
-                    <span className="text-sm text-slate-700">
+                    <span className="font-semibold text-[14px] text-slate-700">
                       {option.courseName}
                     </span>
                   </div>
                   {isSelected && (
-                    <Check size={16} className="text-[#1e3a5f] flex-shrink-0" />
+                    <Check size={20} className="text-[#1e3a5f] flex-shrink-0" />
                   )}
                 </button>
               );
@@ -173,7 +173,7 @@ export const SearchableMultiSelect: React.FC<SearchableMultiSelectProps> = ({
       )}
 
       {/* Helper Text */}
-      <p className="text-[12px] text-slate-600 font-medium mt-1">
+      <p className="text-[14px] text-slate-600 font-medium mt-1">
         Type to search and select multiple courses
       </p>
     </div>

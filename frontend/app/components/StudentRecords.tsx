@@ -107,13 +107,13 @@ export function StudentRecords() {
 
           {/* Row 1: Program Name */}
           <div className="space-y-2 group">
-            <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+            <label className="text-sm font-bold text-[#526782] ml-4 tracking-widest">
               Program Name <span className="text-[#1B4B82]">*</span>
             </label>
 
             <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FDB813] z-10 pointer-events-none">
-                <BookOpen size={16} />
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-[#FDB813] z-10 pointer-events-none">
+                <BookOpen size={20} />
               </div>
 
               <select
@@ -122,7 +122,7 @@ export function StudentRecords() {
                 value={formData.programName}
                 onChange={handleChange}
                 required
-                className="w-full pl-11 pr-10 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1e3a5f] appearance-none"
+                className="w-full pl-11 pr-10 py-4 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1e3a5f] appearance-none"
               >
                 <option value="" disabled className="text-slate-400 font-normal">
                   Select Program
@@ -145,13 +145,13 @@ export function StudentRecords() {
           <div className="grid grid-cols-2 gap-8">
 
             <div className="space-y-2 group">
-              <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+              <label className="text-sm font-bold text-[#526782] ml-4 tracking-widest">
                 Batch Name <span className="text-[#1B4B82]">*</span>
               </label>
 
               <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FDB813] z-10 pointer-events-none">
-                  <Layers size={16} />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-[#FDB813] z-10 pointer-events-none">
+                  <Layers size={20} />
                 </div>
 
                 <select
@@ -160,7 +160,7 @@ export function StudentRecords() {
                   value={formData.batchName}
                   onChange={handleChange}
                   required
-                  className="w-full pl-11 pr-10 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1e3a5f] appearance-none"
+                  className="w-full pl-11 pr-10 py-4 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/50 transition-all cursor-pointer text-[#1e3a5f] appearance-none"
                 >
                   <option value="" disabled className="text-slate-400 font-normal">
                     Select Batch
@@ -177,12 +177,12 @@ export function StudentRecords() {
             </div>
 
             <div className="space-y-2 group">
-              <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+              <label className="text-sm font-bold text-[#526782] ml-4 tracking-widest">
                 Batch Year <span className="text-[#1B4B82]">*</span>
               </label>
 
               <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FDB813]">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-[#FDB813]">
                   <Calendar size={16} />
                 </div>
 
@@ -191,7 +191,7 @@ export function StudentRecords() {
                   value={formData.batchYear}
                   onChange={(e) => setFormData({ ...formData, batchYear: e.target.value })}
                   required
-                  className="w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1e3a5f]"
+                  className="w-full pl-11 pr-4 py-4 bg-slate-200 border-none rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1e3a5f]"
                 />
               </div>
             </div>
@@ -199,13 +199,13 @@ export function StudentRecords() {
 
           {/* Row 3: Excel File Upload */}
           <div className="space-y-2 group">
-            <label className="text-xs font-bold text-[#526782] ml-4 tracking-widest">
+            <label className="text-sm font-bold text-[#526782] ml-4 tracking-widest">
               Excel File <span className="text-[#1B4B82]">*</span>
             </label>
 
             <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#FDB813] z-10 pointer-events-none">
-                <FileText size={16} />
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-[#FDB813] z-10 pointer-events-none">
+                <FileText size={20} />
               </div>
 
               <input
@@ -214,11 +214,11 @@ export function StudentRecords() {
                 accept=".xlsx,.xls"
                 onChange={handleFileChange}
                 required
-                className="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-2xl font-bold text-xs outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1e3a5f] file:ml-2 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1e3a5f] file:text-white hover:file:bg-[#FDB813] hover:file:text-[#1e3a5f] cursor-pointer"
+                className="w-full pl-12 pr-4 py-3 bg-slate-100 border border-slate-300 rounded-2xl font-bold text-sm outline-none focus:ring-2 ring-[#FDB813]/20 transition-all text-[#1e3a5f] file:ml-2 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#1e3a5f] file:text-white hover:file:bg-[#FDB813] hover:file:text-[#1e3a5f] cursor-pointer"
               />
 
               {selectedFile && (
-                <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-green-600 ml-4">
+                <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-green-600 ml-4">
                   <FileSpreadsheet size={16} />
                   <span>
                     {selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
@@ -227,7 +227,7 @@ export function StudentRecords() {
               )}
             </div>
 
-            <p className="text-xs text-[#8293AA] ml-4 mt-1">
+            <p className="text-sm text-[#455366] ml-4 mt-1">
               Supported format: .xlsx, .xls (Max 5MB)
             </p>
           </div>

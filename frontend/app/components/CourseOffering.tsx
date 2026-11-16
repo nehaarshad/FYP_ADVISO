@@ -119,12 +119,12 @@ export const CourseOffering = () => {
       <div className="bg-white p-8 rounded-[2rem] border border-slate-300 shadow-sm">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-[#1e3a5f]  ">Course Offerings</h2>
-            <p className="text-[13px] font-bold text-slate-600 mt-2">Manage and view course offerings by session</p>
+            <h2 className="text-3xl font-bold text-[#1e3a5f]  ">Course Offerings</h2>
+            <p className="text-[15px] font-bold text-slate-600 mt-2">Manage and view course offerings by session</p>
           </div>
           <button 
             onClick={() => setShowUploadModal(true)}
-            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-[12px]  tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
+            className="px-6 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-sm  tracking-wider hover:bg-[#FDB813] transition-all flex items-center gap-2"
           >
             <Upload size={16} /> Upload New List
           </button>
@@ -134,14 +134,14 @@ export const CourseOffering = () => {
         <div className="mb-6 p-4 bg-slate-50 rounded-2xl">
            <div className="flex items-center gap-2 mb-3">
                       <Filter size={18} className="text-[#1e3a5f]" />
-                      <h3 className="text-sm font-bold text-[#1e3a5f]  tracking-wider">Filter by Session</h3>
+                      <h3 className="text-[16px] font-bold text-[#1e3a5f]  tracking-wider">Filter by Session</h3>
                     </div>
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
             <select
               title="Session Type"
               value={selectedSessionType}
               onChange={(e) => setSelectedSessionType(e.target.value)}
-              className="p-2 bg-white border border-slate-300 rounded-xl text-medium focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="p-2 bg-white border border-slate-300 rounded-xl text-[16px] focus:ring-2 focus:ring-[#FDB813] outline-none"
             >
               <option value="">All Session Types</option>
               <option value="FALL">Fall</option>
@@ -192,7 +192,7 @@ export const CourseOffering = () => {
             {(selectedSessionType || selectedSessionYear || selectedProgram || selectedBatchName || selectedBatchYear) && (
               <button
                 onClick={handleResetFilters}
-                  className="px-4 py-2 bg-slate-300 text-slate-800 rounded-xl text-xs font-bold hover:bg-slate-300 transition-all"
+                  className="px-4 py-2 bg-slate-300 text-slate-800 rounded-xl text-sm font-bold hover:bg-slate-300 transition-all"
             >
                 Clear All Filters
               </button>
@@ -203,31 +203,31 @@ export const CourseOffering = () => {
           {(selectedSessionType || selectedSessionYear || selectedProgram || selectedBatchName || selectedBatchYear) && (
             <div className="flex flex-wrap gap-2 mt-3">
               {selectedSessionType && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                   {selectedSessionType}
                   <button onClick={() => setSelectedSessionType('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedSessionYear && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                {selectedSessionYear}
                   <button onClick={() => setSelectedSessionYear('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedProgram && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                   {selectedProgram}
                   <button onClick={() => setSelectedProgram('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedBatchName && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                   Batch: {selectedBatchName}
                   <button onClick={() => setSelectedBatchName('')} className="hover:text-[#FDB813]">×</button>
                 </span>
               )}
               {selectedBatchYear && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-xs">
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#1e3a5f] text-white rounded-lg text-sm">
                   Batch Year: {selectedBatchYear}
                   <button onClick={() => setSelectedBatchYear('')} className="hover:text-[#FDB813]">×</button>
                 </span>
@@ -252,7 +252,7 @@ export const CourseOffering = () => {
           <>
             {/* Summary */}
             <div className="mb-4 text-right">
-              <span className="text-sm text-slate-600">
+              <span className="text-sm text-slate-800 font-semibold">
                 Showing {filteredOfferings.length} of {offerings.length} offerings
               </span>
             </div>
@@ -262,22 +262,22 @@ export const CourseOffering = () => {
   <table className="w-full border-collapse">
     <thead className="bg-slate-50">
       <tr>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
           Course Name
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
           Credits
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
           Category
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
           Batch
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-r border-slate-300 text-left last:border-r-0">
           Program
         </th>
-        <th className="p-4 text-[17px] font-bold text-[#1e3a5f] border-b border-slate-300 text-left">
+        <th className="p-4 text-[18px] font-bold text-[#1e3a5f] border-b border-slate-300 text-left">
           Session
         </th>
       </tr>
@@ -286,24 +286,24 @@ export const CourseOffering = () => {
       {filteredOfferings.map((offering) => (
         <tr key={offering.id} className="hover:bg-slate-50/50 transition-colors">
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <p className="font-bold text-[#1e3a5f] text-sm">{offering.courseName}</p>
+            <p className="font-bold text-[#1e3a5f] text-[16px]">{offering.courseName}</p>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-bold text-slate-600">{offering.credits}</span>
+            <span className="text-[16px] font-bold text-slate-600">{offering.credits}</span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-medium text-slate-600">{offering.courseCategory}</span>
+            <span className="text-[16px] font-medium text-slate-700">{offering.courseCategory}</span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-bold text-slate-600">
+            <span className="text-[16px] font-bold text-slate-700">
               {offering.BatchModel?.batchName} {offering.BatchModel?.batchYear}
             </span>
           </td>
           <td className="px-4 py-4 border-b border-r border-slate-300">
-            <span className="text-sm font-medium text-slate-600">{offering.ProgramModel?.programName}</span>
+            <span className="text-[16px] font-medium text-slate-700">{offering.ProgramModel?.programName}</span>
           </td>
           <td className="px-4 py-4 border-b border-slate-300">
-            <span className="text-sm font-medium text-slate-600">
+            <span className="text-[16px] font-medium text-slate-700">
               {offering.SessionModel?.sessionType} {offering.SessionModel?.sessionYear}
             </span>
           </td>
@@ -319,19 +319,19 @@ export const CourseOffering = () => {
   <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
     <div className="bg-white rounded-2xl max-w-md w-full p-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-bold text-[#1e3a5f] ">Upload Course Offerings</h3>
+        <h3 className="text-xl font-bold text-[#1e3a5f] ">Upload Course Offerings</h3>
         <button title='btn' onClick={() => setShowUploadModal(false)} className="p-1 hover:bg-slate-100 rounded">
           <X size={20} />
         </button>
       </div>
       <form onSubmit={handleUpload} className="space-y-4">
         <div>
-          <label className="text-[13px] font-bold text-slate-600 ">Program Name *</label>
+          <label className="text-sm font-bold text-slate-600 ">Program Name *</label>
           <select
             title='Program'
             value={selectedProgram}
             onChange={(e) => setSelectedProgram(e.target.value)}
-            className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+            className="w-full p-3 bg-slate-200 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
             required
           >
             <option value="">Select Program</option>
@@ -342,12 +342,12 @@ export const CourseOffering = () => {
         </div>
 
         <div>
-          <label className="text-[13px] font-bold text-slate-600 ">Session Type *</label>
+          <label className="text-sm font-bold text-slate-600 ">Session Type *</label>
           <select
             title='Session Type'
             value={selectedSessionType}
             onChange={(e) => setSelectedSessionType(e.target.value)}
-            className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+            className="w-full p-3 bg-slate-200 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
             required
           >
             <option value="">Select Session Type</option>
@@ -358,19 +358,19 @@ export const CourseOffering = () => {
         </div>
 
         <div>
-          <label className="text-[13px] font-bold text-slate-600 ">Session Year *</label>
+          <label className="text-sm font-bold text-slate-600 ">Session Year *</label>
           <input
             type="text"
             title='Session Year'
             value={selectedSessionYear}
             onChange={(e) => setSelectedSessionYear(e.target.value)}
-            className="w-full p-3 bg-slate-50 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+            className="w-full p-3 bg-slate-200 rounded-xl text-sm mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
             required
           />
         </div>
 
         <div>
-          <label className="text-[13px] font-bold text-slate-600 ">Excel File *</label>
+          <label className="text-sm font-bold text-slate-600 ">Excel File *</label>
           <div className="relative mt-1">
             <input
               title='upload file'
@@ -380,11 +380,11 @@ export const CourseOffering = () => {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               required
             />
-            <div className="w-full p-3 bg-slate-50 rounded-xl text-sm border border-slate-200 flex items-center justify-between">
+            <div className="w-full p-3 bg-slate-200 rounded-xl text-sm border border-slate-200 flex items-center justify-between">
               <span className="text-slate-600 truncate mr-2">
                 {selectedFile ? selectedFile.name : 'No file chosen'}
               </span>
-              <span className="px-4 py-1.5 bg-[#1e3a5f] text-white rounded-lg text-xs font-medium shrink-0">
+              <span className="px-4 py-1.5 bg-[#1e3a5f] text-white rounded-lg text-sm font-medium shrink-0">
                 Choose File
               </span>
             </div>
@@ -396,19 +396,19 @@ export const CourseOffering = () => {
             <div className="w-full bg-gray-200 rounded-full h-1.5">
               <div className="bg-[#FDB813] h-1.5 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
             </div>
-            <p className="text-xs text-center text-slate-500">{uploadProgress}%</p>
+            <p className="text-sm text-center text-slate-500">{uploadProgress}%</p>
           </div>
         )}
 
         {error && (
-          <div className="flex items-center gap-2 text-red-600 text-xs p-2 bg-red-50 rounded">
+          <div className="flex items-center gap-2 text-red-600 text-sm p-2 bg-red-50 rounded">
             <AlertCircle size={14} /> {error}
           </div>
         )}
 
         <button 
           type="submit" 
-          className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs  tracking-wider hover:bg-[#FDB813] transition-all"
+          className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold text-sm  tracking-wider hover:bg-[#FDB813] transition-all"
         >
           Upload
         </button>

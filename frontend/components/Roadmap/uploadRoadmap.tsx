@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Program, UploadData } from './types';
+import { Program } from './types';
+import { UploadRoadmapData } from '@/src/repositories/sessionContentManagement/types/uploadRoadmap';
 
 interface RoadmapUploadFormProps {
   programs: Program[];
   isLoading: boolean;
   uploadProgress: number;
-  onUpload: (data: UploadData) => Promise<void>;
+  onUpload: (data: UploadRoadmapData) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -32,8 +33,8 @@ export function RoadmapUploadForm({
     await onUpload({
       file: uploadFile,
       programName: uploadProgram,
-      batchName: uploadBatch || undefined,
-      batchYear: uploadYear || undefined
+      batchName: uploadBatch ,
+      batchYear: uploadYear 
     });
     
     // Reset form on success (handled by parent)
@@ -53,14 +54,14 @@ export function RoadmapUploadForm({
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="text-[11px] font-bold  text-slate-500 ml-2">
+            <label className="text-sm font-bold  text-slate-800 ml-2">
               Program Name *
             </label>
             <select
               title="program-select"
               value={uploadProgram}
               onChange={(e) => setUploadProgram(e.target.value)}
-              className="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-xs mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+              className="w-full p-4 bg-slate-200 border-none rounded-xl font-bold text-[13px] mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
               required
             >
               <option value="">Select Program</option>
@@ -71,14 +72,14 @@ export function RoadmapUploadForm({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-[11px] font-bold text-slate-500 ml-2">
+              <label className="text-sm font-bold text-slate-800 ml-2">
                 Batch Name
               </label>
               <select
                 title="batch-select"
                 value={uploadBatch}
                 onChange={(e) => setUploadBatch(e.target.value)}
-                className="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-xs mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+                className="w-full p-4 bg-slate-200 border-none rounded-xl font-bold text-[13px] mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
               >
                 <option value="">Select Batch</option>
                 <option value="FALL">FALL</option>
@@ -87,7 +88,7 @@ export function RoadmapUploadForm({
               </select>
             </div>
             <div>
-              <label className="text-[11px] font-bold  text-slate-500 ml-2">
+              <label className="text-sm font-bold  text-slate-800 ml-2">
                 Batch Year
               </label>
               <input
@@ -95,14 +96,14 @@ export function RoadmapUploadForm({
                 value={uploadYear}
                 onChange={(e) => setUploadYear(e.target.value)}
                 placeholder="e.g., 2024"
-                className="w-full p-4 bg-slate-50 border-none rounded-xl font-bold text-xs mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
+                className="w-full p-4 bg-slate-200 border-none rounded-xl font-bold text-[13px] mt-1 focus:ring-2 focus:ring-[#FDB813] outline-none"
               />
             </div>
           </div>
         </div>
         
         <div>
-          <label className="text-[11px] font-bold  text-slate-500 ml-2">
+          <label className="text-sm font-bold  text-slate-800 ml-2">
             Excel File *
           </label>
           <input
@@ -110,7 +111,7 @@ export function RoadmapUploadForm({
             type="file"
             accept=".xlsx,.xls"
             onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
-            className="w-full p-4 bg-slate-50 border-none rounded-xl text-sm mt-1 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1e3a5f] file:text-white hover:file:bg-[#FDB813]"
+            className="w-full p-4 bg-slate-200 border-none rounded-xl font-semibold text-sm mt-1 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1e3a5f] file:text-white hover:file:bg-[#FDB813]"
             required
           />
         </div>
@@ -138,7 +139,7 @@ export function RoadmapUploadForm({
           <button
             type="button"
             onClick={onCancel}
-            className="px-6 py-4 bg-slate-100 text-slate-600 rounded-xl font-bold text-xs tracking-wider hover:bg-slate-200 transition-all"
+            className="px-6 py-4 bg-slate-300 text-slate-800 rounded-xl font-bold text-sm tracking-wider hover:bg-slate-200 transition-all"
           >
             Cancel
           </button>

@@ -193,7 +193,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-          <h3 className="text-lg font-bold text-[#1e3a5f] ">Edit Course</h3>
+          <h3 className="text-xl font-bold text-[#1e3a5f] ">Edit Course</h3>
           <button 
             onClick={onClose} 
             className="p-1 hover:bg-slate-100 rounded transition-colors"
@@ -206,7 +206,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Course Code */}
           <div>
-            <label className="text-[13px] font-bold text-slate-600  block mb-1">
+            <label className="text-[15px] font-bold text-slate-600  block mb-1">
               Course Code
             </label>
             <input
@@ -221,7 +221,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
           {/* Course Name */}
           <div>
-            <label className="text-[13px] font-bold text-slate-600  block mb-1">
+            <label className="text-[15px] font-bold text-slate-600  block mb-1">
               Course Name 
             </label>
             <input
@@ -237,7 +237,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
           {/* Credits */}
           <div>
-            <label className="text-[13px] font-bold text-slate-600  block mb-1">
+            <label className="text-[15px] font-bold text-slate-600  block mb-1">
               Credit Hours
             </label>
             <input
@@ -248,7 +248,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:border-[#1e3a5f] transition-colors"
               placeholder="e.g., 3 or 3+1"
             />
-            <p className="text-[12px] text-slate-600 font-medium mt-1">
+            <p className="text-[14px] text-slate-600 font-medium mt-1">
               Enter number (e.g., 3) or format like 3+1
             </p>
           </div>
@@ -256,17 +256,17 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
           {/* Categories - Add-Only Mode */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-[13px] font-bold text-slate-600 ">
+              <label className="text-[15px] font-bold text-slate-600 ">
                 Categories
               </label>
-              <span className="text-[12px] text-blue-600 font-medium">
+              <span className="text-[14px] text-blue-600 font-medium">
                 {existingCategoryIds.length} assigned
               </span>
             </div>
             
             {/* Display existing categories as read-only tags */}
             {existingCategoryIds.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+              <div className="flex flex-wrap gap-1 mb-2 p-2 bg-slate-50 rounded-lg border border-slate-300">
                 {existingCategoryIds.map(id => {
                   const category = getCategoryById(id);
                   if (!category) return null;
@@ -274,11 +274,11 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
                   return (
                     <span
                       key={id}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 text-black text-[10px] font-medium rounded tracking-[0.1rem] border border-slate-300"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 text-black text-[13px] font-medium rounded tracking-light border border-slate-500"
                       style={{ backgroundColor: color }}
                     >
                       {category.categoryName}
-                      <span className="text-[11px]">✓</span>
+                      <span className="text-[13px]">✓</span>
                     </span>
                   );
                 })}
@@ -309,7 +309,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
               placeholder={availableCategories.length > 0 ? "Search and add new categories..." : "No categories available to add"}
               disabled={isLoading || availableCategories.length === 0}
             />
-            <p className="text-[12px] text-slate-600 font-medium mt-1">
+            <p className="text-[14px] text-slate-600 font-medium mt-1">
               {availableCategories.length > 0 
                 ? "Search and select categories to add. Existing categories cannot be removed."
                 : "All available categories are already assigned to this course."}
@@ -329,15 +329,15 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
 
           {/* Error/Success Messages */}
           {error && (
-            <div className="flex items-center gap-2 text-red-600 text-xs p-3 bg-red-50 rounded-lg">
-              <AlertCircle size={14} />
+            <div className="flex items-center gap-2 text-red-600 text-[14px] p-3 bg-red-50 rounded-lg">
+              <AlertCircle size={16} />
               <span>{error}</span>
             </div>
           )}
 
           {success && (
-            <div className="flex items-center gap-2 text-green-600 text-xs p-3 bg-green-50 rounded-lg">
-              <CheckCircle size={14} />
+            <div className="flex items-center gap-2 text-green-700 text-[14px] p-3 bg-green-200/70 rounded-lg">
+              <CheckCircle size={16} />
               <span>Course updated successfully!</span>
             </div>
           )}
@@ -347,7 +347,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-2.5 border border-slate-300 text-slate-600 rounded-xl font-bold text-xs  tracking-wider hover:bg-slate-50 transition-all"
+              className="flex-1 px-6 py-2.5 border border-slate-400 text-slate-600 rounded-xl font-bold text-medium  tracking-wider hover:bg-slate-50 transition-all"
               disabled={isLoading}
             >
               Cancel
@@ -355,7 +355,7 @@ export const EditCourseModal: React.FC<EditCourseModalProps> = ({
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-6 py-2.5 bg-[#1e3a5f] text-white rounded-xl font-bold text-xs  tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-6 py-2.5 bg-[#1e3a5f] text-white rounded-xl font-bold text-medium  tracking-wider hover:bg-[#FDB813] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isLoading && <Loader2 size={14} className="animate-spin" />}
               {isLoading ? 'Saving...' : 'Save Changes'}
