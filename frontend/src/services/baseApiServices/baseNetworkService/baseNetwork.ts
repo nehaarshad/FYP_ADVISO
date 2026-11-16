@@ -37,10 +37,9 @@ export class BaseApiService {
         } else if (response.status === 401 || response.status === 403) {
         localStorage.removeItem('user'); 
         localStorage.removeItem('token');
-       window.location.href = '/session-expired';
        return {
           success: false,
-          error: 'Session expired',
+          error: responseData.error || responseData.message ,
         };
       } else if (response.status === 404) {
           throw new Error(responseData.message || 'Resource not found');
@@ -79,7 +78,6 @@ export class BaseApiService {
       } else if (response.status === 401 || response.status === 403) {
         localStorage.removeItem('user'); // Adjust based on your storage key
         localStorage.removeItem('token');
-        window.location.href = '/session-expired';
         return {
           success: false,
           error: 'Session expired',
@@ -114,7 +112,6 @@ export class BaseApiService {
       } else if (response.status === 401 || response.status === 403) {
         localStorage.removeItem('user'); // Adjust based on your storage key
         localStorage.removeItem('token');
-        window.location.href = '/session-expired';
         return {
           success: false,
           error: 'Session expired',
@@ -147,7 +144,6 @@ export class BaseApiService {
       } else if (response.status === 401 || response.status === 403) {
         localStorage.removeItem('user'); // Adjust based on your storage key
         localStorage.removeItem('token');
-        window.location.href = '/session-expired';
         return {
           success: false,
           error: 'Session expired',
@@ -323,7 +319,6 @@ export class BaseApiService {
     } else  if (response.status === 401 || response.status === 403) {
         localStorage.removeItem('user'); 
         localStorage.removeItem('token');
-       window.location.href = '/session-expired';
        return {
           success: false,
           error: 'Session expired',
