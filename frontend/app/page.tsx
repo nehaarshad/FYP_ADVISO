@@ -97,7 +97,7 @@ export default function LandingPage() {
               <SmallFeature Icon={ShieldCheck} title="Secure Records" desc="Store student profiles, transcripts, and decisions safely." />
               <SmallFeature Icon={History} title="Advisory History" desc="Complete logs accessible to future advisors." />
               <SmallFeature Icon={BookOpen} title="Automatic Transcript Management" desc="Manage student academic records automatically for accurate advising." />
-              <SmallFeature Icon={MessageSquare} title="Faculty Hub & Real-Time Chat" desc="Collaborate with peers on the faculty board and instantly message students or advisors for quick guidance." />
+              <SmallFeature Icon={MessageSquare} title="Faculty Hub & Real-Time Chat" desc="Work with fellow faculty board members and message students or advisors instantly." />
             </div>
       </section>
     </div>
