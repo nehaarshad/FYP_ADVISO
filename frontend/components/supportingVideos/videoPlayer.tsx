@@ -454,27 +454,6 @@ export default function VideoPlayer({
                     </div>
                   )}
                 </div>
-
-                {/* Share */}
-                {allowShare && (
-                  <button
-                    onClick={handleShare}
-                    className="p-2 hover:bg-white/20 rounded-full transition-colors text-white/70 hover:text-white"
-                  >
-                    <Share2 size={18} />
-                  </button>
-                )}
-
-                {/* Download */}
-                {allowDownload && (
-                  <button
-                    onClick={handleDownload}
-                    className="p-2 hover:bg-white/20 rounded-full transition-colors text-white/70 hover:text-white"
-                  >
-                    <Download size={18} />
-                  </button>
-                )}
-
                 {/* Fullscreen */}
                 <button
                   onClick={toggleFullscreen}
