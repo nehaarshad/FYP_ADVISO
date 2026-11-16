@@ -4,9 +4,7 @@ import { sessionManager } from "../../sessionManagement/sessionManager";
 import { ApiResponse } from "../ApiResponseType/apiResponseType";
 
 export class BaseApiService {
-      currentUser = sessionManager.getCurrentUser<any>();
-      token =sessionManager.getSessionToken() || '';
-
+    
   protected async postApiWithJson<T>(
     url: string,           
     data: any,          
@@ -18,7 +16,7 @@ export class BaseApiService {
         method: 'POST',        
         headers: {
           'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${this.token}`,
+          'Authorization': `Bearer ${sessionManager.getSessionToken()}`,
         },
         body: JSON.stringify(data),  
       });
@@ -63,11 +61,12 @@ export class BaseApiService {
     url: string,
   ): Promise<ApiResponse<T>> {
     try {
+      console.log('Making GET request to:', sessionManager.getSessionToken(), url);
       const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.token}`,
+          'Authorization': `Bearer ${sessionManager.getSessionToken()}`,
         },
       });
 
@@ -100,7 +99,7 @@ export class BaseApiService {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.token}`,
+          'Authorization': `Bearer ${sessionManager.getSessionToken()}`,
         },
         body: JSON.stringify(data),
       });
@@ -133,7 +132,7 @@ export class BaseApiService {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.token}`,
+          'Authorization': `Bearer ${sessionManager.getSessionToken()}`,
         },
       });
 
@@ -304,7 +303,7 @@ export class BaseApiService {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        'Authorization': `Bearer ${sessionManager.getSessionToken()}`,
       },
     });
 
