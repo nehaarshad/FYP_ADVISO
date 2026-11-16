@@ -1,106 +1,101 @@
-### To Run the project ###
-frontend -> npm run dev
-backend -> node index.js
+<div align="center">
 
-##  .env file  ##
-**frontend**
-NEXT_PUBLIC_API_URL = "http://192.168.18.4:5000/auth"         //192.168.18.4 replace it with your system ip4 address
+# 🎓 Adviso — An Academic Batch Advisory System
 
-**backend**
-BASE_URL=http://localhost:5500
-DATABASE=adviso
-USERNAME=root
-PASSWORD=database@12345
-HOST=localhost
-PORT=5000
-JWT_SECRET=4eb4cb77ac55d4b6c97a6696dc17f595db197a9b3ef13cc1ad6c1ae98f50e8b3125c1ae044cc4daa140c9a4c9f1248c6c77c08f530358f29fbd159a6de88cc3e
-JWT_EXPIRES_IN=1h
-GEMINI_API_KEY=AIzaSyDDi26oMqT5X9ACZfffMl6711Lfkey_a70
+**Automating academic advising at Riphah International University**
 
-                        Adviso - Academic Batch Advisory System
-->  Adviso is a specialized management system designed for Riphah International University to streamline academic advising, roadmap tracking, and batch coordination. 
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-green?logo=node.js)](https://nodejs.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?logo=mysql)](https://mysql.com/)
+[![Sequelize](https://img.shields.io/badge/Sequelize-ORM-blue)](https://sequelize.org/)
+[![Socket.io](https://img.shields.io/badge/Socket.io-Real--time-black)](https://socket.io/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-Academic-lightgrey)]()
 
--> It automates the complex process of mapping degree requirements from Excel sheets to a structured relational database
-###### FRONTEND & UI/UX IMPLEMENTATION DETAILS
-1. Reactive Dashboard Architecture
+**Final Year Project (FYP) · BSSE · Faculty of Computing · Riphah International University, Islamabad · Spring 2026**
 
-Implemented a role-based access control (RBAC) dashboard for Advisors, Students, and Coordinators using Next.js.
+[Project Overview](#-project-overview) · [Features](#-key-features) · [Tech Stack](#-technology-stack) · [Architecture](#-system-architecture) · [Getting Started](#-getting-started) · [Testing](#-testing-and-evaluation) · [Team](#-team)
 
-Optimized state management to handle real-time updates for advisory session requests and approvals.
+</div>
 
-2. Visual Roadmap Visualization
+---
 
-Designed an interactive grid system to render the RoadmapSemesterModel data, allowing students to visualize their academic journey semester-by-semester.
+## 📌 Project Overview
 
-Developed color-coded course cards that sync with the CourseCategory background colors defined in the Excel processing logic for visual consistency.
+Academic advising at Riphah International University is currently **entirely manual**. Advisors must:
 
-3. Dynamic Forms & Validations
+- Manually collect transcripts from Fiori
+- Hand-calculate credits and CGPA
+- Match students against degree roadmaps
+- Cross-check course offerings and timetables
+- Detect timetable clashes by hand
 
-Built complex forms for Faculty and Student Profile Management with real-time field validation to ensure data integrity before sending it to the backend.
+This leads to **incorrect registrations**, **delayed graduations**, and — critically — **complete loss of advisory history** when a batch advisor changes.
 
-Integrated Framer Motion for smooth transitions between different advisory modules and modal views.
+### 💡 Our Solution
 
-4. Optimized Data Fetching & Search
+**Adviso** is a centralized, intelligent academic advisory system that:
 
-Implemented client-side filtering and search using SAP IDs to allow advisors to quickly access specific student transcripts and records from large batches.
+1. **Automates transcript processing** — Coordinator uploads session results, and the system automatically updates each student's transcript, CGPA, and category-wise credits.
+2. **Generates intelligent course recommendations** — Based on CGPA limits, prerequisites, assigned roadmap, and real-time timetable clash detection.
+3. **Preserves advisory history** — Every decision, note, and recommendation is permanently logged, surviving advisor transitions.
+4. **Streamlines coordination** — One dashboard for coordinators, advisors, and students with role-based access control.
 
-Integrated loading states and skeleton screens to provide a seamless UX during heavy data parsing (Excel uploads).
+> **SDG Alignment:** SDG 4 — Quality Education
 
-5. Responsive Sessional Timetable View
+---
 
-Developed a responsive timetable layout that maps timetableCourseOfferingMapping data into a readable format for both mobile and desktop views.
+## ✨ Key Features
 
-Handled edge cases for course naming (singular/plural) to ensure the UI remains consistent with the database records.
-###### PROGRAM COURSE DETAILS SHEET PROCESSING STEPS ######
+### 👤 For Students
+- 📊 View personal profile, CGPA, and degree completion progress
+- 📜 View auto-generated transcripts (category-wise, semester-wise)
+- 🎯 Receive advisor-finalized course recommendations
+- 🗺️ View assigned degree roadmap
+- 📅 View batch timetable and meeting schedules
+- 💬 Real-time chat with assigned batch advisor
 
-// Although some course code remains same but their credit or name vary by roadmap version
+### 👨‍🏫 For Batch Advisors
+- 👥 Manage assigned batches (regular + irregular students)
+- 🤖 Generate system recommendations (CGPA caps, prerequisites, clash detection, FYP eligibility)
+- ✅ Finalize recommendations and notify students via email
+- 📝 Maintain sticky notes and advisory decision logs
+- 📆 Schedule batch meetings with automatic free-slot detection
+- 🗣️ Participate in the **Faculty Recommendation Hub** (post issues, suggest solutions, vote)
+- 💬 Chat with any assigned student
 
-1. find similar (course code) OR (course name AND credits) 
-            -> if not found, add new course in db 
-            -> if found, chech with attribute need to update as coursecode,course name or just course credit
-                  -> if course code or course credit differ, then create new course with similar course id otherwise just update course code if needed
-2. Store all courses with complete details in MAP variable and access them via course name
-3. list of courses to highlights that which course have a preReq or have not (this preReq course also fetch from sheet)
-                  -> If preReq course name is given in sheet, then this course details are comes from the MAP variable access via this courseName
-4. In last step, in CoursePreReqModel, find or create a new instance by providing a courseId and PreReqCourseId(that might be a null)
+### 🏫 For Coordinators
+- 🧑‍🎓 Register users (single or bulk Excel upload)
+- 🗺️ Upload and assign degree roadmaps
+- 📤 Upload sessional course offerings, timetables, and results
+- 📚 Manage course catalog, programs, and degree guidelines
+- 🎬 Manage supporting instructional videos
+- 🔐 Manage user accounts and reset passwords
 
-###### PROGRAM BATCH ROADMAP PROCESSING STEPS ######
+### 🔒 System-Wide
+- **Role-Based Access Control (RBAC)** — Students cannot view other students' data
+- **JWT Authentication** — Auto-logout after 30 minutes of inactivity
+- **PWA / Offline Support** — Installable, with offline caching
+- **Automated Reminders** — Email notifications 24 hrs and 1 hr before meetings
 
-find or create a new batch and assign a specific required program as CS, or SE
+---
 
-1. Extract the roadmap version name from worksheet name and verify that this similar roadmap of SE or CS program already exists or not.
-                  |-> then assign this roadmapid to the upcoming new program batch 
+## 🛠️ Technology Stack
 
-2. Detect bottom summary 2nd last row, read cells filled color and category name -> store them in MAP vaiable (key is color)
-            |-> add this category name in category model.
-            |-> from the next bottom row of a sheet->  extract required credits per course category of a roadmap, accesses via color code
-                  |-> add this details to roadmapCourseCategoryModel (include color code, req credits and category id)
+| Layer | Technologies |
+|:---|:---|
+| **Frontend** | Next.js (App Router), React, TypeScript, Tailwind CSS, Zustand, Framer Motion, next-pwa |
+| **Backend** | Node.js, Express.js, JavaScript |
+| **Database** | MySQL 8.0 + Sequelize ORM |
+| **Authentication** | JWT + bcrypt |
+| **Real-Time Communication** | Socket.io |
+| **Excel Processing** | ExcelJS, Multer |
+| **Email / Notifications** | Nodemailer + Brevo (SMTP), node-cron |
+| **Deployment** | AWS EC2 (Docker), AWS RDS, AWS S3, GitHub Actions, Docker Hub |
 
-3. Then, process the semester rows (2 & 3), to identify how many semesters are present in this roadmap and credits offer per semester |
-            -> save this info in roadmapSemesterModel
-4. Then, iterate from row 4 till 6 consective columns cell are empty, bcz below this, the category summary row is started
+---
 
-5. process courses row wise, based on column-> accessed semesteer no., and cell fill coloe identify the course category,
-            |-> normalized the course text as to split the  
-                course name and course credits seperately
-                  |-> find the course in db via course name and credits -> if not found and create a new one
-            |-> then CourseCategory model is populated with
-                this course id, category id
-6. In SemesterCourseModel, this coursecategory id and roadmap id is save that provide this roadmap has this semester in which this course is offered whose category is this !
+## 🏗️ System Architecture
 
-###### SESSIONAL COURSE OFFERING & TIMETABLE SHEET PROCESSING STEPS ######
+Adviso uses a clean **4-layer architecture**:
 
-
-
-1. find similar (course code) OR (course name AND credits) 
-            -> if not found, add new course in db 
-            -> if found, chech with attribute need to update as coursecode,course name or just course credit
-                  -> if course code or course credit differ, then create new course with similar course id otherwise just update course code if needed
-2. Store all courses with complete details in MAP variable and access them via course name
-3. list of courses to highlights that which course have a preReq or have not (this preReq course also fetch from sheet)
-                  -> If preReq course name is given in sheet, then this course details are comes from the MAP variable access via this courseName
-4. In last step, in CoursePreReqModel, find or create a new instance by providing a courseId and PreReqCourseId(that might be a null)
-      | node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-
-      //plural->sigular difference  not found->timetableCourseOfferingMapping
-                      
