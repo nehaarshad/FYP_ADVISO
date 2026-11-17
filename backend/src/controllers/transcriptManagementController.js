@@ -104,6 +104,7 @@ if (studentStatus) {
                     sessionId: sessionId
                 });
                 student.currentSemester=student.currentSemester+1;
+                await student.save();
                 console.log(`  Created semester transcript with ${studentData.totalGradedCRH} earned credits`);
             } else {
                 semesterTranscript.semesterEarnedCreditHours = studentData.totalGradedCRH;
