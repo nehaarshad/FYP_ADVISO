@@ -258,7 +258,7 @@ export const FacultyRecommendation: React.FC<FacultyRecommendationProps> = ({
           </button>
           {viewMode === 'detail' && (
             <span className="text-2xl font-bold tracking-tight text-[#1e3a5f]">
-              Recommendation Detail
+              Issue Detail
             </span>
           )}
         </div>
