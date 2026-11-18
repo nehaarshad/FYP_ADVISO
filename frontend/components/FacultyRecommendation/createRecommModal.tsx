@@ -36,7 +36,7 @@ export const CreateRecommendationModal: React.FC<CreateRecommendationModalProps>
           <X size={20} />
         </button>
         <h3 className="text-xl font-bold text-[#1e3a5f]  tracking-tighter mb-6">
-          New Recommendation
+          Post Issue
         </h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
